@@ -1,0 +1,79 @@
+#******************************************************************
+#
+# Copyright 2016 Intel Corporation All Rights Reserved.
+#
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+##
+# ResourceClient Unit Test build script
+##
+import os
+import sys
+Import('env')
+Import('upnpbundle_lib')
+
+test_env = env.Clone()
+######################################################################
+#unit test setting
+######################################################################
+iotivity_base = env.get('IOTIVITY_BASE')
+gtest_dir = env.get('IOTIVITY_BASE') + '/extlibs/gtest/gtest-1.7.0'
+
+######################################################################
+# Build flags
+######################################################################
+gtest = File(gtest_dir + '/lib/.libs/libgtest.a')
+gtest_main = File(gtest_dir + '/lib/.libs/libgtest_main.a')
+
+test_env.AppendUnique(
+        CPPPATH = [
+                iotivity_base + '/extlibs/hippomocks-master',
+                iotivity_base + '/extlibs/gtest/gtest-1.7.0/include',
+                '#/include',
+                '#/src'
+        ])
+
+
+test_env.AppendUnique(CXXFLAGS = ['-std=c++11', '-Wall'])
+oic_libs = ['oc', 'octbstack', 'oc_logger', 'rcs_container', 'rcs_client', 'rcs_server', 'rcs_common']
+
+test_env.PrependUnique(LIBS = [
+    gtest,
+    gtest_main,
+    oic_libs,
+    'UpnpBundle'])
+test_env.AppendUnique(LIBPATH = ['#/${BUILD_DIR}/bin'])
+
+test_env.AppendUnique(LIBS = ['pthread'])
+
+######################################################################
+# Build Test
+######################################################################
+test_src = env.Glob('./*.cpp')
+
+iotivity_upnp_bridge_test = test_env.Program('iotivity_upnp_bridge_test', test_src)
+Alias("iotivity_upnp_bridge_test", iotivity_upnp_bridge_test)
+
+iotivity_upnp_bridge_test_bin = env.Install('#/${BUILD_DIR}/bin', iotivity_upnp_bridge_test)
+#env.AppendTarget('iotivity_upnp_bridge_test')
+
+#if env.get('TEST') == '1':
+#    run_test_env = test_env.Clone()
+#    run_test_env.Append('BUILD_DIR', env.Dir('#/${BUILD_DIR}/bin').abspath)
+#    sys.path.append(iotivity_base)
+#    from tools.scons.RunTest import *
+#    run_test(run_test_env, none, iotivity_upnp_bridge_test[0])
