@@ -85,3 +85,24 @@ UPnP. The `UpnpBridge` is the code that bridges IoTivity and UPnP. The `Observer
 finds the UPnP light using IoTivity and observes any changes in the current lights
 attributes and reports the change.  The `SimpleClient` will find the light and
 will toggle the light state.
+
+## Android UPnP Client App
+The Android UPnP client app is built along with all of the other IoTivity Android examples.
+These instructions assume that the system has already been set up for Android development.
+Follow IoTivity instructions for [Android development](https://www.iotivity.org/)
+
+    $ cd <iotivity>
+
+Copy the Android UPnP client app into the IoTivity Android example code.
+
+    $ cp -rv <iotivity-upnp-bridge>/android/examples/upnpclient/ android/examples
+
+Edit the settings.gradle file to include the upnpclient.
+
+    $ sed -i "s/$/, ':upnpclient'/" android/examples/settings.gradle
+
+Build for Android.
+
+    $ scons TARGET_OS=android TARGET_ARCH=<armeabi|x86|x86_64> TARGET_TRANSPORT=IP
+
+Follow IoTivity instructions for installing Andriod example apps.
