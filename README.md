@@ -105,4 +105,15 @@ Build for Android.
 
     $ scons TARGET_OS=android TARGET_ARCH=<armeabi|x86|x86_64> TARGET_TRANSPORT=IP
 
-Follow IoTivity instructions for installing Andriod example apps.
+   Example: Nexus 7 Table which has arm chipset
+    $ scons TARGET_OS=android TARGET_ARCH=armeabi TARGET_TRANSPORT=IP
+
+Where is the 'upnpclient-debug.apk' - UPnP Client Demo Android App
+Navigate to the `android/examples/upnpclient/build/outputs/apk' directory.
+
+## Installing UPnP Client Demo Android App
+   Follow IoTivity instructions for installing Andriod example apps.
+
+## Testing
+Caveat: This currently requires the UpnpBridge running on a Linux system with UPnP Client Demo Android App
+
