@@ -34,3 +34,6 @@ UpnpErrorCode UpnpException::code() const
 
 NotImplementedException::NotImplementedException(const std::string &msg)
     : UpnpException(UPNP_ERROR_NOT_IMPLEMENTED, msg) {}
+
+BadUriException::BadUriException(const std::string &msg)
+    : UpnpException(UPNP_ERROR_BAD_URI, msg) {}

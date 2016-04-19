@@ -27,6 +27,7 @@ typedef enum
 {
     UPNP_OK = 0,
     UPNP_ERROR_NOT_IMPLEMENTED = 1,
+    UPNP_ERROR_BAD_URI = 2,
 } UpnpErrorCode;
 
 class UpnpException : public std::exception
@@ -48,5 +49,11 @@ class NotImplementedException : public UpnpException
 {
     public:
         NotImplementedException(const std::string &msg);
+};
+
+class BadUriException : public UpnpException
+{
+    public:
+        BadUriException(const std::string &msg);
 };
 #endif

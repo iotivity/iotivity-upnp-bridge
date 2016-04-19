@@ -175,6 +175,8 @@ std::shared_ptr<UpnpDevice> UpnpManager::addDevice(GUPnPDeviceInfo *deviceInfo,
             pDevice->addLink(pService);
         } catch(NotImplementedException& e) {
             ERROR_PRINT("What(): " << e.what());
+        } catch(BadUriException& e) {
+            ERROR_PRINT("What(): " << e.what());
         }
 
         g_object_unref (childService->data);
@@ -205,6 +207,9 @@ UpnpResource::Ptr UpnpManager::processService(GUPnPServiceProxy *proxy,
         try {
             pService = generateService(serviceInfo, requestState);
         } catch(NotImplementedException& e) {
+            ERROR_PRINT("What(): " << e.what());
+            return nullptr;
+        } catch(BadUriException& e) {
             ERROR_PRINT("What(): " << e.what());
             return nullptr;
         }

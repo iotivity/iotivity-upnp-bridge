@@ -68,6 +68,14 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
 
     //TODO: discuss service URI format. Currently: resource_type/service_id/udn
     m_uri = UpnpUriPrefixMap[m_resourceType] + m_name + "/" + m_udn;
+
+    if (m_uri.length() > MAX_URI_LENGTH)
+    {
+        ERROR_PRINT("URI too long " << m_uri<< "( " << m_uri.length());
+        throw BadUriException("UpnpService::ctor: uri length too long");
+        return;
+    }
+
     m_interface = UpnpInterfaceMap[m_resourceType];
 
     // Load attributes description
