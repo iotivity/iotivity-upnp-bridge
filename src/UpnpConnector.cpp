@@ -47,7 +47,6 @@ static UpnpConnector::LostCallback s_lostCallback;
 static GMainLoop *s_mainLoop;
 static GMainContext *s_mainContext;
 static GUPnPContextManager *s_contextManager;
-static GUPnPContext *s_context;
 static GUPnPControlPoint *s_controlPointAll;
 static GUPnPControlPoint *s_controlPointRoot;
 static UpnpManager *s_manager;
@@ -107,9 +106,6 @@ void UpnpConnector::gupnpStop()
 {
     DEBUG_PRINT("");
     g_main_loop_quit(s_mainLoop);
-    g_object_unref(s_controlPointAll);
-    g_object_unref(s_controlPointRoot);
-    g_object_unref(s_context);
     g_object_unref(s_contextManager);
 }
 
@@ -212,15 +208,22 @@ void UpnpConnector::initResourceCallbackHandler()
 // Callback: a gupnp context is available
 void UpnpConnector::onContextAvailable(GUPnPContextManager *manager, GUPnPContext *context)
 {
-    s_context = context;
-
     // create a control point for root devices
-    s_controlPointRoot = gupnp_control_point_new(s_context, "upnp:rootdevice");
+    s_controlPointRoot = gupnp_control_point_new(context, "upnp:rootdevice");
     startDiscovery(s_controlPointRoot, false);
 
+    // let the context manager take care of this control point's life cycle
+    gupnp_context_manager_manage_control_point(manager, s_controlPointRoot);
+    g_object_unref(s_controlPointRoot);
+
     // create a control point (for all devices and services)
-    s_controlPointAll = gupnp_control_point_new(s_context, "ssdp:all");
+    s_controlPointAll = gupnp_control_point_new(context, "ssdp:all");
     startDiscovery(s_controlPointAll, true);
+
+    // let the context manager take care of this control point's life cycle
+    gupnp_context_manager_manage_control_point(manager, s_controlPointAll);
+    g_object_unref(s_controlPointAll);
+
 }
 
 // Callback: a device has been discovered
