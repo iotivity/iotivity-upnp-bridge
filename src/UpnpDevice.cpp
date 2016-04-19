@@ -19,6 +19,7 @@
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #include "UpnpConstants.h"
+#include "UpnpException.h"
 #include "UpnpInternal.h"
 #include "UpnpDevice.h"
 #include "UpnpHelper.h"
@@ -48,6 +49,12 @@ UpnpDevice::UpnpDevice(GUPnPDeviceInfo *deviceInfo,
 
     m_name = getStringField(gupnp_device_info_get_friendly_name, deviceInfo);
     m_uri = UpnpUriPrefixMap[m_resourceType] + gupnp_device_info_get_udn(deviceInfo);
+    if (m_uri.length() > MAX_URI_LENGTH)
+    {
+        ERROR_PRINT("URI too long " << m_uri<< "( " << m_uri.length());
+        throw BadUriException("UpnpDevice::ctor: uri length too long");
+        return;
+    }
     m_interface = UpnpInterfaceMap[m_resourceType];
 
     m_registered = false;
