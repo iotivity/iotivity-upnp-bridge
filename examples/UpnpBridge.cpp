@@ -39,10 +39,13 @@ int main()
     {
         cout << "\tresource uri: " << (*resourceIt).c_str() << endl;
     }
-    cout << "Press enter to stop the container" << endl;
-    getchar();
+    cout << "Enter 'q' to stop the container" << endl;
+
+    while (getchar() != 'q');
+
     container->stopBundle("oic.bundle.upnp");
     container->removeBundle("oic.bundle.upnp");
     container->stopContainer();
+
     return 0;
 }
