@@ -50,6 +50,7 @@ public class OnOffCycleIntentService extends IntentService implements
         OcResource.OnPostListener {
 
     private final static String TAG = OnOffCycleIntentService.class.getSimpleName();
+    private final static int ON_OFF_INTERVAL = 23; // TODO: move to settings
     private final Map<String, OcResource> mIotivityResourceLookup = new HashMap<>();
     private final Map<String, Resource> mResourceLookup = new HashMap<>();
     private final Map<String, Device> mResourceUriToParentDeviceLookup = new HashMap<>();
@@ -91,7 +92,7 @@ public class OnOffCycleIntentService extends IntentService implements
                 Log.e(TAG, e.toString(), e);
             }
 
-            sleep(23);
+            sleep(ON_OFF_INTERVAL);
         }
     }
 

@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -80,6 +81,9 @@ public class UpnpClientActivity extends Activity implements
         OcResource.OnObserveListener {
 
     public static final int UPDATE_REQUEST_CODE = 1;
+    private static final int AUTO_DISCOVERY_INTERVAL = 17; // TODO: move to settings
+    public static final int AUTO_DISCOVERY_RETRY_LIMIT = 3; // TODO: move to settings
+    private static final int RESOURCE_DISCOVERY_WAIT = 7; // TODO: move to settings
     private final Map<String, OcResource> mIotivityResourceLookup = new HashMap<>();
     private final Map<String, Resource> mResourceLookup = new HashMap<>();
     private final Comparator<Resource> nameComparator = new ResourceNameComparator();
@@ -100,15 +104,25 @@ public class UpnpClientActivity extends Activity implements
         );
 
         Log.i(TAG, "Configuring platform.");
-        OcPlatform.Configure(platformConfig);
-
         try {
-            Log.i(TAG, "Finding all resources of type " + Light.UPNP_OIC_TYPE_DEVICE_LIGHT);
-            String requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + Light.UPNP_OIC_TYPE_DEVICE_LIGHT;
-            OcPlatform.findResource("", requestUri, EnumSet.of(OcConnectivityType.CT_DEFAULT), this);
+            OcPlatform.Configure(platformConfig);
 
-        } catch (OcException e) {
+            try {
+                Log.i(TAG, "Finding all resources of type " + Light.UPNP_OIC_TYPE_DEVICE_LIGHT);
+                String requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + Light.UPNP_OIC_TYPE_DEVICE_LIGHT;
+                OcPlatform.findResource("", requestUri, EnumSet.of(OcConnectivityType.CT_DEFAULT), this);
+
+            } catch (OcException e) {
+                Log.e(TAG, e.toString(), e);
+            }
+
+        } catch (Exception e) {
             Log.e(TAG, e.toString(), e);
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(UpnpClientActivity.this, "Configure failed", Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
@@ -587,6 +601,8 @@ public class UpnpClientActivity extends Activity implements
     private final Object mArrayAdapterSync = new Object();
     private ArrayAdapter<Light> mArrayAdapter;
     private boolean mAutoDiscover;
+    private int mAutoDiscoverRetryCount = AUTO_DISCOVERY_RETRY_LIMIT;
+    private boolean mNoResourceDialogIsShowing;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -622,6 +638,7 @@ public class UpnpClientActivity extends Activity implements
                     super.add(light);
                     mArrayAdapter.sort(nameComparator);
                     mArrayAdapter.setNotifyOnChange(true);
+                    mAutoDiscoverRetryCount = AUTO_DISCOVERY_RETRY_LIMIT;
                 }
 
                 runOnUiThread(new Runnable() {
@@ -637,67 +654,72 @@ public class UpnpClientActivity extends Activity implements
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Light light = mArrayAdapter.getItem((int) id);
+                if (light != null) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(UpnpClientActivity.this);
+                    final View dialogView = LayoutInflater.from(UpnpClientActivity.this).inflate(R.layout.dialog_update_light, null);
+                    alertDialogBuilder.setView(dialogView);
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(UpnpClientActivity.this);
-                final View dialogView = LayoutInflater.from(UpnpClientActivity.this).inflate(R.layout.dialog_update_light, null);
-                alertDialogBuilder.setView(dialogView);
-                alertDialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final boolean state = ((Switch) dialogView.findViewById(R.id.on_off_switch)).isChecked();
-                        final int lightLevel = ((SeekBar) dialogView.findViewById(R.id.light_level_bar)).getProgress();
-                        final OcResource ocResource = mIotivityResourceLookup.get(light.getUri());
-                        if (ocResource != null) {
-                            new Thread(new Runnable() {
-                                public void run() {
-                                    postLightRepresentation(ocResource, state, lightLevel);
-                                }
-                            }).start();
+                    alertDialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final boolean state = ((Switch) dialogView.findViewById(R.id.on_off_switch)).isChecked();
+                            final int lightLevel = ((SeekBar) dialogView.findViewById(R.id.light_level_bar)).getProgress();
+                            final OcResource ocResource = mIotivityResourceLookup.get(light.getUri());
+                            if (ocResource != null) {
+                                new Thread(new Runnable() {
+                                    public void run() {
+                                        postLightRepresentation(ocResource, state, lightLevel);
+                                    }
+                                }).start();
 
-                        } else {
-                            Toast.makeText(UpnpClientActivity.this, "No resource for uri " + light.getUri(), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(UpnpClientActivity.this, "No resource for uri " + light.getUri(), Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
+                    });
 
-                alertDialogBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
+                    alertDialogBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
 
-                Dialog updateDialog = alertDialogBuilder.create();
-                ((TextView) dialogView.findViewById(R.id.name_text)).setText(light.getName());
-                ((TextView) dialogView.findViewById(R.id.uri_text)).setText(light.getUri());
-                showOrHideTextView(dialogView, R.id.manufacturer_text, light.getManufacturer());
-                showOrHideTextView(dialogView, R.id.manufacturer_url_text, light.getManufacturerUrl());
-                showOrHideTextView(dialogView, R.id.model_name_text, light.getModelName());
-                showOrHideTextView(dialogView, R.id.model_number_text, light.getModelNumber());
-                showOrHideTextView(dialogView, R.id.model_url_text, light.getModelUrl());
-                showOrHideTextView(dialogView, R.id.model_desc__text, light.getModelDescription());
-                showOrHideTextView(dialogView, R.id.serial_number_text, light.getSerialNumber());
-                showOrHideTextView(dialogView, R.id.presentation_url_text, light.getPresentationUrl());
-                showOrHideTextView(dialogView, R.id.upc_text, light.getUpc());
-                ((Switch) dialogView.findViewById(R.id.on_off_switch)).setChecked(light.getState());
-                ((SeekBar) dialogView.findViewById(R.id.light_level_bar)).setProgress(light.getLightLevel());
-                ((TextView) dialogView.findViewById(R.id.light_level_text)).setText(String.format(getString(R.string.light_level), light.getLightLevel()));
+                    Dialog updateDialog = alertDialogBuilder.create();
+                    ((TextView) dialogView.findViewById(R.id.name_text)).setText(light.getName());
+                    ((TextView) dialogView.findViewById(R.id.uri_text)).setText(light.getUri());
+                    showOrHideTextView(dialogView, R.id.manufacturer_text, light.getManufacturer());
+                    showOrHideTextView(dialogView, R.id.manufacturer_url_text, light.getManufacturerUrl());
+                    showOrHideTextView(dialogView, R.id.model_name_text, light.getModelName());
+                    showOrHideTextView(dialogView, R.id.model_number_text, light.getModelNumber());
+                    showOrHideTextView(dialogView, R.id.model_url_text, light.getModelUrl());
+                    showOrHideTextView(dialogView, R.id.model_desc__text, light.getModelDescription());
+                    showOrHideTextView(dialogView, R.id.serial_number_text, light.getSerialNumber());
+                    showOrHideTextView(dialogView, R.id.presentation_url_text, light.getPresentationUrl());
+                    showOrHideTextView(dialogView, R.id.upc_text, light.getUpc());
+                    ((Switch) dialogView.findViewById(R.id.on_off_switch)).setChecked(light.getState());
+                    ((SeekBar) dialogView.findViewById(R.id.light_level_bar)).setProgress(light.getLightLevel());
+                    ((TextView) dialogView.findViewById(R.id.light_level_text)).setText(String.format(getString(R.string.light_level), light.getLightLevel()));
 
-                ((SeekBar) dialogView.findViewById(R.id.light_level_bar)).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        ((TextView) dialogView.findViewById(R.id.light_level_text)).setText(String.format(getString(R.string.light_level), progress));
-                    }
+                    ((SeekBar) dialogView.findViewById(R.id.light_level_bar)).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                            ((TextView) dialogView.findViewById(R.id.light_level_text)).setText(String.format(getString(R.string.light_level), progress));
+                        }
 
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+                        }
 
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                    }
-                });
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+                        }
+                    });
 
-                updateDialog.show();
+                    updateDialog.show();
+
+                } else {
+                    Log.w(TAG, "Resource not found in list (possible auto discover collision)");
+                }
             }
         });
 
@@ -705,6 +727,7 @@ public class UpnpClientActivity extends Activity implements
         discoverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                discoverButton.setEnabled(false);
                 final Collection<OcResource> iotivityResources = new ArrayList<>();
                 iotivityResources.addAll(mIotivityResourceLookup.values());
 
@@ -727,6 +750,70 @@ public class UpnpClientActivity extends Activity implements
                         }
 
                         startUpnpClient();
+
+                        // Start a monitor thread for resource discovery
+                        new Thread(new Runnable() {
+                            public void run() {
+                                sleep(RESOURCE_DISCOVERY_WAIT);
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        //Log.d(TAG, "Auto discover retry count = " + mAutoDiscoverRetryCount);
+                                        if (mArrayAdapter.isEmpty() && (!mNoResourceDialogIsShowing) && (!mAutoDiscover || (mAutoDiscover && mAutoDiscoverRetryCount <= 0))) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(UpnpClientActivity.this);
+                                            builder.setTitle(R.string.no_resources_found_dialog_title);
+                                            builder.setMessage(R.string.no_resources_found_dialog_message);
+                                            builder.setCancelable(true);
+                                            builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    mNoResourceDialogIsShowing = false;
+                                                    if (!mAutoDiscover) {
+                                                        discoverButton.setEnabled(true);
+                                                    }
+                                                }
+                                            });
+
+                                            AlertDialog alert = builder.create();
+                                            alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                                @Override
+                                                public void onCancel(DialogInterface dialog) {
+                                                    mNoResourceDialogIsShowing = false;
+                                                    if (!mAutoDiscover) {
+                                                        discoverButton.setEnabled(true);
+                                                    }
+                                                }
+                                            });
+                                            alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                @Override
+                                                public void onDismiss(DialogInterface dialog) {
+                                                    mNoResourceDialogIsShowing = false;
+                                                    if (!mAutoDiscover) {
+                                                        discoverButton.setEnabled(true);
+                                                    }
+                                                }
+                                            });
+                                            alert.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                                @Override
+                                                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                        dialog.dismiss();
+                                                        return true;
+                                                    }
+                                                    return false;
+                                                }
+                                            });
+
+                                            mNoResourceDialogIsShowing = true;
+                                            alert.show();
+                                        }
+
+                                        if (!mNoResourceDialogIsShowing && !mAutoDiscover) {
+                                            discoverButton.setEnabled(true);
+                                        }
+                                    }
+                                });
+                            }
+                        }).start();
                     }
                 }).start();
             }
@@ -735,16 +822,17 @@ public class UpnpClientActivity extends Activity implements
         Thread autoDiscoverThread = new Thread(new Runnable() {
             public void run() {
                 while (true) {
-                    if (mAutoDiscover) {
+                    if (mAutoDiscover && (!mNoResourceDialogIsShowing)) {
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 Log.i(TAG, "Starting auto discover");
                                 Toast.makeText(UpnpClientActivity.this, "Auto discovery", Toast.LENGTH_LONG).show();
+                                --mAutoDiscoverRetryCount;
                                 discoverButton.callOnClick();
                             }
                         });
                     }
-                    sleep(17);
+                    sleep(AUTO_DISCOVERY_INTERVAL);
                 }
             }
         });
@@ -762,6 +850,8 @@ public class UpnpClientActivity extends Activity implements
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mAutoDiscover = isChecked;
+                mAutoDiscoverRetryCount = AUTO_DISCOVERY_RETRY_LIMIT;
+                findViewById(R.id.discover_button).setEnabled(!isChecked);
             }
         });
 

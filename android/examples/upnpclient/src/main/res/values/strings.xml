@@ -27,4 +27,6 @@
     <string name="light_level">Light Level %d</string>
     <string name="action_auto_discover">Auto Discover</string>
     <string name="action_on_off_cycle">On/Off Cycle</string>
+    <string name="no_resources_found_dialog_title">No Resources Found</string>
+    <string name="no_resources_found_dialog_message">Please be sure that the UpnpBridge is running and try again.</string>
 </resources>
