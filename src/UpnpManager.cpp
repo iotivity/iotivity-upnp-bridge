@@ -38,6 +38,12 @@ UpnpManager::UpnpManager()
     m_services.clear();
  }
 
+UpnpManager::~UpnpManager()
+{
+    m_devices.clear();
+    m_services.clear();
+}
+
 UpnpResource::Ptr UpnpManager::processDevice(GUPnPDeviceProxy *proxy,
                                              GUPnPDeviceInfo *deviceInfo,
                                              bool isRoot,
