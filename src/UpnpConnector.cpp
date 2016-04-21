@@ -105,6 +105,10 @@ void UpnpConnector::disconnect()
 void UpnpConnector::gupnpStop()
 {
     DEBUG_PRINT("");
+    g_source_unref(s_requestState.source);
+    g_source_destroy(s_requestState.source);
+    s_requestState.sourceId = 0;
+
     g_main_loop_quit(s_mainLoop);
     g_object_unref(s_contextManager);
 }
@@ -185,13 +189,15 @@ int UpnpConnector::checkRequestQueue(gpointer data)
     }
 
     DEBUG_PRINT("sourceId: "<< s_requestState.sourceId << ", context: " << g_source_get_context (s_requestState.source));
-    g_source_unref(s_requestState.source);
-    g_source_destroy(s_requestState.source);
-    s_requestState.sourceId = 0;
+    if (s_requestState.sourceId != 0)
+    {
+        g_source_unref(s_requestState.source);
+        g_source_destroy(s_requestState.source);
+        s_requestState.sourceId = 0;
 
-    // Prepare for the next scheduling call
-    initResourceCallbackHandler();
-
+        // Prepare for the next scheduling call
+        initResourceCallbackHandler();
+    }
     return G_SOURCE_REMOVE;
 }
 
