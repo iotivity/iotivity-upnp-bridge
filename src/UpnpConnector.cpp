@@ -66,6 +66,7 @@ UpnpConnector::UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback l
 
 UpnpConnector::~UpnpConnector()
 {
+    delete s_manager;
 }
 
 void UpnpConnector::disconnect()
