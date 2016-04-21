@@ -99,7 +99,6 @@ void UpnpConnector::disconnect()
 
     }
     promise.get_future().get();
-    s_mainLoop = NULL;
 }
 
 void UpnpConnector::gupnpStop()
@@ -111,6 +110,8 @@ void UpnpConnector::gupnpStop()
 
     g_main_loop_quit(s_mainLoop);
     g_object_unref(s_contextManager);
+    g_main_loop_unref(s_mainLoop);
+    s_mainLoop = NULL;
 }
 
 void UpnpConnector::connect()
