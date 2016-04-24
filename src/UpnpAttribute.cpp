@@ -22,10 +22,10 @@ using namespace std;
 // Service specific attribute initialization
 
 // Power switch service
-static vector <UpnpAttribute> UpnpPowerSwitchAttributes = {
-    UpnpAttribute("value",
-                  {{"GetTarget", UPNP_ACTION_GET}, {"SetTarget", UPNP_ACTION_POST}, {"GetStatus",UPNP_ACTION_GET}},
-                  "Status", G_TYPE_BOOLEAN)
+static vector <UpnpAttributeInfo> UpnpPowerSwitchAttributes = {
+    {"value", "Status", G_TYPE_BOOLEAN,
+     {{"GetTarget", UPNP_ACTION_GET}, {"SetTarget", UPNP_ACTION_POST}, {"GetStatus",UPNP_ACTION_GET}},
+    }
 };
 
 // Brightness service
@@ -48,49 +48,50 @@ static vector <UpnpAttribute> UpnpPowerSwitchAttributes = {
     //      GetRampPaused
     //      GetRampTime
     //      GetIsRamping
-static vector <UpnpAttribute> UpnpDimmingAttributes = {
-    UpnpAttribute("brightness",
-                  {{"GetLoadLevelTarget", UPNP_ACTION_GET}, {"SetLoadLevelTarget", UPNP_ACTION_POST}, {"GetLoadLevelStatus",UPNP_ACTION_GET}},
-                  "LoadLevelStatus", G_TYPE_UINT)
+static vector <UpnpAttributeInfo> UpnpDimmingAttributes = {
+    {"brightness", "LoadLevelStatus", G_TYPE_UINT,
+     {{"GetLoadLevelTarget", UPNP_ACTION_GET}, {"SetLoadLevelTarget", UPNP_ACTION_POST}, {"GetLoadLevelStatus",UPNP_ACTION_GET}}
+    }
 };
 
-
-static vector <UpnpAttribute> UpnpWanCommonInterfaceConfigAttributes = {
+#if 0
+static vector <UpnpAttributeInfo> UpnpWanCommonInterfaceConfigAttributes = {
     UpnpAttribute("enabledForInternet",   {{"GetEnabledForInternet", UPNP_ACTION_GET}, {"SetEnabledForInternet", UPNP_ACTION_POST}},
                   "EnabledForInternet", G_TYPE_BOOLEAN),
-    UpnpAttribute("accessType",           {{"GetCommonLinkProperties", UPNP_ACTION_GET}}),
-    UpnpAttribute("upMaxBitRate",         {{"GetCommonLinkProperties", UPNP_ACTION_GET}}),
-    UpnpAttribute("downMaxBitRate",       {{"GetCommonLinkProperties", UPNP_ACTION_GET}}),
-    UpnpAttribute("physLinkStatus",       {{"GetCommonLinkProperties", UPNP_ACTION_GET}},
-                  "PhysicalLinkStatus", G_TYPE_STRING),
-    UpnpAttribute("wanAccesssProvider",   {{"GetWANAccessProvider", UPNP_ACTION_GET}}),
-    UpnpAttribute("maxActiveConnections", {{"GetMaximumActiveConnections", UPNP_ACTION_GET}}),
-    UpnpAttribute("totalBytesSent",       {{"GetTotalBytesSent", UPNP_ACTION_GET}}),
-    UpnpAttribute("totalBytesReceived",   {{"GetTotalBytesRecieved", UPNP_ACTION_GET}}),
-    UpnpAttribute("totalPacketsSent",     {{"GetTotalPacketsSent", UPNP_ACTION_GET}}),
-    UpnpAttribute("totalPacketsReceived", {{"GetTotalPacketsRecieved", UPNP_ACTION_GET}}),
+    UpnpAttributeInfo("accessType",           {{"GetCommonLinkProperties", UPNP_ACTION_GET}}),
+    UpnpAttributeInfo("upMaxBitRate",         {{"GetCommonLinkProperties", UPNP_ACTION_GET}}),
+    UpnpAttributeInfo("downMaxBitRate",       {{"GetCommonLinkProperties", UPNP_ACTION_GET}}),
+    UpnpAttributeInfo("physLinkStatus",       {{"GetCommonLinkProperties", UPNP_ACTION_GET}},
+                      "PhysicalLinkStatus", G_TYPE_STRING),
+    UpnpAttributeInfo("wanAccesssProvider",   {{"GetWANAccessProvider", UPNP_ACTION_GET}}),
+    UpnpAttributeInfo("maxActiveConnections", {{"GetMaximumActiveConnections", UPNP_ACTION_GET}}),
+    UpnpAttributeInfo("totalBytesSent",       {{"GetTotalBytesSent", UPNP_ACTION_GET}}),
+    UpnpAttributeInfo("totalBytesReceived",   {{"GetTotalBytesRecieved", UPNP_ACTION_GET}}),
+    UpnpAttributeInfo("totalPacketsSent",     {{"GetTotalPacketsSent", UPNP_ACTION_GET}}),
+    UpnpAttributeInfo("totalPacketsReceived", {{"GetTotalPacketsRecieved", UPNP_ACTION_GET}}),
     //Special case: no matching UPNP function, but the attribute value
     //can be set based on observation
-    UpnpAttribute("numActiveConnections",  {{"", UPNP_ACTION_GET}},
+    UpnpAttributeInfo("numActiveConnections",  {{"", UPNP_ACTION_GET}},
                   "NumberOfActiveConnections", G_TYPE_UINT),
     //"activeConnection" is a composite attribute with tags:
     //    "deviceContainer" (matches UpNP "ActiveConnectionDeviceContainer")" &
     //    "serviceID" (matches UPnP "ActiveConnectionServiceID")
-    UpnpAttribute("activeConnection",     {{"GetActiveConnection", UPNP_ACTION_GET}})
+    UpnpAttributeInfo("activeConnection",     {{"GetActiveConnection", UPNP_ACTION_GET}})
 };
+#endif
 
 // Resource type -> service attribute info
-map <string, vector <UpnpAttribute>> UpnpAttributeMap =
+map <string, vector <UpnpAttributeInfo>> UpnpAttributeInfoMap =
 {
     { UPNP_OIC_TYPE_BRIGHTNESS, UpnpDimmingAttributes },
     { UPNP_OIC_TYPE_POWER_SWITCH, UpnpPowerSwitchAttributes }
 };
 
-vector <UpnpAttribute> * UpnpAttribute::getServiceAttributeInfo(string resourceType)
+vector <UpnpAttributeInfo> * UpnpAttribute::getServiceAttributeInfo(string resourceType)
 {
-    map<const string, vector<UpnpAttribute>>::iterator it = UpnpAttributeMap.find(resourceType);
+    map<const string, vector<UpnpAttributeInfo>>::iterator it = UpnpAttributeInfoMap.find(resourceType);
 
-    if (it == UpnpAttributeMap.end())
+    if (it == UpnpAttributeInfoMap.end())
     {
         return nullptr;
     }
@@ -98,33 +99,34 @@ vector <UpnpAttribute> * UpnpAttribute::getServiceAttributeInfo(string resourceT
     return &(it->second);
 }
 
-UpnpAttribute * UpnpAttribute::getAttributeInfo(std::vector <UpnpAttribute> *serviceAttributes,
-                                                std::string attrName)
+UpnpAttributeInfo * UpnpAttribute::getAttributeInfo(std::vector <UpnpAttributeInfo> *serviceAttributes,
+                                                    std::string attrName)
 {
-    vector<UpnpAttribute>::iterator attr;
-    for(attr = serviceAttributes->begin() ; attr != serviceAttributes->end() ; ++attr)
+    vector<UpnpAttributeInfo>::iterator attrInfo;
+    for(attrInfo = serviceAttributes->begin() ; attrInfo != serviceAttributes->end() ; ++attrInfo)
     {
-        if (attr->name == attrName)
+        if (attrInfo->name == attrName)
         {
-            return &(*attr);
+            return &(*attrInfo);
         }
     }
     return nullptr;
 }
 
-bool UpnpAttribute::isValidRequest(std::map <std::string, UpnpAttribute *> *attrMap,
-                                   std::string attrName,
+bool UpnpAttribute::isValidRequest(map <string, pair <UpnpAttributeInfo*, int>> *attrMap,
+                                   string attrName,
                                    UpnpActionType actionType)
 
 {
-    map  <std::string, UpnpAttribute*>::iterator attrInfo = attrMap->find(attrName);
-    if (attrInfo == attrMap->end())
+    // Check if the attribute is present
+    map  <string, pair< UpnpAttributeInfo*, int>>::iterator attr = attrMap->find(attrName);
+    if (attr == attrMap->end())
     {
         return false;
     }
 
     // Check that expected action for the attribute has been found
-    if ((attrInfo->second->flags) & (int) actionType)
+    if ((attr->second.second) & (int) actionType)
     {
         return true;
     }

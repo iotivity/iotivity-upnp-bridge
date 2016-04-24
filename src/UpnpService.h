@@ -59,30 +59,20 @@ public:
 
 protected:
     // Map of associated attributes (OIC)
-    // "attribute name" -> "supported OIC operations"
-    map <string, UpnpAttribute*> m_attributeMap;
-
-    // Map of actions associated with the service (UPnP)
-    map <const string, pair<string, UpnpActionType>> m_actionMap;
-
-    vector <UpnpAttribute> *m_attributes;
+    // "OCF Attribute name" -> (attribute info, supported operations)
+    map <string, pair <UpnpAttributeInfo*, int>> m_attributeMap;
 
     GUPnPServiceProxy *m_proxy;
 
     UpnpRequestState *m_requestState;
 
-
 private:
 
     string m_serviceId;
 
-    // Mapping of state variables being observed/notified by gupnp to
-    // corresponding attributes
-    map <string, string> m_stateVarsMap;
-
-    // Map of state variables associates with the service
-    // Action to attribute map: "UPnP action name" -> {"OIC attribute name",type}
-    map <const string, pair<string, GType>> m_stateVarMap;
+    // Mapping of UPnP state variables that are observed/notified to
+    // corresponding OCF attributes
+    map <const char*, pair <string, GType>> m_stateVarMap;
 
     static string getStringField(function< char*(GUPnPServiceInfo *serviceInfo)> f, GUPnPServiceInfo *serviceInfo);
 
