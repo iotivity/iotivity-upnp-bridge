@@ -78,31 +78,12 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
 
     m_interface = UpnpInterfaceMap[m_resourceType];
 
-    // Load attributes description
-    m_attributes = UpnpAttribute::getServiceAttributeInfo(m_resourceType);
-    if (m_attributes == nullptr)
+    // Check if attribute description is present
+    if (UpnpAttribute::getServiceAttributeInfo(m_resourceType) == nullptr)
     {
         ERROR_PRINT("Attributes for " << m_resourceType << " not found!");
         throw NotImplementedException("UpnpService::ctor: attributes for " + m_resourceType + " not found!");
         return;
-    }
-
-    // Generate convenient maps
-    vector<UpnpAttribute>::iterator attr;
-    for(attr = m_attributes->begin() ; attr != m_attributes->end() ; ++attr)
-    {
-        if (attr->stateVar != "")
-        {
-            m_stateVarMap[attr->stateVar] = {attr->name, attr->type};
-        }
-
-        if (!attr->actions.empty())
-        {
-            for (auto action : attr->actions)
-            {
-                m_actionMap[action.first] = {attr->name, action.second};
-            }
-        }
     }
 
     initAttributes();
@@ -204,6 +185,10 @@ string UpnpService::getId()
 
 void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceIntrospection *introspection)
 {
+
+    // Load attributes description
+    vector <UpnpAttributeInfo> *attributeList = UpnpAttribute::getServiceAttributeInfo(m_resourceType);
+    vector<UpnpAttributeInfo>::iterator attr;
     const GList *actionNameList = gupnp_service_introspection_list_action_names(introspection);
 
     // Populate the name list of supported attributes
@@ -211,39 +196,64 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
     {
         const GList *l;
         DEBUG_PRINT("# of actions: " << g_list_length((GList *)actionNameList));
+        // Generate convenient map of actions associated with the service (UPnP)
+        // "UPnP acttion name" -> ("OCF attribute name", GET/POST/PUT)
+        std::map <const string, pair<string, UpnpActionType>> actionMap;
+        for(attr = attributeList->begin() ; attr != attributeList->end() ; ++attr)
+        {
+            if (!attr->actions.empty())
+            {
+                for (auto action : attr->actions)
+                {
+                    actionMap[action.first] = {attr->name, action.second};
+                }
+            }
+        }
 
         for (l = actionNameList; l != NULL; l = l->next)
         {
             const string actionName = string ((char *) l->data);
-            std::map<const string,pair<string, UpnpActionType>>::iterator it = m_actionMap.find(actionName);
+            std::map<const string,pair<string, UpnpActionType>>::iterator it = actionMap.find(actionName);
 
-            if (it != m_actionMap.end())
+            if (it != actionMap.end())
             {
                 string attrName =  (it->second).first;
 
                 // Update/add the supported attribute in the attribute map associated
                 // with this particular instance of the service
-                UpnpAttribute *attrInfo = UpnpAttribute::getAttributeInfo(m_attributes, attrName);
+                UpnpAttributeInfo *attrInfo = UpnpAttribute::getAttributeInfo(attributeList, attrName);
 
                 if (attrInfo == nullptr)
                 {
                     //TODO: throw exception
                     ERROR_PRINT(attrName << " not found!");
 
-                    assert(0);                }
-                attrInfo->flags |= (it->second).second;
-                m_attributeMap[attrName] = attrInfo;
+                    assert(0);
+                }
+                int flags = m_attributeMap[attrName].second | (it->second).second;
+                m_attributeMap[attrName] = {attrInfo, flags};
 
-                DEBUG_PRINT("Action: "<< actionName << " maps to \"" << attrName << "\" ( flags: " << m_attributeMap[attrName] << " )");
+                DEBUG_PRINT("Action: "<< actionName << " maps to \"" << attrName << "\" ( flags: " << m_attributeMap[attrName].second << " )");
             }
         }
         DEBUG_PRINT("Matched " << m_attributeMap.size() << " attributes");
+    }
+
+    // Generate convenient map of UPnP state variables that are observed/notified to
+    // corresponding OCF attributes
+    for(attr = attributeList->begin() ; attr != attributeList->end() ; ++attr)
+    {
+        if (string(attr->stateVar) != "")
+        {
+            m_stateVarMap[attr->stateVar] = {attr->name, attr->type};
+        }
     }
 
     if (m_stateVarMap.empty())
     {
         return;
     }
+
 
     // Set notifications on supported state variables
     const GList *stateVarList = gupnp_service_introspection_list_state_variable_names(introspection);
@@ -254,15 +264,15 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
         DEBUG_PRINT(" # of state variables: " << g_list_length((GList *)stateVarList));
         for (l = stateVarList; l != NULL; l = l->next)
         {
-            const string varName = string ((char *) l->data);
+            const char* varName = (const char *) l->data;
             DEBUG_PRINT("State variable: "<< varName);
 
-            std::map<const string, pair<string, GType>>::iterator it = m_stateVarMap.find(varName);
+            std::map<const char*, pair<string, GType>>::iterator it = m_stateVarMap.find(varName);
 
             if (it != m_stateVarMap.end())
             {
                 if (!gupnp_service_proxy_add_notify (proxy,
-                                                     varName.c_str(),
+                                                     varName,
                                                      (it->second).second,
                                                      onStateChanged,
                                                      this))
@@ -280,15 +290,14 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
                                  gpointer userData)
 {
     UpnpService * pService = (UpnpService *) userData;
-    const string varName = string(variable);
 
-    std::map<const string, pair<string, GType>>::iterator it = pService->m_stateVarMap.find(varName);
+    std::map<const char*, pair<string, GType>>::iterator it = pService->m_stateVarMap.find(variable);
 
-    DEBUG_PRINT("("<< std::this_thread::get_id() << "): notification state variable: "<< varName);
+    DEBUG_PRINT("("<< std::this_thread::get_id() << "): notification state variable: "<< variable);
 
     if (it == pService->m_stateVarMap.end())
     {
-        DEBUG_PRINT("state variable: "<< varName << " not found for" << pService->getId());
+        DEBUG_PRINT("state variable: "<< variable << " not found for" << pService->getId());
         return;
     }
 

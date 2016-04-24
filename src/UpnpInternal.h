@@ -21,9 +21,10 @@
 #ifndef UPNP_INTERNAL_H_
 #define UPNP_INTERNAL_H_
 
-#include <string>
+#include <gupnp.h>
+
 #include <map>
-#include <functional>
+#include <string>
 
 #include <RCSResourceAttributes.h>
 
@@ -83,6 +84,14 @@ typedef enum
 
 //typedef std::function< bool(void) > GetAttributeHandler;
 //typedef std::function< bool(RCSResourceAttributes::Value&) > SetAttributeHandler;
+
+typedef struct _UpnpAttributeInfo
+{
+    std::string name;
+    const char* stateVar;
+    GType type;
+    std::vector < std::pair <std::string, UpnpActionType>> actions;
+} UpnpAttributeInfo;
 
 #define ERROR_PRINT(x) do { std::cerr << MODULE << ":" << __func__ << "(): ERROR: " << x << std::endl; } while (0)
 
