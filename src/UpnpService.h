@@ -62,6 +62,8 @@ protected:
     // "OCF Attribute name" -> (attribute info, supported operations)
     map <string, pair <UpnpAttributeInfo*, int>> m_attributeMap;
 
+    vector <UpnpAttributeInfo> *m_serviceAttributeInfo;
+
     GUPnPServiceProxy *m_proxy;
 
     UpnpRequestState *m_requestState;

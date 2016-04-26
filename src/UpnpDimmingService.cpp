@@ -22,59 +22,50 @@
 
 static const string MODULE = "UpnpDimmingService";
 
-// Attribute map: "attribute name" -> GET/SET request handlers
-map <const string, pair <UpnpDimming::GetAttributeHandler, UpnpDimming::SetAttributeHandler>> UpnpDimming::AttributeMap =
-{
-    {"brightness", {&UpnpDimming::getLoadLevel, &UpnpDimming::setLoadLevel}}
+// Service specific attribute initialization
+
+// Brightness service
+    // TODO the following actions are not yet mapped: (note all unmapped actions are optional)
+    //      SetOnEffectLevel
+    //      SetOnEffect
+    //      GetOnEffectParameters
+    //      StepUp
+    //      StepDown
+    //      StartRampUp
+    //      StartRampDown
+    //      StopRamp
+    //      StartRampToLevel
+    //      SetStepDelta
+    //      GetStepDelta
+    //      SetRampRate
+    //      GetRampRate
+    //      PauseRamp
+    //      ResumeRamp
+    //      GetRampPaused
+    //      GetRampTime
+    //      GetIsRamping
+
+// Organization:
+// Attribute Name,
+// State Variable Name (can be NULL), State variable type
+// Actions:
+//    0: "GET" action name, action type, optional out parameters: var_name,var_type
+//    1: "SET" action name, action type, optional in parameters: var_name,var_type
+vector <UpnpAttributeInfo> UpnpDimming::Attributes = {
+    {"brightness",
+     "LoadLevelStatus", G_TYPE_UINT,
+     {{"GetLoadLevelStatus", UPNP_ACTION_GET, "retLoadlevelStatus", G_TYPE_UINT},
+      {"SetLoadLevelTarget", UPNP_ACTION_POST, "newLoadlevelTarget", G_TYPE_UINT}}
+    }
 };
-
-GUPnPServiceProxyAction* UpnpDimming::getLoadLevel(UpnpRequest *request)
-{
-    DEBUG_PRINT("");
-
-    return gupnp_service_proxy_begin_action (m_proxy,
-                                             "GetLoadLevelStatus",
-                                             getLoadLevelCb,
-                                             (gpointer *) request,
-                                             NULL);
-}
-
-void UpnpDimming::getLoadLevelCb(GUPnPServiceProxy *proxy,
-                                 GUPnPServiceProxyAction *action,
-                                 gpointer userData)
-{
-    GError *error = NULL;
-    int value;
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
-
-    bool status = gupnp_service_proxy_end_action (proxy,
-                                                  action,
-                                                  &error,
-                                                  "retLoadlevelStatus",
-                                                  G_TYPE_UINT,
-                                                  &value,
-                                                  NULL);
-
-    if (error) {
-        ERROR_PRINT("GetLoadLevel failed: " << error->code << ", " << error->message);
-        g_error_free (error);
-        status = false;
-    }
-
-    if (status)
-    {
-        DEBUG_PRINT("brightness "<< value);
-        request->resource->setAttribute("brightness", value, false);
-    }
-
-    UpnpRequest::requestDone(request, status);
-}
 
 bool UpnpDimming::getAttributesRequest(UpnpRequest *request)
 {
     bool status = false;
-    for (auto it = this->AttributeMap.begin(); it != this->AttributeMap.end(); ++it)
+
+    for (auto it = m_attributeMap.begin(); it != m_attributeMap.end(); ++it)
     {
+        DEBUG_PRINT(" \"" << it->first << "\"");
         // Check the request
         if (!UpnpAttribute::isValidRequest(&m_attributeMap, it->first, UPNP_ACTION_GET))
         {
@@ -82,8 +73,9 @@ bool UpnpDimming::getAttributesRequest(UpnpRequest *request)
             continue;
         }
 
-        GetAttributeHandler fp = it->second.first;
-        GUPnPServiceProxyAction *action = (this->*fp)(request);
+        UpnpAttributeInfo *attrInfo = it->second.first;
+        GUPnPServiceProxyAction *action = UpnpAttribute::get(m_proxy, request, attrInfo);
+
         status |= (action != NULL);
         if (action == NULL)
         {
@@ -111,67 +103,14 @@ bool UpnpDimming::setAttributesRequest(const RCSResourceAttributes &value, UpnpR
         }
         RCSResourceAttributes::Value attrValue = it->value();
 
-        SetAttributeHandler fp = this->AttributeMap[attrName].second;
-        GUPnPServiceProxyAction *action = (this->*fp)(attrValue, request);
+        UpnpAttributeInfo *attrInfo = m_attributeMap[attrName].first;
+        GUPnPServiceProxyAction *action = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
         status |= (action != NULL);
         if (action == NULL)
         {
             request->done++;
         }
-        else
-        {
-            // Save the proxy handle and value to be used in callback
-            request->proxieMap[action] = attrValue;
-        }
     }
 
     return status;
-}
-
-GUPnPServiceProxyAction * UpnpDimming::setLoadLevel(RCSResourceAttributes::Value& attrValue, UpnpRequest *request)
-{
-
-    int value = attrValue.get< int >();
-
-    return gupnp_service_proxy_begin_action (m_proxy,
-                                             "SetLoadLevelTarget",
-                                             setLoadLevelCb,
-                                             (gpointer *) request,
-                                             "newLoadlevelTarget",
-                                             G_TYPE_UINT,
-                                             value,
-                                             NULL);
-}
-
-void UpnpDimming::setLoadLevelCb(GUPnPServiceProxy *proxy,
-                                 GUPnPServiceProxyAction *action,
-                                 gpointer userData)
-{
-    GError *error = NULL;
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
-    bool status = gupnp_service_proxy_end_action (proxy,
-                                                  action,
-                                                  &error,
-                                                  NULL);
-    if (error) {
-        ERROR_PRINT("SetLoadLevel failed: " << error->code << ", " << error->message);
-        g_error_free (error);
-        status = false;
-    }
-
-    if (status)
-    {
-        std::map< GUPnPServiceProxyAction *, RCSResourceAttributes::Value >::iterator it = request->proxieMap.find(action);
-
-        if (it != request->proxieMap.end())
-        {
-            int value = it->second.get< int >();
-            DEBUG_PRINT("brightness "<< value);
-
-            request->resource->setAttribute("brightness", value, false);
-            request->proxieMap.erase(it);
-        }
-    }
-
-    UpnpRequest::requestDone(request, status);
 }

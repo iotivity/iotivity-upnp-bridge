@@ -24,105 +24,27 @@ using namespace OIC::Service;
 
 static const string MODULE = "UpnpPowerSwitchService";
 
-// Attribute map: "attribute name" -> GET/SET request handlers
-map <const string, pair <UpnpPowerSwitch::GetAttributeHandler, UpnpPowerSwitch::SetAttributeHandler>> UpnpPowerSwitch::AttributeMap =
-{
-    {"value", {&UpnpPowerSwitch::getTarget, &UpnpPowerSwitch::setTarget}}
+// Power switch service
+
+// Organization:
+// Attribute Name,
+// State Variable Name (can be NULL), State variable type
+// Actions:
+//    0: "GET" action name, action type, optional out parameters: var_name,var_type
+//    1: "SET" action name, action type, optional in parameters: var_name,var_type
+vector <UpnpAttributeInfo> UpnpPowerSwitch::Attributes = {
+    {"value",
+     "Status", G_TYPE_BOOLEAN,
+     {{"GetTarget", UPNP_ACTION_GET, "RetTargetValue", G_TYPE_BOOLEAN},
+      {"SetTarget", UPNP_ACTION_POST, "newTargetValue", G_TYPE_BOOLEAN}},
+    }
 };
-
-void UpnpPowerSwitch::getTargetCb(GUPnPServiceProxy *proxy,
-                                  GUPnPServiceProxyAction *action,
-                                  gpointer userData)
-{
-    GError *error = NULL;
-    bool value;
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
-
-    bool status = gupnp_service_proxy_end_action (proxy,
-                                                  action,
-                                                  &error,
-                                                  "RetTargetValue",
-                                                  G_TYPE_BOOLEAN,
-                                                  &value,
-                                                  NULL);
-    if (error) {
-        ERROR_PRINT("GetTarget failed: " << error->code << ", " << error->message);
-        g_error_free (error);
-        status = false;
-    }
-
-    if (status)
-    {
-        DEBUG_PRINT("value "<< value);
-        request->resource->setAttribute("value", value, false);
-    }
-
-    UpnpRequest::requestDone(request, status);
-}
-
-GUPnPServiceProxyAction* UpnpPowerSwitch::getTarget(UpnpRequest *request)
-{
-
-    return gupnp_service_proxy_begin_action (m_proxy,
-                                             "GetTarget",
-                                             getTargetCb,
-                                             (gpointer *) request,
-                                             NULL);
-}
-
-void UpnpPowerSwitch::setTargetCb(GUPnPServiceProxy *proxy,
-                                  GUPnPServiceProxyAction *action,
-                                  gpointer userData)
-{
-    GError *error = NULL;
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
-    bool status = gupnp_service_proxy_end_action (proxy,
-                                                  action,
-                                                  &error,
-                                                  NULL);
-    if (error) {
-        ERROR_PRINT("SetTarget failed: " << error->code << ", " << error->message);
-        g_error_free (error);
-        status = false;
-    }
-
-    if (status)
-    {
-        std::map< GUPnPServiceProxyAction *, RCSResourceAttributes::Value >::iterator it = request->proxieMap.find(action);
-
-        if (it != request->proxieMap.end())
-        {
-            bool value = it->second.get< bool >();
-            DEBUG_PRINT("value "<< value);
-
-            request->resource->setAttribute("value", value, false);
-            request->proxieMap.erase(it);
-        }
-    }
-
-    UpnpRequest::requestDone(request, status);
-}
-
-GUPnPServiceProxyAction * UpnpPowerSwitch::setTarget(RCSResourceAttributes::Value& attrValue, UpnpRequest *request)
-{
-
-    bool value = attrValue.get< bool >();
-
-    return gupnp_service_proxy_begin_action (m_proxy,
-                                             "SetTarget",
-                                             setTargetCb,
-                                             (gpointer *) request,
-                                             "newTargetValue",
-                                             G_TYPE_BOOLEAN,
-                                             value,
-                                             NULL);
-}
 
 bool UpnpPowerSwitch::getAttributesRequest(UpnpRequest *request)
 {
     bool status = false;
 
-    for (auto it = this->AttributeMap.begin(); it != this->AttributeMap.end(); ++it)
+    for (auto it = m_attributeMap.begin(); it != m_attributeMap.end(); ++it)
     {
         DEBUG_PRINT(" \"" << it->first << "\"");
         // Check the request
@@ -132,8 +54,9 @@ bool UpnpPowerSwitch::getAttributesRequest(UpnpRequest *request)
             continue;
         }
 
-        GetAttributeHandler fp = it->second.first;
-        GUPnPServiceProxyAction *action = (this->*fp)(request);
+        UpnpAttributeInfo *attrInfo = it->second.first;
+        GUPnPServiceProxyAction *action = UpnpAttribute::get(m_proxy, request, attrInfo);
+
         status |= (action != NULL);
         if (action == NULL)
         {
@@ -161,17 +84,12 @@ bool UpnpPowerSwitch::setAttributesRequest(const RCSResourceAttributes &value, U
         }
         RCSResourceAttributes::Value attrValue = it->value();
 
-        SetAttributeHandler fp = this->AttributeMap[attrName].second;
-        GUPnPServiceProxyAction *action = (this->*fp)(attrValue, request);
+        UpnpAttributeInfo *attrInfo = m_attributeMap[attrName].first;
+        GUPnPServiceProxyAction *action = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
         status |= (action != NULL);
         if (action == NULL)
         {
             request->done++;
-        }
-        else
-        {
-            // Save the proxy handle and value to be used in callback
-            request->proxieMap[action] = attrValue;
         }
     }
 
