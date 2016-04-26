@@ -72,7 +72,7 @@ private:
 
     // Mapping of UPnP state variables that are observed/notified to
     // corresponding OCF attributes
-    map <const char*, pair <string, GType>> m_stateVarMap;
+    map <string, pair <string, GType>> m_stateVarMap;
 
     static string getStringField(function< char*(GUPnPServiceInfo *serviceInfo)> f, GUPnPServiceInfo *serviceInfo);
 
