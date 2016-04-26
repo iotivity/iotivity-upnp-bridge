@@ -27,8 +27,7 @@
 
 #include <glib.h>
 
-#include <RCSResourceAttributes.h>
-
+#include "UpnpInternal.h"
 #include "UpnpResource.h"
 
 class UpnpRequest
@@ -40,13 +39,15 @@ public:
     int done;
 
     UpnpResource* resource;
-    std::map <GUPnPServiceProxyAction *, RCSResourceAttributes::Value> proxieMap;
+    // We have to keep attribute info and (optional) set value
+    std::map <GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>> proxyMap;
 
     static void requestDone (UpnpRequest *request, bool status)
     {
         request->done++;
         if (request->done == request->expected)
         {
+            request->proxyMap.clear();
             request->finish(status);
         }
     }

@@ -396,7 +396,10 @@ void UpnpConnector::unregisterDeviceResource(string udn)
         if (pService != nullptr)
         {
             // Unsubscribe from notifications
-            gupnp_service_proxy_set_subscribed(pService->getProxy(), false);
+            if (pService->getProxy() != nullptr)
+            {
+                gupnp_service_proxy_set_subscribed(pService->getProxy(), false);
+            }
 
             if (pService->isRegistered())
             {
