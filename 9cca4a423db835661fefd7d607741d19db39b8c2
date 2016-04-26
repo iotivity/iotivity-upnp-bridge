@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_9847e14b",
+        "filename": "src/UpnpService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-04-26T17:56:25Z",
+      "side": 1,
+      "message": "This does not seem more efficient the the original code.  The original code did a find on the var name while this looks like it loops through the m_stateVarMap.  Am I missing something?",
+      "range": {
+        "startLine": 274,
+        "startChar": 8,
+        "endLine": 277,
+        "endChar": 13
+      },
+      "revId": "9cca4a423db835661fefd7d607741d19db39b8c2",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
