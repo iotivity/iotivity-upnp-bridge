@@ -78,14 +78,6 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
 
     m_interface = UpnpInterfaceMap[m_resourceType];
 
-    // Check if attribute description is present
-    if (UpnpAttribute::getServiceAttributeInfo(m_resourceType) == nullptr)
-    {
-        ERROR_PRINT("Attributes for " << m_resourceType << " not found!");
-        throw NotImplementedException("UpnpService::ctor: attributes for " + m_resourceType + " not found!");
-        return;
-    }
-
     initAttributes();
 
 }
@@ -109,7 +101,7 @@ UpnpService::~UpnpService()
 
 RCSResourceAttributes UpnpService::handleGetAttributesRequest()
 {
-    DEBUG_PRINT("(" << std::this_thread::get_id()<< ")");
+    DEBUG_PRINT("(" << std::this_thread::get_id()<< "), uri:" << m_uri);
 
     std::promise< bool > promise;
     UpnpRequest request;
@@ -122,7 +114,7 @@ RCSResourceAttributes UpnpService::handleGetAttributesRequest()
             bool status = getAttributesRequest(&request);
             return status;
         };
-        request.finish = [&] (bool status) { promise.set_value(status); };
+        request.finish = [&] (bool status) { DEBUG_PRINT("finish get request"); promise.set_value(status); };
         m_requestState->requestQueue.push(&request);
 
         // Add the gupnp callback if it has not been scheduled yet
@@ -147,7 +139,7 @@ RCSResourceAttributes UpnpService::handleGetAttributesRequest()
 
 void UpnpService::handleSetAttributesRequest(const RCSResourceAttributes &value)
 {
-    DEBUG_PRINT("(" << std::this_thread::get_id()<< ")");
+    DEBUG_PRINT("(" << std::this_thread::get_id()<< "), uri:" << m_uri);
 
     std::promise< bool > promise;
     UpnpRequest request;
@@ -160,7 +152,7 @@ void UpnpService::handleSetAttributesRequest(const RCSResourceAttributes &value)
             bool status = setAttributesRequest(value, &request);
             return status;
         };
-        request.finish = [&] (bool status) { promise.set_value(status); };
+        request.finish = [&] (bool status) { DEBUG_PRINT("finish set request"); promise.set_value(status); };
         m_requestState->requestQueue.push(&request);
 
         // Add the gupnp callback if it has not been scheduled yet
@@ -198,7 +190,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
 {
 
     // Load attributes description
-    vector <UpnpAttributeInfo> *attributeList = UpnpAttribute::getServiceAttributeInfo(m_resourceType);
+    vector <UpnpAttributeInfo> *attributeList = m_serviceAttributeInfo;//UpnpAttribute::getServiceAttributeInfo(m_resourceType);
     vector<UpnpAttributeInfo>::iterator attr;
     const GList *actionNameList = gupnp_service_introspection_list_action_names(introspection);
 
@@ -216,7 +208,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
             {
                 for (auto action : attr->actions)
                 {
-                    actionMap[action.first] = {attr->name, action.second};
+                    actionMap[action.name] = {attr->name, action.type};
                 }
             }
         }
@@ -254,9 +246,14 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
     // corresponding OCF attributes
     for(attr = attributeList->begin() ; attr != attributeList->end() ; ++attr)
     {
-        if (string(attr->stateVar) != "")
+        DEBUG_PRINT("Attr State variable: "<< attr->varName);
+        if (string(attr->varName) != "")
         {
-            m_stateVarMap[attr->stateVar] = {attr->name, attr->type};
+            DEBUG_PRINT("Add to map State variable: "<< attr->varName);
+            m_stateVarMap[attr->varName].first = attr->name;
+            m_stateVarMap[attr->varName].second = attr->type;
+        } else {
+            DEBUG_PRINT("faied Add to map State variable: "<< string(attr->varName));
         }
     }
 
@@ -264,7 +261,6 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
     {
         return;
     }
-
 
     // Set notifications on supported state variables
     const GList *stateVarList = gupnp_service_introspection_list_state_variable_names(introspection);
@@ -282,15 +278,24 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
 
             if (it != m_stateVarMap.end())
             {
-                if (!gupnp_service_proxy_add_notify (proxy,
-                                                     varName,
-                                                     (it->second).second,
-                                                     onStateChanged,
-                                                     this))
+                if (string(it->first) == string(varName))
                 {
-                    ERROR_PRINT("Failed to add notify for " << varName);
+                    if (!gupnp_service_proxy_add_notify (proxy,
+                                                         varName,
+                                                         (it->second).second,
+                                                         onStateChanged,
+                                                         this))
+                    {
+                        ERROR_PRINT("Failed to add notify for " << varName);
+                    }
+                    else
+                    {
+                        DEBUG_PRINT("Added notify for: "<< varName << ", " << (it->second).first << ", " << (it->second).second);
+                    }
+                    break;
                 }
             }
+
         }
     }
 }
@@ -308,16 +313,18 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
 
     if (it == pService->m_stateVarMap.end())
     {
-        DEBUG_PRINT("state variable: "<< variable << " not found for" << pService->getId());
+        DEBUG_PRINT("state var not found: "<< variable);
         return;
     }
 
     if ((it->second).second == G_TYPE_BOOLEAN)
-    {
-        pService->BundleResource::setAttribute((it->second).first, g_value_get_boolean(value));
+    {   bool vbool = g_value_get_boolean(value);
+        DEBUG_PRINT("set " << (it->second).first << " to " << vbool);
+        pService->BundleResource::setAttribute((it->second).first, vbool);
     }
     else if ((it->second).second == G_TYPE_UINT)
     {
+        DEBUG_PRINT("set " << (it->second).first << " to " << g_value_get_uint(value));
         pService->BundleResource::setAttribute((it->second).first, (int) (g_value_get_uint(value)));
     }
     else
