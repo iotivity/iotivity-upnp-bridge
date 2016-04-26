@@ -258,26 +258,33 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
     // Set notifications on supported state variables
     const GList *stateVarList = gupnp_service_introspection_list_state_variable_names(introspection);
 
-    if (stateVarList != NULL)
+    if (stateVarList == NULL)
     {
-        const GList *l;
-        DEBUG_PRINT(" # of state variables: " << g_list_length((GList *)stateVarList));
-        for (l = stateVarList; l != NULL; l = l->next)
+        return;
+    }
+
+    const GList *l;
+    DEBUG_PRINT(" # of state variables: " << g_list_length((GList *)stateVarList));
+    for (l = stateVarList; l != NULL; l = l->next)
+    {
+        const char* varName = (const char *) l->data;
+        DEBUG_PRINT("State variable: "<< varName);
+
+        std::map<const char*, pair<string, GType>>::iterator it;
+        for (it = m_stateVarMap.begin(); it != m_stateVarMap.end(); ++it)
         {
-            const char* varName = (const char *) l->data;
-            DEBUG_PRINT("State variable: "<< varName);
-
-            std::map<const char*, pair<string, GType>>::iterator it = m_stateVarMap.find(varName);
-
-            if (it != m_stateVarMap.end())
+            if (string(it->first) == string(varName))
             {
-                if (!gupnp_service_proxy_add_notify (proxy,
-                                                     varName,
-                                                     (it->second).second,
-                                                     onStateChanged,
-                                                     this))
+                if (it != m_stateVarMap.end())
                 {
-                    ERROR_PRINT("Failed to add notify for " << varName);
+                    if (!gupnp_service_proxy_add_notify (proxy,
+                                                         it->first,
+                                                         (it->second).second,
+                                                         onStateChanged,
+                                                         this))
+                    {
+                        ERROR_PRINT("Failed to add notify for " << varName);
+                    }
                 }
             }
         }
@@ -295,24 +302,29 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
 
     DEBUG_PRINT("("<< std::this_thread::get_id() << "): notification state variable: "<< variable);
 
+    for (it = pService->m_stateVarMap.begin(); it != pService->m_stateVarMap.end(); ++it)
+    {
+        if (string(it->first) == string(variable))
+        {
+            if ((it->second).second == G_TYPE_BOOLEAN)
+            {
+                pService->BundleResource::setAttribute((it->second).first, g_value_get_boolean(value));
+            }
+            else if ((it->second).second == G_TYPE_UINT)
+            {
+                pService->BundleResource::setAttribute((it->second).first, (int) (g_value_get_uint(value)));
+            }
+            else
+            {
+                //TODO this should probably throw and error.
+                ERROR_PRINT("Not implemented!");
+            }
+        }
+    }
+
     if (it == pService->m_stateVarMap.end())
     {
         DEBUG_PRINT("state variable: "<< variable << " not found for" << pService->getId());
-        return;
-    }
-
-    if ((it->second).second == G_TYPE_BOOLEAN)
-    {
-        pService->BundleResource::setAttribute((it->second).first, g_value_get_boolean(value));
-    }
-    else if ((it->second).second == G_TYPE_UINT)
-    {
-        pService->BundleResource::setAttribute((it->second).first, (int) (g_value_get_uint(value)));
-    }
-    else
-    {
-        //TODO this should probably throw and error.
-        ERROR_PRINT("Not implemented!");
     }
 }
 
