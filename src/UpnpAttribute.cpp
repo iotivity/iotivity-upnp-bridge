@@ -19,85 +19,7 @@
 
 using namespace std;
 
-// Service specific attribute initialization
-
-// Power switch service
-static vector <UpnpAttributeInfo> UpnpPowerSwitchAttributes = {
-    {"value", "Status", G_TYPE_BOOLEAN,
-     {{"GetTarget", UPNP_ACTION_GET}, {"SetTarget", UPNP_ACTION_POST}, {"GetStatus",UPNP_ACTION_GET}},
-    }
-};
-
-// Brightness service
-    // TODO the following actions are not yet mapped: (note all unmapped actions are optional)
-    //      SetOnEffectLevel
-    //      SetOnEffect
-    //      GetOnEffectParameters
-    //      StepUp
-    //      StepDown
-    //      StartRampUp
-    //      StartRampDown
-    //      StopRamp
-    //      StartRampToLevel
-    //      SetStepDelta
-    //      GetStepDelta
-    //      SetRampRate
-    //      GetRampRate
-    //      PauseRamp
-    //      ResumeRamp
-    //      GetRampPaused
-    //      GetRampTime
-    //      GetIsRamping
-static vector <UpnpAttributeInfo> UpnpDimmingAttributes = {
-    {"brightness", "LoadLevelStatus", G_TYPE_UINT,
-     {{"GetLoadLevelTarget", UPNP_ACTION_GET}, {"SetLoadLevelTarget", UPNP_ACTION_POST}, {"GetLoadLevelStatus",UPNP_ACTION_GET}}
-    }
-};
-
-#if 0
-static vector <UpnpAttributeInfo> UpnpWanCommonInterfaceConfigAttributes = {
-    UpnpAttribute("enabledForInternet",   {{"GetEnabledForInternet", UPNP_ACTION_GET}, {"SetEnabledForInternet", UPNP_ACTION_POST}},
-                  "EnabledForInternet", G_TYPE_BOOLEAN),
-    UpnpAttributeInfo("accessType",           {{"GetCommonLinkProperties", UPNP_ACTION_GET}}),
-    UpnpAttributeInfo("upMaxBitRate",         {{"GetCommonLinkProperties", UPNP_ACTION_GET}}),
-    UpnpAttributeInfo("downMaxBitRate",       {{"GetCommonLinkProperties", UPNP_ACTION_GET}}),
-    UpnpAttributeInfo("physLinkStatus",       {{"GetCommonLinkProperties", UPNP_ACTION_GET}},
-                      "PhysicalLinkStatus", G_TYPE_STRING),
-    UpnpAttributeInfo("wanAccesssProvider",   {{"GetWANAccessProvider", UPNP_ACTION_GET}}),
-    UpnpAttributeInfo("maxActiveConnections", {{"GetMaximumActiveConnections", UPNP_ACTION_GET}}),
-    UpnpAttributeInfo("totalBytesSent",       {{"GetTotalBytesSent", UPNP_ACTION_GET}}),
-    UpnpAttributeInfo("totalBytesReceived",   {{"GetTotalBytesRecieved", UPNP_ACTION_GET}}),
-    UpnpAttributeInfo("totalPacketsSent",     {{"GetTotalPacketsSent", UPNP_ACTION_GET}}),
-    UpnpAttributeInfo("totalPacketsReceived", {{"GetTotalPacketsRecieved", UPNP_ACTION_GET}}),
-    //Special case: no matching UPNP function, but the attribute value
-    //can be set based on observation
-    UpnpAttributeInfo("numActiveConnections",  {{"", UPNP_ACTION_GET}},
-                  "NumberOfActiveConnections", G_TYPE_UINT),
-    //"activeConnection" is a composite attribute with tags:
-    //    "deviceContainer" (matches UpNP "ActiveConnectionDeviceContainer")" &
-    //    "serviceID" (matches UPnP "ActiveConnectionServiceID")
-    UpnpAttributeInfo("activeConnection",     {{"GetActiveConnection", UPNP_ACTION_GET}})
-};
-#endif
-
-// Resource type -> service attribute info
-map <string, vector <UpnpAttributeInfo>> UpnpAttributeInfoMap =
-{
-    { UPNP_OIC_TYPE_BRIGHTNESS, UpnpDimmingAttributes },
-    { UPNP_OIC_TYPE_POWER_SWITCH, UpnpPowerSwitchAttributes }
-};
-
-vector <UpnpAttributeInfo> * UpnpAttribute::getServiceAttributeInfo(string resourceType)
-{
-    map<const string, vector<UpnpAttributeInfo>>::iterator it = UpnpAttributeInfoMap.find(resourceType);
-
-    if (it == UpnpAttributeInfoMap.end())
-    {
-        return nullptr;
-    }
-
-    return &(it->second);
-}
+static const string MODULE = "UpnpAttribute";
 
 UpnpAttributeInfo * UpnpAttribute::getAttributeInfo(std::vector <UpnpAttributeInfo> *serviceAttributes,
                                                     std::string attrName)
@@ -132,4 +54,256 @@ bool UpnpAttribute::isValidRequest(map <string, pair <UpnpAttributeInfo*, int>> 
     }
 
     return false;
+}
+
+
+void UpnpAttribute::getCb(GUPnPServiceProxy *proxy,
+                          GUPnPServiceProxyAction *action,
+                          gpointer userData)
+{
+    GError *error = NULL;
+    UpnpVar value;
+    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
+    UpnpAttributeInfo *attrInfo;
+
+    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(action);
+
+    assert(it != request->proxyMap.end());
+
+    attrInfo = it->second.first;
+    DEBUG_PRINT(attrInfo->actions[0].varName);
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  action,
+                                                  &error,
+                                                  attrInfo->actions[0].varName,
+                                                  attrInfo->actions[0].varType,
+                                                  &value.var_int64,
+                                                  NULL);
+
+    if (error) {
+        ERROR_PRINT("\"" <<attrInfo->actions[0].name << "\" action failed: " << error->code << ", " << error->message);
+        g_error_free (error);
+        status = false;
+    }
+
+    if (status)
+    {
+        switch (attrInfo->actions[0].varType)
+        {
+        case G_TYPE_STRING:
+            {
+                DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(string) "<< string(static_cast<const char *>(value.var_pchar)));
+                request->resource->setAttribute(attrInfo->name, string(value.var_pchar), false);
+                break;
+            }
+        case G_TYPE_BOOLEAN:
+            {
+                bool vbool = value.var_boolean;
+                DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(bool) "<< vbool);
+                request->resource->setAttribute(attrInfo->name, vbool, false);
+                break;
+            }
+        case G_TYPE_INT:
+        case G_TYPE_UINT:
+            {
+                DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(int) "<< value.var_int);
+                request->resource->setAttribute(attrInfo->name, value.var_int, false);
+                break;
+            }
+        case G_TYPE_INT64:
+        case G_TYPE_UINT64:
+            {
+                DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(int64) "<< value.var_uint64);
+                request->resource->setAttribute(attrInfo->name, static_cast<double>(value.var_int64), false);
+                break;
+            }
+        default:
+            {
+                //TODO: handle additional types?
+                ERROR_PRINT("Type handling not implemented!");
+                assert(0);
+            }
+        }
+    } else
+    {
+        ERROR_PRINT("Failed to retrieve " << attrInfo->actions[0].varName);
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+GUPnPServiceProxyAction* UpnpAttribute::get(GUPnPServiceProxy *serviceProxy,
+                                            UpnpRequest *request,
+                                            UpnpAttributeInfo *attrInfo)
+{
+    GUPnPServiceProxyAction *proxyAction = gupnp_service_proxy_begin_action (serviceProxy,
+                                                                             attrInfo->actions[0].name,
+                                                                             getCb,
+                                                                             (gpointer *) request,
+                                                                             NULL);
+    // Hold on to the attribute info
+    if (proxyAction != NULL)
+    {
+        request->proxyMap[proxyAction].first = attrInfo;
+        request->proxyMap[proxyAction].second.var_int64 = 0;
+    }
+
+    return proxyAction;
+}
+
+void UpnpAttribute::setCb(GUPnPServiceProxy *proxy,
+                          GUPnPServiceProxyAction *action,
+                          gpointer userData)
+{
+    GError *error = NULL;
+    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
+    UpnpAttributeInfo *attrInfo;
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  action,
+                                                  &error,
+                                                  NULL);
+    if (error) {
+        ERROR_PRINT("Set action failed: " << error->code << ", " << error->message);
+        g_error_free (error);
+        status = false;
+    }
+
+    if (status)
+    {
+        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(action);
+
+        if (it != request->proxyMap.end())
+        {
+            attrInfo = it->second.first;
+            UpnpVar value = it->second.second;
+
+            switch (attrInfo->actions[1].varType)
+            {
+            case G_TYPE_STRING:
+                {
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(string) "<< string(value.var_pchar));
+                    request->resource->setAttribute(attrInfo->name, string(value.var_pchar), false);
+                    break;
+                }
+            case G_TYPE_BOOLEAN:
+                {
+                    bool vbool = value.var_boolean;
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(bool) "<< vbool);
+                    request->resource->setAttribute(attrInfo->name, vbool, false);
+                    break;
+                }
+            case G_TYPE_INT:
+            case G_TYPE_UINT:
+                {
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(int) "<< value.var_int);
+                    request->resource->setAttribute(attrInfo->name, value.var_int, false);
+                    break;
+                }
+            case G_TYPE_INT64:
+            case G_TYPE_UINT64:
+                {
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(int64) "<< value.var_uint64);
+                    request->resource->setAttribute(attrInfo->name, static_cast<double>(value.var_int64), false);
+                    break;
+                }
+            default:
+                {
+                    //TODO: handle additional types?
+                    ERROR_PRINT("Type handling not implemented!");
+                    assert(0);
+                }
+            }
+        }
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+GUPnPServiceProxyAction* UpnpAttribute::set(GUPnPServiceProxy *serviceProxy,
+                                            UpnpRequest *request,
+                                            UpnpAttributeInfo *attrInfo,
+                                            RCSResourceAttributes::Value* attrValue)
+{
+    GUPnPServiceProxyAction *proxyAction;
+    UpnpVar value;
+
+    if (attrValue != NULL)
+    {
+        // Type of the value to be stored can be derived either from
+        // input variable type or from state variable type
+        GType type = (attrInfo->actions[1].varType != G_TYPE_NONE) ?
+            attrInfo->actions[1].varType : attrInfo->type;
+
+        switch (type)
+        {
+        case G_TYPE_STRING:
+            {
+                const char* sValue = (attrValue->get< string >()).c_str();
+                DEBUG_PRINT("resource: " << request->resource->m_uri << ", (string) " << sValue);
+                value.var_pchar = sValue;
+                break;
+            }
+        case G_TYPE_BOOLEAN:
+            {
+                value.var_boolean = attrValue->get< bool >();
+                DEBUG_PRINT("resource: " << request->resource->m_uri << ", (bool) " << value.var_boolean);
+                break;
+            }
+        case G_TYPE_INT:
+        case G_TYPE_UINT:
+            {
+                value.var_int = attrValue->get< int >();
+                DEBUG_PRINT("resource: " << request->resource->m_uri << ", (int) " << value.var_int);
+                break;
+            }
+        case G_TYPE_INT64:
+        case G_TYPE_UINT64:
+            {
+                value.var_int64 = attrValue->get< double >();
+                DEBUG_PRINT("resource: " << request->resource->m_uri << ", (int64) " << value.var_int64);
+                break;
+            }
+        default:
+            {
+                //TODO: handle additional types?
+                ERROR_PRINT("Type handling not implemented!");
+                assert(0);
+            }
+        }
+    }
+    else
+    {
+        value.var_int64 = 0;
+    }
+
+    if (string(attrInfo->actions[1].varName) == "")
+    {
+        DEBUG_PRINT("action (no args): " << attrInfo->actions[1].name);
+        proxyAction = gupnp_service_proxy_begin_action (serviceProxy,
+                                                        attrInfo->actions[1].name,
+                                                        setCb,
+                                                        (gpointer *) request,
+                                                        NULL);
+    }
+    else
+    {
+        DEBUG_PRINT("action: " << attrInfo->actions[1].name << "( " << attrInfo->actions[1].varName << " )");
+        proxyAction = gupnp_service_proxy_begin_action (serviceProxy,
+                                                 attrInfo->actions[1].name,
+                                                 setCb,
+                                                 (gpointer *) request,
+                                                 attrInfo->actions[1].varName,
+                                                 attrInfo->actions[1].varType,
+                                                 value.var_int64,
+                                                 NULL);
+    }
+
+    // Hold on to the attribute info and value that is being modified
+    if (proxyAction != NULL)
+    {
+        request->proxyMap[proxyAction] = {attrInfo, value};
+    }
+
+    return proxyAction;
 }
