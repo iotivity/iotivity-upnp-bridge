@@ -35,33 +35,17 @@ class UpnpDimming: public UpnpService
     friend class UpnpService;
 
 public:
-    typedef GUPnPServiceProxyAction* (UpnpDimming::*GetAttributeHandler)(UpnpRequest *request);
-    typedef GUPnPServiceProxyAction* (UpnpDimming::*SetAttributeHandler)(RCSResourceAttributes::Value&, UpnpRequest *request);
-
-    static vector <UpnpAttribute> Attributes;
-
     UpnpDimming(GUPnPServiceInfo *serviceInfo,
                 UpnpRequestState *requestState):
         UpnpService(serviceInfo, UPNP_OIC_TYPE_BRIGHTNESS, requestState)
     {
+        m_serviceAttributeInfo = &Attributes;
     }
 
-    GUPnPServiceProxyAction *getLoadLevel(UpnpRequest *request);
-    static void getLoadLevelCb(GUPnPServiceProxy *proxy,
-                               GUPnPServiceProxyAction *action,
-                               gpointer userData);
-
-    GUPnPServiceProxyAction *setLoadLevel(RCSResourceAttributes::Value& value,
-                                          UpnpRequest *request);
-    static void setLoadLevelCb(GUPnPServiceProxy *proxy,
-                               GUPnPServiceProxyAction *action,
-                               gpointer userData);
-
 private:
-    static map <const string, pair <GetAttributeHandler, SetAttributeHandler>> AttributeMap;
-
     bool getAttributesRequest(UpnpRequest *request);
     bool setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request);
+    static vector <UpnpAttributeInfo> Attributes;
 };
 
 #endif //UPNP_DIMMING_SERVICE_H_

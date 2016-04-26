@@ -19,11 +19,11 @@
 #define UPNP_ATTRIBUTE_H_
 
 #include "UpnpInternal.h"
+#include "UpnpRequest.h"
 
 class UpnpAttribute
 {
 public:
-    static std::vector <UpnpAttributeInfo> * getServiceAttributeInfo(std::string resourceType);
 
     static UpnpAttributeInfo * getAttributeInfo(std::vector <UpnpAttributeInfo> *serviceAttributes,
                                                 std::string attrName);
@@ -31,6 +31,24 @@ public:
     static bool isValidRequest(std::map <std::string, std::pair <UpnpAttributeInfo*, int>> *attrMap,
                                std::string,
                                UpnpActionType actionType);
+
+    static void getCb(GUPnPServiceProxy *proxy,
+                      GUPnPServiceProxyAction *action,
+                      gpointer userData);
+
+    static GUPnPServiceProxyAction* get(GUPnPServiceProxy *serviceProxy,
+                                        UpnpRequest *request,
+                                        UpnpAttributeInfo *attrInfo);
+
+    static void setCb(GUPnPServiceProxy *proxy,
+                      GUPnPServiceProxyAction *action,
+                      gpointer userData);
+
+    static GUPnPServiceProxyAction* set(GUPnPServiceProxy *serviceProxy,
+                                        UpnpRequest *request,
+                                        UpnpAttributeInfo *attrInfo,
+                                        RCSResourceAttributes::Value* attrValue);
+
 };
 
 #endif

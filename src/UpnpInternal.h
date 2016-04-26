@@ -76,22 +76,44 @@ static std::map<std::string, std::string > UpnpUriPrefixMap =
 
 typedef enum
 {
-    UPNP_ACTION_GET = 1,
-    UPNP_ACTION_PUT = 2,
-    UPNP_ACTION_POST = 4,
+    UPNP_ACTION_GET    = 1,
+    UPNP_ACTION_POST   = 2,
+    UPNP_ACTION_PUT    = 4,
     UPNP_ACTION_DELETE = 8
 } UpnpActionType;
 
-//typedef std::function< bool(void) > GetAttributeHandler;
-//typedef std::function< bool(RCSResourceAttributes::Value&) > SetAttributeHandler;
+typedef struct _UpnpAction
+{
+    const char*    name;
+    UpnpActionType type;
+
+    // Argument descriptors for a simple UPnP action:
+    // number of input parameters <= 1 xor
+    // number of output parameters <= 1
+    // Anything more complex than this would require custom approach
+    const char* varName;
+    GType       varType;
+} UpnpAction;
 
 typedef struct _UpnpAttributeInfo
 {
     std::string name;
-    const char* stateVar;
+    const char* varName;
     GType type;
-    std::vector < std::pair <std::string, UpnpActionType>> actions;
+    // Action position in the vector correspond to GET/SET
+    // TODO: include DELETE?
+    std::vector <UpnpAction> actions;
 } UpnpAttributeInfo;
+
+typedef union _UpnpVar
+{
+    gboolean     var_boolean;
+    guint        var_uint;
+    gint         var_int;
+    guint64      var_uint64;
+    gint64       var_int64;
+    const gchar* var_pchar;
+} UpnpVar;
 
 #define ERROR_PRINT(x) do { std::cerr << MODULE << ":" << __func__ << "(): ERROR: " << x << std::endl; } while (0)
 
