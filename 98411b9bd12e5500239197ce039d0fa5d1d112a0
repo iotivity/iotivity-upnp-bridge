@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_98ba4109",
+        "filename": "src/UpnpService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-04-26T19:11:04Z",
+      "side": 1,
+      "message": "This does not matter for this commit. In future commits when using iterators C++11 keyword auto is your friend. i.e. \n   \n  auto it \u003d m_stateVarMap.find(\"string\"); \n\nWhy is this good?  This makes it possible to change the definition of m_stateVarMap without tracking down every place iterators are used on that map somewhere else in the code.  Just a note for future commits.",
+      "range": {
+        "startLine": 281,
+        "startChar": 12,
+        "endLine": 281,
+        "endChar": 59
+      },
+      "revId": "98411b9bd12e5500239197ce039d0fa5d1d112a0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
