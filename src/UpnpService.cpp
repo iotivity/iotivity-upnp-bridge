@@ -92,8 +92,19 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
 
 UpnpService::~UpnpService()
 {
+   if (!m_stateVarMap.empty())
+   {
+       std::map<string, pair<string, GType>>::iterator it;
+       for (it = m_stateVarMap.begin(); it != m_stateVarMap.end(); ++it)
+       {
+           gupnp_service_proxy_remove_notify (m_proxy,
+                                              (it->first).c_str(),
+                                              onStateChanged,
+                                              this);
+           m_stateVarMap.clear();
+       }
+   }
    m_proxy = nullptr;
-   m_stateVarMap.clear();
 }
 
 RCSResourceAttributes UpnpService::handleGetAttributesRequest()
@@ -267,7 +278,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
             const char* varName = (const char *) l->data;
             DEBUG_PRINT("State variable: "<< varName);
 
-            std::map<const char*, pair<string, GType>>::iterator it = m_stateVarMap.find(varName);
+            std::map<string, pair<string, GType>>::iterator it = m_stateVarMap.find(string(varName));
 
             if (it != m_stateVarMap.end())
             {
@@ -291,7 +302,7 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
 {
     UpnpService * pService = (UpnpService *) userData;
 
-    std::map<const char*, pair<string, GType>>::iterator it = pService->m_stateVarMap.find(variable);
+    std::map<string, pair<string, GType>>::iterator it = pService->m_stateVarMap.find(string(variable));
 
     DEBUG_PRINT("("<< std::this_thread::get_id() << "): notification state variable: "<< variable);
 
