@@ -174,7 +174,7 @@ int UpnpConnector::checkRequestQueue(gpointer data)
 {
     // Check request queue
     std::lock_guard< std::mutex > lock(s_requestState.queueLock);
-    DEBUG_PRINT("UpnpConnector::checkRequestQueue ("<< s_requestState.requestQueue.size() <<")");
+    DEBUG_PRINT("("<< s_requestState.requestQueue.size() <<")");
 
     while (!s_requestState.requestQueue.empty())
     {
@@ -242,10 +242,24 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
     UpnpResource::Ptr pUpnpResource;
     const string udn = gupnp_device_info_get_udn(deviceInfo);
     bool isRoot = (controlPoint == s_controlPointRoot);
-    cout << endl << "Device type: " << gupnp_device_info_get_device_type(deviceInfo) << endl;
-    cout << "\tDevice model: " << gupnp_device_info_get_model_name(deviceInfo) << endl;
-    cout << "\tFriendly name: " << gupnp_device_info_get_friendly_name(deviceInfo) << endl;
-    cout << "\tUdn: " << udn  << endl;
+
+    DEBUG_PRINT("Device type: " << gupnp_device_info_get_device_type(deviceInfo));
+#ifndef NDEBUG
+    char *devModel = gupnp_device_info_get_model_name(deviceInfo);
+    if (devModel != NULL)
+    {
+        DEBUG_PRINT("\tDevice model: " << devModel);
+        g_free(devModel);
+    }
+
+    char *devName = gupnp_device_info_get_friendly_name(deviceInfo);
+    if (devName != NULL)
+    {
+        DEBUG_PRINT("\tFriendly name: " << devName);
+        g_free(devName);
+    }
+#endif
+    DEBUG_PRINT("\tUdn: " << udn);
 
     if (isRoot)
     {
@@ -305,12 +319,11 @@ void UpnpConnector::onServiceProxyAvailable(GUPnPControlPoint *controlPoint,
 {
     GUPnPServiceInfo *info = GUPNP_SERVICE_INFO(proxy);
 
-    DEBUG_PRINT("");
-    cout << "Service type: " << gupnp_service_info_get_service_type(info) << endl;
-    cout << "\tUdn: " << gupnp_service_info_get_udn(info) << endl;
+    DEBUG_PRINT("Service type: " << gupnp_service_info_get_service_type(info));
+    DEBUG_PRINT("\tUdn: " << gupnp_service_info_get_udn(info));
 
     // Get service introspection.
-    // TODO; consider using gupnp_service_info_get_introspection_full with GCancellable.
+    // TODO: consider using gupnp_service_info_get_introspection_full with GCancellable.
     gupnp_service_info_get_introspection_async (info,
                                                 onIntrospectionAvailable,
                                                 NULL);
@@ -411,11 +424,10 @@ void UpnpConnector::onDeviceProxyUnavailable(GUPnPControlPoint *controlPoint,
     GUPnPDeviceInfo *info = GUPNP_DEVICE_INFO(proxy);
     const string udn = gupnp_device_info_get_udn(info);
 
-    cout << endl << "UpnpConnector::onDeviceProxyUnavailable: " << gupnp_device_info_get_device_type(info) << endl;
-    cout << "\tUdn: " << udn << endl;
+    DEBUG_PRINT(": " << gupnp_device_info_get_device_type(info));
+    DEBUG_PRINT("\tUdn: " << udn);
 
     unregisterDeviceResource(udn);
-
 }
 
 void UpnpConnector::onServiceProxyUnavailable(GUPnPControlPoint *controlPoint,
@@ -423,8 +435,8 @@ void UpnpConnector::onServiceProxyUnavailable(GUPnPControlPoint *controlPoint,
 {
     GUPnPServiceInfo *info = GUPNP_SERVICE_INFO(proxy);
 
-    cout << endl << "UpnpConnector::onServiceProxyUnavailable: Service type: " << gupnp_service_info_get_service_type(info) << endl;
-    cout << "\tUdn: " << gupnp_service_info_get_udn(info) << endl;
+    DEBUG_PRINT("Service type: " << gupnp_service_info_get_service_type(info));
+    DEBUG_PRINT("\tUdn: " << gupnp_service_info_get_udn(info));
     UpnpResource::Ptr pUpnpResourceService = s_manager->findResource(info);
 
     if (pUpnpResourceService != nullptr)
