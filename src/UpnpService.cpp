@@ -84,19 +84,21 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
 
 UpnpService::~UpnpService()
 {
-   if (!m_stateVarMap.empty())
-   {
-       std::map<string, pair<string, GType>>::iterator it;
-       for (it = m_stateVarMap.begin(); it != m_stateVarMap.end(); ++it)
-       {
-           gupnp_service_proxy_remove_notify (m_proxy,
-                                              (it->first).c_str(),
-                                              onStateChanged,
-                                              this);
-           m_stateVarMap.clear();
-       }
-   }
-   m_proxy = nullptr;
+    DEBUG_PRINT("(" << std::this_thread::get_id()<< "), uri:" << m_uri);
+
+    if (!m_stateVarMap.empty())
+    {
+        std::map<string, pair<string, GType>>::iterator it;
+        for (it = m_stateVarMap.begin(); it != m_stateVarMap.end(); ++it)
+        {
+            gupnp_service_proxy_remove_notify (m_proxy,
+                                               (it->first).c_str(),
+                                               onStateChanged,
+                                               this);
+            m_stateVarMap.clear();
+        }
+    }
+    m_proxy = nullptr;
 }
 
 RCSResourceAttributes UpnpService::handleGetAttributesRequest()
@@ -237,27 +239,30 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
                 m_attributeMap[attrName] = {attrInfo, flags};
 
                 DEBUG_PRINT("Action: "<< actionName << " maps to \"" << attrName << "\" ( flags: " << m_attributeMap[attrName].second << " )");
+            } else
+            {
+                DEBUG_PRINT("Match not found for action: "<< actionName);
+                
             }
         }
         DEBUG_PRINT("Matched " << m_attributeMap.size() << " attributes");
     }
 
+
     // Generate convenient map of UPnP state variables that are observed/notified to
     // corresponding OCF attributes
+    map <string, pair <string, GType>> varMap;
     for(attr = attributeList->begin() ; attr != attributeList->end() ; ++attr)
     {
-        DEBUG_PRINT("Attr State variable: "<< attr->varName);
         if (string(attr->varName) != "")
         {
-            DEBUG_PRINT("Add to map State variable: "<< attr->varName);
-            m_stateVarMap[attr->varName].first = attr->name;
-            m_stateVarMap[attr->varName].second = attr->type;
-        } else {
-            DEBUG_PRINT("faied Add to map State variable: "<< string(attr->varName));
+            DEBUG_PRINT("Attr State variable: "<< attr->varName);
+            varMap[string(attr->varName)].first = attr->name;
+            varMap[string(attr->varName)].second = attr->type;
         }
     }
 
-    if (m_stateVarMap.empty())
+    if (varMap.empty())
     {
         return;
     }
@@ -274,9 +279,9 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
             const char* varName = (const char *) l->data;
             DEBUG_PRINT("State variable: "<< varName);
 
-            std::map<string, pair<string, GType>>::iterator it = m_stateVarMap.find(string(varName));
+            std::map<string, pair<string, GType>>::iterator it = varMap.find(string(varName));
 
-            if (it != m_stateVarMap.end())
+            if (it != varMap.end())
             {
                 if (string(it->first) == string(varName))
                 {
@@ -290,7 +295,9 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
                     }
                     else
                     {
-                        DEBUG_PRINT("Added notify for: "<< varName << ", " << (it->second).first << ", " << (it->second).second);
+                        DEBUG_PRINT("Added notify for: "<< varName << ", " << (it->second).first <<
+                                    ", " << g_type_name((it->second).second));
+                        m_stateVarMap[it->first] = it->second;
                     }
                     break;
                 }
