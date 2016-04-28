@@ -25,6 +25,11 @@
 
 #include "UpnpDimmingService.h"
 #include "UpnpPowerSwitchService.h"
+#include "UpnpConnectionManagerService.h"
+#include "UpnpAVTransportService.h"
+#include "UpnpContentDirectoryService.h"
+#include "UpnpRenderingControlService.h"
+#include "UpnpScheduledRecordingService.h"
 
 #define nestedAtrribute std::vector<std::vector<RCSResourceAttributes>>
 
@@ -350,9 +355,24 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     else if(resourceType == UPNP_OIC_TYPE_BRIGHTNESS) {
         return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
     }
+    else if(resourceType == UPNP_OIC_TYPE_CONNECTION_MANAGER) {
+        return (std::make_shared < UpnpConnectionManager > (serviceInfo, requestState));
+    }
+    else if(resourceType == UPNP_OIC_TYPE_AV_TRANSPORT) {
+        return (std::make_shared < UpnpAVTransport > (serviceInfo, requestState));
+    }
+    else if(resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY) {
+        return (std::make_shared < UpnpContentDirectory > (serviceInfo, requestState));
+    }
+    else if(resourceType == UPNP_OIC_TYPE_RENDERING_CONTROL) {
+        return (std::make_shared < UpnpRenderingControl > (serviceInfo, requestState));
+    }
+    else if(resourceType == UPNP_OIC_TYPE_SCHEDULED_RECORDING) {
+        return (std::make_shared < UpnpScheduledRecording > (serviceInfo, requestState));
+    }
     else {
         //throw an exception
-        ERROR_PRINT("Service type " << serviceType << " not implemented!");
+        ERROR_PRINT("RSB: Service type " << serviceType << " not implemented!");
         throw NotImplementedException("UpnpService::ctor: Service " + serviceType + " not implemented!");
         return nullptr;
     }
