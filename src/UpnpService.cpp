@@ -247,7 +247,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
     for(attr = attributeList->begin() ; attr != attributeList->end() ; ++attr)
     {
         DEBUG_PRINT("Attr State variable: "<< attr->varName);
-        if (string(attr->varName) != "")
+        if ((string(attr->varName) != "") && attr->evented)
         {
             DEBUG_PRINT("Add to map State variable: "<< attr->varName);
             m_stateVarMap[attr->varName].first = attr->name;
