@@ -47,13 +47,13 @@ static const string MODULE = "UpnpDimmingService";
 
 // Organization:
 // Attribute Name,
-// State Variable Name (can be NULL), State variable type
+// State Variable Name (can be NULL), State variable type, Evented (true/false)
 // Actions:
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 vector <UpnpAttributeInfo> UpnpDimming::Attributes = {
     {"brightness",
-     "LoadLevelStatus", G_TYPE_UINT,
+     "LoadLevelStatus", G_TYPE_UINT, true,
      {{"GetLoadLevelStatus", UPNP_ACTION_GET, "retLoadlevelStatus", G_TYPE_UINT},
       {"SetLoadLevelTarget", UPNP_ACTION_POST, "newLoadlevelTarget", G_TYPE_UINT}}
     }

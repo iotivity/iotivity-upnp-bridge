@@ -97,9 +97,10 @@ typedef struct _UpnpAction
 
 typedef struct _UpnpAttributeInfo
 {
-    std::string name;
-    const char* varName;
-    GType type;
+    std::string name;     // Attribute name (OCF)
+    const char* varName;  // State variable name (UPnP)
+    GType       type;     // State variable type (UPnP)
+    bool        evented;  // Flag indicating whether "notify" can be set
     // Action position in the vector correspond to GET/SET
     // TODO: include DELETE?
     std::vector <UpnpAction> actions;
