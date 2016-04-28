@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_4cb08edd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-04-28T15:53:09Z",
+      "side": 1,
+      "message": "Commit message needs to be reorganized into \"subject\" and (optional) \"comment\" sections. It is recommended that the line length of the \"subject\" does not exceed 76 characters (more stringent kernel folks would limit that to 51 characters).",
+      "revId": "bc03d78c4d5bf8247d9c084d87726ab2d199469c",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
