@@ -47,7 +47,7 @@ static const string MODULE = "UpnpDimmingService";
 
 // Organization:
 // Attribute Name,
-// State Variable Name (can be NULL), State variable type
+// State Variable Name (can be empty string), State variable type
 // Actions:
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
