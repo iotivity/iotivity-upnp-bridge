@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_6f79fc92",
+        "filename": "examples/Client.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-04-28T23:30:02Z",
+      "side": 1,
+      "message": "Yes - These are variables for all UPnP Devices and will be filled in.",
+      "parentUuid": "1a486d77_af19347b",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 30
+      },
+      "revId": "dd94e6be8dcc9d743a1fc2c89ccd26e81e2818c6",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_8f2678b9",
         "filename": "examples/Client.cpp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-04-28T23:21:20Z",
       "side": 1,
       "message": "none of these values are filled in. Do we plan on filling them in in a future commit.",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 30
+      },
+      "revId": "dd94e6be8dcc9d743a1fc2c89ccd26e81e2818c6",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_4f6e40cb",
+        "filename": "examples/Client.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-04-28T23:30:02Z",
+      "side": 1,
+      "message": "Yes - These are variables for all UPnP Devices and will be filled in.",
+      "parentUuid": "1a486d77_8f2678b9",
       "range": {
         "startLine": 227,
         "startChar": 0,
