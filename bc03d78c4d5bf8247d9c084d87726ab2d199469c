@@ -16,6 +16,103 @@
       "revId": "bc03d78c4d5bf8247d9c084d87726ab2d199469c",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_2c031275",
+        "filename": "include/UpnpConstants.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-04-28T17:11:32Z",
+      "side": 1,
+      "message": "should probably use spaces not tabs to line up the code.  Not every editor handles tabs the same.  This will case what looks good on one computer to look jagged on another. I recommend replacing tabs with spaces here.",
+      "revId": "bc03d78c4d5bf8247d9c084d87726ab2d199469c",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_4cfe4e6d",
+        "filename": "include/UpnpConstants.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-04-28T17:11:32Z",
+      "side": 1,
+      "message": "All of the URI prefixes need to end in the \u0027/\u0027 character.",
+      "revId": "bc03d78c4d5bf8247d9c084d87726ab2d199469c",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_6c090a95",
+        "filename": "include/UpnpConstants.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-04-28T17:11:32Z",
+      "side": 1,
+      "message": "Just a question.  Do we want to have names like you have here.\n  /oic/upnp/media/renderer/\nor\n  /oic/upnp/media_renderer/\nI have a feeling that it should be one word not two since it represents a single service. What do you think.?",
+      "revId": "bc03d78c4d5bf8247d9c084d87726ab2d199469c",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_acd702ed",
+        "filename": "src/UpnpInternal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-04-28T17:11:32Z",
+      "side": 1,
+      "message": "do we really need to be case insensitive for every letter in the InternetGatewayDeivice? This seems a little unlikely to me.\n\nSame thing with the MediaRenderer and the MediaServer it seems to me the capitalization is going to be quite consistent with these services since they are the most implemented devices.",
+      "range": {
+        "startLine": 42,
+        "startChar": 89,
+        "endLine": 42,
+        "endChar": 173
+      },
+      "revId": "bc03d78c4d5bf8247d9c084d87726ab2d199469c",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_8c04467f",
+        "filename": "src/UpnpInternal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-04-28T17:11:32Z",
+      "side": 1,
+      "message": "inconsistent usage of spaces and tabs.  I recommend changing the tabs to spaces.",
+      "range": {
+        "startLine": 88,
+        "startChar": 37,
+        "endLine": 88,
+        "endChar": 44
+      },
+      "revId": "bc03d78c4d5bf8247d9c084d87726ab2d199469c",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
