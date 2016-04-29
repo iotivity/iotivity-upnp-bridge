@@ -82,11 +82,6 @@ bool UpnpAVTransport::setAttributesRequest(const RCSResourceAttributes &value, U
         {
             request->done++;
         }
-        else
-        {
-            // Save the proxy handle and value to be used in callback
-            request->proxieMap[action] = attrValue;
-        }
     }
 
     return status;
