@@ -30,6 +30,7 @@
 static const std::string UPNP_OIC_TYPE_DEVICE_LIGHT                     = "oic.d.light";
 static const std::string UPNP_OIC_TYPE_DEVICE_FAN                       = "oic.d.fan";
 static const std::string UPNP_OIC_TYPE_DEVICE_INET_GATEWAY              = "oic.d.inet.gateway";
+static const std::string UPNP_OIC_TYPE_DEVICE_WAN                       = "oic.d.wan";
 static const std::string UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER            = "oic.d.media.renderer";
 static const std::string UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER              = "oic.d.media.server";
 
@@ -42,6 +43,7 @@ static const std::string UPNP_OIC_TYPE_AV_TRANSPORT                     = "oic.r
 static const std::string UPNP_OIC_TYPE_CONTENT_DIRECTORY                = "oic.r.content.directory";
 static const std::string UPNP_OIC_TYPE_RENDERING_CONTROL                = "oic.r.rendering.control";
 static const std::string UPNP_OIC_TYPE_SCHEDULED_RECORDING              = "oic.r.scheduled.recording";
+static const std::string UPNP_OIC_TYPE_WAN_IF_CONFIG                    = "oic.r.wan.interface.config";
 
 // URI prefix (URI = URI_PREFIX + UDN)
 static const std::string UPNP_OIC_URI_PREFIX_LIGHT                      = "/oic/upnp/light/";
@@ -49,6 +51,8 @@ static const std::string UPNP_OIC_URI_PREFIX_DIMMING                    = "/oic/
 static const std::string UPNP_OIC_IRI_PREFIX_BRIGHTNESS                 = "/oic/upnp/brightness/";
 static const std::string UPNP_OIC_URI_PREFIX_POWER_SWITCH               = "/oic/upnp/switch/";
 static const std::string UPNP_OIC_URI_PREFIX_INET_GATEWAY               = "/oic/upnp/igd/";
+static const std::string UPNP_OIC_URI_PREFIX_WAN                        = "/oic/upnp/wan/";
+static const std::string UPNP_OIC_URI_PREFIX_WAN_IF_CONFIG              = "/oic/upnp/wanifconfig/";
 static const std::string UPNP_OIC_URI_PREFIX_MEDIA_RENDERER             = "/oic/upnp/media/renderer/";
 static const std::string UPNP_OIC_URI_PREFIX_MEDIA_SERVER               = "/oic/upnp/media/server/";
 static const std::string UPNP_OIC_URI_PREFIX_CONNECTION_MANAGER         = "/oic/upnp/connection-manager/";
