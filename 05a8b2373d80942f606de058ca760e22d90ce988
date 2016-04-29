@@ -22,6 +22,30 @@
       "revId": "05a8b2373d80942f606de058ca760e22d90ce988",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_6f4fbc93",
+        "filename": "src/UpnpManager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-04-29T21:32:02Z",
+      "side": 1,
+      "message": "Agreed.\nSee https://wiki.iotivity.org/iotivity_coding_standards",
+      "parentUuid": "1a486d77_cf80f08d",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 356,
+        "endChar": 5
+      },
+      "revId": "05a8b2373d80942f606de058ca760e22d90ce988",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
