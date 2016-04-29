@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_2fd664c6",
+        "filename": "src/UpnpConnectionManagerService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-04-29T19:55:38Z",
+      "side": 1,
+      "message": "not sure why when I checkout this commit everything builds when the this should reasy requrest-\u003eproxyMap not request-\u003eproxieMap.",
+      "range": {
+        "startLine": 88,
+        "startChar": 12,
+        "endLine": 88,
+        "endChar": 51
+      },
+      "revId": "8a597bb41c3eb4ebcdaa9b6b2d99492a91156179",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
