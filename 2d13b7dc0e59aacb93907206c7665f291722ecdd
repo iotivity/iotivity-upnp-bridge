@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_cf9230f6",
+        "filename": "src/UpnpInternal.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-04-29T20:56:36Z",
+      "side": 1,
+      "message": "I was asking why is this not [Ll]ight[Cc]ontrol",
+      "range": {
+        "startLine": 47,
+        "startChar": 72,
+        "endLine": 47,
+        "endChar": 80
+      },
+      "revId": "2d13b7dc0e59aacb93907206c7665f291722ecdd",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
