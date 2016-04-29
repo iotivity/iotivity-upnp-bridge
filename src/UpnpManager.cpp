@@ -25,6 +25,7 @@
 
 #include "UpnpDimmingService.h"
 #include "UpnpPowerSwitchService.h"
+#include "UpnpContentDirectoryService.h"
 
 #define nestedAtrribute std::vector<std::vector<RCSResourceAttributes>>
 
@@ -349,6 +350,9 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     }
     else if(resourceType == UPNP_OIC_TYPE_BRIGHTNESS) {
         return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
+    }
+    else if(resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY) {
+        return (std::make_shared < UpnpContentDirectory > (serviceInfo, requestState));
     }
     else {
         //throw an exception
