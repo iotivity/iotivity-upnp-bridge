@@ -28,6 +28,7 @@
 #include "UpnpContentDirectoryService.h"
 #include "UpnpConnectionManagerService.h"
 #include "UpnpAVTransportService.h"
+#include "UpnpRenderingControlService.h"
 
 #define nestedAtrribute std::vector<std::vector<RCSResourceAttributes>>
 
@@ -361,6 +362,9 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     }
     else if(resourceType == UPNP_OIC_TYPE_AV_TRANSPORT) {
         return (std::make_shared < UpnpAVTransport > (serviceInfo, requestState));
+    }
+    else if(resourceType == UPNP_OIC_TYPE_RENDERING_CONTROL) {
+        return (std::make_shared < UpnpRenderingControl > (serviceInfo, requestState));
     }
     else {
         //throw an exception

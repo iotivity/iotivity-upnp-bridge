@@ -31,6 +31,7 @@ upnp_iotivity_bridge_cpp = ['UpnpManager.cpp',
                             'UpnpConnectionManagerService.cpp',
                             'UpnpAVTransportService.cpp',
                             'UpnpContentDirectoryService.cpp',
+                            'UpnpRenderingControlService.cpp',
                             'UpnpDimmingService.cpp',
                             'UpnpPowerSwitchService.cpp']
 #upnp_iotivity_bridge_obj = env.SharedObject(upnp_iotivity_bridge_cpp)
