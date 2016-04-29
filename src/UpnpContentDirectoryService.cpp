@@ -82,11 +82,6 @@ bool UpnpContentDirectory::setAttributesRequest(const RCSResourceAttributes &val
         {
             request->done++;
         }
-        else
-        {
-            // Save the proxy handle and value to be used in callback
-            request->proxieMap[action] = attrValue;
-        }
     }
 
     return status;
