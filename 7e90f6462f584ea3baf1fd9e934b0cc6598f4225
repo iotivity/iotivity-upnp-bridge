@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_2f49c48b",
+        "filename": "src/UpnpManager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-04-29T21:35:34Z",
+      "side": 1,
+      "message": "See https://wiki.iotivity.org/iotivity_coding_standards",
+      "revId": "7e90f6462f584ea3baf1fd9e934b0cc6598f4225",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
