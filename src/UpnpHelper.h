@@ -28,56 +28,16 @@
 
 static std::string findResourceType(std::string type)
 {
-    //    if (regex_match(type, regex("urn:schemas-upnp-org:device:.*(?:[Ll][Ii][Gg][Hh][Tt]).*")))
-    if (boost::regex_match(type, boost::regex(UPNP_PATTERN_DEVICE_LIGHT)))
+    for (auto it : UpnpSearchPatternMap)
     {
-        return UPNP_OIC_TYPE_DEVICE_LIGHT;
+        if (boost::regex_match(type, boost::regex(it.second)))
+        {
+            return it.first;
+        }
     }
-    else if (boost::regex_match(type, boost::regex(UPNP_PATTERN_SERVICE_SWITCH_POWER)))
-    {
-        return UPNP_OIC_TYPE_POWER_SWITCH;
-    }
-    else if (boost::regex_match(type, boost::regex(UPNP_PATTERN_SERVICE_DIMMING)))
-    {
-        return UPNP_OIC_TYPE_BRIGHTNESS;
-    }
-    else if (boost::regex_match(type, boost::regex(UPNP_PATTERN_DEVICE_INET_GATEWAY)))
-    {
-        return UPNP_OIC_TYPE_DEVICE_INET_GATEWAY;
-    }
-    else if (boost::regex_match(type, boost::regex(UPNP_PATTERN_DEVICE_MEDIA_RENDERER)))
-    {
-        return UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER;
-    }
-    else if (boost::regex_match(type, boost::regex(UPNP_PATTERN_DEVICE_MEDIA_SERVER)))
-    {
-        return UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER;
-    }
-    else if (boost::regex_match(type, boost::regex(UPNP_PATTERN_SERVICE_CONNECTION_MANAGER)))
-    {
-        return UPNP_OIC_TYPE_CONNECTION_MANAGER;
-    }
-    else if (boost::regex_match(type, boost::regex(UPNP_PATTERN_SERVICE_AV_TRANSPORT)))
-    {
-        return UPNP_OIC_TYPE_AV_TRANSPORT;
-    }
-    else if (boost::regex_match(type, boost::regex(UPNP_PATTERN_SERVICE_CONTENT_DIRECTORY)))
-    {
-        return UPNP_OIC_TYPE_CONTENT_DIRECTORY;
-    }
-    else if (boost::regex_match(type, boost::regex(UPNP_PATTERN_SERVICE_RENDERING_CONTROL)))
-    {
-        return UPNP_OIC_TYPE_RENDERING_CONTROL;
-    }
-    else if (boost::regex_match(type, boost::regex(UPNP_PATTERN_SERVICE_SCHEDULED_RECORDING)))
-    {
-        return UPNP_OIC_TYPE_SCHEDULED_RECORDING;
-    }
-    else
-    {
-        //TODO: change to something more intelligent here, e.g. exeption and/or error code, etc.
-        return "";
-    }
+
+    //TODO: change to something more intelligent here, e.g. exeption and/or error code, etc.
+    return "";
 }
 
 #endif
