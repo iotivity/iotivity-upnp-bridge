@@ -49,6 +49,8 @@ static std::map<std::string, std::string > UpnpSearchPatternMap =
     {UPNP_OIC_TYPE_POWER_SWITCH,            UPNP_PREFIX_SERVICE + ":.*(?:[Ss]witch[Pp]ower).*"},
 // Internet Gateway
     {UPNP_OIC_TYPE_DEVICE_INET_GATEWAY,     UPNP_PREFIX_DEVICE + ":.*(?:[Ii]nternet[Gg]ateway[Dd]evice).*"},
+    {UPNP_OIC_TYPE_DEVICE_WAN,              UPNP_PREFIX_DEVICE + ":.*(?:[Ww][Aa][Nn][Dd]evice).*"},
+    {UPNP_OIC_TYPE_WAN_IF_CONFIG,           UPNP_PREFIX_SERVICE + ".*(?:[Ww][Aa][Nn][Cc]ommon[Ii]nterface[Cc]onfig).*"},
 // Media Control
     {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,   UPNP_PREFIX_DEVICE + ":.*(?:[Mm]edia[Rr]enderer).*"},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,     UPNP_PREFIX_DEVICE + ":.*(?:[Mm]edia[Ss]erver).*"},
@@ -72,6 +74,8 @@ static std::map<std::string, std::string > UpnpInterfaceMap =
     {UPNP_OIC_TYPE_BRIGHTNESS,               "oic.if.a"},
 // Internet Gateway
     {UPNP_OIC_TYPE_DEVICE_INET_GATEWAY,      "oic.if.ll"},
+    {UPNP_OIC_TYPE_DEVICE_WAN,               "oic.if.ll"},
+    {UPNP_OIC_TYPE_WAN_IF_CONFIG      ,      "oic.if.baseline"},
 // Media Control
     {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,    "oic.if.ll"},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,      "oic.if.ll"},
@@ -86,6 +90,8 @@ static std::map<std::string, std::string > UpnpUriPrefixMap =
     {UPNP_OIC_TYPE_BRIGHTNESS,              UPNP_OIC_IRI_PREFIX_BRIGHTNESS},
     {UPNP_OIC_TYPE_POWER_SWITCH,            UPNP_OIC_URI_PREFIX_POWER_SWITCH},
     {UPNP_OIC_TYPE_DEVICE_INET_GATEWAY,     UPNP_OIC_URI_PREFIX_INET_GATEWAY},
+    {UPNP_OIC_TYPE_DEVICE_WAN,              UPNP_OIC_URI_PREFIX_WAN},
+    {UPNP_OIC_TYPE_WAN_IF_CONFIG,           UPNP_OIC_URI_PREFIX_WAN_IF_CONFIG},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,   UPNP_OIC_URI_PREFIX_MEDIA_RENDERER},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,     UPNP_OIC_URI_PREFIX_MEDIA_SERVER},
     {UPNP_OIC_TYPE_CONNECTION_MANAGER,      UPNP_OIC_URI_PREFIX_CONNECTION_MANAGER},
