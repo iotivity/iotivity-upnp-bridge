@@ -28,6 +28,7 @@
 #include "UpnpContentDirectoryService.h"
 #include "UpnpConnectionManagerService.h"
 #include "UpnpAVTransportService.h"
+#include "UpnpRenderingControlService.h"
 #include "UpnpWanCommonInterfaceConfigService.h"
 
 #define nestedAtrribute std::vector<std::vector<RCSResourceAttributes>>
@@ -356,20 +357,27 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     {
         return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY) {
+    else if(resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY) 
+    {
         return (std::make_shared < UpnpContentDirectory > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_CONNECTION_MANAGER) {
+    else if(resourceType == UPNP_OIC_TYPE_CONNECTION_MANAGER) 
+    {
         return (std::make_shared < UpnpConnectionManager > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_AV_TRANSPORT) {
+    else if(resourceType == UPNP_OIC_TYPE_AV_TRANSPORT) 
+    {
         return (std::make_shared < UpnpAVTransport > (serviceInfo, requestState));
+    }
+    else if(resourceType == UPNP_OIC_TYPE_RENDERING_CONTROL) 
+    {
+        return (std::make_shared < UpnpRenderingControl > (serviceInfo, requestState));
     }
     else if(resourceType == UPNP_OIC_TYPE_WAN_IF_CONFIG)
     {
         return (std::make_shared < UpnpWanCommonInterfaceConfig > (serviceInfo, requestState));
     }
-    else
+    else 
     {
         //throw an exception
         ERROR_PRINT("Service type " << serviceType << " not implemented!");
