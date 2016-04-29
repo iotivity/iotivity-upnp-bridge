@@ -25,6 +25,7 @@
 
 #include "UpnpDimmingService.h"
 #include "UpnpPowerSwitchService.h"
+#include "UpnpWanCommonInterfaceConfigService.h"
 
 #define nestedAtrribute std::vector<std::vector<RCSResourceAttributes>>
 
@@ -344,13 +345,20 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     string serviceType = gupnp_service_info_get_service_type(serviceInfo);
     string resourceType = findResourceType(serviceType);
 
-    if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH) {
+    if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
+    {
         return (std::make_shared < UpnpPowerSwitch > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_BRIGHTNESS) {
+    else if(resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
+    {
         return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
     }
-    else {
+    else if(resourceType == UPNP_OIC_TYPE_WAN_IF_CONFIG)
+    {
+        return (std::make_shared < UpnpWanCommonInterfaceConfig > (serviceInfo, requestState));
+    }
+    else
+    {
         //throw an exception
         ERROR_PRINT("Service type " << serviceType << " not implemented!");
         throw NotImplementedException("UpnpService::ctor: Service " + serviceType + " not implemented!");
