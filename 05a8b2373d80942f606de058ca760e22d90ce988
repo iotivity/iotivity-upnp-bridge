@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_cf80f08d",
+        "filename": "src/UpnpManager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-04-29T21:29:39Z",
+      "side": 1,
+      "message": "if we are going to change the style used for open \u0027{\u0027 close \u0027}\u0027 shouldn\u0027t we be consistant for all of the lines in this member function?",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 356,
+        "endChar": 5
+      },
+      "revId": "05a8b2373d80942f606de058ca760e22d90ce988",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
