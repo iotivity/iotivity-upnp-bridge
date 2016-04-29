@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_efcdec5e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-04-29T17:42:18Z",
+      "side": 1,
+      "message": "It\u0027s better to use imperative mode, i.e., \n\"Add\" instead of \"Added\"",
+      "revId": "5dc97546cefc936ce4c0f5ae1df4700f458af9f1",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_0fd168fb",
+        "filename": "src/UpnpContentDirectoryService.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-04-29T17:42:18Z",
+      "side": 1,
+      "message": "The correct type needs to be provided here instead of UPNP_OIC_TYPE_POWER_SWITCH",
+      "revId": "5dc97546cefc936ce4c0f5ae1df4700f458af9f1",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
