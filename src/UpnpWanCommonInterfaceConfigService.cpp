@@ -97,10 +97,10 @@ void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
                                                        gpointer userData)
 {
     GError *error = NULL;
-    string accessType;
+    const char* accessType;
     int upBitrate;
     int downBitrate;
-    string linkStatus;
+    const char* linkStatus;
 
     UpnpRequest *request = static_cast<UpnpRequest*> (userData);
 
@@ -109,7 +109,7 @@ void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
                                                   &error,
                                                   "NewWANAccessType",
                                                   G_TYPE_STRING,
-                                                  accessType,
+                                                  &accessType,
                                                   "NewLayer1UpstreamMaxBitRate",
                                                   G_TYPE_UINT,
                                                   &upBitrate,
@@ -118,7 +118,7 @@ void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
                                                   &downBitrate,
                                                   "NewPhysicalLinkStatus",
                                                   G_TYPE_STRING,
-                                                  linkStatus,
+                                                  &linkStatus,
                                                   NULL);
     if (error) {
         ERROR_PRINT("GetCommonLinkProperties failed: " << error->code << ", " << error->message);
