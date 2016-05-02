@@ -42,7 +42,8 @@ public:
 
     UpnpAVTransport(GUPnPServiceInfo *serviceInfo,
                     UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_AV_TRANSPORT, requestState)
+        UpnpService(serviceInfo, UPNP_OIC_TYPE_AV_TRANSPORT, requestState,
+                    nullptr) // TODO change to Reference to Attribute table)
     {
     }
 

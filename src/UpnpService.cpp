@@ -34,12 +34,21 @@ static const string MODULE = "UpnpService";
 
 UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
                          string type,
-                         UpnpRequestState *requestState)
+                         UpnpRequestState *requestState,
+                         vector <UpnpAttributeInfo> *attributeInfo)
 {
     DEBUG_PRINT("(" << std::this_thread::get_id()<< ")");
     m_proxy = nullptr;
     m_resourceType = type;
 
+    if (attributeInfo == nullptr)
+    {
+        ERROR_PRINT("Service attribute table for " << m_resourceType << " not present!");
+        throw NotImplementedException("UpnpService::ctor: Service attribute table for " + m_resourceType + " not present!");
+        return;
+    }
+
+    m_serviceAttributeInfo = attributeInfo;
     m_requestState = requestState;
 
     //UDN of the hosting device
@@ -192,7 +201,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
 {
 
     // Load attributes description
-    vector <UpnpAttributeInfo> *attributeList = m_serviceAttributeInfo;//UpnpAttribute::getServiceAttributeInfo(m_resourceType);
+    vector <UpnpAttributeInfo> *attributeList = m_serviceAttributeInfo;
     vector<UpnpAttributeInfo>::iterator attr;
     const GList *actionNameList = gupnp_service_introspection_list_action_names(introspection);
 
