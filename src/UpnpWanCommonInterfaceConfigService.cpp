@@ -64,7 +64,7 @@ vector <UpnpAttributeInfo> UpnpWanCommonInterfaceConfig::Attributes = {
      "", G_TYPE_NONE,
      {{"GetTotalPacketsSent", UPNP_ACTION_GET, "NewTotalPacketsSent", G_TYPE_UINT}}
     },
-    {"totalPacketsReceived",
+    {"packetsReceived",
      "", G_TYPE_NONE,
      {{"GetTotalPacketsReceived", UPNP_ACTION_GET, "NewTotalPacketsReceived", G_TYPE_UINT}}
     },
