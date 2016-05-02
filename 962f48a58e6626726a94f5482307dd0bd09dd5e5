@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_e21ce315",
+        "filename": "src/UpnpService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-02T16:43:19Z",
+      "side": 1,
+      "message": "Inga I don\u0027t quite understand why we are passing in an array of UpnpAttributeInfos into the Service now when we didn\u0027t need it earlier.  What is this being used for.  I see it in the introspection but not sure what its doing.",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 43
+      },
+      "revId": "962f48a58e6626726a94f5482307dd0bd09dd5e5",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
