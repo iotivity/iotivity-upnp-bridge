@@ -36,7 +36,8 @@ class UpnpService: public UpnpResource
 public:
     UpnpService(GUPnPServiceInfo *serviceInfo,
                 string type,
-                UpnpRequestState *requestState);
+                UpnpRequestState *requestState,
+                vector <UpnpAttributeInfo> *attributeInfo);
 
     virtual ~UpnpService();
 

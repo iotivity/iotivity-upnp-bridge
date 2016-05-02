@@ -42,7 +42,8 @@ public:
 
     UpnpConnectionManager(GUPnPServiceInfo *serviceInfo,
                     UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_CONNECTION_MANAGER, requestState)
+        UpnpService(serviceInfo, UPNP_OIC_TYPE_CONNECTION_MANAGER, requestState,
+                    nullptr) // TODO change to Reference to Attribute table
     {
     }
 

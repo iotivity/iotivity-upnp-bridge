@@ -42,7 +42,8 @@ public:
 
     UpnpContentDirectory(GUPnPServiceInfo *serviceInfo,
                     UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_CONTENT_DIRECTORY, requestState)
+        UpnpService(serviceInfo, UPNP_OIC_TYPE_CONTENT_DIRECTORY, requestState,
+                    nullptr) // TODO change to Reference to Attribute table)
     {
     }
 
