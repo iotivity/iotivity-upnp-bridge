@@ -37,9 +37,8 @@ class UpnpDimming: public UpnpService
 public:
     UpnpDimming(GUPnPServiceInfo *serviceInfo,
                 UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_BRIGHTNESS, requestState)
+        UpnpService(serviceInfo, UPNP_OIC_TYPE_BRIGHTNESS, requestState, &Attributes)
     {
-        m_serviceAttributeInfo = &Attributes;
     }
 
 private:

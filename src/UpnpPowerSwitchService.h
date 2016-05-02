@@ -48,9 +48,8 @@ public:
 
     UpnpPowerSwitch(GUPnPServiceInfo *serviceInfo,
                     UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_POWER_SWITCH, requestState)
+        UpnpService(serviceInfo, UPNP_OIC_TYPE_POWER_SWITCH, requestState, &Attributes)
     {
-        m_serviceAttributeInfo = &Attributes;
     }
 
 private:

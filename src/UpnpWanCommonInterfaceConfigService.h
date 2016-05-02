@@ -46,9 +46,8 @@ public:
 
     UpnpWanCommonInterfaceConfig(GUPnPServiceInfo *serviceInfo,
                     UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_WAN_IF_CONFIG, requestState)
+        UpnpService(serviceInfo, UPNP_OIC_TYPE_WAN_IF_CONFIG, requestState, &Attributes)
     {
-        m_serviceAttributeInfo = &Attributes;
     }
 
 private:
