@@ -22,6 +22,30 @@
       "revId": "962f48a58e6626726a94f5482307dd0bd09dd5e5",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_82d3ef37",
+        "filename": "src/UpnpService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-02T16:50:20Z",
+      "side": 1,
+      "message": "This forces initialization of a member variable.",
+      "parentUuid": "1a486d77_e21ce315",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 43
+      },
+      "revId": "962f48a58e6626726a94f5482307dd0bd09dd5e5",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
