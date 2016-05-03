@@ -32,6 +32,7 @@ upnp_iotivity_bridge_cpp = ['UpnpManager.cpp',
                             'UpnpAVTransportService.cpp',
                             'UpnpContentDirectoryService.cpp',
                             'UpnpRenderingControlService.cpp',
+                            'UpnpScheduledRecordingService.cpp',
                             'UpnpDimmingService.cpp',
                             'UpnpPowerSwitchService.cpp',
                             'UpnpWanCommonInterfaceConfigService.cpp']

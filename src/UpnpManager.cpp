@@ -29,6 +29,7 @@
 #include "UpnpConnectionManagerService.h"
 #include "UpnpAVTransportService.h"
 #include "UpnpRenderingControlService.h"
+#include "UpnpScheduledRecordingService.h"
 #include "UpnpWanCommonInterfaceConfigService.h"
 
 #define nestedAtrribute std::vector<std::vector<RCSResourceAttributes>>
@@ -372,6 +373,10 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     else if(resourceType == UPNP_OIC_TYPE_RENDERING_CONTROL) 
     {
         return (std::make_shared < UpnpRenderingControl > (serviceInfo, requestState));
+    }
+    else if(resourceType == UPNP_OIC_TYPE_SCHEDULED_RECORDING) 
+    {
+        return (std::make_shared < UpnpScheduledRecording > (serviceInfo, requestState));
     }
     else if(resourceType == UPNP_OIC_TYPE_WAN_IF_CONFIG)
     {
