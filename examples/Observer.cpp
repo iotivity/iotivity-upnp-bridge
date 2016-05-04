@@ -22,17 +22,81 @@
 #include <OCApi.h>
 #include <OCPlatform.h>
 
-#include "UpnpConstants.h"
+#include <UpnpConstants.h>
+#include "UpnpBridgeAttributes.h"
 
 using namespace OC;
 
 static std::vector< std::string> s_foundURIs;
 std::mutex s_mutexFind;
 
-void onObserveResource(const HeaderOptions &headerOptions,
-                           const OCRepresentation &rep,
-                           const int eCode,
-                           const int sequenceNumber)
+static std::map <std::string, std::vector <std::string>> resourceTypeMap;
+
+static void processAttributes(const OCRepresentation &rep,
+                              std::map <std::string, AttrDesc> *attrMap,
+                              std::string prefix)
+{
+    for (auto &attr : *attrMap)
+    {
+        if (rep.hasAttribute(attr.first))
+        {
+            std::cout << prefix << attr.first << "";
+        } else {
+            continue;
+        }
+
+        switch (attr.second.type)
+        {
+        case ATTR_TYPE_BOOL:
+            {
+                bool value;
+                rep.getValue(attr.first, value);
+                std::cout << " (bool):\t " << ((value) ? "TRUE" : "FALSE") << std::endl;
+                break;
+            }
+        case ATTR_TYPE_INT:
+            {
+                int value;
+                rep.getValue(attr.first, value);
+                std::cout << " (int):\t " << value << std::endl;
+                break;
+            }
+        case ATTR_TYPE_INT64:
+            {
+                double value;
+                rep.getValue(attr.first, value);
+                std::cout << " (int64): \t " << value << std::endl;
+                break;
+            }
+        case ATTR_TYPE_STRING:
+            {
+                std::string value;
+                rep.getValue(attr.first, value);
+                std::cout << " (string): \t " << value << std::endl;
+                break;
+            }
+        case ATTR_TYPE_VECTOR:
+            {
+                OCRepresentation internal;
+                rep.getValue(attr.first, internal);
+                std::cout << std::endl;
+                processAttributes(internal, attr.second.composite, prefix + "\t");
+                break;
+            }
+        default:
+            {
+                std::cout << "not handled yet" << std::endl;
+                break;
+            }
+        }
+    }
+
+}
+
+static void onObserveResource(const HeaderOptions &headerOptions,
+                              const OCRepresentation &rep,
+                              const int eCode,
+                              const int sequenceNumber)
 {
     try
     {
@@ -48,18 +112,24 @@ void onObserveResource(const HeaderOptions &headerOptions,
             }
 
             std::cout << "OBSERVE result for: " << rep.getUri() << std::endl;
-            std::cout << "\tsequenceNumber: " << sequenceNumber << std::endl;
-            // PowerSwitch values
-            if(rep.hasAttribute("value")) {
-                bool newState;
-                rep.getValue("value", newState);
-                std::cout << "\tNew power value: " << ((newState) ? "ON" : "OFF") << std::endl;
-            }
-            // Dimming/Brightness values
-            if(rep.hasAttribute("brightness")) {
-                int newBrightness = 101;
-                rep.getValue("brightness", newBrightness);
-                std::cout << "\tNew brightness status: " << newBrightness << "%" << std::endl;
+            std::cout << "\t sequenceNumber: " << sequenceNumber << std::endl;
+
+            for (auto &resourceType : resourceTypeMap[rep.getUri()])
+            {
+                std::cout << "\t\t" << resourceType << std::endl;
+                std::map <std::string, std::map <std::string, AttrDesc>& >::iterator it = ResourceAttrMap.find(resourceType);
+
+                if (it == ResourceAttrMap.end())
+                {
+                    std::cout << "RESOURCE MAP NOT FOUND" << std::endl;
+                    return;
+                }
+
+                std::map <std::string, AttrDesc>& attrMap = it->second;
+
+                processAttributes(rep, &attrMap, "\t");
+
+                std::cout << "\n***********************************************************\n";
             }
         }
         else
@@ -80,7 +150,7 @@ void onObserveResource(const HeaderOptions &headerOptions,
     }
 }
 
-void foundResource(std::shared_ptr< OCResource > resource)
+static void foundResource(std::shared_ptr< OCResource > resource)
 {
     std::string resourceUri;
     std::string hostAddress;
@@ -104,7 +174,10 @@ void foundResource(std::shared_ptr< OCResource > resource)
                     for (auto &resourceType : resource->getResourceTypes())
                     {
                         std::cout << "\t\t" << resourceType << std::endl;
-                        if ((resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT) || (resourceType == UPNP_OIC_TYPE_POWER_SWITCH) || (resourceType == UPNP_OIC_TYPE_BRIGHTNESS))
+                        std::map <std::string, std::map <std::string, AttrDesc>& >::iterator it = ResourceAttrMap.find(resourceType);
+                        resourceTypeMap[resourceUri].push_back(resourceType);
+
+                        if (it != ResourceAttrMap.end())
                         {
                             resource->observe(ObserveType::Observe, QueryParamsMap(),
                                               &onObserveResource);
