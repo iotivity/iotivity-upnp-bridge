@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_e592ad9e",
+        "filename": "src/UpnpService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-05-04T16:35:09Z",
+      "side": 1,
+      "message": "These are leftovers from the original implementation. I believe [IOT-769] maybe related. Maybe the issue was fixed already. As a part of a separate effort, we can check whether the issue is fixed and, if so, remove these lines in a different commit.",
+      "parentUuid": "1a486d77_a5b5d532",
+      "range": {
+        "startLine": 471,
+        "startChar": 57,
+        "endLine": 471,
+        "endChar": 116
+      },
+      "revId": "08e52e280828103a93600ebf63ad92599c8969b4",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_8582d950",
         "filename": "src/UpnpService.cpp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-05-04T16:01:02Z",
       "side": 1,
       "message": "Is this correct?  We are checking it the type is a 64-bit integer then you set the name to a double.  should this be a 64-bit integer?",
+      "range": {
+        "startLine": 487,
+        "startChar": 66,
+        "endLine": 487,
+        "endChar": 76
+      },
+      "revId": "08e52e280828103a93600ebf63ad92599c8969b4",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_45f3c10a",
+        "filename": "src/UpnpService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-05-04T16:35:09Z",
+      "side": 1,
+      "message": "I agree, but the only types available for attributes at this level are defined in iotivity/resource/include/AttributeValue.h which only defines double that would be large enough to hold int64",
+      "parentUuid": "1a486d77_8582d950",
       "range": {
         "startLine": 487,
         "startChar": 66,
