@@ -41,8 +41,6 @@ public:
 
     virtual ~UpnpService();
 
-    virtual void initAttributes();
-
     virtual void handleSetAttributesRequest(const RCSResourceAttributes &attrs);
 
     virtual RCSResourceAttributes handleGetAttributesRequest();
@@ -69,13 +67,24 @@ protected:
 
     UpnpRequestState *m_requestState;
 
+    virtual void initAttributes();
+
 private:
 
     string m_serviceId;
 
+    typedef struct _StateVarAttr
+    {
+        string attrName;
+        GType type;
+        string parentName;
+    } StateVarAttr;
+
     // Mapping of UPnP state variables that are observed/notified to
     // corresponding OCF attributes
-    map <string, pair <string, GType>> m_stateVarMap;
+    map <string, StateVarAttr> m_stateVarMap;
+
+    void initCompositeAttribute(RCSResourceAttributes composite, vector<EmbeddedAttribute> attrs);
 
     static string getStringField(function< char*(GUPnPServiceInfo *serviceInfo)> f, GUPnPServiceInfo *serviceInfo);
 
