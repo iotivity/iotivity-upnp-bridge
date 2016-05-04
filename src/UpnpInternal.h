@@ -123,14 +123,24 @@ typedef struct _UpnpAction
     GType       varType;
 } UpnpAction;
 
+typedef struct _EmbeddedAttribute
+{
+    std::string name;
+    const char* varName;
+    GType       type;
+    bool        evented;
+} EmbeddedAttribute;
+
 typedef struct _UpnpAttributeInfo
 {
     std::string name;
     const char* varName;
-    GType type;
+    GType       type;
+    bool        evented;
     // Action position in the vector correspond to GET/SET
     // TODO: include DELETE?
     std::vector <UpnpAction> actions;
+    std::vector <EmbeddedAttribute> attrs;
 } UpnpAttributeInfo;
 
 typedef union _UpnpVar

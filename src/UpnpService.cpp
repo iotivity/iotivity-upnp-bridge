@@ -87,8 +87,6 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
 
     m_interface = UpnpInterfaceMap[m_resourceType];
 
-    initAttributes();
-
 }
 
 UpnpService::~UpnpService()
@@ -97,16 +95,19 @@ UpnpService::~UpnpService()
 
     if (!m_stateVarMap.empty())
     {
-        std::map<string, pair<string, GType>>::iterator it;
+        std::map<string, StateVarAttr>::iterator it;
         for (it = m_stateVarMap.begin(); it != m_stateVarMap.end(); ++it)
         {
+            DEBUG_PRINT("remove notify for \"" << it->first << "\"");
+
             gupnp_service_proxy_remove_notify (m_proxy,
                                                (it->first).c_str(),
                                                onStateChanged,
                                                this);
-            m_stateVarMap.clear();
         }
+        m_stateVarMap.clear();
     }
+
     m_proxy = nullptr;
 }
 
@@ -202,7 +203,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
 
     // Load attributes description
     vector <UpnpAttributeInfo> *attributeList = m_serviceAttributeInfo;
-    vector<UpnpAttributeInfo>::iterator attr;
+    vector <UpnpAttributeInfo>::iterator attr;
     const GList *actionNameList = gupnp_service_introspection_list_action_names(introspection);
 
     // Populate the name list of supported attributes
@@ -256,17 +257,43 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
         DEBUG_PRINT("Matched " << m_attributeMap.size() << " attributes");
     }
 
+    // Initialize attributes
+    initAttributes();
 
     // Generate convenient map of UPnP state variables that are observed/notified to
     // corresponding OCF attributes
-    map <string, pair <string, GType>> varMap;
+    map <string, StateVarAttr> varMap;
+
     for(attr = attributeList->begin() ; attr != attributeList->end() ; ++attr)
     {
+        if (!attr->evented)
+        {
+            // Not  observable attribute
+            continue;
+        }
+
         if (string(attr->varName) != "")
         {
             DEBUG_PRINT("Attr State variable: "<< attr->varName);
-            varMap[string(attr->varName)].first = attr->name;
-            varMap[string(attr->varName)].second = attr->type;
+            varMap[string(attr->varName)].attrName = attr->name;
+            varMap[string(attr->varName)].type = attr->type;
+            varMap[string(attr->varName)].parentName = "";
+        }
+        else if (!attr->attrs.empty()) // check if embedded attributes
+                                       // are observable
+        {
+            for (auto &it : attr->attrs)
+            {
+                if (it.evented)
+                {
+                    string stateVarName = string(it.varName);
+
+                    DEBUG_PRINT("Attr State variable: "<< stateVarName);
+                    varMap[stateVarName].attrName = it.name;
+                    varMap[stateVarName].type = it.type;
+                    varMap[stateVarName].parentName = attr->name;
+                }
+            }
         }
     }
 
@@ -287,7 +314,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
             const char* varName = (const char *) l->data;
             DEBUG_PRINT("State variable: "<< varName);
 
-            std::map<string, pair<string, GType>>::iterator it = varMap.find(string(varName));
+            std::map<string, StateVarAttr>::iterator it = varMap.find(string(varName));
 
             if (it != varMap.end())
             {
@@ -295,7 +322,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
                 {
                     if (!gupnp_service_proxy_add_notify (proxy,
                                                          varName,
-                                                         (it->second).second,
+                                                         (it->second).type,
                                                          onStateChanged,
                                                          this))
                     {
@@ -303,11 +330,10 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
                     }
                     else
                     {
-                        DEBUG_PRINT("Added notify for: "<< varName << ", " << (it->second).first <<
-                                    ", " << g_type_name((it->second).second));
+                        DEBUG_PRINT("Added notify for: "<< varName << ", " << (it->second).attrName <<
+                                    ", " << g_type_name((it->second).type));
                         m_stateVarMap[it->first] = it->second;
                     }
-                    break;
                 }
             }
 
@@ -322,7 +348,7 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
 {
     UpnpService * pService = (UpnpService *) userData;
 
-    std::map<string, pair<string, GType>>::iterator it = pService->m_stateVarMap.find(string(variable));
+    std::map<string, StateVarAttr>::iterator it = pService->m_stateVarMap.find(string(variable));
 
     DEBUG_PRINT("("<< std::this_thread::get_id() << "): notification state variable: "<< variable);
 
@@ -332,21 +358,71 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
         return;
     }
 
-    if ((it->second).second == G_TYPE_BOOLEAN)
+    GType type = (it->second).type;
+    string attrName = (it->second).attrName;
+    string parentName = (it->second).parentName;
+
+    if (parentName == "")
     {
-        bool vbool = g_value_get_boolean(value);
-        DEBUG_PRINT("set " << (it->second).first << " to " << vbool);
-        pService->BundleResource::setAttribute((it->second).first, vbool);
-    }
-    else if ((it->second).second == G_TYPE_UINT)
-    {
-        DEBUG_PRINT("set " << (it->second).first << " to " << g_value_get_uint(value));
-        pService->BundleResource::setAttribute((it->second).first, (int) (g_value_get_uint(value)));
-    }
-    else
-    {
-        //TODO this should probably throw and error.
-        ERROR_PRINT("Not implemented!");
+        if (type == G_TYPE_BOOLEAN)
+        {
+            bool vbool = g_value_get_boolean(value);
+            DEBUG_PRINT("set " << attrName << " to " << vbool);
+            pService->BundleResource::setAttribute(attrName, vbool);
+        }
+        else if (type == G_TYPE_UINT)
+        {
+            DEBUG_PRINT("set " << attrName << " to " << g_value_get_uint(value));
+            pService->BundleResource::setAttribute(attrName, (int) (g_value_get_uint(value)));
+        }
+        else if (type == G_TYPE_INT)
+        {
+            DEBUG_PRINT("set " << attrName << " to " << g_value_get_int(value));
+            pService->BundleResource::setAttribute(attrName, (int) (g_value_get_int(value)));
+        }
+        else if (type == G_TYPE_STRING)
+        {
+            DEBUG_PRINT("set " << attrName << " to " << g_value_get_string(value));
+            pService->BundleResource::setAttribute(attrName, string(g_value_get_string(value)));
+        }
+        else
+        {
+            //TODO this should probably throw and error.
+            ERROR_PRINT("Type handling not implemented: "<< g_type_name(type));
+        }
+    } else {
+        RCSResourceAttributes::Value attrValue = pService->BundleResource::getAttribute(parentName);
+        RCSResourceAttributes composite = attrValue.get < RCSResourceAttributes > ();
+
+        if (type == G_TYPE_BOOLEAN)
+        {
+            bool vbool = g_value_get_boolean(value);
+            DEBUG_PRINT("set composite: " << parentName <<  "->" << attrName << " to " << vbool);
+            composite[attrName] = vbool;
+        }
+        else if (type == G_TYPE_UINT)
+        {
+            DEBUG_PRINT("set composite: " << parentName <<  "->" << attrName << " to " << g_value_get_uint(value));
+            composite[attrName] = (int) (g_value_get_uint(value));
+        }
+        else if (type == G_TYPE_INT)
+        {
+            DEBUG_PRINT("set composite: " << parentName <<  "->" << attrName << " to " << g_value_get_int(value));
+            composite[attrName] = (int) (g_value_get_int(value));
+        }
+        else if (type == G_TYPE_STRING)
+        {
+            DEBUG_PRINT("set composite: " << parentName <<  "->" << attrName << " to " << g_value_get_string(value));
+            composite[attrName] = string(g_value_get_string(value));
+        }
+        else
+        {
+            //TODO this should probably throw and error.
+            ERROR_PRINT("Type handling not implemented: "<< g_type_name(type));
+            return;
+        }
+
+        pService->BundleResource::setAttribute(parentName, composite);
     }
 }
 
@@ -362,12 +438,69 @@ string UpnpService::getStringField(function< char*(GUPnPServiceInfo *serviceInfo
     return "";
 }
 
+void UpnpService::initCompositeAttribute(RCSResourceAttributes composite, vector<EmbeddedAttribute> attrs)
+{
+    for (auto &attr : attrs)
+    {
+        if (attr.type == G_TYPE_BOOLEAN)
+        {
+            composite[attr.name] = false;
+        }
+        else if ((attr.type == G_TYPE_UINT) || (attr.type == G_TYPE_INT))
+        {
+            composite[attr.name] = 0;
+        }
+        else if ((attr.type == G_TYPE_UINT64) || (attr.type == G_TYPE_INT64))
+        {
+            composite[attr.name] = (double) 0;
+        }
+        else if (attr.type == G_TYPE_STRING)
+        {
+            composite[attr.name] = "";
+        }
+        else
+        {
+            ERROR_PRINT("Type handling not implemented: "<< g_type_name(attr.type));
+        }
+    }
+}
+
 void UpnpService::initAttributes()
 {
-    m_attributeMap.clear();
 
     BundleResource::setAttribute("name", m_name, false); // need to keep name with attributes (OCRepresentation bug)
     BundleResource::setAttribute("uri", m_uri, false);   // need to keep uri with attributes (OCRepresentation bug)
     BundleResource::setAttribute("if", m_interface, false);
+
+    for (auto attr : m_attributeMap)
+    {
+        if (attr.second.first->type == G_TYPE_BOOLEAN)
+        {
+            BundleResource::setAttribute(attr.second.first->name, false);
+        }
+        else if ((attr.second.first->type == G_TYPE_UINT) || (attr.second.first->type == G_TYPE_INT))
+        {
+            BundleResource::setAttribute(attr.second.first->name, 0);
+        }
+        else if ((attr.second.first->type == G_TYPE_UINT64) || (attr.second.first->type == G_TYPE_INT64))
+        {
+            BundleResource::setAttribute(attr.second.first->name, (double) 0);
+        }
+        else if (attr.second.first->type == G_TYPE_STRING)
+        {
+            BundleResource::setAttribute(attr.second.first->name, "");
+        }
+        else if (!attr.second.first->attrs.empty()) // composite attribute
+        {
+            RCSResourceAttributes composite;
+
+            initCompositeAttribute(composite, attr.second.first->attrs);
+            BundleResource::setAttribute(attr.second.first->name, composite);
+        }
+        else
+        {
+            ERROR_PRINT("Type handling not implemented: " << g_type_name((attr.second).first->type));
+        }
+    }
 
 }

@@ -28,15 +28,17 @@ static const string MODULE = "UpnpPowerSwitchService";
 
 // Organization:
 // Attribute Name,
-// State Variable Name (can be empty string), State variable type
+// State Variable Name (can be empty string), State variable type, "evented" flag
 // Actions:
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
+// Vector of embedded attributes (if present)
 vector <UpnpAttributeInfo> UpnpPowerSwitch::Attributes = {
     {"value",
-     "Status", G_TYPE_BOOLEAN,
+     "Status", G_TYPE_BOOLEAN, true,
      {{"GetTarget", UPNP_ACTION_GET, "RetTargetValue", G_TYPE_BOOLEAN},
       {"SetTarget", UPNP_ACTION_POST, "newTargetValue", G_TYPE_BOOLEAN}},
+     {}
     }
 };
 

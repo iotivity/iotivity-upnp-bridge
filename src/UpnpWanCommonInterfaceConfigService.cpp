@@ -28,59 +28,73 @@ static const string MODULE = "WanCommonInterfaceConfig";
 
 // Organization:
 // Attribute Name,
-// State Variable Name (can be empty string), State variable type
+// State Variable Name (can be empty string), State variable type, "evented" flag
 // Actions:
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
+// Vector of embedded attributes (if present)
 vector <UpnpAttributeInfo> UpnpWanCommonInterfaceConfig::Attributes = {
     {"inetEnabled",
-     "EnabledForInternet", G_TYPE_BOOLEAN,
+     "EnabledForInternet", G_TYPE_BOOLEAN, true,
      {{"GetEnabledForInternet", UPNP_ACTION_GET, "NewEnabledForInternet", G_TYPE_BOOLEAN},
-      {"SetEnabledForInternet", UPNP_ACTION_POST, "NewEnabledForInternet", G_TYPE_BOOLEAN}}
+      {"SetEnabledForInternet", UPNP_ACTION_POST, "NewEnabledForInternet", G_TYPE_BOOLEAN}},
+     {}
     },
     //"linkProperties" is a composite attribute with tags:
     // "accessType", "upMaxBitRate", "downMaxBitRate", "linkStatus"
     {"linkProperties",
-     "PhysicalLinkStatus", G_TYPE_STRING,
-     {{"GetCommonLinkProperties", UPNP_ACTION_GET, NULL, G_TYPE_NONE}}
+     "", G_TYPE_NONE, true,
+     {{"GetCommonLinkProperties", UPNP_ACTION_GET, "", G_TYPE_NONE}},
+     {
+         {"accessType",     "WANAccessType", G_TYPE_STRING, false},
+         {"upMaxBitrate",   "Layer1UpstreamMaxBitRate", G_TYPE_UINT, false},
+         {"downMaxBitrate", "Layer1DownstreamMaxBitRate", G_TYPE_UINT, false},
+         {"linkStatus",     "PhysicalLinkStatus", G_TYPE_STRING, true}
+     }
     },
     {"wanAccesssProvider",
-     "", G_TYPE_NONE,
-     {{"GetWANAccessProvider", UPNP_ACTION_GET, "NewWANAccessProvider", G_TYPE_STRING}}
+     "WANAccessProvider", G_TYPE_STRING, false,
+     {{"GetWANAccessProvider", UPNP_ACTION_GET, "NewWANAccessProvider", G_TYPE_STRING}},
+     {}
     },
     {"maxConnections",
-     "", G_TYPE_NONE,
-     {{"GetMaximumActiveConnections", UPNP_ACTION_GET, "NewMaximumActiveConnections", G_TYPE_UINT}}
+     "MaximumActiveConnections", G_TYPE_STRING, false,
+     {{"GetMaximumActiveConnections", UPNP_ACTION_GET, "NewMaximumActiveConnections", G_TYPE_UINT}},
+     {}
     },
     {"bytesSent",
-     "", G_TYPE_NONE,
-     {{"GetTotalBytesSent", UPNP_ACTION_GET, "NewTotalBytesSent", G_TYPE_UINT}}
+     "TotalBytesSent", G_TYPE_UINT, false,
+     {{"GetTotalBytesSent", UPNP_ACTION_GET, "NewTotalBytesSent", G_TYPE_UINT}},
+     {}
     },
     {"bytesReceived",
-     "", G_TYPE_NONE,
-     {{"GetTotalBytesReceived", UPNP_ACTION_GET, "NewTotalBytesReceived", G_TYPE_UINT}}
+     "TotalBytesReceived", G_TYPE_UINT, false,
+     {{"GetTotalBytesReceived", UPNP_ACTION_GET, "NewTotalBytesReceived", G_TYPE_UINT}},
+     {}
     },
     {"packetsSent",
-     "", G_TYPE_NONE,
-     {{"GetTotalPacketsSent", UPNP_ACTION_GET, "NewTotalPacketsSent", G_TYPE_UINT}}
+     "TotalPacketsSent", G_TYPE_UINT, false,
+     {{"GetTotalPacketsSent", UPNP_ACTION_GET, "NewTotalPacketsSent", G_TYPE_UINT}},
+     {}
     },
     {"packetsReceived",
-     "", G_TYPE_NONE,
-     {{"GetTotalPacketsReceived", UPNP_ACTION_GET, "NewTotalPacketsReceived", G_TYPE_UINT}}
+     "TotalPacketsReceived", G_TYPE_UINT, false,
+     {{"GetTotalPacketsReceived", UPNP_ACTION_GET, "NewTotalPacketsReceived", G_TYPE_UINT}},
+     {}
     },
     //Special case: no matching UPNP action, but the attribute value
     //can be set based on observation
     {"numConnections",
-     "NumberOfActiveConnections", G_TYPE_UINT,
-     {{"", UPNP_ACTION_GET, NULL, G_TYPE_NONE}}
+     "NumberOfActiveConnections", G_TYPE_UINT, true,
+     {{"", UPNP_ACTION_GET, "", G_TYPE_NONE}}, {}
     },
     //"connectionInfo" is a composite attribute with tags:
     //    "deviceContainer" (matches UpNP "ActiveConnectionDeviceContainer")" &
     //    "serviceID" (matches UPnP "ActiveConnectionServiceID")
-    {"connectionInfo",
-     "", G_TYPE_NONE,
-     {{"GetActiveConnections", UPNP_ACTION_GET, NULL, G_TYPE_NONE}}
-    }
+    //{"connectionInfo",
+    // "", G_TYPE_NONE, false
+    //{{"GetActiveConnections", UPNP_ACTION_GET, NULL, G_TYPE_NONE}}, ""
+    //}
 };
 
 // Custom action map:
@@ -88,7 +102,6 @@ vector <UpnpAttributeInfo> UpnpWanCommonInterfaceConfig::Attributes = {
 map <const string, UpnpWanCommonInterfaceConfig::GetAttributeHandler> UpnpWanCommonInterfaceConfig::GetAttributeActionMap =
 {
     {"linkProperties", &UpnpWanCommonInterfaceConfig::getLinkProperties},
-    //{"numConnections", &UpnpWanCommonInterfaceConfig::getNumConnections},
     //{"connectionInfo", &UpnpWanCommonInterfaceConfig::getConnectionInfo}
 };
 
@@ -175,14 +188,26 @@ bool UpnpWanCommonInterfaceConfig::getAttributesRequest(UpnpRequest *request)
         {
             GetAttributeHandler fp = attr->second;
             action = (this->*fp)(request);
+            status |= (action != NULL);
         }
-        else
-        {
+        else {
             UpnpAttributeInfo *attrInfo = it->second.first;
-            action = UpnpAttribute::get(m_proxy, request, attrInfo);
+
+            if (string(attrInfo->actions[0].name) == "")
+            {
+                // This attribute value is updated based on  notification.
+                // There is no associated GET action.
+                action = NULL;
+            }
+            else
+            {
+                UpnpAttributeInfo *attrInfo = it->second.first;
+                action = UpnpAttribute::get(m_proxy, request, attrInfo);
+                status |= (action != NULL);
+            }
         }
 
-        status |= (action != NULL);
+
         if (action == NULL)
         {
             request->done++;
