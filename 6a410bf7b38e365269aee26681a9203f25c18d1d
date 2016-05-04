@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_a58cb580",
+        "filename": "examples/UpnpBridgeAttributes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-04T16:33:49Z",
+      "side": 1,
+      "message": "should the these hard coded strings be added to a header file some where?",
+      "revId": "6a410bf7b38e365269aee26681a9203f25c18d1d",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_c58fb174",
+        "filename": "examples/UpnpBridgeAttributes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-04T16:33:49Z",
+      "side": 1,
+      "message": "should we be using the values from the UpnpConstants.h header?",
+      "range": {
+        "startLine": 89,
+        "startChar": 5,
+        "endLine": 91,
+        "endChar": 53
+      },
+      "revId": "6a410bf7b38e365269aee26681a9203f25c18d1d",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
