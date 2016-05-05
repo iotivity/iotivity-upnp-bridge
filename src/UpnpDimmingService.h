@@ -44,6 +44,8 @@ public:
 private:
     bool getAttributesRequest(UpnpRequest *request);
     bool setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request);
+    bool processNotification(string attrName, string parent, GValue *value);
+
     static vector <UpnpAttributeInfo> Attributes;
 };
 

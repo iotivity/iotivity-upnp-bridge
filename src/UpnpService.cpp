@@ -358,10 +358,18 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
         return;
     }
 
-    GType type = (it->second).type;
+
     string attrName = (it->second).attrName;
     string parentName = (it->second).parentName;
 
+    // Check if the value needs customized conversion (specific
+    // to a particular service obect)
+    if (pService->processNotification(attrName, parentName, value))
+    {
+        return;
+    }
+
+    GType type = (it->second).type;
     if (parentName == "")
     {
         if (type == G_TYPE_BOOLEAN)
@@ -503,4 +511,10 @@ void UpnpService::initAttributes()
         }
     }
 
+}
+
+bool UpnpService::processNotification(string attrName, string parent, GValue *value)
+{
+    // Default: no custom variable->attribute conversion
+    return false;
 }

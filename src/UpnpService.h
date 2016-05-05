@@ -54,6 +54,8 @@ public:
 
     virtual bool setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request) = 0;
 
+    virtual bool processNotification(string attrName, string parent, GValue *value);
+
     string getId();
 
 protected:

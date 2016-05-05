@@ -116,3 +116,11 @@ bool UpnpDimming::setAttributesRequest(const RCSResourceAttributes &value, UpnpR
 
     return status;
 }
+
+bool UpnpDimming::processNotification(string attrName, string parent, GValue *value)
+{
+    DEBUG_PRINT("");
+    //TODO: value range conversion here, set attribute and return
+    //"true"
+    return false;
+}
