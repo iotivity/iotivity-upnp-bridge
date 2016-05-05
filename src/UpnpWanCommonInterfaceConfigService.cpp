@@ -246,3 +246,18 @@ bool UpnpWanCommonInterfaceConfig::setAttributesRequest(const RCSResourceAttribu
 
     return status;
 }
+
+bool UpnpWanCommonInterfaceConfig::processNotification(string attrName, string parent, GValue *value)
+{
+
+    if (attrName == "numConnections")
+    {
+        // Need to keep number of active connections around
+        m_numConnections = (int) g_value_get_uint(value);
+        BundleResource::setAttribute("numConnections", m_numConnections);
+        return true;
+    }
+
+    // Default: no custom variable->attribute conversion
+    return false;
+}

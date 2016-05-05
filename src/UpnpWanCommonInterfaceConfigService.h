@@ -48,15 +48,19 @@ public:
                     UpnpRequestState *requestState):
         UpnpService(serviceInfo, UPNP_OIC_TYPE_WAN_IF_CONFIG, requestState, &Attributes)
     {
+        m_numConnections = 0;
     }
 
 private:
+    int m_numConnections;
+
     static map <const string, GetAttributeHandler> GetAttributeActionMap;
 
     static vector <UpnpAttributeInfo> Attributes;
 
     bool getAttributesRequest(UpnpRequest *request);
     bool setAttributesRequest(const RCSResourceAttributes& attrs, UpnpRequest *request);
+    bool processNotification(string attrName, string parent, GValue *value);
 
     static void getLinkPropertiesCb(GUPnPServiceProxy *proxy,
                                     GUPnPServiceProxyAction *action,
