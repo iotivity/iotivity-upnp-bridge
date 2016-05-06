@@ -101,6 +101,7 @@ static std::map<std::string, std::string > UpnpUriPrefixMap =
     {UPNP_OIC_TYPE_SCHEDULED_RECORDING,     UPNP_OIC_URI_PREFIX_SCHEDULED_RECORDING}
 };
 
+typedef std::vector<RCSResourceAttributes> CompositeAttribute;
 
 typedef enum
 {
