@@ -91,10 +91,12 @@ vector <UpnpAttributeInfo> UpnpWanCommonInterfaceConfig::Attributes = {
     //"connectionInfo" is a composite attribute with tags:
     //    "deviceContainer" (matches UpNP "ActiveConnectionDeviceContainer")" &
     //    "serviceID" (matches UPnP "ActiveConnectionServiceID")
-    //{"connectionInfo",
-    // "", G_TYPE_NONE, false
-    //{{"GetActiveConnections", UPNP_ACTION_GET, NULL, G_TYPE_NONE}}, ""
-    //}
+    {"connectionInfo",
+     "", G_TYPE_NONE, false,
+     {{"GetActiveConnections", UPNP_ACTION_GET, NULL, G_TYPE_NONE}},
+     {{"deviceContainer", "ActiveConnectionDeviceContainer", G_TYPE_STRING, false},
+      {"serviceId",       "ActiveConnectionServiceID", G_TYPE_STRING, false}}
+    }
 };
 
 // Custom action map:
@@ -102,7 +104,7 @@ vector <UpnpAttributeInfo> UpnpWanCommonInterfaceConfig::Attributes = {
 map <const string, UpnpWanCommonInterfaceConfig::GetAttributeHandler> UpnpWanCommonInterfaceConfig::GetAttributeActionMap =
 {
     {"linkProperties", &UpnpWanCommonInterfaceConfig::getLinkProperties},
-    //{"connectionInfo", &UpnpWanCommonInterfaceConfig::getConnectionInfo}
+    {"connectionInfo", &UpnpWanCommonInterfaceConfig::getConnectionInfo}
 };
 
 void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
@@ -145,10 +147,10 @@ void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
 
         DEBUG_PRINT("accessType="<< accessType << ", upMaxBitrate=" << upBitrate <<
                     ", downMaxBitrate=" << downBitrate << ", linkStatus=" << linkStatus);
-        properties["accessType"]     = accessType;
+        properties["accessType"]     = string(accessType);
         properties["upMaxBitrate"]   = upBitrate;
         properties["downMaxBitrate"] = downBitrate;
-        properties["linkStatus"]     = linkStatus;
+        properties["linkStatus"]     = string(linkStatus);
 
         request->resource->setAttribute("linkProperties", properties, false);
     }
@@ -171,6 +173,112 @@ bool UpnpWanCommonInterfaceConfig::getLinkProperties(UpnpRequest *request)
 
     request->proxyMap[actionProxy].first = m_attributeMap["linkProperties"].first;
     return true;
+}
+
+void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
+                                                       GUPnPServiceProxyAction *actionProxy,
+                                                       gpointer userData)
+{
+    GError *error = NULL;
+    const char* serviceId;
+    const char* deviceContainer;
+    UpnpAttributeInfo* attrInfo;
+    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
+    UpnpWanCommonInterfaceConfig *pService = static_cast<UpnpWanCommonInterfaceConfig*> (request->resource);
+
+    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(actionProxy);
+    assert(it != request->proxyMap.end());
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  "NewActiveConnectionDeviceContainer",
+                                                  G_TYPE_STRING,
+                                                  &deviceContainer,
+                                                  "NewActiveConnectionServiceID",
+                                                  G_TYPE_STRING,
+                                                  &serviceId,
+                                                  NULL);
+    if (error) {
+        ERROR_PRINT("GetActiveConnectionInfo failed: " << error->code << ", " << error->message);
+        g_error_free (error);
+        status = false;
+    }
+
+    if (status)
+    {
+        RCSResourceAttributes properties;
+
+        DEBUG_PRINT("deviceContainer="<< deviceContainer << ",serviceID=" << serviceId);
+        properties["deviceContainer"] = string(deviceContainer);
+        properties["serviceId"] = string(serviceId);
+
+        (pService->m_ConnectionInfoRequestMap[request]).push_back(properties);
+    }
+
+    attrInfo = it->second.first;
+
+    // Remove action proxy entry from request's proxy map
+    request->proxyMap.erase(it);
+
+    // Check if we got all the expected callbacks
+    for (it = request->proxyMap.begin(); it != request->proxyMap.end(); ++it)
+    {
+        if (it->second.first == attrInfo)
+        {
+            // More callbacks are pending
+            return;
+        }
+    }
+
+    // We are done accumulating connectionInfo:
+    // set the "connectionInfo" and update request count.
+    request->resource->setAttribute("connectionInfo", pService->m_ConnectionInfoRequestMap[request], false);
+    pService->m_ConnectionInfoRequestMap.erase(request);
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpWanCommonInterfaceConfig::getConnectionInfo(UpnpRequest *request)
+{
+    DEBUG_PRINT("");
+    bool status = false;
+    int index = 0;
+
+    if (m_numConnections == 0)
+    {
+        return false;
+    }
+
+    m_ConnectionInfoRequestMap[request] = {};
+
+    while (++index < m_numConnections)
+    {
+        GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (m_proxy,
+                                                                                 "GetActiveConnectionInfo",
+                                                                                 getConnectionInfoCb,
+                                                                                 (gpointer *) request,
+                                                                                 "NewActiveConnectionIndex",
+                                                                                 G_TYPE_UINT,
+                                                                                 (unsigned int)index,
+                                                                                 NULL);
+        status |= (NULL == actionProxy);
+
+        if (actionProxy != NULL)
+        {
+            // Use proxy map to track the completion of cumulative action
+            request->proxyMap[actionProxy].first = m_attributeMap["connectionInfo"].first;
+            request->proxyMap[actionProxy].second = {};
+        }
+    }
+    if (status == false)
+    {
+        // If none of the UPnP "GetActiveConnectionInfo" actions
+        // succeeded, remove entry from m_ConnectionInfoRequestMap
+        m_ConnectionInfoRequestMap.erase(request);
+    }
+
+    return status;
 }
 
 bool UpnpWanCommonInterfaceConfig::getAttributesRequest(UpnpRequest *request)
