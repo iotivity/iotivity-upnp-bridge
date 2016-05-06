@@ -37,12 +37,12 @@ class UpnpWanCommonInterfaceConfig: public UpnpService
     friend class UpnpService;
 
 public:
-    typedef GUPnPServiceProxyAction* (UpnpWanCommonInterfaceConfig::*GetAttributeHandler)(UpnpRequest *);
+    typedef bool (UpnpWanCommonInterfaceConfig::*GetAttributeHandler)(UpnpRequest *);
 
-    typedef GUPnPServiceProxyAction* (UpnpWanCommonInterfaceConfig::*SetAttributeHandler)(GUPnPServiceProxy *,
-                                                                                          UpnpRequest *,
-                                                                                          UpnpAttributeInfo *,
-                                                                                          RCSResourceAttributes);
+    typedef bool (UpnpWanCommonInterfaceConfig::*SetAttributeHandler)(GUPnPServiceProxy *,
+                                                                      UpnpRequest *,
+                                                                      UpnpAttributeInfo *,
+                                                                      RCSResourceAttributes);
 
     UpnpWanCommonInterfaceConfig(GUPnPServiceInfo *serviceInfo,
                     UpnpRequestState *requestState):
@@ -66,7 +66,7 @@ private:
                                     GUPnPServiceProxyAction *action,
                                     gpointer userData);
 
-    GUPnPServiceProxyAction* getLinkProperties(UpnpRequest *request);
+    bool getLinkProperties(UpnpRequest *request);
 };
 
 #endif

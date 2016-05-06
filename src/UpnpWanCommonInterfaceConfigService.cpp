@@ -106,7 +106,7 @@ map <const string, UpnpWanCommonInterfaceConfig::GetAttributeHandler> UpnpWanCom
 };
 
 void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
-                                                       GUPnPServiceProxyAction *action,
+                                                       GUPnPServiceProxyAction *actionProxy,
                                                        gpointer userData)
 {
     GError *error = NULL;
@@ -118,7 +118,7 @@ void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
     UpnpRequest *request = static_cast<UpnpRequest*> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  action,
+                                                  actionProxy,
                                                   &error,
                                                   "NewWANAccessType",
                                                   G_TYPE_STRING,
@@ -156,14 +156,21 @@ void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
     UpnpRequest::requestDone(request, status);
 }
 
-GUPnPServiceProxyAction* UpnpWanCommonInterfaceConfig::getLinkProperties(UpnpRequest *request)
+bool UpnpWanCommonInterfaceConfig::getLinkProperties(UpnpRequest *request)
 {
     DEBUG_PRINT("");
-    return gupnp_service_proxy_begin_action (m_proxy,
-                                             "GetCommonLinkProperties",
-                                             getLinkPropertiesCb,
-                                             (gpointer *) request,
-                                             NULL);
+    GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (m_proxy,
+                                                                             "GetCommonLinkProperties",
+                                                                             getLinkPropertiesCb,
+                                                                             (gpointer *) request,
+                                                                             NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy].first = m_attributeMap["linkProperties"].first;
+    return true;
 }
 
 bool UpnpWanCommonInterfaceConfig::getAttributesRequest(UpnpRequest *request)
@@ -172,7 +179,8 @@ bool UpnpWanCommonInterfaceConfig::getAttributesRequest(UpnpRequest *request)
 
     for (auto it = m_attributeMap.begin(); it != m_attributeMap.end(); ++it)
     {
-        GUPnPServiceProxyAction *action;
+        bool result = false;
+        UpnpAttributeInfo *attrInfo = it->second.first;
 
         DEBUG_PRINT(" \"" << it->first << "\"");
         // Check the request
@@ -187,28 +195,15 @@ bool UpnpWanCommonInterfaceConfig::getAttributesRequest(UpnpRequest *request)
         if (attr != this->GetAttributeActionMap.end())
         {
             GetAttributeHandler fp = attr->second;
-            action = (this->*fp)(request);
-            status |= (action != NULL);
+            result = (this->*fp)(request);
         }
-        else {
-            UpnpAttributeInfo *attrInfo = it->second.first;
-
-            if (string(attrInfo->actions[0].name) == "")
-            {
-                // This attribute value is updated based on  notification.
-                // There is no associated GET action.
-                action = NULL;
-            }
-            else
-            {
-                UpnpAttributeInfo *attrInfo = it->second.first;
-                action = UpnpAttribute::get(m_proxy, request, attrInfo);
-                status |= (action != NULL);
-            }
+        else if (string(attrInfo->actions[0].name) != "")
+        {
+            result = UpnpAttribute::get(m_proxy, request, attrInfo);
         }
 
-
-        if (action == NULL)
+        status |= result;
+        if (!result)
         {
             request->done++;
         }
@@ -222,7 +217,7 @@ bool UpnpWanCommonInterfaceConfig::setAttributesRequest(const RCSResourceAttribu
 
     for (auto it = value.begin(); it != value.end(); ++it)
     {
-        GUPnPServiceProxyAction *action;
+        bool result = false;
         const std::string attrName = it->key();
 
         DEBUG_PRINT(" \"" << attrName << "\"");
@@ -236,9 +231,9 @@ bool UpnpWanCommonInterfaceConfig::setAttributesRequest(const RCSResourceAttribu
         RCSResourceAttributes::Value attrValue = it->value();
 
         UpnpAttributeInfo *attrInfo = m_attributeMap[attrName].first;
-        action = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
-        status |= (action != NULL);
-        if (action == NULL)
+        result = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
+        status |= result;
+        if (!result)
         {
             request->done++;
         }
