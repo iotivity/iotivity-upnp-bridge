@@ -53,6 +53,7 @@ public:
 
 private:
     int m_numConnections;
+    map <UpnpRequest *, CompositeAttribute> m_ConnectionInfoRequestMap;
 
     static map <const string, GetAttributeHandler> GetAttributeActionMap;
 
@@ -67,6 +68,13 @@ private:
                                     gpointer userData);
 
     bool getLinkProperties(UpnpRequest *request);
+
+    static void getConnectionInfoCb(GUPnPServiceProxy *proxy,
+                                    GUPnPServiceProxyAction *action,
+                                    gpointer userData);
+
+    bool getConnectionInfo(UpnpRequest *request);
+
 };
 
 #endif
