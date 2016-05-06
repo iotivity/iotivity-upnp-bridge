@@ -76,10 +76,10 @@ bool UpnpDimming::getAttributesRequest(UpnpRequest *request)
         }
 
         UpnpAttributeInfo *attrInfo = it->second.first;
-        GUPnPServiceProxyAction *action = UpnpAttribute::get(m_proxy, request, attrInfo);
+        bool result = UpnpAttribute::get(m_proxy, request, attrInfo);
 
-        status |= (action != NULL);
-        if (action == NULL)
+        status |= result;
+        if (!result)
         {
             request->done++;
         }
@@ -106,9 +106,10 @@ bool UpnpDimming::setAttributesRequest(const RCSResourceAttributes &value, UpnpR
         RCSResourceAttributes::Value attrValue = it->value();
 
         UpnpAttributeInfo *attrInfo = m_attributeMap[attrName].first;
-        GUPnPServiceProxyAction *action = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
-        status |= (action != NULL);
-        if (action == NULL)
+        bool result = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
+
+        status |= result;
+        if (!result)
         {
             request->done++;
         }
