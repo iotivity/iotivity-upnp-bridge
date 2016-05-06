@@ -24,19 +24,55 @@ using namespace OIC::Service;
 
 static const string MODULE = "UpnpContentDirectoryService";
 
-// Attribute map: "attribute name" -> GET/SET request handlers
-map <const string, pair <UpnpContentDirectory::GetAttributeHandler, UpnpContentDirectory::SetAttributeHandler>> UpnpContentDirectory::AttributeMap =
-{
-//    {"value", {&UpnpContentDirectory::getTarget, &UpnpContentDirectory::setTarget}}
+// Content Directory Service
+
+// Organization:
+// Attribute Name,
+// State Variable Name (can be empty string), State variable type, "evented" flag
+// Actions:
+//    0: "GET" action name, action type, optional out parameters: var_name,var_type
+//    1: "SET" action name, action type, optional in parameters: var_name,var_type
+// Vector of embedded attributes (if present)
+vector <UpnpAttributeInfo> UpnpContentDirectory::Attributes = {
+    {"searchCaps",
+     "SearchCapabilities", G_TYPE_STRING, false,
+     {{"GetSearchCapabilities", UPNP_ACTION_GET, "SearchCaps", G_TYPE_STRING},
+      },
+     {}
+    },
+    {"sortCaps",
+     "SortCapabilities", G_TYPE_STRING, false,
+     {{"GetSortCapabilities", UPNP_ACTION_GET, "SortCaps", G_TYPE_STRING},
+      },
+     {}
+    },
+    {"systemUpdateId",
+     "SystemUpdateID", G_TYPE_UINT, true,
+     {{"GetSystemUpdateID", UPNP_ACTION_GET, "Id", G_TYPE_UINT},
+      },
+     {}
+    },
+    {"resetToken",
+     "ServiceResetToken", G_TYPE_STRING, false,
+     {{"GetServiceResetToken", UPNP_ACTION_GET, "ResetToken", G_TYPE_STRING},
+      },
+     {}
+    },
+    {"featureList",
+     "FeatureList", G_TYPE_STRING, false,
+     {{"GetFeatureList", UPNP_ACTION_GET, "FeatureList", G_TYPE_STRING},
+      },
+     {}
+    }
 };
 
-// TODO Implement various OCF attributes/UPnP Actions
+// TODO Implement Browse and optional actions as necessary (eg Search)
 
 bool UpnpContentDirectory::getAttributesRequest(UpnpRequest *request)
 {
     bool status = false;
 
-    for (auto it = this->AttributeMap.begin(); it != this->AttributeMap.end(); ++it)
+    for (auto it = m_attributeMap.begin(); it != m_attributeMap.end(); ++it)
     {
         DEBUG_PRINT(" \"" << it->first << "\"");
         // Check the request
@@ -46,10 +82,11 @@ bool UpnpContentDirectory::getAttributesRequest(UpnpRequest *request)
             continue;
         }
 
-        GetAttributeHandler fp = it->second.first;
-        GUPnPServiceProxyAction *action = (this->*fp)(request);
-        status |= (action != NULL);
-        if (action == NULL)
+        UpnpAttributeInfo *attrInfo = it->second.first;
+        bool result = UpnpAttribute::get(m_proxy, request, attrInfo);
+
+        status |= result;
+        if (!result)
         {
             request->done++;
         }
@@ -57,7 +94,8 @@ bool UpnpContentDirectory::getAttributesRequest(UpnpRequest *request)
     return status;
 }
 
-bool UpnpContentDirectory::setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request)
+bool UpnpContentDirectory::setAttributesRequest(const RCSResourceAttributes &value,
+        UpnpRequest *request)
 {
     bool status = false;
 
@@ -75,10 +113,11 @@ bool UpnpContentDirectory::setAttributesRequest(const RCSResourceAttributes &val
         }
         RCSResourceAttributes::Value attrValue = it->value();
 
-        SetAttributeHandler fp = this->AttributeMap[attrName].second;
-        GUPnPServiceProxyAction *action = (this->*fp)(attrValue, request);
-        status |= (action != NULL);
-        if (action == NULL)
+        UpnpAttributeInfo *attrInfo = m_attributeMap[attrName].first;
+        bool result = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
+
+        status |= result;
+        if (!result)
         {
             request->done++;
         }
