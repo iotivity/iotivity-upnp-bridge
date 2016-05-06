@@ -58,7 +58,7 @@ bool UpnpAttribute::isValidRequest(map <string, pair <UpnpAttributeInfo*, int>> 
 
 
 void UpnpAttribute::getCb(GUPnPServiceProxy *proxy,
-                          GUPnPServiceProxyAction *action,
+                          GUPnPServiceProxyAction *actionProxy,
                           gpointer userData)
 {
     GError *error = NULL;
@@ -66,14 +66,14 @@ void UpnpAttribute::getCb(GUPnPServiceProxy *proxy,
     UpnpRequest *request = static_cast<UpnpRequest*> (userData);
     UpnpAttributeInfo *attrInfo;
 
-    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(action);
+    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(actionProxy);
 
     assert(it != request->proxyMap.end());
 
     attrInfo = it->second.first;
     DEBUG_PRINT(attrInfo->actions[0].varName);
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  action,
+                                                  actionProxy,
                                                   &error,
                                                   attrInfo->actions[0].varName,
                                                   attrInfo->actions[0].varType,
@@ -132,27 +132,28 @@ void UpnpAttribute::getCb(GUPnPServiceProxy *proxy,
     UpnpRequest::requestDone(request, status);
 }
 
-GUPnPServiceProxyAction* UpnpAttribute::get(GUPnPServiceProxy *serviceProxy,
-                                            UpnpRequest *request,
-                                            UpnpAttributeInfo *attrInfo)
+bool UpnpAttribute::get(GUPnPServiceProxy *serviceProxy,
+                        UpnpRequest *request,
+                        UpnpAttributeInfo *attrInfo)
 {
-    GUPnPServiceProxyAction *proxyAction = gupnp_service_proxy_begin_action (serviceProxy,
+    GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (serviceProxy,
                                                                              attrInfo->actions[0].name,
                                                                              getCb,
                                                                              (gpointer *) request,
                                                                              NULL);
     // Hold on to the attribute info
-    if (proxyAction != NULL)
+    if (NULL == actionProxy)
     {
-        request->proxyMap[proxyAction].first = attrInfo;
-        request->proxyMap[proxyAction].second.var_int64 = 0;
+        return false;
     }
 
-    return proxyAction;
+    request->proxyMap[actionProxy].first = attrInfo;
+    request->proxyMap[actionProxy].second.var_int64 = 0;
+    return true;
 }
 
 void UpnpAttribute::setCb(GUPnPServiceProxy *proxy,
-                          GUPnPServiceProxyAction *action,
+                          GUPnPServiceProxyAction *proxyAction,
                           gpointer userData)
 {
     GError *error = NULL;
@@ -160,7 +161,7 @@ void UpnpAttribute::setCb(GUPnPServiceProxy *proxy,
     UpnpAttributeInfo *attrInfo;
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  action,
+                                                  proxyAction,
                                                   &error,
                                                   NULL);
     if (error) {
@@ -171,7 +172,7 @@ void UpnpAttribute::setCb(GUPnPServiceProxy *proxy,
 
     if (status)
     {
-        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(action);
+        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(proxyAction);
 
         if (it != request->proxyMap.end())
         {
@@ -220,12 +221,12 @@ void UpnpAttribute::setCb(GUPnPServiceProxy *proxy,
     UpnpRequest::requestDone(request, status);
 }
 
-GUPnPServiceProxyAction* UpnpAttribute::set(GUPnPServiceProxy *serviceProxy,
-                                            UpnpRequest *request,
-                                            UpnpAttributeInfo *attrInfo,
-                                            RCSResourceAttributes::Value* attrValue)
+bool UpnpAttribute::set(GUPnPServiceProxy *serviceProxy,
+                        UpnpRequest *request,
+                        UpnpAttributeInfo *attrInfo,
+                        RCSResourceAttributes::Value* attrValue)
 {
-    GUPnPServiceProxyAction *proxyAction;
+    GUPnPServiceProxyAction *actionProxy;
     UpnpVar value;
 
     if (attrValue != NULL)
@@ -280,7 +281,7 @@ GUPnPServiceProxyAction* UpnpAttribute::set(GUPnPServiceProxy *serviceProxy,
     if (string(attrInfo->actions[1].varName) == "")
     {
         DEBUG_PRINT("action (no args): " << attrInfo->actions[1].name);
-        proxyAction = gupnp_service_proxy_begin_action (serviceProxy,
+        actionProxy = gupnp_service_proxy_begin_action (serviceProxy,
                                                         attrInfo->actions[1].name,
                                                         setCb,
                                                         (gpointer *) request,
@@ -289,7 +290,7 @@ GUPnPServiceProxyAction* UpnpAttribute::set(GUPnPServiceProxy *serviceProxy,
     else
     {
         DEBUG_PRINT("action: " << attrInfo->actions[1].name << "( " << attrInfo->actions[1].varName << " )");
-        proxyAction = gupnp_service_proxy_begin_action (serviceProxy,
+        actionProxy = gupnp_service_proxy_begin_action (serviceProxy,
                                                  attrInfo->actions[1].name,
                                                  setCb,
                                                  (gpointer *) request,
@@ -300,10 +301,11 @@ GUPnPServiceProxyAction* UpnpAttribute::set(GUPnPServiceProxy *serviceProxy,
     }
 
     // Hold on to the attribute info and value that is being modified
-    if (proxyAction != NULL)
+    if (NULL == actionProxy)
     {
-        request->proxyMap[proxyAction] = {attrInfo, value};
+        return false;
     }
 
-    return proxyAction;
+    request->proxyMap[actionProxy] = {attrInfo, value};
+    return true;
 }

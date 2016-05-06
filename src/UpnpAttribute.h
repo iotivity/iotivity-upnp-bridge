@@ -36,18 +36,18 @@ public:
                       GUPnPServiceProxyAction *action,
                       gpointer userData);
 
-    static GUPnPServiceProxyAction* get(GUPnPServiceProxy *serviceProxy,
-                                        UpnpRequest *request,
-                                        UpnpAttributeInfo *attrInfo);
+    static  bool get(GUPnPServiceProxy *serviceProxy,
+                     UpnpRequest *request,
+                     UpnpAttributeInfo *attrInfo);
 
     static void setCb(GUPnPServiceProxy *proxy,
                       GUPnPServiceProxyAction *action,
                       gpointer userData);
 
-    static GUPnPServiceProxyAction* set(GUPnPServiceProxy *serviceProxy,
-                                        UpnpRequest *request,
-                                        UpnpAttributeInfo *attrInfo,
-                                        RCSResourceAttributes::Value* attrValue);
+    static bool set(GUPnPServiceProxy *serviceProxy,
+                    UpnpRequest *request,
+                    UpnpAttributeInfo *attrInfo,
+                    RCSResourceAttributes::Value* attrValue);
 
 };
 
