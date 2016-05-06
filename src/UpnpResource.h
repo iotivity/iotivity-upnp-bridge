@@ -27,6 +27,8 @@
 #include <RCSResourceAttributes.h>
 #include <gupnp.h>
 
+#include "UpnpInternal.h"
+
 using namespace OIC::Service;
 using namespace std;
 
@@ -35,7 +37,6 @@ class UpnpResource: public ProtocolBridgeResource
 public:
 
     typedef std::shared_ptr< UpnpResource > Ptr;
-    typedef std::vector<RCSResourceAttributes> CompositeAttribute;
 
     UpnpResource();
     virtual ~UpnpResource();
