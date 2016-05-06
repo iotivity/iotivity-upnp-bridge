@@ -22,6 +22,30 @@
       "revId": "bb21e96b8598c875c2a1a21a0a27ba0eee238871",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_8563f919",
+        "filename": "src/UpnpService.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-05-06T21:12:52Z",
+      "side": 1,
+      "message": "This should be used whenever a type/range conversion (or any other attribute specific operation) needs to be performed on the UPnP value obtained from notification. The code is currently used in WANCommonInterfaceConfig and Dimming services (that one is empty and value range conversion needs to be implemented). As we add more services this is going to be used more widely.",
+      "parentUuid": "1a486d77_65c11de4",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 84
+      },
+      "revId": "bb21e96b8598c875c2a1a21a0a27ba0eee238871",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
