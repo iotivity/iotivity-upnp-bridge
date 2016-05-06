@@ -37,24 +37,21 @@ class UpnpContentDirectory: public UpnpService
     friend class UpnpService;
 
 public:
-    typedef GUPnPServiceProxyAction* (UpnpContentDirectory::*GetAttributeHandler)(UpnpRequest*);
-    typedef GUPnPServiceProxyAction* (UpnpContentDirectory::*SetAttributeHandler)(RCSResourceAttributes::Value&, UpnpRequest*);
+    typedef GUPnPServiceProxyAction* (UpnpContentDirectory::*GetAttributeHandler)(UpnpRequest *);
+    typedef GUPnPServiceProxyAction* (UpnpContentDirectory::*SetAttributeHandler)(
+            GUPnPServiceProxy *, UpnpRequest *, UpnpAttributeInfo *, RCSResourceAttributes);
 
-    UpnpContentDirectory(GUPnPServiceInfo *serviceInfo,
-                    UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_CONTENT_DIRECTORY, requestState,
-                    nullptr) // TODO change to Reference to Attribute table)
+    UpnpContentDirectory(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_CONTENT_DIRECTORY, requestState, &Attributes)
     {
     }
 
-// TODO Implement various OCF attributes/UPnP Actions
-
 private:
-    static map <const string, pair <GetAttributeHandler, SetAttributeHandler>> AttributeMap;
+    static vector< UpnpAttributeInfo > Attributes;
 
     bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(const RCSResourceAttributes& attrs, UpnpRequest *request);
-
+    bool setAttributesRequest(
+            const RCSResourceAttributes& attrs, UpnpRequest *request);
 };
 
 #endif
