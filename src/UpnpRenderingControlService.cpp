@@ -24,10 +24,30 @@ using namespace OIC::Service;
 
 static const string MODULE = "UpnpRenderingControlService";
 
-// Attribute map: "attribute name" -> GET/SET request handlers
-map <const string, pair <UpnpRenderingControl::GetAttributeHandler, UpnpRenderingControl::SetAttributeHandler>> UpnpRenderingControl::AttributeMap =
-{
-//    {"value", {&UpnpRenderingControl::getTarget, &UpnpRenderingControl::setTarget}}
+// Rendering Control Service
+
+// Organization:
+// Attribute Name,
+// State Variable Name (can be empty string), State variable type, "evented" flag
+// Actions:
+//    0: "GET" action name, action type, optional out parameters: var_name,var_type
+//    1: "SET" action name, action type, optional in parameters: var_name,var_type
+// Vector of embedded attributes (if present)
+vector <UpnpAttributeInfo> UpnpRenderingControl::Attributes = {
+//    {"mute",
+//     "Mute", G_TYPE_BOOLEAN, false,
+//     {{"GetMute", UPNP_ACTION_GET, "Mute", G_TYPE_BOOLEAN},
+//      {"SetMute", UPNP_ACTION_POST, "Mute", G_TYPE_BOOLEAN}
+//     },
+//     {}
+//    },
+//    {"volume",
+//     "Volume", G_TYPE_UINT, false,
+//     {{"GetVolume", UPNP_ACTION_GET, "Volume", G_TYPE_UINT},
+//      {"SetVolume", UPNP_ACTION_POST, "Volume", G_TYPE_UINT}
+//     },
+//     {}
+//    }
 };
 
 // TODO Implement various OCF attributes/UPnP Actions
@@ -36,7 +56,7 @@ bool UpnpRenderingControl::getAttributesRequest(UpnpRequest *request)
 {
     bool status = false;
 
-    for (auto it = this->AttributeMap.begin(); it != this->AttributeMap.end(); ++it)
+    for (auto it = m_attributeMap.begin(); it != m_attributeMap.end(); ++it)
     {
         DEBUG_PRINT(" \"" << it->first << "\"");
         // Check the request
@@ -46,18 +66,21 @@ bool UpnpRenderingControl::getAttributesRequest(UpnpRequest *request)
             continue;
         }
 
-        GetAttributeHandler fp = it->second.first;
-        GUPnPServiceProxyAction *action = (this->*fp)(request);
-        status |= (action != NULL);
-        if (action == NULL)
+        UpnpAttributeInfo *attrInfo = it->second.first;
+        bool result = UpnpAttribute::get(m_proxy, request, attrInfo);
+
+        status |= result;
+        if (!result)
         {
             request->done++;
         }
     }
+
     return status;
 }
 
-bool UpnpRenderingControl::setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request)
+bool UpnpRenderingControl::setAttributesRequest(const RCSResourceAttributes &value,
+        UpnpRequest *request)
 {
     bool status = false;
 
@@ -75,10 +98,11 @@ bool UpnpRenderingControl::setAttributesRequest(const RCSResourceAttributes &val
         }
         RCSResourceAttributes::Value attrValue = it->value();
 
-        SetAttributeHandler fp = this->AttributeMap[attrName].second;
-        GUPnPServiceProxyAction *action = (this->*fp)(attrValue, request);
-        status |= (action != NULL);
-        if (action == NULL)
+        UpnpAttributeInfo *attrInfo = m_attributeMap[attrName].first;
+        bool result = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
+
+        status |= result;
+        if (!result)
         {
             request->done++;
         }

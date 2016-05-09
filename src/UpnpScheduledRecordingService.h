@@ -37,24 +37,21 @@ class UpnpScheduledRecording: public UpnpService
     friend class UpnpService;
 
 public:
-    typedef GUPnPServiceProxyAction* (UpnpScheduledRecording::*GetAttributeHandler)(UpnpRequest*);
-    typedef GUPnPServiceProxyAction* (UpnpScheduledRecording::*SetAttributeHandler)(RCSResourceAttributes::Value&, UpnpRequest*);
+    typedef GUPnPServiceProxyAction* (UpnpScheduledRecording::*GetAttributeHandler)(UpnpRequest *);
+    typedef GUPnPServiceProxyAction* (UpnpScheduledRecording::*SetAttributeHandler)(
+            GUPnPServiceProxy *, UpnpRequest *, UpnpAttributeInfo *, RCSResourceAttributes);
 
-    UpnpScheduledRecording(GUPnPServiceInfo *serviceInfo,
-                    UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_SCHEDULED_RECORDING, requestState,
-                    nullptr) // TODO change to Reference to Attribute table)
+    UpnpScheduledRecording(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_SCHEDULED_RECORDING, requestState, &Attributes)
     {
     }
 
-    // TODO Implement various OCF attributes/UPnP Actions
-
 private:
-    static map <const string, pair <GetAttributeHandler, SetAttributeHandler>> AttributeMap;
+    static vector< UpnpAttributeInfo > Attributes;
 
     bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(const RCSResourceAttributes& attrs, UpnpRequest *request);
-
+    bool setAttributesRequest(
+            const RCSResourceAttributes& attrs, UpnpRequest *request);
 };
 
 #endif

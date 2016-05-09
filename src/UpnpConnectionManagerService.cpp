@@ -24,10 +24,26 @@ using namespace OIC::Service;
 
 static const string MODULE = "UpnpConnectionManagerService";
 
-// Attribute map: "attribute name" -> GET/SET request handlers
-map <const string, pair <UpnpConnectionManager::GetAttributeHandler, UpnpConnectionManager::SetAttributeHandler>> UpnpConnectionManager::AttributeMap =
-{
-//    {"value", {&UpnpConnectionManager::getTarget, &UpnpConnectionManager::setTarget}}
+// Connection Manager Service
+
+// Organization:
+// Attribute Name,
+// State Variable Name (can be empty string), State variable type, "evented" flag
+// Actions:
+//    0: "GET" action name, action type, optional out parameters: var_name,var_type
+//    1: "SET" action name, action type, optional in parameters: var_name,var_type
+// Vector of embedded attributes (if present)
+vector <UpnpAttributeInfo> UpnpConnectionManager::Attributes = {
+    {"currentConnectionIds",
+     "CurrentConnectionIDs", G_TYPE_STRING, true,
+     {{"GetCurrentConnectionIDs", UPNP_ACTION_GET, "ConnectionIDs", G_TYPE_STRING}},
+     {}
+    },
+    {"featureList",
+     "FeatureList", G_TYPE_STRING, false,
+     {{"GetFeatureList", UPNP_ACTION_GET, "FeatureList", G_TYPE_STRING}},
+     {}
+    }
 };
 
 // TODO Implement various OCF attributes/UPnP Actions
@@ -36,7 +52,7 @@ bool UpnpConnectionManager::getAttributesRequest(UpnpRequest *request)
 {
     bool status = false;
 
-    for (auto it = this->AttributeMap.begin(); it != this->AttributeMap.end(); ++it)
+    for (auto it = m_attributeMap.begin(); it != m_attributeMap.end(); ++it)
     {
         DEBUG_PRINT(" \"" << it->first << "\"");
         // Check the request
@@ -46,18 +62,21 @@ bool UpnpConnectionManager::getAttributesRequest(UpnpRequest *request)
             continue;
         }
 
-        GetAttributeHandler fp = it->second.first;
-        GUPnPServiceProxyAction *action = (this->*fp)(request);
-        status |= (action != NULL);
-        if (action == NULL)
+        UpnpAttributeInfo *attrInfo = it->second.first;
+        bool result = UpnpAttribute::get(m_proxy, request, attrInfo);
+
+        status |= result;
+        if (!result)
         {
             request->done++;
         }
     }
+
     return status;
 }
 
-bool UpnpConnectionManager::setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request)
+bool UpnpConnectionManager::setAttributesRequest(const RCSResourceAttributes &value,
+        UpnpRequest *request)
 {
     bool status = false;
 
@@ -75,10 +94,11 @@ bool UpnpConnectionManager::setAttributesRequest(const RCSResourceAttributes &va
         }
         RCSResourceAttributes::Value attrValue = it->value();
 
-        SetAttributeHandler fp = this->AttributeMap[attrName].second;
-        GUPnPServiceProxyAction *action = (this->*fp)(attrValue, request);
-        status |= (action != NULL);
-        if (action == NULL)
+        UpnpAttributeInfo *attrInfo = m_attributeMap[attrName].first;
+        bool result = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
+
+        status |= result;
+        if (!result)
         {
             request->done++;
         }
