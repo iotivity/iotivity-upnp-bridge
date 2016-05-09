@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_81a0baf5",
+        "filename": "src/UpnpWanCommonInterfaceConfigService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-09T16:25:38Z",
+      "side": 1,
+      "message": "Not sure if this is going to be an issue for us since we are using newer compilers. I would add a space here \u003e_\u003e so that its clear that this is for template code not a shift operator. New compilers don\u0027t have a problem with the code as it is. Older compilers need the space.  \n\nProbably not an issue.",
+      "range": {
+        "startLine": 189,
+        "startChar": 79,
+        "endLine": 189,
+        "endChar": 81
+      },
+      "revId": "4bdd68175320a3349ce7c1fd42a718e08aabcf74",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_41aab2d5",
+        "filename": "src/UpnpWanCommonInterfaceConfigService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-09T16:25:38Z",
+      "side": 1,
+      "message": "If there is an error calling the GetActiveConnectionInfo will these values be filled in?",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 214,
+        "endChar": 52
+      },
+      "revId": "4bdd68175320a3349ce7c1fd42a718e08aabcf74",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_e1ae66e7",
+        "filename": "src/UpnpWanCommonInterfaceConfigService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-09T16:25:38Z",
+      "side": 1,
+      "message": "why print an empty line?",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 244,
+        "endChar": 20
+      },
+      "revId": "4bdd68175320a3349ce7c1fd42a718e08aabcf74",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_01acaaec",
+        "filename": "src/UpnpWanCommonInterfaceConfigService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-09T16:25:38Z",
+      "side": 1,
+      "message": "Inga I am not familiar with what this code does.  does it erase the request element? or does it replace/create it with an empty value?",
+      "range": {
+        "startLine": 253,
+        "startChar": 4,
+        "endLine": 253,
+        "endChar": 45
+      },
+      "revId": "4bdd68175320a3349ce7c1fd42a718e08aabcf74",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
