@@ -52,6 +52,8 @@ static std::map<std::string, std::string > UpnpSearchPatternMap =
     {UPNP_OIC_TYPE_DEVICE_WAN,              UPNP_PREFIX_DEVICE + ":.*(?:[Ww][Aa][Nn][Dd]evice).*"},
     {UPNP_OIC_TYPE_WAN_IF_CONFIG,           UPNP_PREFIX_SERVICE + ".*(?:[Ww][Aa][Nn][Cc]ommon[Ii]nterface[Cc]onfig).*"},
     {UPNP_OIC_TYPE_LAYER3_FORWARDING,       UPNP_PREFIX_SERVICE + ".*(?:[Ll]ayer3[Ff]orwarding).*"},
+    {UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION,   UPNP_PREFIX_DEVICE + ":.*(?:[Ww][Aa][Nn][Cc]onnection[Dd]evice).*"},
+    {UPNP_OIC_TYPE_DEVICE_LAN,              UPNP_PREFIX_DEVICE + ":.*(?:[Ll][Aa][Nn][Dd]evice).*"},
 // Media Control
     {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,   UPNP_PREFIX_DEVICE + ":.*(?:[Mm]edia[Rr]enderer).*"},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,     UPNP_PREFIX_DEVICE + ":.*(?:[Mm]edia[Ss]erver).*"},
@@ -78,6 +80,8 @@ static std::map<std::string, std::string > UpnpInterfaceMap =
     {UPNP_OIC_TYPE_DEVICE_WAN,               "oic.if.ll"},
     {UPNP_OIC_TYPE_WAN_IF_CONFIG,            "oic.if.baseline"},
     {UPNP_OIC_TYPE_LAYER3_FORWARDING,        "oic.if.baseline"},
+    {UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION,    "oic.if.ll"},
+    {UPNP_OIC_TYPE_DEVICE_LAN,               "oic.if.ll"},
 // Media Control
     {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,    "oic.if.ll"},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,      "oic.if.ll"},
@@ -95,6 +99,8 @@ static std::map<std::string, std::string > UpnpUriPrefixMap =
     {UPNP_OIC_TYPE_DEVICE_WAN,              UPNP_OIC_URI_PREFIX_WAN},
     {UPNP_OIC_TYPE_WAN_IF_CONFIG,           UPNP_OIC_URI_PREFIX_WAN_IF_CONFIG},
     {UPNP_OIC_TYPE_LAYER3_FORWARDING,       UPNP_OIC_URI_PREFIX_LAYER3_FORWARDING},
+    {UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION,   UPNP_OIC_URI_PREFIX_WAN_CONNECTION},
+    {UPNP_OIC_TYPE_DEVICE_LAN,              UPNP_OIC_URI_PREFIX_LAN},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,   UPNP_OIC_URI_PREFIX_MEDIA_RENDERER},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,     UPNP_OIC_URI_PREFIX_MEDIA_SERVER},
     {UPNP_OIC_TYPE_CONNECTION_MANAGER,      UPNP_OIC_URI_PREFIX_CONNECTION_MANAGER},
