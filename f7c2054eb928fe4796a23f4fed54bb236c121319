@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_61881623",
+        "filename": "src/UpnpRenderingControlService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-09T21:17:07Z",
+      "side": 1,
+      "message": "why are these commented out?",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 7
+      },
+      "revId": "f7c2054eb928fe4796a23f4fed54bb236c121319",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
