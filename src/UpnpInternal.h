@@ -71,20 +71,27 @@ static std::map<std::string, std::string > UpnpSearchPatternMap =
 static std::map<std::string, std::string > UpnpInterfaceMap =
 {
 // Lighting Control
-    {UPNP_OIC_TYPE_DEVICE_LIGHT,             "oic.if.ll"},
+    {UPNP_OIC_TYPE_DEVICE_LIGHT,             OC_RSRVD_INTERFACE_LL},
     {UPNP_OIC_TYPE_DIMMING,                  "oic.if.a"},
     {UPNP_OIC_TYPE_POWER_SWITCH,             "oic.if.a"},
     {UPNP_OIC_TYPE_BRIGHTNESS,               "oic.if.a"},
 // Internet Gateway
-    {UPNP_OIC_TYPE_DEVICE_INET_GATEWAY,      "oic.if.ll"},
-    {UPNP_OIC_TYPE_DEVICE_WAN,               "oic.if.ll"},
-    {UPNP_OIC_TYPE_WAN_IF_CONFIG,            "oic.if.baseline"},
-    {UPNP_OIC_TYPE_LAYER3_FORWARDING,        "oic.if.baseline"},
-    {UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION,    "oic.if.ll"},
-    {UPNP_OIC_TYPE_DEVICE_LAN,               "oic.if.ll"},
+<<<<<<< HEAD
+    {UPNP_OIC_TYPE_DEVICE_INET_GATEWAY,      OC_RSRVD_INTERFACE_LL},
+    {UPNP_OIC_TYPE_DEVICE_WAN,               OC_RSRVD_INTERFACE_LL},
+    {UPNP_OIC_TYPE_WAN_IF_CONFIG,            OC_RSRVD_INTERFACE_DEFAULT},
+    {UPNP_OIC_TYPE_LAYER3_FORWARDING,        OC_RSRVD_INTERFACE_DEFAULT},
+    {UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION,    OC_RSRVD_INTERFACE_LL},
+    {UPNP_OIC_TYPE_DEVICE_LAN,               OC_RSRVD_INTERFACE_LL},
+=======
+    {UPNP_OIC_TYPE_DEVICE_INET_GATEWAY,      OC_RSRVD_INTERFACE_LL},
+    {UPNP_OIC_TYPE_DEVICE_WAN,               OC_RSRVD_INTERFACE_LL},
+    {UPNP_OIC_TYPE_WAN_IF_CONFIG,            OC_RSRVD_INTERFACE_DEFAULT},
+    {UPNP_OIC_TYPE_LAYER3_FORWARDING,        OC_RSRVD_INTERFACE_DEFAULT},
+>>>>>>> 8830af8... Updated constants that have a constant definition in iotivity
 // Media Control
-    {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,    "oic.if.ll"},
-    {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,      "oic.if.ll"},
+    {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,    OC_RSRVD_INTERFACE_LL},
+    {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,      OC_RSRVD_INTERFACE_LL},
 };
 
 // URI prexfix map
