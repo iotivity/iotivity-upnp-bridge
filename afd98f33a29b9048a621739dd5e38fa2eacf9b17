@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_e1950689",
+        "filename": "src/UpnpContentDirectoryService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-09T16:44:49Z",
+      "side": 1,
+      "message": "I would suggest putting this all on one line and removing the unneeded \u0027,\u0027 char the extra line and the unneeded \u0027,\u0027 make this harder to read.\nsame goes for the next for attributes. i.e.\n\n  {{\"GetSearchCapabilities\", UPNP_ACTION_GET, \"SearchCaps\", G_TYPE_STRING}},",
+      "range": {
+        "startLine": 39,
+        "startChar": 77,
+        "endLine": 40,
+        "endChar": 7
+      },
+      "revId": "afd98f33a29b9048a621739dd5e38fa2eacf9b17",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
