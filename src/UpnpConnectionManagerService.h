@@ -37,24 +37,21 @@ class UpnpConnectionManager: public UpnpService
     friend class UpnpService;
 
 public:
-    typedef GUPnPServiceProxyAction* (UpnpConnectionManager::*GetAttributeHandler)(UpnpRequest*);
-    typedef GUPnPServiceProxyAction* (UpnpConnectionManager::*SetAttributeHandler)(RCSResourceAttributes::Value&, UpnpRequest*);
+    typedef GUPnPServiceProxyAction* (UpnpConnectionManager::*GetAttributeHandler)(UpnpRequest *);
+    typedef GUPnPServiceProxyAction* (UpnpConnectionManager::*SetAttributeHandler)(
+            GUPnPServiceProxy *, UpnpRequest *, UpnpAttributeInfo *, RCSResourceAttributes);
 
-    UpnpConnectionManager(GUPnPServiceInfo *serviceInfo,
-                    UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_CONNECTION_MANAGER, requestState,
-                    nullptr) // TODO change to Reference to Attribute table
+    UpnpConnectionManager(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_CONNECTION_MANAGER, requestState, &Attributes)
     {
     }
 
-    // TODO Implement various OCF attributes/UPnP Actions
-
 private:
-    static map <const string, pair <GetAttributeHandler, SetAttributeHandler>> AttributeMap;
+    static vector< UpnpAttributeInfo > Attributes;
 
     bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(const RCSResourceAttributes& attrs, UpnpRequest *request);
-
+    bool setAttributesRequest(
+            const RCSResourceAttributes& attrs, UpnpRequest *request);
 };
 
 #endif

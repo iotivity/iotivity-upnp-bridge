@@ -40,21 +40,17 @@ public:
     typedef GUPnPServiceProxyAction* (UpnpAVTransport::*GetAttributeHandler)(UpnpRequest*);
     typedef GUPnPServiceProxyAction* (UpnpAVTransport::*SetAttributeHandler)(RCSResourceAttributes::Value&, UpnpRequest*);
 
-    UpnpAVTransport(GUPnPServiceInfo *serviceInfo,
-                    UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_AV_TRANSPORT, requestState,
-                    nullptr) // TODO change to Reference to Attribute table)
+    UpnpAVTransport(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_AV_TRANSPORT, requestState, &Attributes)
     {
     }
 
-    // TODO Implement various OCF attributes/UPnP Actions
-
 private:
-    static map <const string, pair <GetAttributeHandler, SetAttributeHandler>> AttributeMap;
+    static vector< UpnpAttributeInfo > Attributes;
 
     bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(const RCSResourceAttributes& attrs, UpnpRequest *request);
-
+    bool setAttributesRequest(
+            const RCSResourceAttributes& attrs, UpnpRequest *request);
 };
 
 #endif
