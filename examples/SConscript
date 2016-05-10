@@ -33,8 +33,11 @@ env_samples.AppendUnique(CPPPATH = ['#/include/'])
 env_samples['LIBS'] = [oic_libs, 'pthread']
 env_samples['LIBPATH'] = ['${IOTIVITY_BASE}/out/linux/${TARGET_ARCH}/${IOTIVITY_LIB_TYPE}']
 examples_bins.extend(env_samples.Program('Client.cpp'))
+examples_bins.extend(env_samples.Program('Client2.cpp'))
 examples_bins.extend(env_samples.Program('SimpleClient.cpp'))
 examples_bins.extend(env_samples.Program('Observer.cpp'))
+
+env.SConscript('iotApp/SConscript', exports= ['env', 'iotivity_resource_inc_paths'], duplicate=0)
 
 env.Install('#/${BUILD_DIR}/bin', examples_bins)
 env.Install('#/${BUILD_DIR}/bin', 'BundleConfig.xml')
