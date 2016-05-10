@@ -24,7 +24,7 @@ using namespace OIC::Service;
 
 static const string MODULE = "WanCommonInterfaceConfig";
 
-// Wan Common Interface Config service
+// WAN Common Interface Config service
 
 // Organization:
 // Attribute Name,
@@ -58,7 +58,7 @@ vector <UpnpAttributeInfo> UpnpWanCommonInterfaceConfig::Attributes = {
      {}
     },
     {"maxConnections",
-     "MaximumActiveConnections", G_TYPE_STRING, false,
+     "MaximumActiveConnections", G_TYPE_UINT, false,
      {{"GetMaximumActiveConnections", UPNP_ACTION_GET, "NewMaximumActiveConnections", G_TYPE_UINT}},
      {}
     },
