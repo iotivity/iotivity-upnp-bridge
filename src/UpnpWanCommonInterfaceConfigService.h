@@ -18,8 +18,8 @@
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#ifndef UPNP_COMMON_INTERFACE_CONFIG_SERVICE_H_
-#define UPNP_COMMON_INTERFACE_CONFIG_SERVICE_H_
+#ifndef UPNP_WAN_COMMON_INTERFACE_CONFIG_SERVICE_H_
+#define UPNP_WAN_COMMON_INTERFACE_CONFIG_SERVICE_H_
 
 #include <string>
 #include <map>
