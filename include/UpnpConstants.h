@@ -47,6 +47,7 @@ static const std::string UPNP_OIC_TYPE_RENDERING_CONTROL                = "oic.r
 static const std::string UPNP_OIC_TYPE_SCHEDULED_RECORDING              = "oic.r.scheduled.recording";
 static const std::string UPNP_OIC_TYPE_WAN_IF_CONFIG                    = "oic.r.wan.interface.config";
 static const std::string UPNP_OIC_TYPE_LAYER3_FORWARDING                = "oic.r.l3f";
+static const std::string UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG              = "oic.r.wan.ethernet";
 
 // URI prefix (URI = URI_PREFIX + UDN)
 static const std::string UPNP_OIC_URI_PREFIX_LIGHT                      = "/oic/upnp/light/";
@@ -57,6 +58,7 @@ static const std::string UPNP_OIC_URI_PREFIX_INET_GATEWAY               = "/oic/
 static const std::string UPNP_OIC_URI_PREFIX_LAYER3_FORWARDING          = "/oic/upnp/l3f/";
 static const std::string UPNP_OIC_URI_PREFIX_WAN                        = "/oic/upnp/wan/";
 static const std::string UPNP_OIC_URI_PREFIX_WAN_IF_CONFIG              = "/oic/upnp/wan/ifconfig/";
+static const std::string UPNP_OIC_URI_PREFIX_WAN_ETHERNET_CONFIG        = "/oic/upnp/wan/ethernetconfig";
 static const std::string UPNP_OIC_URI_PREFIX_WAN_CONNECTION             = "/oic/upnp/wan/connection";
 static const std::string UPNP_OIC_URI_PREFIX_LAN                        = "/oic/upnp/lan";
 static const std::string UPNP_OIC_URI_PREFIX_MEDIA_RENDERER             = "/oic/upnp/media/renderer/";

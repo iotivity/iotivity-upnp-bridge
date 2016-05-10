@@ -92,12 +92,19 @@ std::map <std::string, AttrDesc> L3FAttrs =
     {"defaultConnectionService",  {ATTR_TYPE_STRING,   true, NULL}}
 };
 
+//WANEthernetLinkConfig
+std::map <std::string, AttrDesc> WanEthConfigAttrs =
+{
+    {"linkStatus",  {ATTR_TYPE_STRING,   true, NULL}}
+};
+
 std::map <std::string, std::map <std::string, AttrDesc> & > ResourceAttrMap =
 {
-    {UPNP_OIC_TYPE_POWER_SWITCH,   BinarySwitchAttrs},
-    {UPNP_OIC_TYPE_BRIGHTNESS ,    BrightnessAttrs},
-    {UPNP_OIC_TYPE_WAN_IF_CONFIG,  WanIfConfigAttrs},
-    {UPNP_OIC_TYPE_LAYER3_FORWARDING,  L3FAttrs},
+    {UPNP_OIC_TYPE_POWER_SWITCH,         BinarySwitchAttrs},
+    {UPNP_OIC_TYPE_BRIGHTNESS ,          BrightnessAttrs},
+    {UPNP_OIC_TYPE_WAN_IF_CONFIG,        WanIfConfigAttrs},
+    {UPNP_OIC_TYPE_LAYER3_FORWARDING,    L3FAttrs},
+    {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,  WanEthConfigAttrs}
 };
 
 #endif

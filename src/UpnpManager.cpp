@@ -23,17 +23,16 @@
 #include "UpnpInternal.h"
 #include "UpnpManager.h"
 
-#include "UpnpDimmingService.h"
-#include "UpnpPowerSwitchService.h"
-#include "UpnpContentDirectoryService.h"
-#include "UpnpConnectionManagerService.h"
 #include "UpnpAVTransportService.h"
+#include "UpnpConnectionManagerService.h"
+#include "UpnpContentDirectoryService.h"
+#include "UpnpDimmingService.h"
+#include "UpnpLayer3ForwardingService.h"
+#include "UpnpPowerSwitchService.h"
 #include "UpnpRenderingControlService.h"
 #include "UpnpScheduledRecordingService.h"
 #include "UpnpWanCommonInterfaceConfigService.h"
-#include "UpnpLayer3ForwardingService.h"
-
-#define nestedAtrribute std::vector<std::vector<RCSResourceAttributes>>
+#include "UpnpWanEthernetLinkConfigService.h"
 
 using namespace std;
 
@@ -382,6 +381,10 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     else if(resourceType == UPNP_OIC_TYPE_WAN_IF_CONFIG)
     {
         return (std::make_shared < UpnpWanCommonInterfaceConfig > (serviceInfo, requestState));
+    }
+    else if(resourceType == UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG)
+    {
+        return (std::make_shared < UpnpWanEthernetLinkConfig > (serviceInfo, requestState));
     }
     else if(resourceType == UPNP_OIC_TYPE_LAYER3_FORWARDING)
     {
