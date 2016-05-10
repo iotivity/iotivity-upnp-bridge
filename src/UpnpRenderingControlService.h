@@ -29,6 +29,7 @@
 #include "UpnpResource.h"
 #include "UpnpInternal.h"
 #include "UpnpService.h"
+#include "UpnpRenderingControlAttribute.h"
 
 using namespace std;
 

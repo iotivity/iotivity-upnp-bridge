@@ -34,20 +34,27 @@ static const string MODULE = "UpnpRenderingControlService";
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
 vector <UpnpAttributeInfo> UpnpRenderingControl::Attributes = {
-//    {"mute",
-//     "Mute", G_TYPE_BOOLEAN, false,
-//     {{"GetMute", UPNP_ACTION_GET, "Mute", G_TYPE_BOOLEAN},
-//      {"SetMute", UPNP_ACTION_POST, "Mute", G_TYPE_BOOLEAN}
-//     },
-//     {}
-//    },
-//    {"volume",
-//     "Volume", G_TYPE_UINT, false,
-//     {{"GetVolume", UPNP_ACTION_GET, "Volume", G_TYPE_UINT},
-//      {"SetVolume", UPNP_ACTION_POST, "Volume", G_TYPE_UINT}
-//     },
-//     {}
-//    }
+    {"presetNamelist",
+     "PresetNameList", G_TYPE_STRING, false,
+     {{"ListPresets", UPNP_ACTION_GET, "CurrentPresetNameList", G_TYPE_STRING},
+      {"SelectPreset", UPNP_ACTION_POST, "PresetName", G_TYPE_STRING}
+     },
+     {}
+    },
+    {"mute",
+     "Mute", G_TYPE_BOOLEAN, false,
+     {{"GetMute", UPNP_ACTION_GET, "CurrentMute", G_TYPE_BOOLEAN},
+      {"SetMute", UPNP_ACTION_POST, "DesiredMute", G_TYPE_BOOLEAN}
+     },
+     {}
+    },
+    {"volume",
+     "Volume", G_TYPE_UINT, false,
+     {{"GetVolume", UPNP_ACTION_GET, "CurrentVolume", G_TYPE_UINT},
+      {"SetVolume", UPNP_ACTION_POST, "DesiredVolume", G_TYPE_UINT}
+     },
+     {}
+    }
 };
 
 // TODO Implement various OCF attributes/UPnP Actions
@@ -67,7 +74,7 @@ bool UpnpRenderingControl::getAttributesRequest(UpnpRequest *request)
         }
 
         UpnpAttributeInfo *attrInfo = it->second.first;
-        bool result = UpnpAttribute::get(m_proxy, request, attrInfo);
+        bool result = UpnpRenderingControlAttribute::get(m_proxy, request, attrInfo);
 
         status |= result;
         if (!result)
@@ -99,7 +106,7 @@ bool UpnpRenderingControl::setAttributesRequest(const RCSResourceAttributes &val
         RCSResourceAttributes::Value attrValue = it->value();
 
         UpnpAttributeInfo *attrInfo = m_attributeMap[attrName].first;
-        bool result = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
+        bool result = UpnpRenderingControlAttribute::set(m_proxy, request, attrInfo, &attrValue);
 
         status |= result;
         if (!result)

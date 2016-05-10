@@ -144,11 +144,11 @@ typedef struct _EmbeddedAttribute
 typedef struct _UpnpAttributeInfo
 {
     std::string name;      // OCF Attribute name
-    const char* varName;   // UPnP state variale name
-    GType       type;      // UPnP state variale type
+    const char* varName;   // UPnP state variable name
+    GType       type;      // UPnP state variable type
     bool        evented;   // Flag to indicate evented state variable
     std::vector <UpnpAction> actions;      // UPnP Actions
-    std::vector <EmbeddedAttribute> attrs; // Embedded atttributes (composite attribute case)
+    std::vector <EmbeddedAttribute> attrs; // Embedded attributes (composite attribute case)
 } UpnpAttributeInfo;
 
 typedef union _UpnpVar
