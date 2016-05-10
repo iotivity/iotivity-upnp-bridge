@@ -37,8 +37,8 @@ class UpnpConnectionManager: public UpnpService
     friend class UpnpService;
 
 public:
-    typedef GUPnPServiceProxyAction* (UpnpConnectionManager::*GetAttributeHandler)(UpnpRequest *);
-    typedef GUPnPServiceProxyAction* (UpnpConnectionManager::*SetAttributeHandler)(
+    typedef bool (UpnpConnectionManager::*GetAttributeHandler)(UpnpRequest *);
+    typedef bool (UpnpConnectionManager::*SetAttributeHandler)(
             GUPnPServiceProxy *, UpnpRequest *, UpnpAttributeInfo *, RCSResourceAttributes);
 
     UpnpConnectionManager(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
@@ -47,11 +47,19 @@ public:
     }
 
 private:
+
+    static map< const string, UpnpConnectionManager::GetAttributeHandler > GetAttributeActionMap;
+
     static vector< UpnpAttributeInfo > Attributes;
 
     bool getAttributesRequest(UpnpRequest *request);
     bool setAttributesRequest(
             const RCSResourceAttributes& attrs, UpnpRequest *request);
+
+    static void getProtocolInfoCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
+            gpointer userData);
+
+    bool getProtocolInfo(UpnpRequest *request);
 };
 
 #endif
