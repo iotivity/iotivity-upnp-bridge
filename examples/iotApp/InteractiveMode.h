@@ -1,0 +1,64 @@
+//
+// Copyright 2016 Intel Corporation All Rights Reserved.
+//
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+#ifndef INTERACTIVEMODE_H_
+#define INTERACTIVEMODE_H_
+
+#include <memory>
+
+#include "MenuMain.h"
+
+class InteractiveMode {
+public:
+    InteractiveMode();
+    void run();
+private:
+    std::vector<std::string> parseCmd(const std::string &cmd);
+    std::stack<std::unique_ptr<MenuBase>> menuStack;
+};
+
+InteractiveMode::InteractiveMode() {
+    menuStack.push(std::unique_ptr<MenuBase>(new MenuMain));
+}
+void InteractiveMode::run() {
+    std::cout << "Enter command or type help" << std::endl;
+    std::string cmd;
+    do {
+        std::cout << menuStack.top()->getName() << "> ";
+
+        getline(std::cin, cmd);
+        std::vector<std::string> cmds = parseCmd(cmd);
+        menuStack.top()->run(cmds, menuStack);
+    } while(!menuStack.top()->quit());
+    std::cout << "Exiting please wait..." << std::endl;
+}
+
+std::vector<std::string> InteractiveMode::parseCmd(const std::string &cmd) {
+        std::vector<std::string> token;
+        std::stringstream ss(cmd);
+        std::string tok;
+        while (getline(ss, tok, ' ')) {
+            if(!tok.empty()){
+                token.push_back(tok);
+            }
+        }
+        return token;
+    }
+
+#endif /* INTERACTIVEMODE_H_ */
