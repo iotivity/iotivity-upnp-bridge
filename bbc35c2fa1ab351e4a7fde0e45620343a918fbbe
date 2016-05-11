@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_e4951489",
+        "filename": "examples/SConscript",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-05-11T19:01:31Z",
+      "side": 1,
+      "message": "what is Client2 ?",
+      "revId": "bbc35c2fa1ab351e4a7fde0e45620343a918fbbe",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_44816049",
+        "filename": "examples/iotApp/BinarySwitch.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-05-11T19:01:31Z",
+      "side": 1,
+      "message": "getBrightness() doesn\u0027t seem like the right name here.  getStatus() or isOn() maybe?",
+      "revId": "bbc35c2fa1ab351e4a7fde0e45620343a918fbbe",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_84876861",
+        "filename": "examples/iotApp/commandlineMode.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-05-11T19:01:31Z",
+      "side": 1,
+      "message": "braces misaligned?",
+      "revId": "bbc35c2fa1ab351e4a7fde0e45620343a918fbbe",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_247c5c72",
+        "filename": "examples/iotApp/commandlineMode.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-05-11T19:01:31Z",
+      "side": 1,
+      "message": "{ alignment?",
+      "revId": "bbc35c2fa1ab351e4a7fde0e45620343a918fbbe",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
