@@ -37,9 +37,9 @@ class UpnpContentDirectory: public UpnpService
     friend class UpnpService;
 
 public:
-    typedef GUPnPServiceProxyAction* (UpnpContentDirectory::*GetAttributeHandler)(UpnpRequest *);
-    typedef GUPnPServiceProxyAction* (UpnpContentDirectory::*SetAttributeHandler)(
-            GUPnPServiceProxy *, UpnpRequest *, UpnpAttributeInfo *, RCSResourceAttributes);
+    typedef bool (UpnpContentDirectory::*GetAttributeHandler)(UpnpRequest *);
+    typedef bool (UpnpContentDirectory::*SetAttributeHandler)(GUPnPServiceProxy *, UpnpRequest *,
+            UpnpAttributeInfo *, RCSResourceAttributes);
 
     UpnpContentDirectory(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
             UpnpService(serviceInfo, UPNP_OIC_TYPE_CONTENT_DIRECTORY, requestState, &Attributes)
@@ -47,11 +47,23 @@ public:
     }
 
 private:
+    static map< const string, UpnpContentDirectory::GetAttributeHandler > GetAttributeActionMap;
+
     static vector< UpnpAttributeInfo > Attributes;
 
     bool getAttributesRequest(UpnpRequest *request);
     bool setAttributesRequest(
             const RCSResourceAttributes& attrs, UpnpRequest *request);
+
+    static void getBrowseResultCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
+            gpointer userData);
+
+    bool getBrowseResult(UpnpRequest *request);
+
+    static void getSearchResultCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
+            gpointer userData);
+
+    bool getSearchResult(UpnpRequest *request);
 };
 
 #endif
