@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_07c11a80",
+        "filename": "examples/iotApp/CommandMenu.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-16T18:24:56Z",
+      "side": 1,
+      "message": "Incorrect Copyright header.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 3
+      },
+      "revId": "77d8fa7cd63c9dcd9382ef9d8ba49f6873878560",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_a7bdce04",
+        "filename": "examples/iotApp/IotivityMenu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-16T18:24:56Z",
+      "side": 1,
+      "message": "should ether remove this file while using the header file programming or clean this cpp file up.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 1
+      },
+      "revId": "77d8fa7cd63c9dcd9382ef9d8ba49f6873878560",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_c7ba520a",
+        "filename": "examples/iotApp/IotivityUtility.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-16T18:24:56Z",
+      "side": 1,
+      "message": "incorrect copyright",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 3
+      },
+      "revId": "77d8fa7cd63c9dcd9382ef9d8ba49f6873878560",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_6737c6b1",
+        "filename": "examples/iotApp/MainMenu.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-16T18:24:56Z",
+      "side": 1,
+      "message": "incorrect copyright.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 3
+      },
+      "revId": "77d8fa7cd63c9dcd9382ef9d8ba49f6873878560",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
