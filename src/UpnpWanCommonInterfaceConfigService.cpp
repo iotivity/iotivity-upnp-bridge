@@ -186,7 +186,7 @@ void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
     UpnpRequest *request = static_cast<UpnpRequest*> (userData);
     UpnpWanCommonInterfaceConfig *pService = static_cast<UpnpWanCommonInterfaceConfig*> (request->resource);
 
-    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar> >::iterator it = request->proxyMap.find(actionProxy);
+    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, std::vector <UpnpVar> > >::iterator it = request->proxyMap.find(actionProxy);
     assert(it != request->proxyMap.end());
 
     bool status = gupnp_service_proxy_end_action (proxy,

@@ -30,7 +30,7 @@ void UpnpRenderingControlAttribute::getCb(GUPnPServiceProxy *proxy,
     UpnpRequest *request = static_cast<UpnpRequest*> (userData);
     UpnpAttributeInfo *attrInfo;
 
-    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(actionProxy);
+    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, std::vector <UpnpVar> > >::iterator it = request->proxyMap.find(actionProxy);
 
     assert(it != request->proxyMap.end());
 
@@ -101,6 +101,7 @@ bool UpnpRenderingControlAttribute::get(GUPnPServiceProxy *serviceProxy,
                         UpnpAttributeInfo *attrInfo)
 {
     GUPnPServiceProxyAction *actionProxy;
+    UpnpVar value;
 
     DEBUG_PRINT("action: " << attrInfo->actions[1].name << "( " << attrInfo->actions[1].varName << " )");
     if (NULL != strstr(attrInfo->varName, "PresetNameList"))
@@ -138,7 +139,8 @@ bool UpnpRenderingControlAttribute::get(GUPnPServiceProxy *serviceProxy,
     }
 
     request->proxyMap[actionProxy].first = attrInfo;
-    request->proxyMap[actionProxy].second.var_int64 = 0;
+    value.var_int64 = 0;
+    request->proxyMap[actionProxy].second.push_back(value);
     return true;
 }
 
@@ -162,12 +164,12 @@ void UpnpRenderingControlAttribute::setCb(GUPnPServiceProxy *proxy,
 
     if (status)
     {
-        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(proxyAction);
+        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, std::vector <UpnpVar> > >::iterator it = request->proxyMap.find(proxyAction);
 
         if (it != request->proxyMap.end())
         {
             attrInfo = it->second.first;
-            UpnpVar value = it->second.second;
+            UpnpVar value = it->second.second[0];
 
             switch (attrInfo->actions[1].varType)
             {
@@ -309,6 +311,7 @@ bool UpnpRenderingControlAttribute::set(GUPnPServiceProxy *serviceProxy,
         return false;
     }
 
-    request->proxyMap[actionProxy] = {attrInfo, value};
+    request->proxyMap[actionProxy].first = attrInfo;
+    request->proxyMap[actionProxy].second.push_back(value);
     return true;
 }
