@@ -32,34 +32,35 @@
 
 class UpnpRequest
 {
-public:
-    std::function< bool() > start;
-    std::function< void(bool) > finish;
-    int expected;
-    int done;
+    public:
+        std::function< bool() > start;
+        std::function< void(bool) > finish;
+        int expected;
+        int done;
 
-    UpnpResource* resource;
-    // We have to keep attribute info and (optional) set value(s)
-    std::map <GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, std::vector <UpnpVar> > > proxyMap;
+        UpnpResource *resource;
+        // We have to keep attribute info and (optional) set value(s)
+        std::map <GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >
+        proxyMap;
 
-    static void requestDone (UpnpRequest *request, bool status)
-    {
-        request->done++;
-        if (request->done == request->expected)
+        static void requestDone (UpnpRequest *request, bool status)
         {
-            request->proxyMap.clear();
-            request->finish(status);
+            request->done++;
+            if (request->done == request->expected)
+            {
+                request->proxyMap.clear();
+                request->finish(status);
+            }
         }
-    }
 };
 
 typedef struct _UpnpRequestState
 {
-    GSource * source;
+    GSource *source;
     guint sourceId;
     GMainContext *context;
 
-    std::queue< UpnpRequest* > requestQueue;
+    std::queue< UpnpRequest * > requestQueue;
     std::mutex queueLock;
 } UpnpRequestState;
 #endif

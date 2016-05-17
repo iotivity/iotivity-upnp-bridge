@@ -33,81 +33,101 @@ static const string MODULE = "LanHostConfigManagement";
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
-vector <UpnpAttributeInfo> UpnpLanHostConfigManagement::Attributes = {
-    {"configurable",
-     "DHCPServerConfigurable", G_TYPE_BOOLEAN, false,
-     {{"GetDHCPServerConfigurable", UPNP_ACTION_GET, "NewDHCPServerConfigurable", G_TYPE_BOOLEAN},
-      {"SetDHCPServerConfigurable", UPNP_ACTION_POST, "NewDHCPServerConfigurable", G_TYPE_BOOLEAN}},
-     {}
+vector <UpnpAttributeInfo> UpnpLanHostConfigManagement::Attributes =
+{
+    {
+        "configurable",
+        "DHCPServerConfigurable", G_TYPE_BOOLEAN, false,
+        {   {"GetDHCPServerConfigurable", UPNP_ACTION_GET, "NewDHCPServerConfigurable", G_TYPE_BOOLEAN},
+            {"SetDHCPServerConfigurable", UPNP_ACTION_POST, "NewDHCPServerConfigurable", G_TYPE_BOOLEAN}
+        },
+        {}
     },
-    {"dhcpRelay",
-     "DHCPRelay", G_TYPE_BOOLEAN, false,
-     {{"GetDHCPRelay", UPNP_ACTION_GET, "NewDHCPRelay", G_TYPE_BOOLEAN},
-      {"SetDHCPRelay", UPNP_ACTION_POST, "NewDHCPRelay", G_TYPE_BOOLEAN}},
-     {}
+    {
+        "dhcpRelay",
+        "DHCPRelay", G_TYPE_BOOLEAN, false,
+        {   {"GetDHCPRelay", UPNP_ACTION_GET, "NewDHCPRelay", G_TYPE_BOOLEAN},
+            {"SetDHCPRelay", UPNP_ACTION_POST, "NewDHCPRelay", G_TYPE_BOOLEAN}
+        },
+        {}
     },
-    {"subnetMask",
-     "SubnetMask", G_TYPE_STRING, false,
-     {{"GetSubnetMask", UPNP_ACTION_GET, "NewSubnetMask", G_TYPE_STRING},
-      {"SetSubnetMask", UPNP_ACTION_POST, "NewSubnetMask", G_TYPE_STRING}},
-     {}
+    {
+        "subnetMask",
+        "SubnetMask", G_TYPE_STRING, false,
+        {   {"GetSubnetMask", UPNP_ACTION_GET, "NewSubnetMask", G_TYPE_STRING},
+            {"SetSubnetMask", UPNP_ACTION_POST, "NewSubnetMask", G_TYPE_STRING}
+        },
+        {}
     },
-    {"domainName",
-     "DomainNAme", G_TYPE_STRING, false,
-     {{"GetDomainName", UPNP_ACTION_GET, "NewDomainName", G_TYPE_STRING},
-      {"SetDomainName", UPNP_ACTION_POST, "NewDomainName", G_TYPE_STRING}},
-     {}
+    {
+        "domainName",
+        "DomainNAme", G_TYPE_STRING, false,
+        {   {"GetDomainName", UPNP_ACTION_GET, "NewDomainName", G_TYPE_STRING},
+            {"SetDomainName", UPNP_ACTION_POST, "NewDomainName", G_TYPE_STRING}
+        },
+        {}
     },
-    {"addrRange",
-     "", G_TYPE_NONE, false,
-     {{"GetAddressRange", UPNP_ACTION_GET, NULL, G_TYPE_NONE},
-      {"SetAddressRange", UPNP_ACTION_GET, NULL, G_TYPE_NONE}},
-     {{"minAddr", "MinAddress", G_TYPE_STRING, false},
-      {"maxAddr", "MaxAddress", G_TYPE_STRING, false}}
+    {
+        "addrRange",
+        "", G_TYPE_NONE, false,
+        {   {"GetAddressRange", UPNP_ACTION_GET, NULL, G_TYPE_NONE},
+            {"SetAddressRange", UPNP_ACTION_GET, NULL, G_TYPE_NONE}
+        },
+        {   {"minAddr", "MinAddress", G_TYPE_STRING, false},
+            {"maxAddr", "MaxAddress", G_TYPE_STRING, false}
+        }
     },
-    {"dnsServers",
-     "DNSServers", G_TYPE_STRING, false,
-     {{"GetDNSServers", UPNP_ACTION_GET, "NewDNSServers", G_TYPE_STRING},
-      {"SetDNSServer", UPNP_ACTION_POST, "NewDNSServers", G_TYPE_STRING}},
-     {}
+    {
+        "dnsServers",
+        "DNSServers", G_TYPE_STRING, false,
+        {   {"GetDNSServers", UPNP_ACTION_GET, "NewDNSServers", G_TYPE_STRING},
+            {"SetDNSServer", UPNP_ACTION_POST, "NewDNSServers", G_TYPE_STRING}
+        },
+        {}
     },
-    {"reservedAddr",
-     "ReservedAddresses", G_TYPE_STRING, false,
-     {{"GetReservedAddressess", UPNP_ACTION_GET, "NewReservedAddresses", G_TYPE_STRING},
-      {"SetReservedAddress",   UPNP_ACTION_POST, "NewReservedAddresses", G_TYPE_STRING}},
-     {}
+    {
+        "reservedAddr",
+        "ReservedAddresses", G_TYPE_STRING, false,
+        {   {"GetReservedAddressess", UPNP_ACTION_GET, "NewReservedAddresses", G_TYPE_STRING},
+            {"SetReservedAddress",   UPNP_ACTION_POST, "NewReservedAddresses", G_TYPE_STRING}
+        },
+        {}
     },
-    {"ipRouters",
-     "IPRouters", G_TYPE_STRING, false,
-     {{"GetIPRoutersList", UPNP_ACTION_GET, "NewIPRouters", G_TYPE_STRING},
-      {"SetIPRouter",     UPNP_ACTION_POST, "NewIPRouters", G_TYPE_STRING}},
-     {}
+    {
+        "ipRouters",
+        "IPRouters", G_TYPE_STRING, false,
+        {   {"GetIPRoutersList", UPNP_ACTION_GET, "NewIPRouters", G_TYPE_STRING},
+            {"SetIPRouter",     UPNP_ACTION_POST, "NewIPRouters", G_TYPE_STRING}
+        },
+        {}
     },
 };
 
 // Custom action map:
 // "attribute name" -> GET request handlers
-map <const string, UpnpLanHostConfigManagement::GetAttributeHandler> UpnpLanHostConfigManagement::GetAttributeActionMap =
+map <const string, UpnpLanHostConfigManagement::GetAttributeHandler>
+UpnpLanHostConfigManagement::GetAttributeActionMap =
 {
     {"addrRange", &UpnpLanHostConfigManagement::getAddressRange}
 };
 
 // Custom action map:
 // "attribute name" -> SET request handlers
-map <const string, UpnpLanHostConfigManagement::SetAttributeHandler> UpnpLanHostConfigManagement::SetAttributeActionMap =
+map <const string, UpnpLanHostConfigManagement::SetAttributeHandler>
+UpnpLanHostConfigManagement::SetAttributeActionMap =
 {
     {"addrRange", &UpnpLanHostConfigManagement::setAddressRange}
 };
 
 void UpnpLanHostConfigManagement::getAddressRangeCb(GUPnPServiceProxy *proxy,
-                                                       GUPnPServiceProxyAction *actionProxy,
-                                                       gpointer userData)
+        GUPnPServiceProxyAction *actionProxy,
+        gpointer userData)
 {
     GError *error = NULL;
-    const char* minAddress;
-    const char* maxAddress;
+    const char *minAddress;
+    const char *maxAddress;
 
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
                                                   actionProxy,
@@ -119,7 +139,8 @@ void UpnpLanHostConfigManagement::getAddressRangeCb(GUPnPServiceProxy *proxy,
                                                   G_TYPE_STRING,
                                                   &maxAddress,
                                                   NULL);
-    if (error) {
+    if (error)
+    {
         ERROR_PRINT("GetAddressRange failed: " << error->code << ", " << error->message);
         g_error_free (error);
         status = false;
@@ -129,7 +150,7 @@ void UpnpLanHostConfigManagement::getAddressRangeCb(GUPnPServiceProxy *proxy,
     {
         RCSResourceAttributes addrRange;
 
-        DEBUG_PRINT("minAddress="<< minAddress << ", maxAddress=" << maxAddress);
+        DEBUG_PRINT("minAddress=" << minAddress << ", maxAddress=" << maxAddress);
         addrRange["minAddress"]   = string(minAddress);
         addrRange["maxAddress"]   = string(maxAddress);
         request->resource->setAttribute("addrRange", addrRange, false);
@@ -142,10 +163,10 @@ bool UpnpLanHostConfigManagement::getAddressRange(UpnpRequest *request)
 {
     DEBUG_PRINT("");
     GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (m_proxy,
-                                                                             "GetAddressRange",
-                                                                             getAddressRangeCb,
-                                                                             (gpointer *) request,
-                                                                             NULL);
+                                           "GetAddressRange",
+                                           getAddressRangeCb,
+                                           (gpointer *) request,
+                                           NULL);
     if (NULL == actionProxy)
     {
         return false;
@@ -155,18 +176,19 @@ bool UpnpLanHostConfigManagement::getAddressRange(UpnpRequest *request)
 }
 
 void UpnpLanHostConfigManagement::setAddressRangeCb(GUPnPServiceProxy *proxy,
-                                                    GUPnPServiceProxyAction *actionProxy,
-                                                    gpointer userData)
+        GUPnPServiceProxyAction *actionProxy,
+        gpointer userData)
 {
     GError *error = NULL;
 
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
                                                   actionProxy,
                                                   &error,
                                                   NULL);
-    if (error) {
+    if (error)
+    {
         ERROR_PRINT("SetAddressRange failed: " << error->code << ", " << error->message);
         g_error_free (error);
         status = false;
@@ -177,7 +199,8 @@ void UpnpLanHostConfigManagement::setAddressRangeCb(GUPnPServiceProxy *proxy,
         const char *minAddress;
         const char *maxAddress;
         RCSResourceAttributes addrRange;
-        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, std::vector <UpnpVar> > >::iterator it = request->proxyMap.find(actionProxy);
+        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >::iterator
+        it = request->proxyMap.find(actionProxy);
 
         assert(it != request->proxyMap.end());
 
@@ -186,7 +209,7 @@ void UpnpLanHostConfigManagement::setAddressRangeCb(GUPnPServiceProxy *proxy,
         minAddress = it->second.second[0].var_pchar;
         maxAddress = it->second.second[1].var_pchar;
 
-        DEBUG_PRINT("minAddress="<< minAddress << ", maxAddress=" << maxAddress);
+        DEBUG_PRINT("minAddress=" << minAddress << ", maxAddress=" << maxAddress);
         addrRange["minAddress"]   = string(minAddress);
         addrRange["maxAddress"]   = string(maxAddress);
         request->resource->setAttribute("addrRange", addrRange, false);
@@ -195,19 +218,20 @@ void UpnpLanHostConfigManagement::setAddressRangeCb(GUPnPServiceProxy *proxy,
     UpnpRequest::requestDone(request, status);
 }
 
-bool UpnpLanHostConfigManagement::setAddressRange(UpnpRequest *request, RCSResourceAttributes::Value *attrValue)
+bool UpnpLanHostConfigManagement::setAddressRange(UpnpRequest *request,
+        RCSResourceAttributes::Value *attrValue)
 {
     DEBUG_PRINT("");
     GUPnPServiceProxyAction *actionProxy;
-    const char* sMinAddr;
-    const char* sMaxAddr;
+    const char *sMinAddr;
+    const char *sMaxAddr;
     UpnpVar value;
     int count = 0;
 
-    const auto& attrVector = attrValue->get< vector< RCSResourceAttributes > >();
-    for (const auto& attrs : attrVector)
+    const auto &attrVector = attrValue->get< vector< RCSResourceAttributes > >();
+    for (const auto &attrs : attrVector)
     {
-        for (const auto & kvPair : attrs)
+        for (const auto &kvPair : attrs)
         {
             string sValue = (kvPair.value()). get < string> ();
             if (kvPair.key() == "minAddr")
@@ -302,7 +326,8 @@ bool UpnpLanHostConfigManagement::getAttributesRequest(UpnpRequest *request)
     return status;
 }
 
-bool UpnpLanHostConfigManagement::setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request)
+bool UpnpLanHostConfigManagement::setAttributesRequest(const RCSResourceAttributes &value,
+        UpnpRequest *request)
 {
     bool status = false;
 

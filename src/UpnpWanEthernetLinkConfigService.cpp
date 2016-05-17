@@ -33,11 +33,13 @@ static const string MODULE = "WanEthernetLinkConfig";
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
-vector <UpnpAttributeInfo> UpnpWanEthernetLinkConfig::Attributes = {
-    {"linkStatus",
-     "EthernetLinkStatus", G_TYPE_STRING, true,
-     {{"GetEthernetLinkStatus", UPNP_ACTION_GET, "NewEthernetLinkStatus", G_TYPE_STRING}},
-     {}
+vector <UpnpAttributeInfo> UpnpWanEthernetLinkConfig::Attributes =
+{
+    {
+        "linkStatus",
+        "EthernetLinkStatus", G_TYPE_STRING, true,
+        {{"GetEthernetLinkStatus", UPNP_ACTION_GET, "NewEthernetLinkStatus", G_TYPE_STRING}},
+        {}
     }
 };
 
@@ -69,9 +71,10 @@ bool UpnpWanEthernetLinkConfig::getAttributesRequest(UpnpRequest *request)
     return status;
 }
 
-bool UpnpWanEthernetLinkConfig::setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request)
+bool UpnpWanEthernetLinkConfig::setAttributesRequest(const RCSResourceAttributes &value,
+        UpnpRequest *request)
 {
-    // There are no "SET" actions associated with this service 
+    // There are no "SET" actions associated with this service
     request->proxyMap.clear();
     request->finish(false);
     return false;

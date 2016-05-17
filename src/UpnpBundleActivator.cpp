@@ -70,9 +70,9 @@ void UpnpBundleActivator::activateBundle(ResourceContainerBundleAPI *resourceCon
     m_pResourceContainer = resourceContainer;
     m_bundleId = bundleId;
     UpnpConnector::DiscoveryCallback discoveryCb = std::bind(
-            &UpnpBundleActivator::connectorDiscoveryCb, this, std::placeholders::_1);
+                &UpnpBundleActivator::connectorDiscoveryCb, this, std::placeholders::_1);
     UpnpConnector::LostCallback lostCb = std::bind(&UpnpBundleActivator::connectorLostCb, this,
-            std::placeholders::_1);
+                                         std::placeholders::_1);
 
     m_connector = new UpnpConnector(discoveryCb, lostCb);
     m_connector->connect();
@@ -112,7 +112,7 @@ void UpnpBundleActivator::destroyResource(BundleResource::Ptr pBundleResource)
 #define DLL_PUBLIC __attribute__((__visibility__("default")))
 
 extern "C" DLL_PUBLIC void upnp_externalActivateBundle(
-        ResourceContainerBundleAPI *resourceContainer, std::string bundleId)
+    ResourceContainerBundleAPI *resourceContainer, std::string bundleId)
 {
     g_upnpBundle = new UpnpBundleActivator();
     g_upnpBundle->activateBundle(resourceContainer, bundleId);

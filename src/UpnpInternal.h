@@ -128,21 +128,21 @@ typedef enum
 
 typedef struct _UpnpAction
 {
-    const char*    name;
+    const char    *name;
     UpnpActionType type;
 
     // Argument descriptors for a simple UPnP action:
     // number of input parameters <= 1 xor
     // number of output parameters <= 1
     // Anything more complex than this would require custom approach
-    const char* varName;
+    const char *varName;
     GType       varType;
 } UpnpAction;
 
 typedef struct _EmbeddedAttribute
 {
     std::string name;
-    const char* varName;
+    const char *varName;
     GType       type;
     bool        evented;
 } EmbeddedAttribute;
@@ -150,7 +150,7 @@ typedef struct _EmbeddedAttribute
 typedef struct _UpnpAttributeInfo
 {
     std::string name;      // OCF Attribute name
-    const char* varName;   // UPnP state variable name
+    const char *varName;   // UPnP state variable name
     GType       type;      // UPnP state variable type
     bool        evented;   // Flag to indicate evented state variable
     std::vector <UpnpAction> actions;      // UPnP Actions
@@ -164,7 +164,7 @@ typedef union _UpnpVar
     gint         var_int;
     guint64      var_uint64;
     gint64       var_int64;
-    const gchar* var_pchar;
+    const gchar *var_pchar;
 } UpnpVar;
 
 #define ERROR_PRINT(x) do { std::cerr << MODULE << ":" << __func__ << "(): ERROR: " << x << std::endl; } while (0)

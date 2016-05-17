@@ -37,14 +37,15 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
                          UpnpRequestState *requestState,
                          vector <UpnpAttributeInfo> *attributeInfo)
 {
-    DEBUG_PRINT("(" << std::this_thread::get_id()<< ")");
+    DEBUG_PRINT("(" << std::this_thread::get_id() << ")");
     m_proxy = nullptr;
     m_resourceType = type;
 
     if (attributeInfo == nullptr)
     {
         ERROR_PRINT("Service attribute table for " << m_resourceType << " not present!");
-        throw NotImplementedException("UpnpService::ctor: Service attribute table for " + m_resourceType + " not present!");
+        throw NotImplementedException("UpnpService::ctor: Service attribute table for " + m_resourceType +
+                                      " not present!");
         return;
     }
 
@@ -63,7 +64,8 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
     {
         //TODO change to invalid exception
         ERROR_PRINT("Service ID for " << m_resourceType << " not present!");
-        throw NotImplementedException("UpnpService::ctor: Service ID for " + m_resourceType + " not present!");
+        throw NotImplementedException("UpnpService::ctor: Service ID for " + m_resourceType +
+                                      " not present!");
         return;
     }
 
@@ -80,7 +82,7 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
 
     if (m_uri.length() > MAX_URI_LENGTH)
     {
-        ERROR_PRINT("URI too long " << m_uri<< "( " << m_uri.length());
+        ERROR_PRINT("URI too long " << m_uri << "( " << m_uri.length());
         throw BadUriException("UpnpService::ctor: uri length too long");
         return;
     }
@@ -91,7 +93,7 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
 
 UpnpService::~UpnpService()
 {
-    DEBUG_PRINT("(" << std::this_thread::get_id()<< "), uri:" << m_uri);
+    DEBUG_PRINT("(" << std::this_thread::get_id() << "), uri:" << m_uri);
 
     if (!m_stateVarMap.empty())
     {
@@ -113,7 +115,7 @@ UpnpService::~UpnpService()
 
 RCSResourceAttributes UpnpService::handleGetAttributesRequest()
 {
-    DEBUG_PRINT("(" << std::this_thread::get_id()<< "), uri:" << m_uri);
+    DEBUG_PRINT("(" << std::this_thread::get_id() << "), uri:" << m_uri);
 
     std::promise< bool > promise;
     UpnpRequest request;
@@ -122,7 +124,8 @@ RCSResourceAttributes UpnpService::handleGetAttributesRequest()
     request.resource = this;
     {
         std::lock_guard< std::mutex > lock(m_requestState->queueLock);
-        request.start = [&] (){
+        request.start = [&] ()
+        {
             bool status = getAttributesRequest(&request);
             return status;
         };
@@ -141,7 +144,8 @@ RCSResourceAttributes UpnpService::handleGetAttributesRequest()
 
     // Notice the API deficiency: there is no way to return error code
     // to the iotivity layer
-    if (status != true) {
+    if (status != true)
+    {
         DEBUG_PRINT("Failed to get attributes for " << m_uri);
     }
 
@@ -151,7 +155,7 @@ RCSResourceAttributes UpnpService::handleGetAttributesRequest()
 
 void UpnpService::handleSetAttributesRequest(const RCSResourceAttributes &value)
 {
-    DEBUG_PRINT("(" << std::this_thread::get_id()<< "), uri:" << m_uri);
+    DEBUG_PRINT("(" << std::this_thread::get_id() << "), uri:" << m_uri);
 
     std::promise< bool > promise;
     UpnpRequest request;
@@ -160,7 +164,8 @@ void UpnpService::handleSetAttributesRequest(const RCSResourceAttributes &value)
     request.resource = this;
     {
         std::lock_guard< std::mutex > lock(m_requestState->queueLock);
-        request.start = [&] (){
+        request.start = [&] ()
+        {
             bool status = setAttributesRequest(value, &request);
             return status;
         };
@@ -188,7 +193,7 @@ void UpnpService::setProxy(GUPnPServiceProxy *proxy)
     m_proxy = proxy;
 }
 
-GUPnPServiceProxy * UpnpService::getProxy()
+GUPnPServiceProxy *UpnpService::getProxy()
 {
     return m_proxy;
 }
@@ -198,7 +203,8 @@ string UpnpService::getId()
     return m_serviceId;
 }
 
-void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceIntrospection *introspection)
+void UpnpService::processIntrospection(GUPnPServiceProxy *proxy,
+                                       GUPnPServiceIntrospection *introspection)
 {
 
     // Load attributes description
@@ -214,7 +220,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
         // Generate convenient map of actions associated with the service (UPnP)
         // "UPnP acttion name" -> ("OCF attribute name", GET/POST/PUT)
         std::map <const string, pair<string, UpnpActionType>> actionMap;
-        for(attr = attributeList->begin() ; attr != attributeList->end() ; ++attr)
+        for (attr = attributeList->begin() ; attr != attributeList->end() ; ++attr)
         {
             if (!attr->actions.empty())
             {
@@ -228,7 +234,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
         for (l = actionNameList; l != NULL; l = l->next)
         {
             const string actionName = string ((char *) l->data);
-            std::map<const string,pair<string, UpnpActionType>>::iterator it = actionMap.find(actionName);
+            std::map<const string, pair<string, UpnpActionType>>::iterator it = actionMap.find(actionName);
 
             if (it != actionMap.end())
             {
@@ -248,10 +254,12 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
                 int flags = m_attributeMap[attrName].second | (it->second).second;
                 m_attributeMap[attrName] = {attrInfo, flags};
 
-                DEBUG_PRINT("Action: "<< actionName << " maps to \"" << attrName << "\" ( flags: " << m_attributeMap[attrName].second << " )");
-            } else
+                DEBUG_PRINT("Action: " << actionName << " maps to \"" << attrName << "\" ( flags: " <<
+                            m_attributeMap[attrName].second << " )");
+            }
+            else
             {
-                DEBUG_PRINT("Match not found for action: "<< actionName);
+                DEBUG_PRINT("Match not found for action: " << actionName);
             }
         }
         DEBUG_PRINT("Matched " << m_attributeMap.size() << " attributes");
@@ -264,7 +272,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
     // corresponding OCF attributes
     map <string, StateVarAttr> varMap;
 
-    for(attr = attributeList->begin() ; attr != attributeList->end() ; ++attr)
+    for (attr = attributeList->begin() ; attr != attributeList->end() ; ++attr)
     {
         if (!attr->evented)
         {
@@ -274,13 +282,13 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
 
         if (string(attr->varName) != "")
         {
-            DEBUG_PRINT("Attr State variable: "<< attr->varName);
+            DEBUG_PRINT("Attr State variable: " << attr->varName);
             varMap[string(attr->varName)].attrName = attr->name;
             varMap[string(attr->varName)].type = attr->type;
             varMap[string(attr->varName)].parentName = "";
         }
         else if (!attr->attrs.empty()) // check if embedded attributes
-                                       // are observable
+            // are observable
         {
             for (auto &it : attr->attrs)
             {
@@ -288,7 +296,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
                 {
                     string stateVarName = string(it.varName);
 
-                    DEBUG_PRINT("Attr State variable: "<< stateVarName);
+                    DEBUG_PRINT("Attr State variable: " << stateVarName);
                     varMap[stateVarName].attrName = it.name;
                     varMap[stateVarName].type = it.type;
                     varMap[stateVarName].parentName = attr->name;
@@ -311,8 +319,8 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
         DEBUG_PRINT(" # of state variables: " << g_list_length((GList *)stateVarList));
         for (l = stateVarList; l != NULL; l = l->next)
         {
-            const char* varName = (const char *) l->data;
-            DEBUG_PRINT("State variable: "<< varName);
+            const char *varName = (const char *) l->data;
+            DEBUG_PRINT("State variable: " << varName);
 
             std::map<string, StateVarAttr>::iterator it = varMap.find(string(varName));
 
@@ -330,7 +338,7 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceInt
                     }
                     else
                     {
-                        DEBUG_PRINT("Added notify for: "<< varName << ", " << (it->second).attrName <<
+                        DEBUG_PRINT("Added notify for: " << varName << ", " << (it->second).attrName <<
                                     ", " << g_type_name((it->second).type));
                         m_stateVarMap[it->first] = it->second;
                     }
@@ -346,15 +354,15 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
                                  GValue *value,
                                  gpointer userData)
 {
-    UpnpService * pService = (UpnpService *) userData;
+    UpnpService *pService = (UpnpService *) userData;
 
     std::map<string, StateVarAttr>::iterator it = pService->m_stateVarMap.find(string(variable));
 
-    DEBUG_PRINT("("<< std::this_thread::get_id() << "): notification state variable: "<< variable);
+    DEBUG_PRINT("(" << std::this_thread::get_id() << "): notification state variable: " << variable);
 
     if (it == pService->m_stateVarMap.end())
     {
-        DEBUG_PRINT("state var not found: "<< variable);
+        DEBUG_PRINT("state var not found: " << variable);
         return;
     }
 
@@ -396,9 +404,11 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
         else
         {
             //TODO this should probably throw and error.
-            ERROR_PRINT("Type handling not implemented: "<< g_type_name(type));
+            ERROR_PRINT("Type handling not implemented: " << g_type_name(type));
         }
-    } else {
+    }
+    else
+    {
         RCSResourceAttributes::Value attrValue = pService->BundleResource::getAttribute(parentName);
         RCSResourceAttributes composite = attrValue.get < RCSResourceAttributes > ();
 
@@ -410,23 +420,26 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
         }
         else if (type == G_TYPE_UINT)
         {
-            DEBUG_PRINT("set composite: " << parentName <<  "->" << attrName << " to " << g_value_get_uint(value));
+            DEBUG_PRINT("set composite: " << parentName <<  "->" << attrName << " to " << g_value_get_uint(
+                            value));
             composite[attrName] = (int) (g_value_get_uint(value));
         }
         else if (type == G_TYPE_INT)
         {
-            DEBUG_PRINT("set composite: " << parentName <<  "->" << attrName << " to " << g_value_get_int(value));
+            DEBUG_PRINT("set composite: " << parentName <<  "->" << attrName << " to " << g_value_get_int(
+                            value));
             composite[attrName] = (int) (g_value_get_int(value));
         }
         else if (type == G_TYPE_STRING)
         {
-            DEBUG_PRINT("set composite: " << parentName <<  "->" << attrName << " to " << g_value_get_string(value));
+            DEBUG_PRINT("set composite: " << parentName <<  "->" << attrName << " to " << g_value_get_string(
+                            value));
             composite[attrName] = string(g_value_get_string(value));
         }
         else
         {
             //TODO this should probably throw and error.
-            ERROR_PRINT("Type handling not implemented: "<< g_type_name(type));
+            ERROR_PRINT("Type handling not implemented: " << g_type_name(type));
             return;
         }
 
@@ -435,10 +448,12 @@ void UpnpService::onStateChanged(GUPnPServiceProxy *proxy,
 }
 
 // TODO: This should probably live in some UpnpUtil class
-string UpnpService::getStringField(function< char*(GUPnPServiceInfo *serviceInfo)> f, GUPnPServiceInfo *serviceInfo)
+string UpnpService::getStringField(function< char *(GUPnPServiceInfo *serviceInfo)> f,
+                                   GUPnPServiceInfo *serviceInfo)
 {
     char *c_field = f(serviceInfo);
-    if (c_field != NULL) {
+    if (c_field != NULL)
+    {
         string s_field = string(c_field);
         g_free(c_field);
         return s_field;
@@ -446,7 +461,8 @@ string UpnpService::getStringField(function< char*(GUPnPServiceInfo *serviceInfo
     return "";
 }
 
-void UpnpService::initCompositeAttribute(RCSResourceAttributes composite, vector<EmbeddedAttribute> attrs)
+void UpnpService::initCompositeAttribute(RCSResourceAttributes composite,
+        vector<EmbeddedAttribute> attrs)
 {
     for (auto &attr : attrs)
     {
@@ -468,7 +484,7 @@ void UpnpService::initCompositeAttribute(RCSResourceAttributes composite, vector
         }
         else
         {
-            ERROR_PRINT("Type handling not implemented: "<< g_type_name(attr.type));
+            ERROR_PRINT("Type handling not implemented: " << g_type_name(attr.type));
         }
     }
 }
@@ -476,8 +492,10 @@ void UpnpService::initCompositeAttribute(RCSResourceAttributes composite, vector
 void UpnpService::initAttributes()
 {
 
-    BundleResource::setAttribute("name", m_name, false); // need to keep name with attributes (OCRepresentation bug)
-    BundleResource::setAttribute("uri", m_uri, false);   // need to keep uri with attributes (OCRepresentation bug)
+    BundleResource::setAttribute("name", m_name,
+                                 false); // need to keep name with attributes (OCRepresentation bug)
+    BundleResource::setAttribute("uri", m_uri,
+                                 false);   // need to keep uri with attributes (OCRepresentation bug)
     BundleResource::setAttribute("if", m_interface, false);
 
     for (auto attr : m_attributeMap)

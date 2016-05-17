@@ -32,21 +32,21 @@
 
 class UpnpDimming: public UpnpService
 {
-    friend class UpnpService;
+        friend class UpnpService;
 
-public:
-    UpnpDimming(GUPnPServiceInfo *serviceInfo,
-                UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_BRIGHTNESS, requestState, &Attributes)
-    {
-    }
+    public:
+        UpnpDimming(GUPnPServiceInfo *serviceInfo,
+                    UpnpRequestState *requestState):
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_BRIGHTNESS, requestState, &Attributes)
+        {
+        }
 
-private:
-    bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request);
-    bool processNotification(string attrName, string parent, GValue *value);
+    private:
+        bool getAttributesRequest(UpnpRequest *request);
+        bool setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request);
+        bool processNotification(string attrName, string parent, GValue *value);
 
-    static vector <UpnpAttributeInfo> Attributes;
+        static vector <UpnpAttributeInfo> Attributes;
 };
 
 #endif //UPNP_DIMMING_SERVICE_H_

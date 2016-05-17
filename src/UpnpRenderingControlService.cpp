@@ -33,27 +33,31 @@ static const string MODULE = "UpnpRenderingControlService";
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
-vector <UpnpAttributeInfo> UpnpRenderingControl::Attributes = {
-    {"presetNamelist",
-     "PresetNameList", G_TYPE_STRING, false,
-     {{"ListPresets", UPNP_ACTION_GET, "CurrentPresetNameList", G_TYPE_STRING},
-      {"SelectPreset", UPNP_ACTION_POST, "PresetName", G_TYPE_STRING}
-     },
-     {}
+vector <UpnpAttributeInfo> UpnpRenderingControl::Attributes =
+{
+    {
+        "presetNamelist",
+        "PresetNameList", G_TYPE_STRING, false,
+        {   {"ListPresets", UPNP_ACTION_GET, "CurrentPresetNameList", G_TYPE_STRING},
+            {"SelectPreset", UPNP_ACTION_POST, "PresetName", G_TYPE_STRING}
+        },
+        {}
     },
-    {"mute",
-     "Mute", G_TYPE_BOOLEAN, false,
-     {{"GetMute", UPNP_ACTION_GET, "CurrentMute", G_TYPE_BOOLEAN},
-      {"SetMute", UPNP_ACTION_POST, "DesiredMute", G_TYPE_BOOLEAN}
-     },
-     {}
+    {
+        "mute",
+        "Mute", G_TYPE_BOOLEAN, false,
+        {   {"GetMute", UPNP_ACTION_GET, "CurrentMute", G_TYPE_BOOLEAN},
+            {"SetMute", UPNP_ACTION_POST, "DesiredMute", G_TYPE_BOOLEAN}
+        },
+        {}
     },
-    {"volume",
-     "Volume", G_TYPE_UINT, false,
-     {{"GetVolume", UPNP_ACTION_GET, "CurrentVolume", G_TYPE_UINT},
-      {"SetVolume", UPNP_ACTION_POST, "DesiredVolume", G_TYPE_UINT}
-     },
-     {}
+    {
+        "volume",
+        "Volume", G_TYPE_UINT, false,
+        {   {"GetVolume", UPNP_ACTION_GET, "CurrentVolume", G_TYPE_UINT},
+            {"SetVolume", UPNP_ACTION_POST, "DesiredVolume", G_TYPE_UINT}
+        },
+        {}
     }
 };
 

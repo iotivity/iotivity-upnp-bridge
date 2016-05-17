@@ -34,32 +34,32 @@ using namespace std;
 
 class UpnpPowerSwitch: public UpnpService
 {
-    friend class UpnpService;
+        friend class UpnpService;
 
-public:
-    typedef GUPnPServiceProxyAction* (UpnpPowerSwitch::*GetAttributeHandler)(GUPnPServiceProxy *,
-                                                                             UpnpRequest *,
-                                                                             UpnpAttributeInfo *);
+    public:
+        typedef GUPnPServiceProxyAction *(UpnpPowerSwitch::*GetAttributeHandler)(GUPnPServiceProxy *,
+                UpnpRequest *,
+                UpnpAttributeInfo *);
 
-    typedef GUPnPServiceProxyAction* (UpnpPowerSwitch::*SetAttributeHandler)(GUPnPServiceProxy *,
-                                                                             UpnpRequest *,
-                                                                             UpnpAttributeInfo *,
-                                                                             RCSResourceAttributes);
+        typedef GUPnPServiceProxyAction *(UpnpPowerSwitch::*SetAttributeHandler)(GUPnPServiceProxy *,
+                UpnpRequest *,
+                UpnpAttributeInfo *,
+                RCSResourceAttributes);
 
-    UpnpPowerSwitch(GUPnPServiceInfo *serviceInfo,
-                    UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_POWER_SWITCH, requestState, &Attributes)
-    {
-    }
+        UpnpPowerSwitch(GUPnPServiceInfo *serviceInfo,
+                        UpnpRequestState *requestState):
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_POWER_SWITCH, requestState, &Attributes)
+        {
+        }
 
-private:
-    // This map is unused, for illustration only
-    static map <const string, pair <GetAttributeHandler, SetAttributeHandler>> AttributeActionMap;
+    private:
+        // This map is unused, for illustration only
+        static map <const string, pair <GetAttributeHandler, SetAttributeHandler>> AttributeActionMap;
 
-    static vector <UpnpAttributeInfo> Attributes;
+        static vector <UpnpAttributeInfo> Attributes;
 
-    bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(const RCSResourceAttributes& attrs, UpnpRequest *request);
+        bool getAttributesRequest(UpnpRequest *request);
+        bool setAttributesRequest(const RCSResourceAttributes &attrs, UpnpRequest *request);
 
 };
 

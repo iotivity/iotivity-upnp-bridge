@@ -51,7 +51,7 @@ UpnpDevice::UpnpDevice(GUPnPDeviceInfo *deviceInfo,
     m_uri = UpnpUriPrefixMap[m_resourceType] + gupnp_device_info_get_udn(deviceInfo);
     if (m_uri.length() > MAX_URI_LENGTH)
     {
-        ERROR_PRINT("URI too long " << m_uri<< "( " << m_uri.length());
+        ERROR_PRINT("URI too long " << m_uri << "( " << m_uri.length());
         throw BadUriException("UpnpDevice::ctor: uri length too long");
         return;
     }
@@ -79,17 +79,18 @@ void UpnpDevice::insertService(string id)
     m_serviceList.push_back(id);
 }
 
-std::vector<string> & UpnpDevice::getDeviceList()
+std::vector<string> &UpnpDevice::getDeviceList()
 {
     return m_deviceList;
 }
 
-std::vector<string> & UpnpDevice::getServiceList()
+std::vector<string> &UpnpDevice::getServiceList()
 {
     return m_serviceList;
 }
 
-static const map< string, function< char*(GUPnPDeviceInfo *deviceInfo)>> s_deviceInfo2AttributesMap =
+static const map< string, function< char *(GUPnPDeviceInfo *deviceInfo)>> s_deviceInfo2AttributesMap
+        =
 {
     {"n",                     gupnp_device_info_get_friendly_name},
     {"manufacturer",          gupnp_device_info_get_manufacturer},
@@ -107,18 +108,21 @@ void UpnpDevice::initBasicAttributes(GUPnPDeviceInfo *deviceInfo)
 {
     BundleResource::setAttribute("device_type", m_deviceType);
 
-    for (auto const & kv : s_deviceInfo2AttributesMap)
+    for (auto const &kv : s_deviceInfo2AttributesMap)
     {
         char *c_field = kv.second(deviceInfo);
-        if (c_field != NULL) {
+        if (c_field != NULL)
+        {
             string s_field = string(c_field);
             BundleResource::setAttribute(kv.first, s_field);
             g_free(c_field);
         }
     }
 
-    BundleResource::setAttribute("name", m_name); // need to keep name with attributes (OCRepresentation bug)
-    BundleResource::setAttribute("uri", m_uri);   // need to keep uri with attributes (OCRepresentation bug)
+    BundleResource::setAttribute("name",
+                                 m_name); // need to keep name with attributes (OCRepresentation bug)
+    BundleResource::setAttribute("uri",
+                                 m_uri);   // need to keep uri with attributes (OCRepresentation bug)
 }
 
 RCSResourceAttributes UpnpDevice::handleGetAttributesRequest()
@@ -142,7 +146,7 @@ void UpnpDevice::setProxy(GUPnPDeviceProxy *proxy)
     m_proxy = proxy;
 }
 
-GUPnPDeviceProxy * UpnpDevice::getProxy()
+GUPnPDeviceProxy *UpnpDevice::getProxy()
 {
     return m_proxy;
 }
@@ -158,10 +162,12 @@ const string UpnpDevice::getParent()
 }
 
 // TODO" This should probably live in some UpnpUtil class
-string UpnpDevice::getStringField(function< char*(GUPnPDeviceInfo *deviceInfo)> f, GUPnPDeviceInfo *deviceInfo)
+string UpnpDevice::getStringField(function< char *(GUPnPDeviceInfo *deviceInfo)> f,
+                                  GUPnPDeviceInfo *deviceInfo)
 {
     char *c_field = f(deviceInfo);
-    if (c_field != NULL) {
+    if (c_field != NULL)
+    {
         string s_field = string(c_field);
         g_free(c_field);
         return s_field;

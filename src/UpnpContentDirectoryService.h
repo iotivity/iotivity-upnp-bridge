@@ -34,36 +34,36 @@ using namespace std;
 
 class UpnpContentDirectory: public UpnpService
 {
-    friend class UpnpService;
+        friend class UpnpService;
 
-public:
-    typedef bool (UpnpContentDirectory::*GetAttributeHandler)(UpnpRequest *);
-    typedef bool (UpnpContentDirectory::*SetAttributeHandler)(GUPnPServiceProxy *, UpnpRequest *,
-            UpnpAttributeInfo *, RCSResourceAttributes);
+    public:
+        typedef bool (UpnpContentDirectory::*GetAttributeHandler)(UpnpRequest *);
+        typedef bool (UpnpContentDirectory::*SetAttributeHandler)(GUPnPServiceProxy *, UpnpRequest *,
+                UpnpAttributeInfo *, RCSResourceAttributes);
 
-    UpnpContentDirectory(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
+        UpnpContentDirectory(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
             UpnpService(serviceInfo, UPNP_OIC_TYPE_CONTENT_DIRECTORY, requestState, &Attributes)
-    {
-    }
+        {
+        }
 
-private:
-    static map< const string, UpnpContentDirectory::GetAttributeHandler > GetAttributeActionMap;
+    private:
+        static map< const string, UpnpContentDirectory::GetAttributeHandler > GetAttributeActionMap;
 
-    static vector< UpnpAttributeInfo > Attributes;
+        static vector< UpnpAttributeInfo > Attributes;
 
-    bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(
-            const RCSResourceAttributes& attrs, UpnpRequest *request);
+        bool getAttributesRequest(UpnpRequest *request);
+        bool setAttributesRequest(
+            const RCSResourceAttributes &attrs, UpnpRequest *request);
 
-    static void getBrowseResultCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
-            gpointer userData);
+        static void getBrowseResultCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
+                                      gpointer userData);
 
-    bool getBrowseResult(UpnpRequest *request);
+        bool getBrowseResult(UpnpRequest *request);
 
-    static void getSearchResultCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
-            gpointer userData);
+        static void getSearchResultCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
+                                      gpointer userData);
 
-    bool getSearchResult(UpnpRequest *request);
+        bool getSearchResult(UpnpRequest *request);
 };
 
 #endif

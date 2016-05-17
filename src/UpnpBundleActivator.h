@@ -33,23 +33,23 @@ using namespace OIC::Service;
 
 class UpnpBundleActivator: public BundleActivator
 {
-public:
-    UpnpBundleActivator();
-    ~UpnpBundleActivator();
-    void activateBundle(ResourceContainerBundleAPI *resourceContainer, std::string bundleId);
-    void deactivateBundle();
-    void createResource(resourceInfo resourceInfo);
-    void destroyResource(BundleResource::Ptr pBundleResource);
+    public:
+        UpnpBundleActivator();
+        ~UpnpBundleActivator();
+        void activateBundle(ResourceContainerBundleAPI *resourceContainer, std::string bundleId);
+        void deactivateBundle();
+        void createResource(resourceInfo resourceInfo);
+        void destroyResource(BundleResource::Ptr pBundleResource);
 
-private:
-    std::string m_bundleId;
-    ResourceContainerBundleAPI *m_pResourceContainer;
-    std::vector< BundleResource::Ptr > m_vecResources;
+    private:
+        std::string m_bundleId;
+        ResourceContainerBundleAPI *m_pResourceContainer;
+        std::vector< BundleResource::Ptr > m_vecResources;
 
-    UpnpConnector *m_connector;
+        UpnpConnector *m_connector;
 
-    void connectorDiscoveryCb(UpnpResource::Ptr pBundleResource);
-    void connectorLostCb(UpnpResource::Ptr pBundleResource);
+        void connectorDiscoveryCb(UpnpResource::Ptr pBundleResource);
+        void connectorLostCb(UpnpResource::Ptr pBundleResource);
 
 };
 
