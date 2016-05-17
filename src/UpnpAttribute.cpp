@@ -66,7 +66,7 @@ void UpnpAttribute::getCb(GUPnPServiceProxy *proxy,
     UpnpRequest *request = static_cast<UpnpRequest*> (userData);
     UpnpAttributeInfo *attrInfo;
 
-    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(actionProxy);
+    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, std::vector <UpnpVar> > >::iterator it = request->proxyMap.find(actionProxy);
 
     assert(it != request->proxyMap.end());
 
@@ -136,6 +136,8 @@ bool UpnpAttribute::get(GUPnPServiceProxy *serviceProxy,
                         UpnpRequest *request,
                         UpnpAttributeInfo *attrInfo)
 {
+    DEBUG_PRINT("");
+    UpnpVar value;
     GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (serviceProxy,
                                                                              attrInfo->actions[0].name,
                                                                              getCb,
@@ -148,7 +150,8 @@ bool UpnpAttribute::get(GUPnPServiceProxy *serviceProxy,
     }
 
     request->proxyMap[actionProxy].first = attrInfo;
-    request->proxyMap[actionProxy].second.var_int64 = 0;
+    value.var_int64 = 0;
+    request->proxyMap[actionProxy].second.push_back(value);
     return true;
 }
 
@@ -172,12 +175,12 @@ void UpnpAttribute::setCb(GUPnPServiceProxy *proxy,
 
     if (status)
     {
-        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, UpnpVar>>::iterator it = request->proxyMap.find(proxyAction);
+        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, std::vector <UpnpVar> > >::iterator it = request->proxyMap.find(proxyAction);
 
         if (it != request->proxyMap.end())
         {
             attrInfo = it->second.first;
-            UpnpVar value = it->second.second;
+            UpnpVar value = it->second.second[0];
 
             switch (attrInfo->actions[1].varType)
             {
@@ -306,6 +309,7 @@ bool UpnpAttribute::set(GUPnPServiceProxy *serviceProxy,
         return false;
     }
 
-    request->proxyMap[actionProxy] = {attrInfo, value};
+    request->proxyMap[actionProxy].first = attrInfo;
+    request->proxyMap[actionProxy].second.push_back(value);
     return true;
 }
