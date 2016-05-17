@@ -33,7 +33,8 @@ static const string MODULE = "UpnpAVTransportService";
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
-vector <UpnpAttributeInfo> UpnpAVTransport::Attributes = {
+vector <UpnpAttributeInfo> UpnpAVTransport::Attributes =
+{
 };
 
 // TODO Implement various OCF attributes/UPnP Actions

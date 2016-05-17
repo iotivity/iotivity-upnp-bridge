@@ -39,38 +39,38 @@ using namespace OIC::Service;
 
 class UpnpConnector: public ProtocolBridgeConnector
 {
-public:
-    typedef std::function< void(UpnpResource::Ptr) > DiscoveryCallback;
-    typedef std::function< void(UpnpResource::Ptr) > LostCallback;
-    UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback lostCallback);
-    virtual ~UpnpConnector();
+    public:
+        typedef std::function< void(UpnpResource::Ptr) > DiscoveryCallback;
+        typedef std::function< void(UpnpResource::Ptr) > LostCallback;
+        UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback lostCallback);
+        virtual ~UpnpConnector();
 
-    void connect();
-    void disconnect();
+        void connect();
+        void disconnect();
 
-private:
-    DiscoveryCallback m_discoveryCallback;
-    LostCallback m_lostCallback;
+    private:
+        DiscoveryCallback m_discoveryCallback;
+        LostCallback m_lostCallback;
 
-    void gupnpStart();
-    void gupnpStop();
+        void gupnpStart();
+        void gupnpStop();
 
-    static void startDiscovery(GUPnPControlPoint *controlPoint, bool findService);
+        static void startDiscovery(GUPnPControlPoint *controlPoint, bool findService);
 
-    // static is necessary for callbacks defined with the c gupnp functions (c code)
-    static void onContextAvailable(GUPnPContextManager *manager, GUPnPContext *context);
-    static void onDeviceProxyAvailable(GUPnPControlPoint *cp, GUPnPDeviceProxy *proxy);
-    static void onDeviceProxyUnavailable(GUPnPControlPoint *cp, GUPnPDeviceProxy *proxy);
-    static void onServiceProxyAvailable(GUPnPControlPoint *cp, GUPnPServiceProxy *proxy);
-    static void onServiceProxyUnavailable(GUPnPControlPoint *cp, GUPnPServiceProxy *proxy);
-    static int checkRequestQueue(gpointer data);
+        // static is necessary for callbacks defined with the c gupnp functions (c code)
+        static void onContextAvailable(GUPnPContextManager *manager, GUPnPContext *context);
+        static void onDeviceProxyAvailable(GUPnPControlPoint *cp, GUPnPDeviceProxy *proxy);
+        static void onDeviceProxyUnavailable(GUPnPControlPoint *cp, GUPnPDeviceProxy *proxy);
+        static void onServiceProxyAvailable(GUPnPControlPoint *cp, GUPnPServiceProxy *proxy);
+        static void onServiceProxyUnavailable(GUPnPControlPoint *cp, GUPnPServiceProxy *proxy);
+        static int checkRequestQueue(gpointer data);
 
-    static void onIntrospectionAvailable(GUPnPServiceInfo  *serviceInfo,
-                                         GUPnPServiceIntrospection *introspection,
-                                         const GError              *error,
-                                         gpointer                   userContext);
-    static void unregisterDeviceResource(string udn);
-    static void initResourceCallbackHandler();
+        static void onIntrospectionAvailable(GUPnPServiceInfo  *serviceInfo,
+                                             GUPnPServiceIntrospection *introspection,
+                                             const GError              *error,
+                                             gpointer                   userContext);
+        static void unregisterDeviceResource(string udn);
+        static void initResourceCallbackHandler();
 };
 
 #endif

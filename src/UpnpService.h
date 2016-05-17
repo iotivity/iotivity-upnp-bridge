@@ -33,67 +33,69 @@ using namespace OIC::Service;
 
 class UpnpService: public UpnpResource
 {
-public:
-    UpnpService(GUPnPServiceInfo *serviceInfo,
-                string type,
-                UpnpRequestState *requestState,
-                vector <UpnpAttributeInfo> *attributeInfo);
+    public:
+        UpnpService(GUPnPServiceInfo *serviceInfo,
+                    string type,
+                    UpnpRequestState *requestState,
+                    vector <UpnpAttributeInfo> *attributeInfo);
 
-    virtual ~UpnpService();
+        virtual ~UpnpService();
 
-    virtual void handleSetAttributesRequest(const RCSResourceAttributes &attrs);
+        virtual void handleSetAttributesRequest(const RCSResourceAttributes &attrs);
 
-    virtual RCSResourceAttributes handleGetAttributesRequest();
+        virtual RCSResourceAttributes handleGetAttributesRequest();
 
-    void setProxy(GUPnPServiceProxy *proxy);
-    GUPnPServiceProxy* getProxy();
+        void setProxy(GUPnPServiceProxy *proxy);
+        GUPnPServiceProxy *getProxy();
 
-    virtual void processIntrospection(GUPnPServiceProxy *proxy, GUPnPServiceIntrospection *introspection);
+        virtual void processIntrospection(GUPnPServiceProxy *proxy,
+                                          GUPnPServiceIntrospection *introspection);
 
-    virtual bool getAttributesRequest(UpnpRequest *request) = 0;
+        virtual bool getAttributesRequest(UpnpRequest *request) = 0;
 
-    virtual bool setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request) = 0;
+        virtual bool setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request) = 0;
 
-    virtual bool processNotification(string attrName, string parent, GValue *value);
+        virtual bool processNotification(string attrName, string parent, GValue *value);
 
-    string getId();
+        string getId();
 
-protected:
-    // Map of associated attributes (OIC)
-    // "OCF Attribute name" -> (attribute info, supported operations)
-    map <string, pair <UpnpAttributeInfo*, int>> m_attributeMap;
+    protected:
+        // Map of associated attributes (OIC)
+        // "OCF Attribute name" -> (attribute info, supported operations)
+        map <string, pair <UpnpAttributeInfo *, int>> m_attributeMap;
 
-    vector <UpnpAttributeInfo> *m_serviceAttributeInfo;
+        vector <UpnpAttributeInfo> *m_serviceAttributeInfo;
 
-    GUPnPServiceProxy *m_proxy;
+        GUPnPServiceProxy *m_proxy;
 
-    UpnpRequestState *m_requestState;
+        UpnpRequestState *m_requestState;
 
-    virtual void initAttributes();
+        virtual void initAttributes();
 
-private:
+    private:
 
-    string m_serviceId;
+        string m_serviceId;
 
-    typedef struct _StateVarAttr
-    {
-        string attrName;
-        GType type;
-        string parentName;
-    } StateVarAttr;
+        typedef struct _StateVarAttr
+        {
+            string attrName;
+            GType type;
+            string parentName;
+        } StateVarAttr;
 
-    // Mapping of UPnP state variables that are observed/notified to
-    // corresponding OCF attributes
-    map <string, StateVarAttr> m_stateVarMap;
+        // Mapping of UPnP state variables that are observed/notified to
+        // corresponding OCF attributes
+        map <string, StateVarAttr> m_stateVarMap;
 
-    void initCompositeAttribute(RCSResourceAttributes composite, vector<EmbeddedAttribute> attrs);
+        void initCompositeAttribute(RCSResourceAttributes composite, vector<EmbeddedAttribute> attrs);
 
-    static string getStringField(function< char*(GUPnPServiceInfo *serviceInfo)> f, GUPnPServiceInfo *serviceInfo);
+        static string getStringField(function< char *(GUPnPServiceInfo *serviceInfo)> f,
+                                     GUPnPServiceInfo *serviceInfo);
 
-    static void onStateChanged(GUPnPServiceProxy *proxy,
-                               const char *varName,
-                               GValue *value,
-                               gpointer userData);
+        static void onStateChanged(GUPnPServiceProxy *proxy,
+                                   const char *varName,
+                                   GValue *value,
+                                   gpointer userData);
 };
 
 #endif

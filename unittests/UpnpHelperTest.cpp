@@ -22,18 +22,27 @@
 #include <UpnpInternal.h>
 #include <UpnpHelper.h>
 
-TEST(UpnpHelper, findResourceTypeLight) {
-    EXPECT_STREQ(UPNP_OIC_TYPE_DEVICE_LIGHT.c_str(), findResourceType("urn:schemas-upnp-org:device:Light").c_str());
-    EXPECT_STREQ(UPNP_OIC_TYPE_DEVICE_LIGHT.c_str(), findResourceType("urn:schemas-upnp-org:device:light").c_str());
+TEST(UpnpHelper, findResourceTypeLight)
+{
+    EXPECT_STREQ(UPNP_OIC_TYPE_DEVICE_LIGHT.c_str(),
+                 findResourceType("urn:schemas-upnp-org:device:Light").c_str());
+    EXPECT_STREQ(UPNP_OIC_TYPE_DEVICE_LIGHT.c_str(),
+                 findResourceType("urn:schemas-upnp-org:device:light").c_str());
 }
 
-TEST(UpnpHelper, findResourceTypeSwitchPower) {
-    EXPECT_STREQ(UPNP_OIC_TYPE_POWER_SWITCH.c_str(), findResourceType("urn:schemas-upnp-org:service:SwitchPower").c_str());
-    EXPECT_STREQ(UPNP_OIC_TYPE_POWER_SWITCH.c_str(), findResourceType("urn:schemas-upnp-org:service:switchpower").c_str());
+TEST(UpnpHelper, findResourceTypeSwitchPower)
+{
+    EXPECT_STREQ(UPNP_OIC_TYPE_POWER_SWITCH.c_str(),
+                 findResourceType("urn:schemas-upnp-org:service:SwitchPower").c_str());
+    EXPECT_STREQ(UPNP_OIC_TYPE_POWER_SWITCH.c_str(),
+                 findResourceType("urn:schemas-upnp-org:service:switchpower").c_str());
 }
 
-TEST(UpnpHelper, findResourceTypeDimming) {
-    EXPECT_STREQ(UPNP_OIC_TYPE_BRIGHTNESS.c_str(), findResourceType("urn:schemas-upnp-org:service:Dimming").c_str());
-    EXPECT_STREQ(UPNP_OIC_TYPE_BRIGHTNESS.c_str(), findResourceType("urn:schemas-upnp-org:service:dimming").c_str());
+TEST(UpnpHelper, findResourceTypeDimming)
+{
+    EXPECT_STREQ(UPNP_OIC_TYPE_BRIGHTNESS.c_str(),
+                 findResourceType("urn:schemas-upnp-org:service:Dimming").c_str());
+    EXPECT_STREQ(UPNP_OIC_TYPE_BRIGHTNESS.c_str(),
+                 findResourceType("urn:schemas-upnp-org:service:dimming").c_str());
 }
 

@@ -34,23 +34,24 @@ using namespace std;
 
 class UpnpAVTransport: public UpnpService
 {
-    friend class UpnpService;
+        friend class UpnpService;
 
-public:
-    typedef GUPnPServiceProxyAction* (UpnpAVTransport::*GetAttributeHandler)(UpnpRequest*);
-    typedef GUPnPServiceProxyAction* (UpnpAVTransport::*SetAttributeHandler)(RCSResourceAttributes::Value&, UpnpRequest*);
+    public:
+        typedef GUPnPServiceProxyAction *(UpnpAVTransport::*GetAttributeHandler)(UpnpRequest *);
+        typedef GUPnPServiceProxyAction *(UpnpAVTransport::*SetAttributeHandler)(
+            RCSResourceAttributes::Value &, UpnpRequest *);
 
-    UpnpAVTransport(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
+        UpnpAVTransport(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
             UpnpService(serviceInfo, UPNP_OIC_TYPE_AV_TRANSPORT, requestState, &Attributes)
-    {
-    }
+        {
+        }
 
-private:
-    static vector< UpnpAttributeInfo > Attributes;
+    private:
+        static vector< UpnpAttributeInfo > Attributes;
 
-    bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(
-            const RCSResourceAttributes& attrs, UpnpRequest *request);
+        bool getAttributesRequest(UpnpRequest *request);
+        bool setAttributesRequest(
+            const RCSResourceAttributes &attrs, UpnpRequest *request);
 };
 
 #endif

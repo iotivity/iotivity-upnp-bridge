@@ -34,46 +34,46 @@ using namespace std;
 
 class UpnpWanCommonInterfaceConfig: public UpnpService
 {
-    friend class UpnpService;
+        friend class UpnpService;
 
-public:
-    typedef bool (UpnpWanCommonInterfaceConfig::*GetAttributeHandler)(UpnpRequest *);
+    public:
+        typedef bool (UpnpWanCommonInterfaceConfig::*GetAttributeHandler)(UpnpRequest *);
 
-    typedef bool (UpnpWanCommonInterfaceConfig::*SetAttributeHandler)(GUPnPServiceProxy *,
-                                                                      UpnpRequest *,
-                                                                      UpnpAttributeInfo *,
-                                                                      RCSResourceAttributes);
+        typedef bool (UpnpWanCommonInterfaceConfig::*SetAttributeHandler)(GUPnPServiceProxy *,
+                UpnpRequest *,
+                UpnpAttributeInfo *,
+                RCSResourceAttributes);
 
-    UpnpWanCommonInterfaceConfig(GUPnPServiceInfo *serviceInfo,
-                    UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_WAN_IF_CONFIG, requestState, &Attributes)
-    {
-        m_numConnections = 0;
-    }
+        UpnpWanCommonInterfaceConfig(GUPnPServiceInfo *serviceInfo,
+                                     UpnpRequestState *requestState):
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_WAN_IF_CONFIG, requestState, &Attributes)
+        {
+            m_numConnections = 0;
+        }
 
-private:
-    int m_numConnections;
-    map <UpnpRequest *, CompositeAttribute> m_ConnectionInfoRequestMap;
+    private:
+        int m_numConnections;
+        map <UpnpRequest *, CompositeAttribute> m_ConnectionInfoRequestMap;
 
-    static map <const string, GetAttributeHandler> GetAttributeActionMap;
+        static map <const string, GetAttributeHandler> GetAttributeActionMap;
 
-    static vector <UpnpAttributeInfo> Attributes;
+        static vector <UpnpAttributeInfo> Attributes;
 
-    bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(const RCSResourceAttributes& attrs, UpnpRequest *request);
-    bool processNotification(string attrName, string parent, GValue *value);
+        bool getAttributesRequest(UpnpRequest *request);
+        bool setAttributesRequest(const RCSResourceAttributes &attrs, UpnpRequest *request);
+        bool processNotification(string attrName, string parent, GValue *value);
 
-    static void getLinkPropertiesCb(GUPnPServiceProxy *proxy,
-                                    GUPnPServiceProxyAction *action,
-                                    gpointer userData);
+        static void getLinkPropertiesCb(GUPnPServiceProxy *proxy,
+                                        GUPnPServiceProxyAction *action,
+                                        gpointer userData);
 
-    bool getLinkProperties(UpnpRequest *request);
+        bool getLinkProperties(UpnpRequest *request);
 
-    static void getConnectionInfoCb(GUPnPServiceProxy *proxy,
-                                    GUPnPServiceProxyAction *action,
-                                    gpointer userData);
+        static void getConnectionInfoCb(GUPnPServiceProxy *proxy,
+                                        GUPnPServiceProxyAction *action,
+                                        gpointer userData);
 
-    bool getConnectionInfo(UpnpRequest *request);
+        bool getConnectionInfo(UpnpRequest *request);
 
 };
 

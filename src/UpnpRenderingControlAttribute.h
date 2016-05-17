@@ -23,17 +23,17 @@
 class UpnpRenderingControlAttribute: public UpnpAttribute
 {
 
-public:
+    public:
 
-    static void getCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        static void getCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
 
-    static bool get(GUPnPServiceProxy *serviceProxy, UpnpRequest *request,
-            UpnpAttributeInfo *attrInfo);
+        static bool get(GUPnPServiceProxy *serviceProxy, UpnpRequest *request,
+                        UpnpAttributeInfo *attrInfo);
 
-    static void setCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        static void setCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
 
-    static bool set(GUPnPServiceProxy *serviceProxy, UpnpRequest *request,
-            UpnpAttributeInfo *attrInfo, RCSResourceAttributes::Value* attrValue);
+        static bool set(GUPnPServiceProxy *serviceProxy, UpnpRequest *request,
+                        UpnpAttributeInfo *attrInfo, RCSResourceAttributes::Value *attrValue);
 
 };
 

@@ -23,31 +23,31 @@
 
 class UpnpAttribute
 {
-public:
+    public:
 
-    static UpnpAttributeInfo * getAttributeInfo(std::vector <UpnpAttributeInfo> *serviceAttributes,
-                                                std::string attrName);
+        static UpnpAttributeInfo *getAttributeInfo(std::vector <UpnpAttributeInfo> *serviceAttributes,
+                std::string attrName);
 
-    static bool isValidRequest(std::map <std::string, std::pair <UpnpAttributeInfo*, int>> *attrMap,
-                               std::string,
-                               UpnpActionType actionType);
+        static bool isValidRequest(std::map <std::string, std::pair <UpnpAttributeInfo *, int>> *attrMap,
+                                   std::string,
+                                   UpnpActionType actionType);
 
-    static void getCb(GUPnPServiceProxy *proxy,
-                      GUPnPServiceProxyAction *action,
-                      gpointer userData);
+        static void getCb(GUPnPServiceProxy *proxy,
+                          GUPnPServiceProxyAction *action,
+                          gpointer userData);
 
-    static  bool get(GUPnPServiceProxy *serviceProxy,
-                     UpnpRequest *request,
-                     UpnpAttributeInfo *attrInfo);
+        static  bool get(GUPnPServiceProxy *serviceProxy,
+                         UpnpRequest *request,
+                         UpnpAttributeInfo *attrInfo);
 
-    static void setCb(GUPnPServiceProxy *proxy,
-                      GUPnPServiceProxyAction *action,
-                      gpointer userData);
+        static void setCb(GUPnPServiceProxy *proxy,
+                          GUPnPServiceProxyAction *action,
+                          gpointer userData);
 
-    static bool set(GUPnPServiceProxy *serviceProxy,
-                    UpnpRequest *request,
-                    UpnpAttributeInfo *attrInfo,
-                    RCSResourceAttributes::Value* attrValue);
+        static bool set(GUPnPServiceProxy *serviceProxy,
+                        UpnpRequest *request,
+                        UpnpAttributeInfo *attrInfo,
+                        RCSResourceAttributes::Value *attrValue);
 
 };
 

@@ -33,57 +33,66 @@ static const string MODULE = "UpnpContentDirectoryService";
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
-vector <UpnpAttributeInfo> UpnpContentDirectory::Attributes = {
-    {"browseResult",
-     "", G_TYPE_NONE, false,
-     {{"Browse", UPNP_ACTION_GET, "", G_TYPE_NONE}},
-     {
-         {"result", "Result", G_TYPE_STRING, false},
-         {"numberReturned", "NumberReturned", G_TYPE_UINT, false},
-         {"totalMatches", "TotalMatches", G_TYPE_UINT, false},
-         {"updateId", "UpdateID", G_TYPE_UINT, false}
-     }
+vector <UpnpAttributeInfo> UpnpContentDirectory::Attributes =
+{
+    {
+        "browseResult",
+        "", G_TYPE_NONE, false,
+        {{"Browse", UPNP_ACTION_GET, "", G_TYPE_NONE}},
+        {
+            {"result", "Result", G_TYPE_STRING, false},
+            {"numberReturned", "NumberReturned", G_TYPE_UINT, false},
+            {"totalMatches", "TotalMatches", G_TYPE_UINT, false},
+            {"updateId", "UpdateID", G_TYPE_UINT, false}
+        }
     },
-    {"searchResult",
-     "", G_TYPE_NONE, false,
-     {{"Search", UPNP_ACTION_GET, "", G_TYPE_NONE}},
-     {
-         {"result", "Result", G_TYPE_STRING, false},
-         {"numberReturned", "NumberReturned", G_TYPE_UINT, false},
-         {"totalMatches", "TotalMatches", G_TYPE_UINT, false},
-         {"updateId", "UpdateID", G_TYPE_UINT, false}
-     }
+    {
+        "searchResult",
+        "", G_TYPE_NONE, false,
+        {{"Search", UPNP_ACTION_GET, "", G_TYPE_NONE}},
+        {
+            {"result", "Result", G_TYPE_STRING, false},
+            {"numberReturned", "NumberReturned", G_TYPE_UINT, false},
+            {"totalMatches", "TotalMatches", G_TYPE_UINT, false},
+            {"updateId", "UpdateID", G_TYPE_UINT, false}
+        }
     },
-    {"searchCaps",
-     "SearchCapabilities", G_TYPE_STRING, false,
-     {{"GetSearchCapabilities", UPNP_ACTION_GET, "SearchCaps", G_TYPE_STRING}},
-     {}
+    {
+        "searchCaps",
+        "SearchCapabilities", G_TYPE_STRING, false,
+        {{"GetSearchCapabilities", UPNP_ACTION_GET, "SearchCaps", G_TYPE_STRING}},
+        {}
     },
-    {"sortCaps",
-     "SortCapabilities", G_TYPE_STRING, false,
-     {{"GetSortCapabilities", UPNP_ACTION_GET, "SortCaps", G_TYPE_STRING}},
-     {}
+    {
+        "sortCaps",
+        "SortCapabilities", G_TYPE_STRING, false,
+        {{"GetSortCapabilities", UPNP_ACTION_GET, "SortCaps", G_TYPE_STRING}},
+        {}
     },
-    {"systemUpdateId",
-     "SystemUpdateID", G_TYPE_UINT, true,
-     {{"GetSystemUpdateID", UPNP_ACTION_GET, "Id", G_TYPE_UINT}},
-     {}
+    {
+        "systemUpdateId",
+        "SystemUpdateID", G_TYPE_UINT, true,
+        {{"GetSystemUpdateID", UPNP_ACTION_GET, "Id", G_TYPE_UINT}},
+        {}
     },
-    {"resetToken",
-     "ServiceResetToken", G_TYPE_STRING, false,
-     {{"GetServiceResetToken", UPNP_ACTION_GET, "ResetToken", G_TYPE_STRING}},
-     {}
+    {
+        "resetToken",
+        "ServiceResetToken", G_TYPE_STRING, false,
+        {{"GetServiceResetToken", UPNP_ACTION_GET, "ResetToken", G_TYPE_STRING}},
+        {}
     },
-    {"featureList",
-     "FeatureList", G_TYPE_STRING, false,
-     {{"GetFeatureList", UPNP_ACTION_GET, "FeatureList", G_TYPE_STRING}},
-     {}
+    {
+        "featureList",
+        "FeatureList", G_TYPE_STRING, false,
+        {{"GetFeatureList", UPNP_ACTION_GET, "FeatureList", G_TYPE_STRING}},
+        {}
     }
 };
 
 // Custom action map:
 // "attribute name" -> GET request handlers
-map <const string, UpnpContentDirectory::GetAttributeHandler> UpnpContentDirectory::GetAttributeActionMap =
+map <const string, UpnpContentDirectory::GetAttributeHandler>
+UpnpContentDirectory::GetAttributeActionMap =
 {
     {"browseResult", &UpnpContentDirectory::getBrowseResult},
     {"searchResult", &UpnpContentDirectory::getSearchResult}
@@ -97,33 +106,33 @@ map <const string, UpnpContentDirectory::GetAttributeHandler> UpnpContentDirecto
 // be sent to iotivity in some other form.
 
 void UpnpContentDirectory::getBrowseResultCb(GUPnPServiceProxy *proxy,
-                                              GUPnPServiceProxyAction *actionProxy,
-                                              gpointer userData)
+        GUPnPServiceProxyAction *actionProxy,
+        gpointer userData)
 {
     GError *error = NULL;
-    const char* result;
+    const char *result;
     int numberReturned;
     int totalMatches;
     int updateId;
 
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  actionProxy,
-                                                  &error,
-                                                  "Result",
-                                                  G_TYPE_STRING,
-                                                  &result,
-                                                  "NumberReturned",
-                                                  G_TYPE_UINT,
-                                                  &numberReturned,
-                                                  "TotalMatches",
-                                                  G_TYPE_UINT,
-                                                  &totalMatches,
-                                                  "UpdateID",
-                                                  G_TYPE_UINT,
-                                                  &updateId,
-                                                  NULL);
+                  actionProxy,
+                  &error,
+                  "Result",
+                  G_TYPE_STRING,
+                  &result,
+                  "NumberReturned",
+                  G_TYPE_UINT,
+                  &numberReturned,
+                  "TotalMatches",
+                  G_TYPE_UINT,
+                  &totalMatches,
+                  "UpdateID",
+                  G_TYPE_UINT,
+                  &updateId,
+                  NULL);
     if (error)
     {
         ERROR_PRINT("GetBrowseResult failed: " << error->code << ", " << error->message);
@@ -151,28 +160,28 @@ bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request)
 {
     DEBUG_PRINT("");
     GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (m_proxy,
-                                                                             "Browse",
-                                                                             getBrowseResultCb,
-                                                                             (gpointer *) request,
-                                                                             "ObjectID",
-                                                                             G_TYPE_STRING,
-                                                                             "0",
-                                                                             "BrowseFlag",
-                                                                             G_TYPE_STRING,
-                                                                             "BrowseDirectChildren",
-                                                                             "Filter",
-                                                                             G_TYPE_STRING,
-                                                                             "*",
-                                                                             "StartingIndex",
-                                                                             G_TYPE_UINT,
-                                                                             (unsigned int)0,
-                                                                             "RequestedCount",
-                                                                             G_TYPE_UINT,
-                                                                             (unsigned int)0,
-                                                                             "SortCriteria",
-                                                                             G_TYPE_STRING,
-                                                                             "",
-                                                                             NULL);
+                                           "Browse",
+                                           getBrowseResultCb,
+                                           (gpointer *) request,
+                                           "ObjectID",
+                                           G_TYPE_STRING,
+                                           "0",
+                                           "BrowseFlag",
+                                           G_TYPE_STRING,
+                                           "BrowseDirectChildren",
+                                           "Filter",
+                                           G_TYPE_STRING,
+                                           "*",
+                                           "StartingIndex",
+                                           G_TYPE_UINT,
+                                           (unsigned int)0,
+                                           "RequestedCount",
+                                           G_TYPE_UINT,
+                                           (unsigned int)0,
+                                           "SortCriteria",
+                                           G_TYPE_STRING,
+                                           "",
+                                           NULL);
     if (NULL == actionProxy)
     {
         return false;
@@ -183,33 +192,33 @@ bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request)
 }
 
 void UpnpContentDirectory::getSearchResultCb(GUPnPServiceProxy *proxy,
-                                              GUPnPServiceProxyAction *actionProxy,
-                                              gpointer userData)
+        GUPnPServiceProxyAction *actionProxy,
+        gpointer userData)
 {
     GError *error = NULL;
-    const char* result;
+    const char *result;
     int numberReturned;
     int totalMatches;
     int updateId;
 
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  actionProxy,
-                                                  &error,
-                                                  "Result",
-                                                  G_TYPE_STRING,
-                                                  &result,
-                                                  "NumberReturned",
-                                                  G_TYPE_UINT,
-                                                  &numberReturned,
-                                                  "TotalMatches",
-                                                  G_TYPE_UINT,
-                                                  &totalMatches,
-                                                  "UpdateID",
-                                                  G_TYPE_UINT,
-                                                  &updateId,
-                                                  NULL);
+                  actionProxy,
+                  &error,
+                  "Result",
+                  G_TYPE_STRING,
+                  &result,
+                  "NumberReturned",
+                  G_TYPE_UINT,
+                  &numberReturned,
+                  "TotalMatches",
+                  G_TYPE_UINT,
+                  &totalMatches,
+                  "UpdateID",
+                  G_TYPE_UINT,
+                  &updateId,
+                  NULL);
     if (error)
     {
         ERROR_PRINT("GetSearchResult failed: " << error->code << ", " << error->message);
@@ -237,28 +246,28 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request)
 {
     DEBUG_PRINT("");
     GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (m_proxy,
-                                                                             "Search",
-                                                                             getSearchResultCb,
-                                                                             (gpointer *) request,
-                                                                             "ContainerID",
-                                                                             G_TYPE_STRING,
-                                                                             "0",
-                                                                             "SearchCriteria",
-                                                                             G_TYPE_STRING,
-                                                                             "*",
-                                                                             "Filter",
-                                                                             G_TYPE_STRING,
-                                                                             "*",
-                                                                             "StartingIndex",
-                                                                             G_TYPE_UINT,
-                                                                             (unsigned int)0,
-                                                                             "RequestedCount",
-                                                                             G_TYPE_UINT,
-                                                                             (unsigned int)10, // limit to 10
-                                                                             "SortCriteria",
-                                                                             G_TYPE_STRING,
-                                                                             "",
-                                                                             NULL);
+                                           "Search",
+                                           getSearchResultCb,
+                                           (gpointer *) request,
+                                           "ContainerID",
+                                           G_TYPE_STRING,
+                                           "0",
+                                           "SearchCriteria",
+                                           G_TYPE_STRING,
+                                           "*",
+                                           "Filter",
+                                           G_TYPE_STRING,
+                                           "*",
+                                           "StartingIndex",
+                                           G_TYPE_UINT,
+                                           (unsigned int)0,
+                                           "RequestedCount",
+                                           G_TYPE_UINT,
+                                           (unsigned int)10, // limit to 10
+                                           "SortCriteria",
+                                           G_TYPE_STRING,
+                                           "",
+                                           NULL);
     if (NULL == actionProxy)
     {
         return false;

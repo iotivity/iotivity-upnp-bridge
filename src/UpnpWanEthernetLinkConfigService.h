@@ -34,27 +34,27 @@ using namespace std;
 
 class UpnpWanEthernetLinkConfig: public UpnpService
 {
-    friend class UpnpService;
+        friend class UpnpService;
 
-public:
-    typedef bool (UpnpWanEthernetLinkConfig::*GetAttributeHandler)(UpnpRequest *);
+    public:
+        typedef bool (UpnpWanEthernetLinkConfig::*GetAttributeHandler)(UpnpRequest *);
 
-    typedef bool (UpnpWanEthernetLinkConfig::*SetAttributeHandler)(GUPnPServiceProxy *,
-                                                                   UpnpRequest *,
-                                                                   UpnpAttributeInfo *,
-                                                                   RCSResourceAttributes);
+        typedef bool (UpnpWanEthernetLinkConfig::*SetAttributeHandler)(GUPnPServiceProxy *,
+                UpnpRequest *,
+                UpnpAttributeInfo *,
+                RCSResourceAttributes);
 
-    UpnpWanEthernetLinkConfig(GUPnPServiceInfo *serviceInfo,
-                          UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG, requestState, &Attributes)
-    {
-    }
+        UpnpWanEthernetLinkConfig(GUPnPServiceInfo *serviceInfo,
+                                  UpnpRequestState *requestState):
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG, requestState, &Attributes)
+        {
+        }
 
-private:
-    static vector <UpnpAttributeInfo> Attributes;
+    private:
+        static vector <UpnpAttributeInfo> Attributes;
 
-    bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(const RCSResourceAttributes& attrs, UpnpRequest *request);
+        bool getAttributesRequest(UpnpRequest *request);
+        bool setAttributesRequest(const RCSResourceAttributes &attrs, UpnpRequest *request);
 };
 
 #endif

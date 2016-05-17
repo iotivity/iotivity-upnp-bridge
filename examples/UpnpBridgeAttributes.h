@@ -36,8 +36,8 @@ typedef struct _AttrDesc
 {
     AttrType   type;
     bool       observable; // ignore, if this is a sub-attribute and the hosting
-                           // attribute is observable set to "true"
-    std::map <std::string, _AttrDesc> * composite;
+    // attribute is observable set to "true"
+    std::map <std::string, _AttrDesc> *composite;
 } AttrDesc;
 
 // Light

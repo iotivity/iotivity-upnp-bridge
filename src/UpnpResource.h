@@ -34,30 +34,30 @@ using namespace std;
 
 class UpnpResource: public ProtocolBridgeResource
 {
-public:
+    public:
 
-    typedef std::shared_ptr< UpnpResource > Ptr;
+        typedef std::shared_ptr< UpnpResource > Ptr;
 
-    UpnpResource();
-    virtual ~UpnpResource();
+        UpnpResource();
+        virtual ~UpnpResource();
 
-    virtual void addLink(UpnpResource::Ptr resource);
-    virtual void setLinkAttribute();
+        virtual void addLink(UpnpResource::Ptr resource);
+        virtual void setLinkAttribute();
 
-    string getResourceType();
-    string getUdn();
+        string getResourceType();
+        string getUdn();
 
-    bool isRegistered();
-    void setRegistered(bool registered);
+        bool isRegistered();
+        void setRegistered(bool registered);
 
-    void setReady(bool isReady);
-    bool isReady();
+        void setReady(bool isReady);
+        bool isReady();
 
-protected:
-    CompositeAttribute m_links;
-    string m_udn;
-    bool m_ready;
-    bool m_registered;
+    protected:
+        CompositeAttribute m_links;
+        string m_udn;
+        bool m_ready;
+        bool m_registered;
 };
 
 #endif

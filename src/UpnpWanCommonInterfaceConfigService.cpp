@@ -33,109 +33,124 @@ static const string MODULE = "WanCommonInterfaceConfig";
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
-vector <UpnpAttributeInfo> UpnpWanCommonInterfaceConfig::Attributes = {
-    {"inetEnabled",
-     "EnabledForInternet", G_TYPE_BOOLEAN, true,
-     {{"GetEnabledForInternet", UPNP_ACTION_GET, "NewEnabledForInternet", G_TYPE_BOOLEAN},
-      {"SetEnabledForInternet", UPNP_ACTION_POST, "NewEnabledForInternet", G_TYPE_BOOLEAN}},
-     {}
+vector <UpnpAttributeInfo> UpnpWanCommonInterfaceConfig::Attributes =
+{
+    {
+        "inetEnabled",
+        "EnabledForInternet", G_TYPE_BOOLEAN, true,
+        {   {"GetEnabledForInternet", UPNP_ACTION_GET, "NewEnabledForInternet", G_TYPE_BOOLEAN},
+            {"SetEnabledForInternet", UPNP_ACTION_POST, "NewEnabledForInternet", G_TYPE_BOOLEAN}
+        },
+        {}
     },
     //"linkProperties" is a composite attribute with tags:
     // "accessType", "upMaxBitRate", "downMaxBitRate", "linkStatus"
-    {"linkProperties",
-     "", G_TYPE_NONE, true,
-     {{"GetCommonLinkProperties", UPNP_ACTION_GET, "", G_TYPE_NONE}},
-     {
-         {"accessType",     "WANAccessType", G_TYPE_STRING, false},
-         {"upMaxBitrate",   "Layer1UpstreamMaxBitRate", G_TYPE_UINT, false},
-         {"downMaxBitrate", "Layer1DownstreamMaxBitRate", G_TYPE_UINT, false},
-         {"linkStatus",     "PhysicalLinkStatus", G_TYPE_STRING, true}
-     }
+    {
+        "linkProperties",
+        "", G_TYPE_NONE, true,
+        {{"GetCommonLinkProperties", UPNP_ACTION_GET, "", G_TYPE_NONE}},
+        {
+            {"accessType",     "WANAccessType", G_TYPE_STRING, false},
+            {"upMaxBitrate",   "Layer1UpstreamMaxBitRate", G_TYPE_UINT, false},
+            {"downMaxBitrate", "Layer1DownstreamMaxBitRate", G_TYPE_UINT, false},
+            {"linkStatus",     "PhysicalLinkStatus", G_TYPE_STRING, true}
+        }
     },
-    {"wanAccesssProvider",
-     "WANAccessProvider", G_TYPE_STRING, false,
-     {{"GetWANAccessProvider", UPNP_ACTION_GET, "NewWANAccessProvider", G_TYPE_STRING}},
-     {}
+    {
+        "wanAccesssProvider",
+        "WANAccessProvider", G_TYPE_STRING, false,
+        {{"GetWANAccessProvider", UPNP_ACTION_GET, "NewWANAccessProvider", G_TYPE_STRING}},
+        {}
     },
-    {"maxConnections",
-     "MaximumActiveConnections", G_TYPE_UINT, false,
-     {{"GetMaximumActiveConnections", UPNP_ACTION_GET, "NewMaximumActiveConnections", G_TYPE_UINT}},
-     {}
+    {
+        "maxConnections",
+        "MaximumActiveConnections", G_TYPE_UINT, false,
+        {{"GetMaximumActiveConnections", UPNP_ACTION_GET, "NewMaximumActiveConnections", G_TYPE_UINT}},
+        {}
     },
-    {"bytesSent",
-     "TotalBytesSent", G_TYPE_UINT, false,
-     {{"GetTotalBytesSent", UPNP_ACTION_GET, "NewTotalBytesSent", G_TYPE_UINT}},
-     {}
+    {
+        "bytesSent",
+        "TotalBytesSent", G_TYPE_UINT, false,
+        {{"GetTotalBytesSent", UPNP_ACTION_GET, "NewTotalBytesSent", G_TYPE_UINT}},
+        {}
     },
-    {"bytesReceived",
-     "TotalBytesReceived", G_TYPE_UINT, false,
-     {{"GetTotalBytesReceived", UPNP_ACTION_GET, "NewTotalBytesReceived", G_TYPE_UINT}},
-     {}
+    {
+        "bytesReceived",
+        "TotalBytesReceived", G_TYPE_UINT, false,
+        {{"GetTotalBytesReceived", UPNP_ACTION_GET, "NewTotalBytesReceived", G_TYPE_UINT}},
+        {}
     },
-    {"packetsSent",
-     "TotalPacketsSent", G_TYPE_UINT, false,
-     {{"GetTotalPacketsSent", UPNP_ACTION_GET, "NewTotalPacketsSent", G_TYPE_UINT}},
-     {}
+    {
+        "packetsSent",
+        "TotalPacketsSent", G_TYPE_UINT, false,
+        {{"GetTotalPacketsSent", UPNP_ACTION_GET, "NewTotalPacketsSent", G_TYPE_UINT}},
+        {}
     },
-    {"packetsReceived",
-     "TotalPacketsReceived", G_TYPE_UINT, false,
-     {{"GetTotalPacketsReceived", UPNP_ACTION_GET, "NewTotalPacketsReceived", G_TYPE_UINT}},
-     {}
+    {
+        "packetsReceived",
+        "TotalPacketsReceived", G_TYPE_UINT, false,
+        {{"GetTotalPacketsReceived", UPNP_ACTION_GET, "NewTotalPacketsReceived", G_TYPE_UINT}},
+        {}
     },
     //Special case: no matching UPNP action, but the attribute value
     //can be set based on observation
-    {"numConnections",
-     "NumberOfActiveConnections", G_TYPE_UINT, true,
-     {{"", UPNP_ACTION_GET, "", G_TYPE_NONE}}, {}
+    {
+        "numConnections",
+        "NumberOfActiveConnections", G_TYPE_UINT, true,
+        {{"", UPNP_ACTION_GET, "", G_TYPE_NONE}}, {}
     },
     //"connectionInfo" is a composite attribute with tags:
     //    "deviceContainer" (matches UpNP "ActiveConnectionDeviceContainer")" &
     //    "serviceID" (matches UPnP "ActiveConnectionServiceID")
-    {"connectionInfo",
-     "", G_TYPE_NONE, false,
-     {{"GetActiveConnections", UPNP_ACTION_GET, NULL, G_TYPE_NONE}},
-     {{"deviceContainer", "ActiveConnectionDeviceContainer", G_TYPE_STRING, false},
-      {"serviceId",       "ActiveConnectionServiceID", G_TYPE_STRING, false}}
+    {
+        "connectionInfo",
+        "", G_TYPE_NONE, false,
+        {{"GetActiveConnections", UPNP_ACTION_GET, NULL, G_TYPE_NONE}},
+        {   {"deviceContainer", "ActiveConnectionDeviceContainer", G_TYPE_STRING, false},
+            {"serviceId",       "ActiveConnectionServiceID", G_TYPE_STRING, false}
+        }
     }
 };
 
 // Custom action map:
 // "attribute name" -> GET request handlers
-map <const string, UpnpWanCommonInterfaceConfig::GetAttributeHandler> UpnpWanCommonInterfaceConfig::GetAttributeActionMap =
+map <const string, UpnpWanCommonInterfaceConfig::GetAttributeHandler>
+UpnpWanCommonInterfaceConfig::GetAttributeActionMap =
 {
     {"linkProperties", &UpnpWanCommonInterfaceConfig::getLinkProperties},
     {"connectionInfo", &UpnpWanCommonInterfaceConfig::getConnectionInfo}
 };
 
 void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
-                                                       GUPnPServiceProxyAction *actionProxy,
-                                                       gpointer userData)
+        GUPnPServiceProxyAction *actionProxy,
+        gpointer userData)
 {
     GError *error = NULL;
-    const char* accessType;
+    const char *accessType;
     int upBitrate;
     int downBitrate;
-    const char* linkStatus;
+    const char *linkStatus;
 
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  actionProxy,
-                                                  &error,
-                                                  "NewWANAccessType",
-                                                  G_TYPE_STRING,
-                                                  &accessType,
-                                                  "NewLayer1UpstreamMaxBitRate",
-                                                  G_TYPE_UINT,
-                                                  &upBitrate,
-                                                 "NewLayer1DownstreamMaxBitRate",
-                                                  G_TYPE_UINT,
-                                                  &downBitrate,
-                                                  "NewPhysicalLinkStatus",
-                                                  G_TYPE_STRING,
-                                                  &linkStatus,
-                                                  NULL);
-    if (error) {
+                  actionProxy,
+                  &error,
+                  "NewWANAccessType",
+                  G_TYPE_STRING,
+                  &accessType,
+                  "NewLayer1UpstreamMaxBitRate",
+                  G_TYPE_UINT,
+                  &upBitrate,
+                  "NewLayer1DownstreamMaxBitRate",
+                  G_TYPE_UINT,
+                  &downBitrate,
+                  "NewPhysicalLinkStatus",
+                  G_TYPE_STRING,
+                  &linkStatus,
+                  NULL);
+    if (error)
+    {
         ERROR_PRINT("GetCommonLinkProperties failed: " << error->code << ", " << error->message);
         g_error_free (error);
         status = false;
@@ -145,7 +160,7 @@ void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
     {
         RCSResourceAttributes properties;
 
-        DEBUG_PRINT("accessType="<< accessType << ", upMaxBitrate=" << upBitrate <<
+        DEBUG_PRINT("accessType=" << accessType << ", upMaxBitrate=" << upBitrate <<
                     ", downMaxBitrate=" << downBitrate << ", linkStatus=" << linkStatus);
         properties["accessType"]     = string(accessType);
         properties["upMaxBitrate"]   = upBitrate;
@@ -162,10 +177,10 @@ bool UpnpWanCommonInterfaceConfig::getLinkProperties(UpnpRequest *request)
 {
     DEBUG_PRINT("");
     GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (m_proxy,
-                                                                             "GetCommonLinkProperties",
-                                                                             getLinkPropertiesCb,
-                                                                             (gpointer *) request,
-                                                                             NULL);
+                                           "GetCommonLinkProperties",
+                                           getLinkPropertiesCb,
+                                           (gpointer *) request,
+                                           NULL);
     if (NULL == actionProxy)
     {
         return false;
@@ -176,30 +191,33 @@ bool UpnpWanCommonInterfaceConfig::getLinkProperties(UpnpRequest *request)
 }
 
 void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
-                                                       GUPnPServiceProxyAction *actionProxy,
-                                                       gpointer userData)
+        GUPnPServiceProxyAction *actionProxy,
+        gpointer userData)
 {
     GError *error = NULL;
-    const char* serviceId;
-    const char* deviceContainer;
-    UpnpAttributeInfo* attrInfo;
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
-    UpnpWanCommonInterfaceConfig *pService = static_cast<UpnpWanCommonInterfaceConfig*> (request->resource);
+    const char *serviceId;
+    const char *deviceContainer;
+    UpnpAttributeInfo *attrInfo;
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+    UpnpWanCommonInterfaceConfig *pService = static_cast<UpnpWanCommonInterfaceConfig *>
+            (request->resource);
 
-    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, std::vector <UpnpVar> > >::iterator it = request->proxyMap.find(actionProxy);
+    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >::iterator
+    it = request->proxyMap.find(actionProxy);
     assert(it != request->proxyMap.end());
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  actionProxy,
-                                                  &error,
-                                                  "NewActiveConnectionDeviceContainer",
-                                                  G_TYPE_STRING,
-                                                  &deviceContainer,
-                                                  "NewActiveConnectionServiceID",
-                                                  G_TYPE_STRING,
-                                                  &serviceId,
-                                                  NULL);
-    if (error) {
+                  actionProxy,
+                  &error,
+                  "NewActiveConnectionDeviceContainer",
+                  G_TYPE_STRING,
+                  &deviceContainer,
+                  "NewActiveConnectionServiceID",
+                  G_TYPE_STRING,
+                  &serviceId,
+                  NULL);
+    if (error)
+    {
         ERROR_PRINT("GetActiveConnectionInfo failed: " << error->code << ", " << error->message);
         g_error_free (error);
         status = false;
@@ -209,7 +227,7 @@ void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
     {
         RCSResourceAttributes properties;
 
-        DEBUG_PRINT("deviceContainer="<< deviceContainer << ",serviceID=" << serviceId);
+        DEBUG_PRINT("deviceContainer=" << deviceContainer << ",serviceID=" << serviceId);
         properties["deviceContainer"] = string(deviceContainer);
         properties["serviceId"] = string(serviceId);
 
@@ -233,7 +251,8 @@ void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
 
     // We are done accumulating connectionInfo:
     // set the "connectionInfo" and update request count.
-    request->resource->setAttribute("connectionInfo", pService->m_ConnectionInfoRequestMap[request], false);
+    request->resource->setAttribute("connectionInfo", pService->m_ConnectionInfoRequestMap[request],
+                                    false);
     pService->m_ConnectionInfoRequestMap.erase(request);
 
     UpnpRequest::requestDone(request, status);
@@ -255,13 +274,13 @@ bool UpnpWanCommonInterfaceConfig::getConnectionInfo(UpnpRequest *request)
     while (++index < m_numConnections)
     {
         GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (m_proxy,
-                                                                                 "GetActiveConnectionInfo",
-                                                                                 getConnectionInfoCb,
-                                                                                 (gpointer *) request,
-                                                                                 "NewActiveConnectionIndex",
-                                                                                 G_TYPE_UINT,
-                                                                                 (unsigned int)index,
-                                                                                 NULL);
+                                               "GetActiveConnectionInfo",
+                                               getConnectionInfoCb,
+                                               (gpointer *) request,
+                                               "NewActiveConnectionIndex",
+                                               G_TYPE_UINT,
+                                               (unsigned int)index,
+                                               NULL);
         status |= (NULL == actionProxy);
 
         if (actionProxy != NULL)
@@ -319,7 +338,8 @@ bool UpnpWanCommonInterfaceConfig::getAttributesRequest(UpnpRequest *request)
     return status;
 }
 
-bool UpnpWanCommonInterfaceConfig::setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request)
+bool UpnpWanCommonInterfaceConfig::setAttributesRequest(const RCSResourceAttributes &value,
+        UpnpRequest *request)
 {
     bool status = false;
 
@@ -350,7 +370,8 @@ bool UpnpWanCommonInterfaceConfig::setAttributesRequest(const RCSResourceAttribu
     return status;
 }
 
-bool UpnpWanCommonInterfaceConfig::processNotification(string attrName, string parent, GValue *value)
+bool UpnpWanCommonInterfaceConfig::processNotification(string attrName, string parent,
+        GValue *value)
 {
 
     if (attrName == "numConnections")
