@@ -35,24 +35,24 @@ using namespace std;
 
 class UpnpRenderingControl: public UpnpService
 {
-    friend class UpnpService;
+        friend class UpnpService;
 
-public:
-    typedef GUPnPServiceProxyAction* (UpnpRenderingControl::*GetAttributeHandler)(UpnpRequest *);
-    typedef GUPnPServiceProxyAction* (UpnpRenderingControl::*SetAttributeHandler)(
+    public:
+        typedef GUPnPServiceProxyAction *(UpnpRenderingControl::*GetAttributeHandler)(UpnpRequest *);
+        typedef GUPnPServiceProxyAction *(UpnpRenderingControl::*SetAttributeHandler)(
             GUPnPServiceProxy *, UpnpRequest *, UpnpAttributeInfo *, RCSResourceAttributes);
 
-    UpnpRenderingControl(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
+        UpnpRenderingControl(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
             UpnpService(serviceInfo, UPNP_OIC_TYPE_RENDERING_CONTROL, requestState, &Attributes)
-    {
-    }
+        {
+        }
 
-private:
-    static vector< UpnpAttributeInfo > Attributes;
+    private:
+        static vector< UpnpAttributeInfo > Attributes;
 
-    bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(
-            const RCSResourceAttributes& attrs, UpnpRequest *request);
+        bool getAttributesRequest(UpnpRequest *request);
+        bool setAttributesRequest(
+            const RCSResourceAttributes &attrs, UpnpRequest *request);
 };
 
 #endif

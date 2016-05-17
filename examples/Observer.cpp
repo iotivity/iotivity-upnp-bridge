@@ -41,53 +41,55 @@ static void processAttributes(const OCRepresentation &rep,
         if (rep.hasAttribute(attr.first))
         {
             std::cout << prefix << attr.first << "";
-        } else {
+        }
+        else
+        {
             continue;
         }
 
         switch (attr.second.type)
         {
-        case ATTR_TYPE_BOOL:
-            {
-                bool value;
-                rep.getValue(attr.first, value);
-                std::cout << " (bool):\t " << ((value) ? "TRUE" : "FALSE") << std::endl;
-                break;
-            }
-        case ATTR_TYPE_INT:
-            {
-                int value;
-                rep.getValue(attr.first, value);
-                std::cout << " (int):\t " << value << std::endl;
-                break;
-            }
-        case ATTR_TYPE_INT64:
-            {
-                double value;
-                rep.getValue(attr.first, value);
-                std::cout << " (int64): \t " << value << std::endl;
-                break;
-            }
-        case ATTR_TYPE_STRING:
-            {
-                std::string value;
-                rep.getValue(attr.first, value);
-                std::cout << " (string): \t " << value << std::endl;
-                break;
-            }
-        case ATTR_TYPE_VECTOR:
-            {
-                OCRepresentation internal;
-                rep.getValue(attr.first, internal);
-                std::cout << std::endl;
-                processAttributes(internal, attr.second.composite, prefix + "\t");
-                break;
-            }
-        default:
-            {
-                std::cout << "not handled yet" << std::endl;
-                break;
-            }
+            case ATTR_TYPE_BOOL:
+                {
+                    bool value;
+                    rep.getValue(attr.first, value);
+                    std::cout << " (bool):\t " << ((value) ? "TRUE" : "FALSE") << std::endl;
+                    break;
+                }
+            case ATTR_TYPE_INT:
+                {
+                    int value;
+                    rep.getValue(attr.first, value);
+                    std::cout << " (int):\t " << value << std::endl;
+                    break;
+                }
+            case ATTR_TYPE_INT64:
+                {
+                    double value;
+                    rep.getValue(attr.first, value);
+                    std::cout << " (int64): \t " << value << std::endl;
+                    break;
+                }
+            case ATTR_TYPE_STRING:
+                {
+                    std::string value;
+                    rep.getValue(attr.first, value);
+                    std::cout << " (string): \t " << value << std::endl;
+                    break;
+                }
+            case ATTR_TYPE_VECTOR:
+                {
+                    OCRepresentation internal;
+                    rep.getValue(attr.first, internal);
+                    std::cout << std::endl;
+                    processAttributes(internal, attr.second.composite, prefix + "\t");
+                    break;
+                }
+            default:
+                {
+                    std::cout << "not handled yet" << std::endl;
+                    break;
+                }
         }
     }
 
@@ -117,7 +119,8 @@ static void onObserveResource(const HeaderOptions &headerOptions,
             for (auto &resourceType : resourceTypeMap[rep.getUri()])
             {
                 std::cout << "\t\t" << resourceType << std::endl;
-                std::map <std::string, std::map <std::string, AttrDesc>& >::iterator it = ResourceAttrMap.find(resourceType);
+                std::map <std::string, std::map <std::string, AttrDesc>& >::iterator it = ResourceAttrMap.find(
+                            resourceType);
 
                 if (it == ResourceAttrMap.end())
                 {
@@ -125,7 +128,7 @@ static void onObserveResource(const HeaderOptions &headerOptions,
                     return;
                 }
 
-                std::map <std::string, AttrDesc>& attrMap = it->second;
+                std::map <std::string, AttrDesc> &attrMap = it->second;
 
                 processAttributes(rep, &attrMap, "\t");
 
@@ -144,7 +147,7 @@ static void onObserveResource(const HeaderOptions &headerOptions,
             }
         }
     }
-    catch (std::exception& e)
+    catch (std::exception &e)
     {
         std::cout << "Exception: " << e.what() << " in onObserveResource" << std::endl;
     }
@@ -169,12 +172,13 @@ static void foundResource(std::shared_ptr< OCResource > resource)
                 std::cout << "\t address: " << hostAddress << std::endl;
 
                 s_foundURIs.push_back(resourceUri);
-                if((resourceUri != "/oic/p") && (resourceUri != "/oic/d"))
+                if ((resourceUri != "/oic/p") && (resourceUri != "/oic/d"))
                 {
                     for (auto &resourceType : resource->getResourceTypes())
                     {
                         std::cout << "\t\t" << resourceType << std::endl;
-                        std::map <std::string, std::map <std::string, AttrDesc>& >::iterator it = ResourceAttrMap.find(resourceType);
+                        std::map <std::string, std::map <std::string, AttrDesc>& >::iterator it = ResourceAttrMap.find(
+                                    resourceType);
                         resourceTypeMap[resourceUri].push_back(resourceType);
 
                         if (it != ResourceAttrMap.end())
@@ -196,8 +200,10 @@ static void foundResource(std::shared_ptr< OCResource > resource)
 int main(int argc, char *argv[])
 {
     PlatformConfig cfg =
-    { OC::ServiceType::InProc, OC::ModeType::Both, "0.0.0.0", 0, OC::QualityOfService::LowQos,
-    NULL };
+    {
+        OC::ServiceType::InProc, OC::ModeType::Both, "0.0.0.0", 0, OC::QualityOfService::LowQos,
+        NULL
+    };
     OCPlatform::Configure(cfg);
     try
     {

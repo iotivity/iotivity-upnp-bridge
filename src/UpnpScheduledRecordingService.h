@@ -34,24 +34,24 @@ using namespace std;
 
 class UpnpScheduledRecording: public UpnpService
 {
-    friend class UpnpService;
+        friend class UpnpService;
 
-public:
-    typedef GUPnPServiceProxyAction* (UpnpScheduledRecording::*GetAttributeHandler)(UpnpRequest *);
-    typedef GUPnPServiceProxyAction* (UpnpScheduledRecording::*SetAttributeHandler)(
+    public:
+        typedef GUPnPServiceProxyAction *(UpnpScheduledRecording::*GetAttributeHandler)(UpnpRequest *);
+        typedef GUPnPServiceProxyAction *(UpnpScheduledRecording::*SetAttributeHandler)(
             GUPnPServiceProxy *, UpnpRequest *, UpnpAttributeInfo *, RCSResourceAttributes);
 
-    UpnpScheduledRecording(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
+        UpnpScheduledRecording(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
             UpnpService(serviceInfo, UPNP_OIC_TYPE_SCHEDULED_RECORDING, requestState, &Attributes)
-    {
-    }
+        {
+        }
 
-private:
-    static vector< UpnpAttributeInfo > Attributes;
+    private:
+        static vector< UpnpAttributeInfo > Attributes;
 
-    bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(
-            const RCSResourceAttributes& attrs, UpnpRequest *request);
+        bool getAttributesRequest(UpnpRequest *request);
+        bool setAttributesRequest(
+            const RCSResourceAttributes &attrs, UpnpRequest *request);
 };
 
 #endif

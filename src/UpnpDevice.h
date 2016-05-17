@@ -31,44 +31,45 @@ using namespace std;
 
 class UpnpDevice: public UpnpResource
 {
-public:
-    UpnpDevice(GUPnPDeviceInfo *deviceInfo,
-               UpnpRequestState* requestState);
+    public:
+        UpnpDevice(GUPnPDeviceInfo *deviceInfo,
+                   UpnpRequestState *requestState);
 
-    virtual ~UpnpDevice();
+        virtual ~UpnpDevice();
 
-    RCSResourceAttributes handleGetAttributesRequest();
-    void handleSetAttributesRequest(const RCSResourceAttributes &value);
-    void initAttributes();
+        RCSResourceAttributes handleGetAttributesRequest();
+        void handleSetAttributesRequest(const RCSResourceAttributes &value);
+        void initAttributes();
 
-    void insertDevice(string udn);
-    void insertService(string id);
+        void insertDevice(string udn);
+        void insertService(string id);
 
-    void setProxy(GUPnPDeviceProxy *proxy);
-    GUPnPDeviceProxy* getProxy();
+        void setProxy(GUPnPDeviceProxy *proxy);
+        GUPnPDeviceProxy *getProxy();
 
-    const string getParent();
-    void setParent(const string parent);
+        const string getParent();
+        void setParent(const string parent);
 
-    std::vector<string> & getDeviceList();
-    std::vector<string> & getServiceList();
+        std::vector<string> &getDeviceList();
+        std::vector<string> &getServiceList();
 
-private:
+    private:
 
-    GUPnPDeviceProxy *m_proxy;
-    string m_parent;
-    string m_deviceType;
+        GUPnPDeviceProxy *m_proxy;
+        string m_parent;
+        string m_deviceType;
 
-    // UDNs of embedded devices
-    std::vector<string> m_deviceList;
+        // UDNs of embedded devices
+        std::vector<string> m_deviceList;
 
-    // IDs of embedded services
-    std::vector<string> m_serviceList;
+        // IDs of embedded services
+        std::vector<string> m_serviceList;
 
-    UpnpRequestState *m_requestState;
+        UpnpRequestState *m_requestState;
 
-    void initBasicAttributes(GUPnPDeviceInfo *deviceInfo);
-    string getStringField(function< char*(GUPnPDeviceInfo *deviceInfo)> f, GUPnPDeviceInfo *deviceInfo);
+        void initBasicAttributes(GUPnPDeviceInfo *deviceInfo);
+        string getStringField(function< char *(GUPnPDeviceInfo *deviceInfo)> f,
+                              GUPnPDeviceInfo *deviceInfo);
 };
 
 #endif

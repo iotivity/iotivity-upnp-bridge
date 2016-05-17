@@ -85,7 +85,8 @@ void UpnpConnector::disconnect()
     request.expected = 0;
     {
         std::lock_guard< std::mutex > lock(s_requestState.queueLock);
-        request.start = [&] (){
+        request.start = [&] ()
+        {
             gupnpStop();
             return true;
         };
@@ -95,7 +96,7 @@ void UpnpConnector::disconnect()
         if (s_requestState.sourceId == 0)
         {
             s_requestState.sourceId = g_source_attach(s_requestState.source, s_mainContext);
-            DEBUG_PRINT("sourceId: "<< s_requestState.sourceId << "context: " << s_mainContext);
+            DEBUG_PRINT("sourceId: " << s_requestState.sourceId << "context: " << s_mainContext);
         }
 
     }
@@ -129,7 +130,7 @@ void UpnpConnector::startDiscovery(GUPnPControlPoint *controlPoint, bool findSer
 
     // the 'device-proxy-available' signal is sent when any devices are found
     g_signal_connect(controlPoint, "device-proxy-available",
-            G_CALLBACK (&UpnpConnector::onDeviceProxyAvailable), NULL);
+                     G_CALLBACK (&UpnpConnector::onDeviceProxyAvailable), NULL);
 
     if (findService)
     {
@@ -158,9 +159,9 @@ void UpnpConnector::gupnpStart()
     s_contextManager = gupnp_context_manager_create(0);
 
     g_signal_connect(s_contextManager, "context-available",
-            G_CALLBACK(&UpnpConnector::onContextAvailable), NULL);
+                     G_CALLBACK(&UpnpConnector::onContextAvailable), NULL);
 
-    DEBUG_PRINT("UPnP main loop starting... ("<<std::this_thread::get_id() << ")");
+    DEBUG_PRINT("UPnP main loop starting... (" << std::this_thread::get_id() << ")");
     s_mainLoop = g_main_loop_new(NULL, false);
     s_mainContext = g_main_context_default();
     DEBUG_PRINT("main context" << s_mainContext);
@@ -174,7 +175,7 @@ int UpnpConnector::checkRequestQueue(gpointer data)
 {
     // Check request queue
     std::lock_guard< std::mutex > lock(s_requestState.queueLock);
-    DEBUG_PRINT("("<< s_requestState.requestQueue.size() <<")");
+    DEBUG_PRINT("(" << s_requestState.requestQueue.size() << ")");
 
     while (!s_requestState.requestQueue.empty())
     {
@@ -190,7 +191,8 @@ int UpnpConnector::checkRequestQueue(gpointer data)
         s_requestState.requestQueue.pop();
     }
 
-    DEBUG_PRINT("sourceId: "<< s_requestState.sourceId << ", context: " << g_source_get_context (s_requestState.source));
+    DEBUG_PRINT("sourceId: " << s_requestState.sourceId << ", context: " << g_source_get_context (
+                    s_requestState.source));
     if (s_requestState.sourceId != 0)
     {
         g_source_unref(s_requestState.source);
@@ -236,7 +238,7 @@ void UpnpConnector::onContextAvailable(GUPnPContextManager *manager, GUPnPContex
 
 // Callback: a device has been discovered
 void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
-                                              GUPnPDeviceProxy *proxy)
+        GUPnPDeviceProxy *proxy)
 {
     GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(proxy);
     UpnpResource::Ptr pUpnpResource;
@@ -293,10 +295,12 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
             }
             else
             {
-                DEBUG_PRINT(pUpnpResourceService->m_uri << "ready " << pUpnpResourceService->isReady() << " and registered "<< pUpnpResourceService->isRegistered());
+                DEBUG_PRINT(pUpnpResourceService->m_uri << "ready " << pUpnpResourceService->isReady() <<
+                            " and registered " << pUpnpResourceService->isRegistered());
                 if (pUpnpResourceService->isReady() && !pUpnpResourceService->isRegistered())
                 {
-                    DEBUG_PRINT("Register resource for previously discovered child service: " << pUpnpResourceService->m_uri);
+                    DEBUG_PRINT("Register resource for previously discovered child service: " <<
+                                pUpnpResourceService->m_uri);
                     s_discoveryCallback(pUpnpResourceService);
                     pUpnpResourceService->setRegistered(true);
 
@@ -315,7 +319,7 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
 }
 
 void UpnpConnector::onServiceProxyAvailable(GUPnPControlPoint *controlPoint,
-                                               GUPnPServiceProxy *proxy)
+        GUPnPServiceProxy *proxy)
 {
     GUPnPServiceInfo *info = GUPNP_SERVICE_INFO(proxy);
 
@@ -325,17 +329,18 @@ void UpnpConnector::onServiceProxyAvailable(GUPnPControlPoint *controlPoint,
     // Get service introspection.
     // TODO: consider using gupnp_service_info_get_introspection_full with GCancellable.
     gupnp_service_info_get_introspection_async (info,
-                                                onIntrospectionAvailable,
-                                                NULL);
+            onIntrospectionAvailable,
+            NULL);
 }
 
 // Introspection callback
 void UpnpConnector::onIntrospectionAvailable(GUPnPServiceInfo          *info,
-                                             GUPnPServiceIntrospection *introspection,
-                                             const GError              *error,
-                                             gpointer                  context)
+        GUPnPServiceIntrospection *introspection,
+        const GError              *error,
+        gpointer                  context)
 {
-    DEBUG_PRINT(gupnp_service_info_get_service_type(info) << ", udn: " << gupnp_service_info_get_udn(info));
+    DEBUG_PRINT(gupnp_service_info_get_service_type(info) << ", udn: " << gupnp_service_info_get_udn(
+                    info));
 
     if (error)
     {
@@ -343,8 +348,9 @@ void UpnpConnector::onIntrospectionAvailable(GUPnPServiceInfo          *info,
         return;
     }
 
-    UpnpResource::Ptr pUpnpResourceService = s_manager->processService(GUPNP_SERVICE_PROXY (info), info, introspection,
-                                                                       &s_requestState);
+    UpnpResource::Ptr pUpnpResourceService = s_manager->processService(GUPNP_SERVICE_PROXY (info), info,
+            introspection,
+            &s_requestState);
 
     if (introspection != NULL)
     {
@@ -422,7 +428,7 @@ void UpnpConnector::unregisterDeviceResource(string udn)
 }
 
 void UpnpConnector::onDeviceProxyUnavailable(GUPnPControlPoint *controlPoint,
-                                                GUPnPDeviceProxy *proxy)
+        GUPnPDeviceProxy *proxy)
 {
     GUPnPDeviceInfo *info = GUPNP_DEVICE_INFO(proxy);
     const string udn = gupnp_device_info_get_udn(info);
@@ -434,7 +440,7 @@ void UpnpConnector::onDeviceProxyUnavailable(GUPnPControlPoint *controlPoint,
 }
 
 void UpnpConnector::onServiceProxyUnavailable(GUPnPControlPoint *controlPoint,
-                                               GUPnPServiceProxy *proxy)
+        GUPnPServiceProxy *proxy)
 {
     GUPnPServiceInfo *info = GUPNP_SERVICE_INFO(proxy);
 

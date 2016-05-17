@@ -25,25 +25,25 @@ static const string MODULE = "UpnpDimmingService";
 // Service specific attribute initialization
 
 // Brightness service
-    // TODO the following actions are not yet mapped: (note all unmapped actions are optional)
-    //      SetOnEffectLevel
-    //      SetOnEffect
-    //      GetOnEffectParameters
-    //      StepUp
-    //      StepDown
-    //      StartRampUp
-    //      StartRampDown
-    //      StopRamp
-    //      StartRampToLevel
-    //      SetStepDelta
-    //      GetStepDelta
-    //      SetRampRate
-    //      GetRampRate
-    //      PauseRamp
-    //      ResumeRamp
-    //      GetRampPaused
-    //      GetRampTime
-    //      GetIsRamping
+// TODO the following actions are not yet mapped: (note all unmapped actions are optional)
+//      SetOnEffectLevel
+//      SetOnEffect
+//      GetOnEffectParameters
+//      StepUp
+//      StepDown
+//      StartRampUp
+//      StartRampDown
+//      StopRamp
+//      StartRampToLevel
+//      SetStepDelta
+//      GetStepDelta
+//      SetRampRate
+//      GetRampRate
+//      PauseRamp
+//      ResumeRamp
+//      GetRampPaused
+//      GetRampTime
+//      GetIsRamping
 
 // Organization:
 // Attribute Name,
@@ -52,12 +52,15 @@ static const string MODULE = "UpnpDimmingService";
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
-vector <UpnpAttributeInfo> UpnpDimming::Attributes = {
-    {"brightness",
-     "LoadLevelStatus", G_TYPE_UINT, true,
-     {{"GetLoadLevelStatus", UPNP_ACTION_GET, "retLoadlevelStatus", G_TYPE_UINT},
-      {"SetLoadLevelTarget", UPNP_ACTION_POST, "newLoadlevelTarget", G_TYPE_UINT}},
-     {}
+vector <UpnpAttributeInfo> UpnpDimming::Attributes =
+{
+    {
+        "brightness",
+        "LoadLevelStatus", G_TYPE_UINT, true,
+        {   {"GetLoadLevelStatus", UPNP_ACTION_GET, "retLoadlevelStatus", G_TYPE_UINT},
+            {"SetLoadLevelTarget", UPNP_ACTION_POST, "newLoadlevelTarget", G_TYPE_UINT}
+        },
+        {}
     }
 };
 

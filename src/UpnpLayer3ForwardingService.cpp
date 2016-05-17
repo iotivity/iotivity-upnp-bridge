@@ -33,12 +33,15 @@ static const string MODULE = "UpnpLayer3ForwardingService";
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
-vector <UpnpAttributeInfo> UpnpLayer3Forwarding::Attributes = {
-    {"defaultConnectionService",
-     "DefaultConnectionService", G_TYPE_STRING, true,
-     {{"GetDefaultConnectionService", UPNP_ACTION_GET, "NewDefaultConnectionService", G_TYPE_STRING},
-      {"SetDefaultConnectionService", UPNP_ACTION_POST, "NewDefaultConnectionService", G_TYPE_STRING}},
-     {}
+vector <UpnpAttributeInfo> UpnpLayer3Forwarding::Attributes =
+{
+    {
+        "defaultConnectionService",
+        "DefaultConnectionService", G_TYPE_STRING, true,
+        {   {"GetDefaultConnectionService", UPNP_ACTION_GET, "NewDefaultConnectionService", G_TYPE_STRING},
+            {"SetDefaultConnectionService", UPNP_ACTION_POST, "NewDefaultConnectionService", G_TYPE_STRING}
+        },
+        {}
     }
 };
 
@@ -68,7 +71,8 @@ bool UpnpLayer3Forwarding::getAttributesRequest(UpnpRequest *request)
     return status;
 }
 
-bool UpnpLayer3Forwarding::setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request)
+bool UpnpLayer3Forwarding::setAttributesRequest(const RCSResourceAttributes &value,
+        UpnpRequest *request)
 {
     bool status = false;
 

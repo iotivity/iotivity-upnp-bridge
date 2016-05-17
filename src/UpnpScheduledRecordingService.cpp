@@ -33,11 +33,13 @@ static const string MODULE = "UpnpScheduledRecordingService";
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
-vector <UpnpAttributeInfo> UpnpScheduledRecording::Attributes = {
-    {"stateUpdateId",
-     "StateUpdateID", G_TYPE_UINT, false,
-     {{"GetStateUpdateID", UPNP_ACTION_GET, "Id", G_TYPE_UINT}},
-     {}
+vector <UpnpAttributeInfo> UpnpScheduledRecording::Attributes =
+{
+    {
+        "stateUpdateId",
+        "StateUpdateID", G_TYPE_UINT, false,
+        {{"GetStateUpdateID", UPNP_ACTION_GET, "Id", G_TYPE_UINT}},
+        {}
     }
 };
 

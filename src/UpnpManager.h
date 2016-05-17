@@ -14,44 +14,44 @@ using namespace OIC::Service;
 class UpnpManager
 {
 
-public:    UpnpManager();
-    ~UpnpManager();
+    public:    UpnpManager();
+        ~UpnpManager();
 
-    UpnpResource::Ptr processDevice(GUPnPDeviceProxy *proxy,
-                                    GUPnPDeviceInfo *info,
-                                    bool isRoot,
-                                    UpnpRequestState *requestState);
+        UpnpResource::Ptr processDevice(GUPnPDeviceProxy *proxy,
+                                        GUPnPDeviceInfo *info,
+                                        bool isRoot,
+                                        UpnpRequestState *requestState);
 
-    UpnpResource::Ptr processService(GUPnPServiceProxy *proxy,
-                                     GUPnPServiceInfo *info,
-                                     GUPnPServiceIntrospection *introspection,
-                                     UpnpRequestState *requestState);
+        UpnpResource::Ptr processService(GUPnPServiceProxy *proxy,
+                                         GUPnPServiceInfo *info,
+                                         GUPnPServiceIntrospection *introspection,
+                                         UpnpRequestState *requestState);
 
-    void removeService(GUPnPServiceInfo *info);
-    void removeService(string serviceKey);
-    void removeDevice(string udn);
+        void removeService(GUPnPServiceInfo *info);
+        void removeService(string serviceKey);
+        void removeDevice(string udn);
 
-    UpnpResource::Ptr findResource(GUPnPServiceInfo *info);
-    UpnpResource::Ptr findResource(GUPnPDeviceInfo *info);
+        UpnpResource::Ptr findResource(GUPnPServiceInfo *info);
+        UpnpResource::Ptr findResource(GUPnPDeviceInfo *info);
 
-    std::shared_ptr<UpnpDevice>  findDevice(std::string udn);
-    std::shared_ptr<UpnpService> findService(std::string serviceKey);
+        std::shared_ptr<UpnpDevice>  findDevice(std::string udn);
+        std::shared_ptr<UpnpService> findService(std::string serviceKey);
 
-private:
-    // Device map, keyed off device UDN
-    std::map<std::string, std::shared_ptr<UpnpDevice> > m_devices;
+    private:
+        // Device map, keyed off device UDN
+        std::map<std::string, std::shared_ptr<UpnpDevice> > m_devices;
 
-    // Service map, keyed off service ID
-    std::map<std::string, std::shared_ptr<UpnpService> > m_services;
+        // Service map, keyed off service ID
+        std::map<std::string, std::shared_ptr<UpnpService> > m_services;
 
-    std::shared_ptr<UpnpDevice> addDevice(GUPnPDeviceInfo *info,
-                                          const string parent,
-                                          UpnpRequestState *requestState);
+        std::shared_ptr<UpnpDevice> addDevice(GUPnPDeviceInfo *info,
+                                              const string parent,
+                                              UpnpRequestState *requestState);
 
-    const std::string generateServiceKey(GUPnPServiceInfo* info);
-    std::shared_ptr<UpnpService> findService(GUPnPServiceInfo *info);
-    std::shared_ptr<UpnpService>  generateService(GUPnPServiceInfo *serviceInfo,
-                                                  UpnpRequestState *requestState);
+        const std::string generateServiceKey(GUPnPServiceInfo *info);
+        std::shared_ptr<UpnpService> findService(GUPnPServiceInfo *info);
+        std::shared_ptr<UpnpService>  generateService(GUPnPServiceInfo *serviceInfo,
+                UpnpRequestState *requestState);
 };
 
 #endif
