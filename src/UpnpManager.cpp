@@ -33,6 +33,7 @@
 #include "UpnpScheduledRecordingService.h"
 #include "UpnpWanCommonInterfaceConfigService.h"
 #include "UpnpWanEthernetLinkConfigService.h"
+#include "UpnpLanHostConfigManagementService.h"
 
 using namespace std;
 
@@ -389,6 +390,10 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     else if(resourceType == UPNP_OIC_TYPE_LAYER3_FORWARDING)
     {
         return (std::make_shared < UpnpLayer3Forwarding > (serviceInfo, requestState));
+    }
+    else if(resourceType == UPNP_OIC_TYPE_LAN_HOST_CONFIG)
+    {
+        return (std::make_shared < UpnpLanHostConfigManagement > (serviceInfo, requestState));
     }
     else 
     {
