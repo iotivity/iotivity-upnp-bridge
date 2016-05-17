@@ -34,39 +34,39 @@ using namespace std;
 
 class UpnpLanHostConfigManagement: public UpnpService
 {
-    friend class UpnpService;
+        friend class UpnpService;
 
-public:
-    typedef bool (UpnpLanHostConfigManagement::*GetAttributeHandler)(UpnpRequest *);
+    public:
+        typedef bool (UpnpLanHostConfigManagement::*GetAttributeHandler)(UpnpRequest *);
 
-    typedef bool (UpnpLanHostConfigManagement::*SetAttributeHandler)(UpnpRequest *,
-                                                                     RCSResourceAttributes::Value*);
+        typedef bool (UpnpLanHostConfigManagement::*SetAttributeHandler)(UpnpRequest *,
+                RCSResourceAttributes::Value *);
 
-    UpnpLanHostConfigManagement(GUPnPServiceInfo *serviceInfo,
-                                UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_LAN_HOST_CONFIG, requestState, &Attributes)
-    {
-    }
+        UpnpLanHostConfigManagement(GUPnPServiceInfo *serviceInfo,
+                                    UpnpRequestState *requestState):
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_LAN_HOST_CONFIG, requestState, &Attributes)
+        {
+        }
 
-private:
-    static map <const string, GetAttributeHandler> GetAttributeActionMap;
-    static map <const string, SetAttributeHandler> SetAttributeActionMap;
-    static vector <UpnpAttributeInfo> Attributes;
+    private:
+        static map <const string, GetAttributeHandler> GetAttributeActionMap;
+        static map <const string, SetAttributeHandler> SetAttributeActionMap;
+        static vector <UpnpAttributeInfo> Attributes;
 
-    bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(const RCSResourceAttributes& attrs, UpnpRequest *request);
+        bool getAttributesRequest(UpnpRequest *request);
+        bool setAttributesRequest(const RCSResourceAttributes &attrs, UpnpRequest *request);
 
-    static void getAddressRangeCb(GUPnPServiceProxy *proxy,
-                                  GUPnPServiceProxyAction *action,
-                                  gpointer userData);
+        static void getAddressRangeCb(GUPnPServiceProxy *proxy,
+                                      GUPnPServiceProxyAction *action,
+                                      gpointer userData);
 
-    bool getAddressRange(UpnpRequest *request);
+        bool getAddressRange(UpnpRequest *request);
 
-    static void setAddressRangeCb(GUPnPServiceProxy *proxy,
-                                  GUPnPServiceProxyAction *action,
-                                  gpointer userData);
+        static void setAddressRangeCb(GUPnPServiceProxy *proxy,
+                                      GUPnPServiceProxyAction *action,
+                                      gpointer userData);
 
-    bool setAddressRange(UpnpRequest *request, RCSResourceAttributes::Value* value);
+        bool setAddressRange(UpnpRequest *request, RCSResourceAttributes::Value *value);
 };
 
 #endif

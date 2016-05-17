@@ -34,29 +34,29 @@ using namespace std;
 
 class UpnpLayer3Forwarding: public UpnpService
 {
-    friend class UpnpService;
+        friend class UpnpService;
 
-public:
-    typedef GUPnPServiceProxyAction* (UpnpLayer3Forwarding::*GetAttributeHandler)(GUPnPServiceProxy *,
-                                                                                  UpnpRequest *,
-                                                                                  UpnpAttributeInfo *);
+    public:
+        typedef GUPnPServiceProxyAction *(UpnpLayer3Forwarding::*GetAttributeHandler)(GUPnPServiceProxy *,
+                UpnpRequest *,
+                UpnpAttributeInfo *);
 
-    typedef GUPnPServiceProxyAction* (UpnpLayer3Forwarding::*SetAttributeHandler)(GUPnPServiceProxy *,
-                                                                                  UpnpRequest *,
-                                                                                  UpnpAttributeInfo *,
-                                                                                  RCSResourceAttributes);
+        typedef GUPnPServiceProxyAction *(UpnpLayer3Forwarding::*SetAttributeHandler)(GUPnPServiceProxy *,
+                UpnpRequest *,
+                UpnpAttributeInfo *,
+                RCSResourceAttributes);
 
-    UpnpLayer3Forwarding(GUPnPServiceInfo *serviceInfo,
-                         UpnpRequestState *requestState):
-        UpnpService(serviceInfo, UPNP_OIC_TYPE_LAYER3_FORWARDING, requestState, &Attributes)
-    {
-    }
+        UpnpLayer3Forwarding(GUPnPServiceInfo *serviceInfo,
+                             UpnpRequestState *requestState):
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_LAYER3_FORWARDING, requestState, &Attributes)
+        {
+        }
 
-private:
-    static vector <UpnpAttributeInfo> Attributes;
+    private:
+        static vector <UpnpAttributeInfo> Attributes;
 
-    bool getAttributesRequest(UpnpRequest *request);
-    bool setAttributesRequest(const RCSResourceAttributes& attrs, UpnpRequest *request);
+        bool getAttributesRequest(UpnpRequest *request);
+        bool setAttributesRequest(const RCSResourceAttributes &attrs, UpnpRequest *request);
 
 };
 

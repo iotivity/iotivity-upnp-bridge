@@ -27,34 +27,34 @@ using namespace OC;
 
 class Light
 {
-public:
-    std::string m_uri; // need to keep uri here, due to OCRepresentation bug
-    Light() :
+    public:
+        std::string m_uri; // need to keep uri here, due to OCRepresentation bug
+        Light() :
             m_uri("")
-    {
-    }
+        {
+        }
 };
 
 class PowerSwitch
 {
-public:
-    std::string m_uri; // need to keep uri here, due to OCRepresentation bug
-    bool m_state;
-    PowerSwitch() :
+    public:
+        std::string m_uri; // need to keep uri here, due to OCRepresentation bug
+        bool m_state;
+        PowerSwitch() :
             m_uri(""), m_state(false)
-    {
-    }
+        {
+        }
 };
 
 class Brightness
 {
-public:
-    std::string m_uri; // need to keep uri here, due to OCRepresentation bug
-    int m_loadlevel;
-    Brightness() :
-        m_uri(""), m_loadlevel(100)
-    {
-    }
+    public:
+        std::string m_uri; // need to keep uri here, due to OCRepresentation bug
+        int m_loadlevel;
+        Brightness() :
+            m_uri(""), m_loadlevel(100)
+        {
+        }
 };
 
 static std::map< std::string, std::shared_ptr< OCResource > > s_resourceLookup;
@@ -71,7 +71,8 @@ void PostPowerSwitchRepresentation(std::shared_ptr< OCResource > resource);
 void GetBrightnessRepresentation(std::shared_ptr< OCResource > resource);
 void PostBrightnessRepresentation(std::shared_ptr< OCResource > resource);
 
-void OnPostPowerSwitch(const HeaderOptions &headerOptions, const OCRepresentation &rep, const int eCode)
+void OnPostPowerSwitch(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                       const int eCode)
 {
     (void) headerOptions;
     (void) rep;
@@ -89,7 +90,8 @@ void OnPostPowerSwitch(const HeaderOptions &headerOptions, const OCRepresentatio
 
 }
 
-void OnPostBrightness(const HeaderOptions &headerOptions, const OCRepresentation &rep, const int eCode)
+void OnPostBrightness(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                      const int eCode)
 {
     (void) headerOptions;
     (void) rep;
@@ -178,7 +180,8 @@ void OnGetLight(const HeaderOptions &headerOptions, const OCRepresentation &rep,
     }
 }
 
-void OnGetPowerSwitch(const HeaderOptions &headerOptions, const OCRepresentation &rep, const int eCode)
+void OnGetPowerSwitch(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                      const int eCode)
 {
     (void) headerOptions;
     try
@@ -212,7 +215,8 @@ void OnGetPowerSwitch(const HeaderOptions &headerOptions, const OCRepresentation
     }
 }
 
-void OnGetBrightness(const HeaderOptions &headerOptions, const OCRepresentation &rep, const int eCode)
+void OnGetBrightness(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                     const int eCode)
 {
     (void) headerOptions;
     try
@@ -352,7 +356,8 @@ void foundResource(std::shared_ptr< OCResource > resource)
                         //std::cout << "Already discovered uri: " << resourceUri << std::endl;
                         s_resourceLookup[resourceUri] = resource;
                     }
-                } else if(resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
+                }
+                else if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
                 {
                     if (s_powerSwitchLookup.find(resourceUri) == s_powerSwitchLookup.end())
                     {
@@ -370,7 +375,8 @@ void foundResource(std::shared_ptr< OCResource > resource)
                         //std::cout << "Already discovered uri: " << resourceUri << std::endl;
                         s_resourceLookup[resourceUri] = resource;
                     }
-                } else if(resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
+                }
+                else if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
                 {
                     std::cout << "found Brightness resouce." << std::endl;
                     if (s_brightnessLookup.find(resourceUri) == s_brightnessLookup.end())
@@ -403,8 +409,10 @@ void foundResource(std::shared_ptr< OCResource > resource)
 int main(int argc, char *argv[])
 {
     PlatformConfig cfg =
-    { OC::ServiceType::InProc, OC::ModeType::Both, "0.0.0.0", 0, OC::QualityOfService::LowQos,
-    NULL };
+    {
+        OC::ServiceType::InProc, OC::ModeType::Both, "0.0.0.0", 0, OC::QualityOfService::LowQos,
+        NULL
+    };
     OCPlatform::Configure(cfg);
     try
     {

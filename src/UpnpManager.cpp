@@ -43,7 +43,7 @@ UpnpManager::UpnpManager()
 {
     m_devices.clear();
     m_services.clear();
- }
+}
 
 UpnpManager::~UpnpManager()
 {
@@ -52,9 +52,9 @@ UpnpManager::~UpnpManager()
 }
 
 UpnpResource::Ptr UpnpManager::processDevice(GUPnPDeviceProxy *proxy,
-                                             GUPnPDeviceInfo *deviceInfo,
-                                             bool isRoot,
-                                             UpnpRequestState *requestState)
+        GUPnPDeviceInfo *deviceInfo,
+        bool isRoot,
+        UpnpRequestState *requestState)
 {
     const string udn = gupnp_device_info_get_udn(deviceInfo);
     std::shared_ptr<UpnpDevice> pDevice = findDevice(udn);
@@ -64,7 +64,9 @@ UpnpResource::Ptr UpnpManager::processDevice(GUPnPDeviceProxy *proxy,
         if (isRoot)
         {
             pDevice = addDevice(deviceInfo, UPNP_ROOT_DEVICE, requestState);
-        } else {
+        }
+        else
+        {
             DEBUG_PRINT(udn << " is not root and does not have a parent");
             pDevice = addDevice(deviceInfo, "", requestState);
         }
@@ -84,8 +86,8 @@ UpnpResource::Ptr UpnpManager::processDevice(GUPnPDeviceProxy *proxy,
 //
 // We keep the device lookup in manager, inside a map as <udn, device object reference> pair
 std::shared_ptr<UpnpDevice> UpnpManager::addDevice(GUPnPDeviceInfo *deviceInfo,
-                                                   const string parent,
-                                                   UpnpRequestState *requestState)
+        const string parent,
+        UpnpRequestState *requestState)
 {
     const string udn = gupnp_device_info_get_udn(deviceInfo);
     std::shared_ptr<UpnpDevice> pDevice;
@@ -93,9 +95,12 @@ std::shared_ptr<UpnpDevice> UpnpManager::addDevice(GUPnPDeviceInfo *deviceInfo,
     DEBUG_PRINT(udn);
 
     // Create a new UpnpDevice Object
-    try {
+    try
+    {
         pDevice = std::make_shared < UpnpDevice > (deviceInfo, requestState);
-    } catch (exception& e) {
+    }
+    catch (exception &e)
+    {
         ERROR_PRINT("What(): " << e.what());
         return nullptr;
     }
@@ -120,7 +125,8 @@ std::shared_ptr<UpnpDevice> UpnpManager::addDevice(GUPnPDeviceInfo *deviceInfo,
 
     while (childDev)
     {
-        try {
+        try
+        {
             GUPnPDeviceInfo *info = GUPNP_DEVICE_INFO (childDev->data);
             const string udnChild = gupnp_device_info_get_udn(info);
             std::shared_ptr<UpnpDevice> pChildDev = findDevice(udnChild);
@@ -145,7 +151,9 @@ std::shared_ptr<UpnpDevice> UpnpManager::addDevice(GUPnPDeviceInfo *deviceInfo,
                 // Add link to "links" attribute map
                 pDevice->addLink(pChildDev);
             }
-        } catch (exception& e) {
+        }
+        catch (exception &e)
+        {
             ERROR_PRINT("What(): " << e.what());
         }
 
@@ -161,7 +169,8 @@ std::shared_ptr<UpnpDevice> UpnpManager::addDevice(GUPnPDeviceInfo *deviceInfo,
 
     while (childService)
     {
-        try {
+        try
+        {
             DEBUG_PRINT("Add service description");
             GUPnPServiceInfo *serviceInfo = GUPNP_SERVICE_INFO (childService->data);
             std::shared_ptr<UpnpService> pService = findService(serviceInfo);
@@ -186,9 +195,13 @@ std::shared_ptr<UpnpDevice> UpnpManager::addDevice(GUPnPDeviceInfo *deviceInfo,
 
             // Add link to "links" attribute map
             pDevice->addLink(pService);
-        } catch(NotImplementedException& e) {
+        }
+        catch (NotImplementedException &e)
+        {
             ERROR_PRINT("What(): " << e.what());
-        } catch(BadUriException& e) {
+        }
+        catch (BadUriException &e)
+        {
             ERROR_PRINT("What(): " << e.what());
         }
 
@@ -205,9 +218,9 @@ std::shared_ptr<UpnpDevice> UpnpManager::addDevice(GUPnPDeviceInfo *deviceInfo,
 
 // We keep the service lookup inside a map as <udn + service ID, service object reference> pair
 UpnpResource::Ptr UpnpManager::processService(GUPnPServiceProxy *proxy,
-                                              GUPnPServiceInfo *serviceInfo,
-                                              GUPnPServiceIntrospection *introspection,
-                                              UpnpRequestState *requestState)
+        GUPnPServiceInfo *serviceInfo,
+        GUPnPServiceIntrospection *introspection,
+        UpnpRequestState *requestState)
 {
     const string udn = gupnp_service_info_get_udn(serviceInfo);
     DEBUG_PRINT("type: " << gupnp_service_info_get_service_type(serviceInfo) << ", Udn: " << udn);
@@ -217,12 +230,17 @@ UpnpResource::Ptr UpnpManager::processService(GUPnPServiceProxy *proxy,
     if (pService == nullptr)
     {
         // Never seen before service
-        try {
+        try
+        {
             pService = generateService(serviceInfo, requestState);
-        } catch(NotImplementedException& e) {
+        }
+        catch (NotImplementedException &e)
+        {
             ERROR_PRINT("What(): " << e.what());
             return nullptr;
-        } catch(BadUriException& e) {
+        }
+        catch (BadUriException &e)
+        {
             ERROR_PRINT("What(): " << e.what());
             return nullptr;
         }
@@ -247,7 +265,8 @@ void UpnpManager::removeService(GUPnPServiceInfo *info)
     DEBUG_PRINT("type: " << gupnp_service_info_get_service_type(info));
     const string serviceKey = generateServiceKey(info);
 
-    if (serviceKey != "") {
+    if (serviceKey != "")
+    {
         std::map< string, shared_ptr<UpnpService> >::iterator it = m_services.find(serviceKey);
 
         if (it != m_services.end())
@@ -316,11 +335,12 @@ shared_ptr<UpnpDevice> UpnpManager::findDevice(string udn)
     return nullptr;
 }
 
-const string UpnpManager::generateServiceKey(GUPnPServiceInfo* info)
+const string UpnpManager::generateServiceKey(GUPnPServiceInfo *info)
 {
     // Extract service ID
     char *c_field = gupnp_service_info_get_id(info);
-    if (c_field != NULL) {
+    if (c_field != NULL)
+    {
 
         const string udn = gupnp_service_info_get_udn(info);
         string id = string(c_field);
@@ -333,7 +353,7 @@ const string UpnpManager::generateServiceKey(GUPnPServiceInfo* info)
     return "";
 }
 
-std::shared_ptr<UpnpService> UpnpManager::findService (GUPnPServiceInfo* info)
+std::shared_ptr<UpnpService> UpnpManager::findService (GUPnPServiceInfo *info)
 {
     const string serviceKey = generateServiceKey(info);
     if (serviceKey != "")
@@ -345,7 +365,7 @@ std::shared_ptr<UpnpService> UpnpManager::findService (GUPnPServiceInfo* info)
 }
 
 std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *serviceInfo,
-                                                           UpnpRequestState *requestState)
+        UpnpRequestState *requestState)
 {
     // Service type
     string serviceType = gupnp_service_info_get_service_type(serviceInfo);
@@ -355,47 +375,47 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     {
         return (std::make_shared < UpnpPowerSwitch > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
+    else if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
     {
         return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY) 
+    else if (resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY)
     {
         return (std::make_shared < UpnpContentDirectory > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_CONNECTION_MANAGER) 
+    else if (resourceType == UPNP_OIC_TYPE_CONNECTION_MANAGER)
     {
         return (std::make_shared < UpnpConnectionManager > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_AV_TRANSPORT) 
+    else if (resourceType == UPNP_OIC_TYPE_AV_TRANSPORT)
     {
         return (std::make_shared < UpnpAVTransport > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_RENDERING_CONTROL) 
+    else if (resourceType == UPNP_OIC_TYPE_RENDERING_CONTROL)
     {
         return (std::make_shared < UpnpRenderingControl > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_SCHEDULED_RECORDING) 
+    else if (resourceType == UPNP_OIC_TYPE_SCHEDULED_RECORDING)
     {
         return (std::make_shared < UpnpScheduledRecording > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_WAN_IF_CONFIG)
+    else if (resourceType == UPNP_OIC_TYPE_WAN_IF_CONFIG)
     {
         return (std::make_shared < UpnpWanCommonInterfaceConfig > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG)
+    else if (resourceType == UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG)
     {
         return (std::make_shared < UpnpWanEthernetLinkConfig > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_LAYER3_FORWARDING)
+    else if (resourceType == UPNP_OIC_TYPE_LAYER3_FORWARDING)
     {
         return (std::make_shared < UpnpLayer3Forwarding > (serviceInfo, requestState));
     }
-    else if(resourceType == UPNP_OIC_TYPE_LAN_HOST_CONFIG)
+    else if (resourceType == UPNP_OIC_TYPE_LAN_HOST_CONFIG)
     {
         return (std::make_shared < UpnpLanHostConfigManagement > (serviceInfo, requestState));
     }
-    else 
+    else
     {
         //throw an exception
         ERROR_PRINT("Service type " << serviceType << " not implemented!");

@@ -22,15 +22,16 @@ using namespace std;
 static const string MODULE = "UpnpRenderingControlAttribute";
 
 void UpnpRenderingControlAttribute::getCb(GUPnPServiceProxy *proxy,
-                          GUPnPServiceProxyAction *actionProxy,
-                          gpointer userData)
+        GUPnPServiceProxyAction *actionProxy,
+        gpointer userData)
 {
     GError *error = NULL;
     UpnpVar value;
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
     UpnpAttributeInfo *attrInfo;
 
-    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, std::vector <UpnpVar> > >::iterator it = request->proxyMap.find(actionProxy);
+    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >::iterator
+    it = request->proxyMap.find(actionProxy);
 
     assert(it != request->proxyMap.end());
 
@@ -44,8 +45,10 @@ void UpnpRenderingControlAttribute::getCb(GUPnPServiceProxy *proxy,
                                                   &value.var_int64,
                                                   NULL);
 
-    if (error) {
-        ERROR_PRINT("\"" <<attrInfo->actions[0].name << "\" action failed: " << error->code << ", " << error->message);
+    if (error)
+    {
+        ERROR_PRINT("\"" << attrInfo->actions[0].name << "\" action failed: " << error->code << ", " <<
+                    error->message);
         g_error_free (error);
         status = false;
     }
@@ -54,41 +57,46 @@ void UpnpRenderingControlAttribute::getCb(GUPnPServiceProxy *proxy,
     {
         switch (attrInfo->actions[0].varType)
         {
-        case G_TYPE_STRING:
-            {
-                DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(string) "<< string(static_cast<const char *>(value.var_pchar)));
-                request->resource->setAttribute(attrInfo->name, string(value.var_pchar), false);
-                break;
-            }
-        case G_TYPE_BOOLEAN:
-            {
-                bool vbool = value.var_boolean;
-                DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(bool) "<< vbool);
-                request->resource->setAttribute(attrInfo->name, vbool, false);
-                break;
-            }
-        case G_TYPE_INT:
-        case G_TYPE_UINT:
-            {
-                DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(int) "<< value.var_int);
-                request->resource->setAttribute(attrInfo->name, value.var_int, false);
-                break;
-            }
-        case G_TYPE_INT64:
-        case G_TYPE_UINT64:
-            {
-                DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(int64) "<< value.var_uint64);
-                request->resource->setAttribute(attrInfo->name, static_cast<double>(value.var_int64), false);
-                break;
-            }
-        default:
-            {
-                //TODO: handle additional types?
-                ERROR_PRINT("Type handling not implemented!");
-                assert(0);
-            }
+            case G_TYPE_STRING:
+                {
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(string) " <<
+                                string(static_cast<const char *>(value.var_pchar)));
+                    request->resource->setAttribute(attrInfo->name, string(value.var_pchar), false);
+                    break;
+                }
+            case G_TYPE_BOOLEAN:
+                {
+                    bool vbool = value.var_boolean;
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(bool) " <<
+                                vbool);
+                    request->resource->setAttribute(attrInfo->name, vbool, false);
+                    break;
+                }
+            case G_TYPE_INT:
+            case G_TYPE_UINT:
+                {
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(int) " <<
+                                value.var_int);
+                    request->resource->setAttribute(attrInfo->name, value.var_int, false);
+                    break;
+                }
+            case G_TYPE_INT64:
+            case G_TYPE_UINT64:
+                {
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(int64) " <<
+                                value.var_uint64);
+                    request->resource->setAttribute(attrInfo->name, static_cast<double>(value.var_int64), false);
+                    break;
+                }
+            default:
+                {
+                    //TODO: handle additional types?
+                    ERROR_PRINT("Type handling not implemented!");
+                    assert(0);
+                }
         }
-    } else
+    }
+    else
     {
         ERROR_PRINT("Failed to retrieve " << attrInfo->actions[0].varName);
     }
@@ -97,13 +105,14 @@ void UpnpRenderingControlAttribute::getCb(GUPnPServiceProxy *proxy,
 }
 
 bool UpnpRenderingControlAttribute::get(GUPnPServiceProxy *serviceProxy,
-                        UpnpRequest *request,
-                        UpnpAttributeInfo *attrInfo)
+                                        UpnpRequest *request,
+                                        UpnpAttributeInfo *attrInfo)
 {
     GUPnPServiceProxyAction *actionProxy;
     UpnpVar value;
 
-    DEBUG_PRINT("action: " << attrInfo->actions[1].name << "( " << attrInfo->actions[1].varName << " )");
+    DEBUG_PRINT("action: " << attrInfo->actions[1].name << "( " << attrInfo->actions[1].varName <<
+                " )");
     if (NULL != strstr(attrInfo->varName, "PresetNameList"))
     {
         // InstanceID is required
@@ -145,18 +154,19 @@ bool UpnpRenderingControlAttribute::get(GUPnPServiceProxy *serviceProxy,
 }
 
 void UpnpRenderingControlAttribute::setCb(GUPnPServiceProxy *proxy,
-                          GUPnPServiceProxyAction *proxyAction,
-                          gpointer userData)
+        GUPnPServiceProxyAction *proxyAction,
+        gpointer userData)
 {
     GError *error = NULL;
-    UpnpRequest *request = static_cast<UpnpRequest*> (userData);
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
     UpnpAttributeInfo *attrInfo;
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  proxyAction,
-                                                  &error,
-                                                  NULL);
-    if (error) {
+                  proxyAction,
+                  &error,
+                  NULL);
+    if (error)
+    {
         ERROR_PRINT("Set action failed: " << error->code << ", " << error->message);
         g_error_free (error);
         status = false;
@@ -164,7 +174,8 @@ void UpnpRenderingControlAttribute::setCb(GUPnPServiceProxy *proxy,
 
     if (status)
     {
-        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo*, std::vector <UpnpVar> > >::iterator it = request->proxyMap.find(proxyAction);
+        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >::iterator
+        it = request->proxyMap.find(proxyAction);
 
         if (it != request->proxyMap.end())
         {
@@ -173,39 +184,43 @@ void UpnpRenderingControlAttribute::setCb(GUPnPServiceProxy *proxy,
 
             switch (attrInfo->actions[1].varType)
             {
-            case G_TYPE_STRING:
-                {
-                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(string) "<< string(value.var_pchar));
-                    request->resource->setAttribute(attrInfo->name, string(value.var_pchar), false);
-                    break;
-                }
-            case G_TYPE_BOOLEAN:
-                {
-                    bool vbool = value.var_boolean;
-                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(bool) "<< vbool);
-                    request->resource->setAttribute(attrInfo->name, vbool, false);
-                    break;
-                }
-            case G_TYPE_INT:
-            case G_TYPE_UINT:
-                {
-                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(int) "<< value.var_int);
-                    request->resource->setAttribute(attrInfo->name, value.var_int, false);
-                    break;
-                }
-            case G_TYPE_INT64:
-            case G_TYPE_UINT64:
-                {
-                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name<<":(int64) "<< value.var_uint64);
-                    request->resource->setAttribute(attrInfo->name, static_cast<double>(value.var_int64), false);
-                    break;
-                }
-            default:
-                {
-                    //TODO: handle additional types?
-                    ERROR_PRINT("Type handling not implemented!");
-                    assert(0);
-                }
+                case G_TYPE_STRING:
+                    {
+                        DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(string) " <<
+                                    string(value.var_pchar));
+                        request->resource->setAttribute(attrInfo->name, string(value.var_pchar), false);
+                        break;
+                    }
+                case G_TYPE_BOOLEAN:
+                    {
+                        bool vbool = value.var_boolean;
+                        DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(bool) " <<
+                                    vbool);
+                        request->resource->setAttribute(attrInfo->name, vbool, false);
+                        break;
+                    }
+                case G_TYPE_INT:
+                case G_TYPE_UINT:
+                    {
+                        DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(int) " <<
+                                    value.var_int);
+                        request->resource->setAttribute(attrInfo->name, value.var_int, false);
+                        break;
+                    }
+                case G_TYPE_INT64:
+                case G_TYPE_UINT64:
+                    {
+                        DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(int64) " <<
+                                    value.var_uint64);
+                        request->resource->setAttribute(attrInfo->name, static_cast<double>(value.var_int64), false);
+                        break;
+                    }
+                default:
+                    {
+                        //TODO: handle additional types?
+                        ERROR_PRINT("Type handling not implemented!");
+                        assert(0);
+                    }
             }
         }
     }
@@ -214,9 +229,9 @@ void UpnpRenderingControlAttribute::setCb(GUPnPServiceProxy *proxy,
 }
 
 bool UpnpRenderingControlAttribute::set(GUPnPServiceProxy *serviceProxy,
-                        UpnpRequest *request,
-                        UpnpAttributeInfo *attrInfo,
-                        RCSResourceAttributes::Value* attrValue)
+                                        UpnpRequest *request,
+                                        UpnpAttributeInfo *attrInfo,
+                                        RCSResourceAttributes::Value *attrValue)
 {
     GUPnPServiceProxyAction *actionProxy;
     UpnpVar value;
@@ -226,43 +241,43 @@ bool UpnpRenderingControlAttribute::set(GUPnPServiceProxy *serviceProxy,
         // Type of the value to be stored can be derived either from
         // input variable type or from state variable type
         GType type = (attrInfo->actions[1].varType != G_TYPE_NONE) ?
-            attrInfo->actions[1].varType : attrInfo->type;
+                     attrInfo->actions[1].varType : attrInfo->type;
 
         switch (type)
         {
-        case G_TYPE_STRING:
-            {
-                const char* sValue = (attrValue->get< string >()).c_str();
-                DEBUG_PRINT("resource: " << request->resource->m_uri << ", (string) " << sValue);
-                value.var_pchar = sValue;
-                break;
-            }
-        case G_TYPE_BOOLEAN:
-            {
-                value.var_boolean = attrValue->get< bool >();
-                DEBUG_PRINT("resource: " << request->resource->m_uri << ", (bool) " << value.var_boolean);
-                break;
-            }
-        case G_TYPE_INT:
-        case G_TYPE_UINT:
-            {
-                value.var_int = attrValue->get< int >();
-                DEBUG_PRINT("resource: " << request->resource->m_uri << ", (int) " << value.var_int);
-                break;
-            }
-        case G_TYPE_INT64:
-        case G_TYPE_UINT64:
-            {
-                value.var_int64 = attrValue->get< double >();
-                DEBUG_PRINT("resource: " << request->resource->m_uri << ", (int64) " << value.var_int64);
-                break;
-            }
-        default:
-            {
-                //TODO: handle additional types?
-                ERROR_PRINT("Type handling not implemented!");
-                assert(0);
-            }
+            case G_TYPE_STRING:
+                {
+                    const char *sValue = (attrValue->get< string >()).c_str();
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", (string) " << sValue);
+                    value.var_pchar = sValue;
+                    break;
+                }
+            case G_TYPE_BOOLEAN:
+                {
+                    value.var_boolean = attrValue->get< bool >();
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", (bool) " << value.var_boolean);
+                    break;
+                }
+            case G_TYPE_INT:
+            case G_TYPE_UINT:
+                {
+                    value.var_int = attrValue->get< int >();
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", (int) " << value.var_int);
+                    break;
+                }
+            case G_TYPE_INT64:
+            case G_TYPE_UINT64:
+                {
+                    value.var_int64 = attrValue->get< double >();
+                    DEBUG_PRINT("resource: " << request->resource->m_uri << ", (int64) " << value.var_int64);
+                    break;
+                }
+            default:
+                {
+                    //TODO: handle additional types?
+                    ERROR_PRINT("Type handling not implemented!");
+                    assert(0);
+                }
         }
     }
     else
@@ -270,7 +285,8 @@ bool UpnpRenderingControlAttribute::set(GUPnPServiceProxy *serviceProxy,
         value.var_int64 = 0;
     }
 
-    DEBUG_PRINT("action: " << attrInfo->actions[1].name << "( " << attrInfo->actions[1].varName << " )");
+    DEBUG_PRINT("action: " << attrInfo->actions[1].name << "( " << attrInfo->actions[1].varName <<
+                " )");
     if (NULL != strstr(attrInfo->varName, "PresetNameList"))
     {
         // InstanceID is required
