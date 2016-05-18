@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_6a054bc1",
+        "filename": "src/UpnpRenderingControlAttribute.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-05-18T20:29:53Z",
+      "side": 1,
+      "message": "Agree. Changed in the patchset 3",
+      "parentUuid": "da87b5cf_8a3c4f95",
+      "range": {
+        "startLine": 41,
+        "startChar": 18,
+        "endLine": 46,
+        "endChar": 24
+      },
+      "revId": "26d4532eece5be8f95de6491aca134ce94c6fb52",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_2a41830b",
         "filename": "unittests/UpnpHelperTest.cpp",
         "patchSetId": 2
