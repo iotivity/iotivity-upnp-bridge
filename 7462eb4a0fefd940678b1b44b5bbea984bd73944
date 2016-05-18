@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_0a6fdf93",
+        "filename": "examples/iotApp/MenuServices.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-18T20:03:29Z",
+      "side": 1,
+      "message": "Right now I have these commented out because there is no implementation for them.  I could add them in and it would tell us when the service is found we just would get the \"not yet implemented\" error when trying to access the service.  Is it better to show the item or keep it hidden?",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 121
+      },
+      "revId": "7462eb4a0fefd940678b1b44b5bbea984bd73944",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
