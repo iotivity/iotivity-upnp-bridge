@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_0a483f2c",
+        "filename": "examples/iotApp/MenuServices.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-05-18T19:55:46Z",
+      "side": 1,
+      "message": "You forgot to check-in or remove MenuBrightness.h file. I can\u0027t build this patch...",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 27
+      },
+      "revId": "025e9783ad97515937ab9954a07e37019efb9af1",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
