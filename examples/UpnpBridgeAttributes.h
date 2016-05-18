@@ -117,6 +117,50 @@ std::map <std::string, AttrDesc> LanHostConfigAttrs =
     {"ipRouters",    {ATTR_TYPE_STRING,  false, NULL}},
 };
 
+// Media Server / Media Renderer
+
+// AV Tranport
+std::map <std::string, AttrDesc> AvTransportAttrs =
+{
+};
+
+// Connection Manager
+std::map <std::string, AttrDesc> ProtocolInfoAttrs =
+{
+    {"source", {ATTR_TYPE_STRING, false, NULL}},
+    {"sink",   {ATTR_TYPE_STRING, false, NULL}}
+};
+
+std::map <std::string, AttrDesc> ConnectionManagerAttrs =
+{
+    {"protocolInfo", {ATTR_TYPE_STRING, false, &ProtocolInfoAttrs}},
+    {"featureList",  {ATTR_TYPE_STRING, false, NULL}},
+};
+
+// Content Directory
+std::map <std::string, AttrDesc> ContentDirectoryAttrs =
+{
+    {"searchCaps",     {ATTR_TYPE_STRING, false, NULL}},
+    {"searchCaps",     {ATTR_TYPE_STRING, false, NULL}},
+    {"systemUpdateId", {ATTR_TYPE_INT,    true,  NULL}},
+    {"resetToken",     {ATTR_TYPE_STRING, false, NULL}},
+    {"featureList",    {ATTR_TYPE_STRING, false, NULL}},
+};
+
+// Rendering Control
+std::map <std::string, AttrDesc> RenderingControlAttrs =
+{
+    {"presetNameList", {ATTR_TYPE_STRING, false, NULL}},
+    {"mute",           {ATTR_TYPE_BOOL,   false, NULL}},
+    {"volume",         {ATTR_TYPE_INT,    false, NULL}},
+};
+
+// Scheduled Recording
+std::map <std::string, AttrDesc> ScheduledRecordingAttrs =
+{
+    {"stateUpdateId",  {ATTR_TYPE_INT,    false, NULL}},
+};
+
 std::map <std::string, std::map <std::string, AttrDesc> & > ResourceAttrMap =
 {
     {UPNP_OIC_TYPE_POWER_SWITCH,         BinarySwitchAttrs},
@@ -125,6 +169,11 @@ std::map <std::string, std::map <std::string, AttrDesc> & > ResourceAttrMap =
     {UPNP_OIC_TYPE_LAYER3_FORWARDING,    L3FAttrs},
     {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,  WanEthConfigAttrs},
     {UPNP_OIC_TYPE_LAN_HOST_CONFIG,      LanHostConfigAttrs},
+    {UPNP_OIC_TYPE_AV_TRANSPORT,         AvTransportAttrs},
+    {UPNP_OIC_TYPE_CONNECTION_MANAGER,   ConnectionManagerAttrs},
+    {UPNP_OIC_TYPE_CONTENT_DIRECTORY,    ContentDirectoryAttrs},
+    {UPNP_OIC_TYPE_RENDERING_CONTROL,    RenderingControlAttrs},
+    {UPNP_OIC_TYPE_SCHEDULED_RECORDING,  ScheduledRecordingAttrs},
 };
 
 #endif
