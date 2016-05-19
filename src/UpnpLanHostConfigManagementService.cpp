@@ -88,7 +88,7 @@ vector <UpnpAttributeInfo> UpnpLanHostConfigManagement::Attributes =
     {
         "reservedAddr",
         "ReservedAddresses", G_TYPE_STRING, false,
-        {   {"GetReservedAddressess", UPNP_ACTION_GET, "NewReservedAddresses", G_TYPE_STRING},
+        {   {"GetReservedAddresses", UPNP_ACTION_GET, "NewReservedAddresses", G_TYPE_STRING},
             {"SetReservedAddress",   UPNP_ACTION_POST, "NewReservedAddresses", G_TYPE_STRING}
         },
         {}
@@ -120,8 +120,8 @@ UpnpLanHostConfigManagement::SetAttributeActionMap =
 };
 
 void UpnpLanHostConfigManagement::getAddressRangeCb(GUPnPServiceProxy *proxy,
-        GUPnPServiceProxyAction *actionProxy,
-        gpointer userData)
+                                                    GUPnPServiceProxyAction *actionProxy,
+                                                    gpointer userData)
 {
     GError *error = NULL;
     const char *minAddress;
@@ -162,11 +162,12 @@ void UpnpLanHostConfigManagement::getAddressRangeCb(GUPnPServiceProxy *proxy,
 bool UpnpLanHostConfigManagement::getAddressRange(UpnpRequest *request)
 {
     DEBUG_PRINT("");
-    GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (m_proxy,
-                                           "GetAddressRange",
-                                           getAddressRangeCb,
-                                           (gpointer *) request,
-                                           NULL);
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "GetAddressRange",
+                                          getAddressRangeCb,
+                                          (gpointer *) request,
+                                          NULL);
     if (NULL == actionProxy)
     {
         return false;
@@ -176,8 +177,8 @@ bool UpnpLanHostConfigManagement::getAddressRange(UpnpRequest *request)
 }
 
 void UpnpLanHostConfigManagement::setAddressRangeCb(GUPnPServiceProxy *proxy,
-        GUPnPServiceProxyAction *actionProxy,
-        gpointer userData)
+                                                    GUPnPServiceProxyAction *actionProxy,
+                                                    gpointer userData)
 {
     GError *error = NULL;
 
@@ -219,7 +220,7 @@ void UpnpLanHostConfigManagement::setAddressRangeCb(GUPnPServiceProxy *proxy,
 }
 
 bool UpnpLanHostConfigManagement::setAddressRange(UpnpRequest *request,
-        RCSResourceAttributes::Value *attrValue)
+                                                  RCSResourceAttributes::Value *attrValue)
 {
     DEBUG_PRINT("");
     GUPnPServiceProxyAction *actionProxy;
@@ -327,7 +328,7 @@ bool UpnpLanHostConfigManagement::getAttributesRequest(UpnpRequest *request)
 }
 
 bool UpnpLanHostConfigManagement::setAttributesRequest(const RCSResourceAttributes &value,
-        UpnpRequest *request)
+                                                       UpnpRequest *request)
 {
     bool status = false;
 

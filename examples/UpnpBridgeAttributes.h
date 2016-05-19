@@ -111,7 +111,7 @@ std::map <std::string, AttrDesc> LanHostConfigAttrs =
     {"dhcpRelay",    {ATTR_TYPE_BOOL,    false, NULL}},
     {"subnetMask",   {ATTR_TYPE_STRING,  false, NULL}},
     {"domainName",   {ATTR_TYPE_STRING,  false, NULL}},
-    {"addrRange",    {ATTR_TYPE_STRING,  false, &LanHostConfigAddrRangeAttrs}},
+    {"addrRange",    {ATTR_TYPE_VECTOR,  false, &LanHostConfigAddrRangeAttrs}},
     {"dnsServers",   {ATTR_TYPE_STRING,  false, NULL}},
     {"reservedAddr", {ATTR_TYPE_STRING,  false, NULL}},
     {"ipRouters",    {ATTR_TYPE_STRING,  false, NULL}},
