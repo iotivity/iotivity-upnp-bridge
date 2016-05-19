@@ -54,6 +54,7 @@ static std::map<std::string, std::string > UpnpSearchPatternMap =
     {UPNP_OIC_TYPE_LAYER3_FORWARDING,       UPNP_PREFIX_SERVICE + ".*(?:[Ll]ayer3[Ff]orwarding).*"},
     {UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION,   UPNP_PREFIX_DEVICE + ":.*(?:[Ww][Aa][Nn][Cc]onnection[Dd]evice).*"},
     {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,     UPNP_PREFIX_SERVICE + ":.*(?:[Ww][Aa][Nn][Ee]thernet[Ll]ink[Cc]onfig).*"},
+    {UPNP_OIC_TYPE_WAN_IP_CONNECTION,       UPNP_PREFIX_SERVICE + ":.*(?:[Ww][Aa][Nn][Ii][Pp][Cc]onnection).*"},
     {UPNP_OIC_TYPE_DEVICE_LAN,              UPNP_PREFIX_DEVICE + ":.*(?:[Ll][Aa][Nn][Dd]evice).*"},
     {UPNP_OIC_TYPE_LAN_HOST_CONFIG,         UPNP_PREFIX_SERVICE + ":.*(?:[Ll][Aa][Nn][Hh]ost[Cc]onfig[Mm]anagement).*"},
 // Media Control
@@ -85,6 +86,7 @@ static std::map<std::string, std::string > UpnpInterfaceMap =
     {UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION,    OC_RSRVD_INTERFACE_LL},
     {UPNP_OIC_TYPE_DEVICE_LAN,               OC_RSRVD_INTERFACE_LL},
     {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,      OC_RSRVD_INTERFACE_DEFAULT},
+    {UPNP_OIC_TYPE_WAN_IP_CONNECTION,        OC_RSRVD_INTERFACE_DEFAULT},
     {UPNP_OIC_TYPE_LAN_HOST_CONFIG,          OC_RSRVD_INTERFACE_DEFAULT},
 // Media Control
     {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,    OC_RSRVD_INTERFACE_LL},
@@ -102,6 +104,7 @@ static std::map<std::string, std::string > UpnpUriPrefixMap =
     {UPNP_OIC_TYPE_DEVICE_INET_GATEWAY,     UPNP_OIC_URI_PREFIX_INET_GATEWAY},
     {UPNP_OIC_TYPE_DEVICE_WAN,              UPNP_OIC_URI_PREFIX_WAN},
     {UPNP_OIC_TYPE_WAN_IF_CONFIG,           UPNP_OIC_URI_PREFIX_WAN_IF_CONFIG},
+    {UPNP_OIC_TYPE_WAN_IP_CONNECTION,       UPNP_OIC_URI_PREFIX_WAN_IP_CONNECTION},
     {UPNP_OIC_TYPE_LAYER3_FORWARDING,       UPNP_OIC_URI_PREFIX_LAYER3_FORWARDING},
     {UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION,   UPNP_OIC_URI_PREFIX_WAN_CONNECTION},
     {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,     UPNP_OIC_URI_PREFIX_WAN_ETHERNET_CONFIG},

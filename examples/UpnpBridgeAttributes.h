@@ -86,19 +86,19 @@ std::map <std::string, AttrDesc> WanIfConfigAttrs =
     {"connectionInfo",     {ATTR_TYPE_VECTOR, true, &WanIfConfigConnInfoAttrs}}
 };
 
-//Layer3Forwarding
+// Layer3Forwarding
 std::map <std::string, AttrDesc> L3FAttrs =
 {
     {"defaultConnectionService",  {ATTR_TYPE_STRING,   true, NULL}}
 };
 
-//WANEthernetLinkConfig
+// WANEthernetLinkConfig
 std::map <std::string, AttrDesc> WanEthConfigAttrs =
 {
     {"linkStatus",  {ATTR_TYPE_STRING,   true, NULL}}
 };
 
-//LANHostConfigManagement
+// LANHostConfigManagement
 std::map <std::string, AttrDesc> LanHostConfigAddrRangeAttrs =
 {
     {"minAddr",  {ATTR_TYPE_STRING, false, NULL}},
@@ -115,6 +115,31 @@ std::map <std::string, AttrDesc> LanHostConfigAttrs =
     {"dnsServers",   {ATTR_TYPE_STRING,  false, NULL}},
     {"reservedAddr", {ATTR_TYPE_STRING,  false, NULL}},
     {"ipRouters",    {ATTR_TYPE_STRING,  false, NULL}},
+};
+
+// WANIPConnection
+std::map <std::string, AttrDesc> WanIpConnectionTypeInfoAttrs =
+{
+    {"type",         {ATTR_TYPE_STRING, false,  NULL}},
+    {"allTypes",     {ATTR_TYPE_STRING, false,  NULL}}
+};   
+
+std::map <std::string, AttrDesc> WanIpConnectionNatStatusAttrs =
+{
+    {"rsip",        {ATTR_TYPE_BOOL, false,  NULL}},
+    {"enabled",     {ATTR_TYPE_BOOL, false,  NULL}}
+};   
+
+std::map <std::string, AttrDesc> WanIpConnectionAttrs =
+{
+    {"autoDiscoTime",      {ATTR_TYPE_INT,    false, NULL}},
+    {"idleDiscoTime",      {ATTR_TYPE_INT,    false, NULL}},
+    {"warnDiscoTime",      {ATTR_TYPE_INT,    false, NULL}},
+    {"externAddr",         {ATTR_TYPE_STRING, true,  NULL}},
+    {"connectionTypeInfo", {ATTR_TYPE_VECTOR, false, &WanIpConnectionTypeInfoAttrs}},
+    {"nat",                {ATTR_TYPE_VECTOR, false, &WanIpConnectionNatStatusAttrs}},
+    {"updateId",           {ATTR_TYPE_INT,    true, NULL}},
+    {"sizePortMap",        {ATTR_TYPE_INT,    true, NULL}},
 };
 
 // Media Server / Media Renderer
@@ -168,6 +193,7 @@ std::map <std::string, std::map <std::string, AttrDesc> & > ResourceAttrMap =
     {UPNP_OIC_TYPE_WAN_IF_CONFIG,        WanIfConfigAttrs},
     {UPNP_OIC_TYPE_LAYER3_FORWARDING,    L3FAttrs},
     {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,  WanEthConfigAttrs},
+    {UPNP_OIC_TYPE_WAN_IP_CONNECTION,    WanIpConnectionAttrs},
     {UPNP_OIC_TYPE_LAN_HOST_CONFIG,      LanHostConfigAttrs},
     {UPNP_OIC_TYPE_AV_TRANSPORT,         AvTransportAttrs},
     {UPNP_OIC_TYPE_CONNECTION_MANAGER,   ConnectionManagerAttrs},
