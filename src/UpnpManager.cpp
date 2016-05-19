@@ -27,13 +27,14 @@
 #include "UpnpConnectionManagerService.h"
 #include "UpnpContentDirectoryService.h"
 #include "UpnpDimmingService.h"
+#include "UpnpLanHostConfigManagementService.h"
 #include "UpnpLayer3ForwardingService.h"
 #include "UpnpPowerSwitchService.h"
 #include "UpnpRenderingControlService.h"
 #include "UpnpScheduledRecordingService.h"
 #include "UpnpWanCommonInterfaceConfigService.h"
 #include "UpnpWanEthernetLinkConfigService.h"
-#include "UpnpLanHostConfigManagementService.h"
+#include "UpnpWanIpConnectionService.h"
 
 using namespace std;
 
@@ -414,6 +415,10 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     else if (resourceType == UPNP_OIC_TYPE_LAN_HOST_CONFIG)
     {
         return (std::make_shared < UpnpLanHostConfigManagement > (serviceInfo, requestState));
+    }
+    else if (resourceType == UPNP_OIC_TYPE_WAN_IP_CONNECTION)
+    {
+        return (std::make_shared < UpnpWanIpConnection > (serviceInfo, requestState));
     }
     else
     {
