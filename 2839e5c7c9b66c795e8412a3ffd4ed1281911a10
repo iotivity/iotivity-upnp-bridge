@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_eadabbe8",
+        "filename": "examples/iotApp/CommandlineMode.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-19T23:31:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da87b5cf_4a1167ab",
+      "range": {
+        "startLine": 97,
+        "startChar": 33,
+        "endLine": 97,
+        "endChar": 39
+      },
+      "revId": "2839e5c7c9b66c795e8412a3ffd4ed1281911a10",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_ea25db0a",
         "filename": "examples/iotApp/CommandlineMode.h",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2016-05-19T21:18:07Z",
       "side": 1,
       "message": "I tested with --loop\u003d-2 and did not received the Invalid Value. You should not support any other negative values...",
+      "range": {
+        "startLine": 109,
+        "startChar": 32,
+        "endLine": 109,
+        "endChar": 38
+      },
+      "revId": "2839e5c7c9b66c795e8412a3ffd4ed1281911a10",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_0ad83fee",
+        "filename": "examples/iotApp/CommandlineMode.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-19T23:31:12Z",
+      "side": 1,
+      "message": "Giving the loop option a negative value just goes into an endless loop I personally think that is alright so I just documented that fact in the help text",
+      "parentUuid": "da87b5cf_ea25db0a",
       "range": {
         "startLine": 109,
         "startChar": 32,
