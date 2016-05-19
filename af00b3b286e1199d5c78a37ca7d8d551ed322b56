@@ -16,6 +16,24 @@
       "revId": "af00b3b286e1199d5c78a37ca7d8d551ed322b56",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_aa4833cd",
+        "filename": "examples/iotApp/CommandlineMode.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-19T21:10:18Z",
+      "side": 1,
+      "message": "yes it should",
+      "parentUuid": "da87b5cf_8a30cf57",
+      "revId": "af00b3b286e1199d5c78a37ca7d8d551ed322b56",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
