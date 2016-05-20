@@ -113,7 +113,7 @@ UpnpService::~UpnpService()
     m_proxy = nullptr;
 }
 
-RCSResourceAttributes UpnpService::handleGetAttributesRequest()
+RCSResourceAttributes UpnpService::handleGetAttributesRequest(const std::map< std::string, std::string > &queryParams)
 {
     DEBUG_PRINT("(" << std::this_thread::get_id() << "), uri:" << m_uri);
 
@@ -153,7 +153,8 @@ RCSResourceAttributes UpnpService::handleGetAttributesRequest()
 
 }
 
-void UpnpService::handleSetAttributesRequest(const RCSResourceAttributes &value)
+void UpnpService::handleSetAttributesRequest(const RCSResourceAttributes &value,
+                                             const std::map< std::string, std::string > &queryParams)
 {
     DEBUG_PRINT("(" << std::this_thread::get_id() << "), uri:" << m_uri);
 
