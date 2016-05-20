@@ -125,14 +125,15 @@ void UpnpDevice::initBasicAttributes(GUPnPDeviceInfo *deviceInfo)
                                  m_uri);   // need to keep uri with attributes (OCRepresentation bug)
 }
 
-RCSResourceAttributes UpnpDevice::handleGetAttributesRequest()
+RCSResourceAttributes UpnpDevice::handleGetAttributesRequest(const std::map< std::string, std::string > &queryParams)
 {
     DEBUG_PRINT("");
     return BundleResource::getAttributes();
 }
 
 // Assumption: Device attributes are read-only. Ignore. (TODO: send back an error code)
-void UpnpDevice::handleSetAttributesRequest(const RCSResourceAttributes &value)
+void UpnpDevice::handleSetAttributesRequest(const RCSResourceAttributes &value,
+                                            const std::map< std::string, std::string > &queryParams)
 {
     DEBUG_PRINT("");
 }

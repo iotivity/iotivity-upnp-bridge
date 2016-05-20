@@ -41,9 +41,10 @@ class UpnpService: public UpnpResource
 
         virtual ~UpnpService();
 
-        virtual void handleSetAttributesRequest(const RCSResourceAttributes &attrs);
+        virtual void handleSetAttributesRequest(const RCSResourceAttributes &attrs,
+                                                const std::map< std::string, std::string > &queryParams);
 
-        virtual RCSResourceAttributes handleGetAttributesRequest();
+        virtual RCSResourceAttributes handleGetAttributesRequest(const std::map< std::string, std::string > &queryParams);
 
         void setProxy(GUPnPServiceProxy *proxy);
         GUPnPServiceProxy *getProxy();

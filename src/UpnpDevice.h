@@ -37,8 +37,9 @@ class UpnpDevice: public UpnpResource
 
         virtual ~UpnpDevice();
 
-        RCSResourceAttributes handleGetAttributesRequest();
-        void handleSetAttributesRequest(const RCSResourceAttributes &value);
+        RCSResourceAttributes handleGetAttributesRequest(const std::map< std::string, std::string > &queryParams);
+        void handleSetAttributesRequest(const RCSResourceAttributes &value,
+                                        const std::map< std::string, std::string > &queryParams);
         void initAttributes();
 
         void insertDevice(string udn);
