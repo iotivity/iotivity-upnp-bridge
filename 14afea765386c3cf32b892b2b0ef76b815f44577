@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_b5bdf804",
+        "filename": "examples/iotApp/CommandlineMode.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-05-20T21:48:42Z",
+      "side": 1,
+      "message": "This message should not be printed if --time is negative value. Also add a blank line between both command and error message and Usage message...\n\n ./iotApp --test --time\u003d-7 --loop\u003d2\nWaiting -7 seconds before exiting.\n--time option MUST be a positive value\nUsage: iotApp [OPTION]...\n\nThe iotApp runs in two modes:",
+      "range": {
+        "startLine": 102,
+        "startChar": 16,
+        "endLine": 102,
+        "endChar": 95
+      },
+      "revId": "14afea765386c3cf32b892b2b0ef76b815f44577",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_d5bafc09",
+        "filename": "examples/iotApp/CommandlineMode.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-05-20T21:48:42Z",
+      "side": 1,
+      "message": "I used --time\u003d7 notice LoopDelay displays default value 10 instead 7\n\n./iotApp --test --time\u003d7 --loop\u003d2\nWaiting 7 seconds before exiting.\n--------------------------------------------------\n Run test : TRUE\n List Discovered resources FALSE\n Loop Mode: TRUE LoopCount: 2 LoopDelay: 10\n Wait 7 seconds then exit\n--------------------------------------------------",
+      "range": {
+        "startLine": 159,
+        "startChar": 19,
+        "endLine": 159,
+        "endChar": 48
+      },
+      "revId": "14afea765386c3cf32b892b2b0ef76b815f44577",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
