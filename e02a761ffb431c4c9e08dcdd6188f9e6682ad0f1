@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_3557a804",
+        "filename": "examples/iotApp/CommandlineMode.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-05-20T17:08:51Z",
+      "side": 1,
+      "message": "Is this for all negatives values? I would assume it would be for just -1",
+      "range": {
+        "startLine": 115,
+        "startChar": 34,
+        "endLine": 115,
+        "endChar": 38
+      },
+      "revId": "e02a761ffb431c4c9e08dcdd6188f9e6682ad0f1",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
