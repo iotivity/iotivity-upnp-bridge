@@ -46,6 +46,29 @@
       "revId": "e02a761ffb431c4c9e08dcdd6188f9e6682ad0f1",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_35a56804",
+        "filename": "examples/iotApp/CommandlineMode.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-05-20T18:50:09Z",
+      "side": 1,
+      "message": "Could be simplified a bit to make the code more readable?\nloopCount \u003d -1; // use -1 to indicate infinite loops\nif ((token !\u003d nullptr) \u0026\u0026 (token[0] !\u003d \u0027-\u0027)) {\n     try {\n             loopCount \u003d std::stoi(token);\n         } catch (const std::invalid_argument\u0026 ia) {\n             std::cerr \u003c\u003c \"Invalid input option for --loop option\" \u003c\u003c std::endl;\n             printHelp();\n             exit(0);\n         }\n}",
+      "range": {
+        "startLine": 118,
+        "startChar": 1,
+        "endLine": 132,
+        "endChar": 13
+      },
+      "revId": "e02a761ffb431c4c9e08dcdd6188f9e6682ad0f1",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
