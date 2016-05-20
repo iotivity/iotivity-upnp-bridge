@@ -198,13 +198,10 @@ void MenuServices::run(const std::vector<std::string>& cmd, std::stack<std::uniq
         } else if("av" == cmd[0]) {
             std::cout << "AV Transport Menu not yet Implemented" << std::endl;
         } else if("brightness" == cmd[0]) {
-            std::cout << "Brightness Menu not yet Implemented" << std::endl;
-            std::cout << "Binary Switch Menu not yet Implemented" << std::endl;
             std::unique_ptr<MenuBrightness> menuItem(new MenuBrightness);
             menuItem->init(m_brightness);
             menuStack.push(std::move(menuItem));
         } else if("switch" == cmd[0]) {
-            std::cout << "Binary Switch Menu not yet Implemented" << std::endl;
             std::unique_ptr<MenuBinarySwitch> menuItem(new MenuBinarySwitch);
             menuItem->init(m_binarySwitch);
             menuStack.push(std::move(menuItem));

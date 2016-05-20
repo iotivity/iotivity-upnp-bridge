@@ -24,8 +24,9 @@
 #include <memory>
 
 #include "MenuBase.h"
-#include "MenuIotivity.h"
+#include "MenuDevices.h"
 #include "MenuServices.h"
+#include "MenuIotivity.h"
 
 class MenuMain: public MenuBase
 {
@@ -73,8 +74,7 @@ void MenuMain::run(const std::vector<std::string>& cmd, std::stack<std::unique_p
 {
     if(cmd.size() > 0) {
         if("d" == cmd[0]) {
-            std::cout << "Devices Menu not yet Implmented" << std::endl;
-           // menuStack.push(unique_ptr<CommandMenu>(new MenuDevices));
+            menuStack.push(std::unique_ptr<MenuBase>(new MenuDevices));
         } else if("s" == cmd[0]) {
             menuStack.push(std::unique_ptr<MenuBase>(new MenuServices));
         } else if("i" == cmd[0]) {
