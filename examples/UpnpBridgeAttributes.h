@@ -158,8 +158,9 @@ std::map <std::string, AttrDesc> ProtocolInfoAttrs =
 
 std::map <std::string, AttrDesc> ConnectionManagerAttrs =
 {
-    {"protocolInfo", {ATTR_TYPE_VECTOR, false, &ProtocolInfoAttrs}},
-    {"featureList",  {ATTR_TYPE_STRING, false, NULL}},
+    {"protocolInfo",         {ATTR_TYPE_VECTOR, false, &ProtocolInfoAttrs}},
+    {"currentConnectionIds", {ATTR_TYPE_STRING, false, NULL}},
+    {"featureList",          {ATTR_TYPE_STRING, false, NULL}},
 };
 
 // Content Directory
