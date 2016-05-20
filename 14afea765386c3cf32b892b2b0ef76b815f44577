@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_1548642c",
+        "filename": "examples/iotApp/CommandlineMode.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-20T22:57:22Z",
+      "side": 1,
+      "message": "I just deleted this line since its not needed. The same information is printed below.",
+      "parentUuid": "da87b5cf_b5bdf804",
+      "range": {
+        "startLine": 102,
+        "startChar": 16,
+        "endLine": 102,
+        "endChar": 95
+      },
+      "revId": "14afea765386c3cf32b892b2b0ef76b815f44577",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_d5bafc09",
         "filename": "examples/iotApp/CommandlineMode.h",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2016-05-20T21:48:42Z",
       "side": 1,
       "message": "I used --time\u003d7 notice LoopDelay displays default value 10 instead 7\n\n./iotApp --test --time\u003d7 --loop\u003d2\nWaiting 7 seconds before exiting.\n--------------------------------------------------\n Run test : TRUE\n List Discovered resources FALSE\n Loop Mode: TRUE LoopCount: 2 LoopDelay: 10\n Wait 7 seconds then exit\n--------------------------------------------------",
+      "range": {
+        "startLine": 159,
+        "startChar": 19,
+        "endLine": 159,
+        "endChar": 48
+      },
+      "revId": "14afea765386c3cf32b892b2b0ef76b815f44577",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_b55418cb",
+        "filename": "examples/iotApp/CommandlineMode.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-20T22:57:22Z",
+      "side": 1,
+      "message": "the loopDelay is set usign the --delay option not --time option.  If the --delay option is not set it defaults to 10 seconds.  The --time option is how long the program waits for asyn actions to complete before closing.",
+      "parentUuid": "da87b5cf_d5bafc09",
       "range": {
         "startLine": 159,
         "startChar": 19,
