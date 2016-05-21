@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_b56bb884",
+        "filename": "examples/iotApp/CommandlineMode.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-05-21T00:29:43Z",
+      "side": 1,
+      "message": "Why is a difference of one or two dashes. I would prefer on all arguments to use one dash. i.e. -delay not --delay",
+      "range": {
+        "startLine": 220,
+        "startChar": 13,
+        "endLine": 220,
+        "endChar": 23
+      },
+      "revId": "533ee756b0dd87cec26d54fdfe691b664bb78b6e",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
