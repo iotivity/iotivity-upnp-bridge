@@ -42,9 +42,9 @@ class UpnpService: public UpnpResource
         virtual ~UpnpService();
 
         virtual void handleSetAttributesRequest(const RCSResourceAttributes &attrs,
-                                                const std::map< std::string, std::string > &queryParams);
+                                                const map< string, string > &queryParams);
 
-        virtual RCSResourceAttributes handleGetAttributesRequest(const std::map< std::string, std::string > &queryParams);
+        virtual RCSResourceAttributes handleGetAttributesRequest(const map< string, string > &queryParams);
 
         void setProxy(GUPnPServiceProxy *proxy);
         GUPnPServiceProxy *getProxy();
@@ -52,9 +52,12 @@ class UpnpService: public UpnpResource
         virtual void processIntrospection(GUPnPServiceProxy *proxy,
                                           GUPnPServiceIntrospection *introspection);
 
-        virtual bool getAttributesRequest(UpnpRequest *request) = 0;
+        virtual bool getAttributesRequest(UpnpRequest *request,
+                                      const map< string, string > &queryParams) = 0;
 
-        virtual bool setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request) = 0;
+        virtual bool setAttributesRequest(const RCSResourceAttributes &value,
+                                          UpnpRequest *request,
+                                          const map< string, string > &queryParams) = 0;
 
         virtual bool processNotification(string attrName, string parent, GValue *value);
 

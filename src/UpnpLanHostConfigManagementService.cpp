@@ -289,7 +289,8 @@ bool UpnpLanHostConfigManagement::setAddressRange(UpnpRequest *request,
     return true;
 }
 
-bool UpnpLanHostConfigManagement::getAttributesRequest(UpnpRequest *request)
+bool UpnpLanHostConfigManagement::getAttributesRequest(UpnpRequest *request,
+                                                       const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -328,7 +329,8 @@ bool UpnpLanHostConfigManagement::getAttributesRequest(UpnpRequest *request)
 }
 
 bool UpnpLanHostConfigManagement::setAttributesRequest(const RCSResourceAttributes &value,
-                                                       UpnpRequest *request)
+                                                       UpnpRequest *request,
+                                                       const map< string, string > &queryParams)
 {
     bool status = false;
 

@@ -339,7 +339,8 @@ bool UpnpWanIpConnection::setConnectionTypeInfo(UpnpRequest *request,
     return true;
 }
 
-bool UpnpWanIpConnection::getAttributesRequest(UpnpRequest *request)
+bool UpnpWanIpConnection::getAttributesRequest(UpnpRequest *request,
+                                               const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -378,7 +379,8 @@ bool UpnpWanIpConnection::getAttributesRequest(UpnpRequest *request)
 }
 
 bool UpnpWanIpConnection::setAttributesRequest(const RCSResourceAttributes &value,
-                                               UpnpRequest *request)
+                                               UpnpRequest *request,
+                                               const map< string, string > &queryParams)
 {
     bool status = false;
 

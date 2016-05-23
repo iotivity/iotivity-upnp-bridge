@@ -42,8 +42,11 @@ class UpnpDimming: public UpnpService
         }
 
     private:
-        bool getAttributesRequest(UpnpRequest *request);
-        bool setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request);
+        bool getAttributesRequest(UpnpRequest *request,
+                                  const map< string, string > &queryParams);
+        bool setAttributesRequest(const RCSResourceAttributes &value,
+                                  UpnpRequest *request,
+                                  const map< string, string > &queryParams);
         bool processNotification(string attrName, string parent, GValue *value);
 
         static vector <UpnpAttributeInfo> Attributes;

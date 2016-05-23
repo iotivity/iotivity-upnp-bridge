@@ -63,7 +63,8 @@ vector <UpnpAttributeInfo> UpnpRenderingControl::Attributes =
 
 // TODO Implement various OCF attributes/UPnP Actions
 
-bool UpnpRenderingControl::getAttributesRequest(UpnpRequest *request)
+bool UpnpRenderingControl::getAttributesRequest(UpnpRequest *request,
+                                                const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -91,7 +92,8 @@ bool UpnpRenderingControl::getAttributesRequest(UpnpRequest *request)
 }
 
 bool UpnpRenderingControl::setAttributesRequest(const RCSResourceAttributes &value,
-        UpnpRequest *request)
+                                                UpnpRequest *request,
+                                                const map< string, string > &queryParams)
 {
     bool status = false;
 

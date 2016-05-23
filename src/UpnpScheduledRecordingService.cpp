@@ -45,7 +45,8 @@ vector <UpnpAttributeInfo> UpnpScheduledRecording::Attributes =
 
 // TODO Implement various OCF attributes/UPnP Actions
 
-bool UpnpScheduledRecording::getAttributesRequest(UpnpRequest *request)
+bool UpnpScheduledRecording::getAttributesRequest(UpnpRequest *request,
+                                                  const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -73,7 +74,8 @@ bool UpnpScheduledRecording::getAttributesRequest(UpnpRequest *request)
 }
 
 bool UpnpScheduledRecording::setAttributesRequest(const RCSResourceAttributes &value,
-        UpnpRequest *request)
+                                                  UpnpRequest *request,
+                                                  const map< string, string > &queryParams)
 {
     bool status = false;
 

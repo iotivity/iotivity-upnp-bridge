@@ -113,7 +113,7 @@ UpnpService::~UpnpService()
     m_proxy = nullptr;
 }
 
-RCSResourceAttributes UpnpService::handleGetAttributesRequest(const std::map< std::string, std::string > &queryParams)
+RCSResourceAttributes UpnpService::handleGetAttributesRequest(const map< string, string > &queryParams)
 {
     DEBUG_PRINT("(" << std::this_thread::get_id() << "), uri:" << m_uri);
 
@@ -126,7 +126,7 @@ RCSResourceAttributes UpnpService::handleGetAttributesRequest(const std::map< st
         std::lock_guard< std::mutex > lock(m_requestState->queueLock);
         request.start = [&] ()
         {
-            bool status = getAttributesRequest(&request);
+            bool status = getAttributesRequest(&request, queryParams);
             return status;
         };
         request.finish = [&] (bool status) { DEBUG_PRINT("finish get request"); promise.set_value(status); };
@@ -154,7 +154,7 @@ RCSResourceAttributes UpnpService::handleGetAttributesRequest(const std::map< st
 }
 
 void UpnpService::handleSetAttributesRequest(const RCSResourceAttributes &value,
-                                             const std::map< std::string, std::string > &queryParams)
+                                             const map< string, string > &queryParams)
 {
     DEBUG_PRINT("(" << std::this_thread::get_id() << "), uri:" << m_uri);
 
@@ -167,7 +167,7 @@ void UpnpService::handleSetAttributesRequest(const RCSResourceAttributes &value,
         std::lock_guard< std::mutex > lock(m_requestState->queueLock);
         request.start = [&] ()
         {
-            bool status = setAttributesRequest(value, &request);
+            bool status = setAttributesRequest(value, &request, queryParams);
             return status;
         };
         request.finish = [&] (bool status) { DEBUG_PRINT("finish set request"); promise.set_value(status); };

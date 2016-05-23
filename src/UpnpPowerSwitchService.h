@@ -58,9 +58,11 @@ class UpnpPowerSwitch: public UpnpService
 
         static vector <UpnpAttributeInfo> Attributes;
 
-        bool getAttributesRequest(UpnpRequest *request);
-        bool setAttributesRequest(const RCSResourceAttributes &attrs, UpnpRequest *request);
-
+        bool getAttributesRequest(UpnpRequest *request,
+                                  const map< string, string > &queryParams);
+        bool setAttributesRequest(const RCSResourceAttributes &attrs,
+                                  UpnpRequest *request,
+                                  const map< string, string > &queryParams);
 };
 
 #endif

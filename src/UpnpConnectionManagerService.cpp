@@ -126,7 +126,8 @@ bool UpnpConnectionManager::getProtocolInfo(UpnpRequest *request)
     return true;
 }
 
-bool UpnpConnectionManager::getAttributesRequest(UpnpRequest *request)
+bool UpnpConnectionManager::getAttributesRequest(UpnpRequest *request,
+                                                 const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -166,7 +167,8 @@ bool UpnpConnectionManager::getAttributesRequest(UpnpRequest *request)
 }
 
 bool UpnpConnectionManager::setAttributesRequest(const RCSResourceAttributes &value,
-        UpnpRequest *request)
+                                                 UpnpRequest *request,
+                                                 const map< string, string > &queryParams)
 {
     bool status = false;
 

@@ -55,9 +55,11 @@ class UpnpWanIpConnection: public UpnpService
         static vector <UpnpAttributeInfo> Attributes;
         int m_sizePortMap;
 
-        bool getAttributesRequest(UpnpRequest *request);
+        bool getAttributesRequest(UpnpRequest *request,
+                                  const map< string, string > &queryParams);
         bool setAttributesRequest(const RCSResourceAttributes &attrs,
-                                  UpnpRequest *request);
+                                  UpnpRequest *request,
+                                  const map< string, string > &queryParams);
         bool processNotification(string attrName,
                                  string parent,
                                  GValue *value);

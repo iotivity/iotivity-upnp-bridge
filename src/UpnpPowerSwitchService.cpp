@@ -45,7 +45,8 @@ vector <UpnpAttributeInfo> UpnpPowerSwitch::Attributes =
     }
 };
 
-bool UpnpPowerSwitch::getAttributesRequest(UpnpRequest *request)
+bool UpnpPowerSwitch::getAttributesRequest(UpnpRequest *request,
+                                           const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -71,7 +72,9 @@ bool UpnpPowerSwitch::getAttributesRequest(UpnpRequest *request)
     return status;
 }
 
-bool UpnpPowerSwitch::setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request)
+bool UpnpPowerSwitch::setAttributesRequest(const RCSResourceAttributes &value,
+                                           UpnpRequest *request,
+                                           const map< string, string > &queryParams)
 {
     bool status = false;
 

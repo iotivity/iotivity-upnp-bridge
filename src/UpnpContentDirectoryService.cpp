@@ -279,7 +279,8 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request)
     return true;
 }
 
-bool UpnpContentDirectory::getAttributesRequest(UpnpRequest *request)
+bool UpnpContentDirectory::getAttributesRequest(UpnpRequest *request,
+                                                const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -318,7 +319,8 @@ bool UpnpContentDirectory::getAttributesRequest(UpnpRequest *request)
 }
 
 bool UpnpContentDirectory::setAttributesRequest(const RCSResourceAttributes &value,
-        UpnpRequest *request)
+                                                UpnpRequest *request,
+                                                const map< string, string > &queryParams)
 {
     bool status = false;
 
