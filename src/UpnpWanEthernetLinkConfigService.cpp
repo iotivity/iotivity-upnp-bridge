@@ -43,7 +43,8 @@ vector <UpnpAttributeInfo> UpnpWanEthernetLinkConfig::Attributes =
     }
 };
 
-bool UpnpWanEthernetLinkConfig::getAttributesRequest(UpnpRequest *request)
+bool UpnpWanEthernetLinkConfig::getAttributesRequest(UpnpRequest *request,
+                                                     const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -72,7 +73,8 @@ bool UpnpWanEthernetLinkConfig::getAttributesRequest(UpnpRequest *request)
 }
 
 bool UpnpWanEthernetLinkConfig::setAttributesRequest(const RCSResourceAttributes &value,
-        UpnpRequest *request)
+                                                     UpnpRequest *request,
+    const map< string, string > &queryParams)
 {
     // There are no "SET" actions associated with this service
     request->proxyMap.clear();

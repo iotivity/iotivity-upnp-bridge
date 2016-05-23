@@ -39,7 +39,8 @@ vector <UpnpAttributeInfo> UpnpAVTransport::Attributes =
 
 // TODO Implement various OCF attributes/UPnP Actions
 
-bool UpnpAVTransport::getAttributesRequest(UpnpRequest *request)
+bool UpnpAVTransport::getAttributesRequest(UpnpRequest *request,
+                                           const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -66,7 +67,9 @@ bool UpnpAVTransport::getAttributesRequest(UpnpRequest *request)
     return status;
 }
 
-bool UpnpAVTransport::setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request)
+bool UpnpAVTransport::setAttributesRequest(const RCSResourceAttributes &value,
+                                           UpnpRequest *request,
+                                           const map< string, string > &queryParams)
 {
     bool status = false;
 

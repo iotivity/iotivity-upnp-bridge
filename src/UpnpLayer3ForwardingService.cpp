@@ -45,7 +45,8 @@ vector <UpnpAttributeInfo> UpnpLayer3Forwarding::Attributes =
     }
 };
 
-bool UpnpLayer3Forwarding::getAttributesRequest(UpnpRequest *request)
+bool UpnpLayer3Forwarding::getAttributesRequest(UpnpRequest *request,
+                                                const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -72,7 +73,8 @@ bool UpnpLayer3Forwarding::getAttributesRequest(UpnpRequest *request)
 }
 
 bool UpnpLayer3Forwarding::setAttributesRequest(const RCSResourceAttributes &value,
-        UpnpRequest *request)
+                                                UpnpRequest *request,
+                                                const map< string, string > &queryParams)
 {
     bool status = false;
 

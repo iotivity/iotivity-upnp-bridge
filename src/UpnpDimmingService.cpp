@@ -64,7 +64,8 @@ vector <UpnpAttributeInfo> UpnpDimming::Attributes =
     }
 };
 
-bool UpnpDimming::getAttributesRequest(UpnpRequest *request)
+bool UpnpDimming::getAttributesRequest(UpnpRequest *request,
+                                       const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -90,7 +91,9 @@ bool UpnpDimming::getAttributesRequest(UpnpRequest *request)
     return status;
 }
 
-bool UpnpDimming::setAttributesRequest(const RCSResourceAttributes &value, UpnpRequest *request)
+bool UpnpDimming::setAttributesRequest(const RCSResourceAttributes &value,
+                                       UpnpRequest *request,
+                                       const map< string, string > &queryParams)
 {
     bool status = false;
 

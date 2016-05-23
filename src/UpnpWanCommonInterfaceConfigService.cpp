@@ -301,7 +301,8 @@ bool UpnpWanCommonInterfaceConfig::getConnectionInfo(UpnpRequest *request)
     return status;
 }
 
-bool UpnpWanCommonInterfaceConfig::getAttributesRequest(UpnpRequest *request)
+bool UpnpWanCommonInterfaceConfig::getAttributesRequest(UpnpRequest *request,
+                                                        const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -340,7 +341,8 @@ bool UpnpWanCommonInterfaceConfig::getAttributesRequest(UpnpRequest *request)
 }
 
 bool UpnpWanCommonInterfaceConfig::setAttributesRequest(const RCSResourceAttributes &value,
-        UpnpRequest *request)
+                                                        UpnpRequest *request,
+                                                        const map< string, string > &queryParams)
 {
     bool status = false;
 
