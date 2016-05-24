@@ -156,9 +156,65 @@ void UpnpContentDirectory::getBrowseResultCb(GUPnPServiceProxy *proxy,
     UpnpRequest::requestDone(request, status);
 }
 
-bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request)
+bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request, const map< string, string > &queryParams)
 {
     DEBUG_PRINT("");
+
+    string objectId = "0";
+    string browseFlag = "BrowseMetadata";
+    string filter = "*";
+    int startingIndex = 0;
+    int requestedCount = 0;
+    string sortCriteria = "";
+
+    if (! queryParams.empty()) {
+        auto it = queryParams.find("objectId");
+        if (it != queryParams.end()) {
+            objectId = it->second;
+            DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
+        }
+
+        it = queryParams.find("browseFlag");
+        if (it != queryParams.end()) {
+            browseFlag = it->second;
+            DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
+        }
+
+        it = queryParams.find("filter");
+        if (it != queryParams.end()) {
+            filter = it->second;
+            DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
+        }
+
+        it = queryParams.find("startingIndex");
+        if (it != queryParams.end()) {
+            try {
+                startingIndex = std::stoi(it->second);
+                startingIndex = std::max(0, startingIndex);
+                DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
+            } catch (const std::invalid_argument& ia) {
+                ERROR_PRINT("Invalid browse queryParam " << it->first << "=" << it->second);
+            }
+        }
+
+        it = queryParams.find("requestedCount");
+        if (it != queryParams.end()) {
+            try {
+                requestedCount = std::stoi(it->second);
+                requestedCount = std::max(0, requestedCount);
+                DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
+            } catch (const std::invalid_argument& ia) {
+                ERROR_PRINT("Invalid browse queryParam " << it->first << "=" << it->second);
+            }
+        }
+
+        it = queryParams.find("sortCriteria");
+        if (it != queryParams.end()) {
+            sortCriteria = it->second;
+            DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
+        }
+    }
+
     GUPnPServiceProxyAction *actionProxy =
         gupnp_service_proxy_begin_action (m_proxy,
                                           "Browse",
@@ -166,22 +222,22 @@ bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request)
                                           (gpointer *) request,
                                           "ObjectID",
                                           G_TYPE_STRING,
-                                          "0",
+                                          objectId.c_str(),
                                           "BrowseFlag",
                                           G_TYPE_STRING,
-                                          "BrowseDirectChildren",
+                                          browseFlag.c_str(),
                                           "Filter",
                                           G_TYPE_STRING,
-                                          "*",
+                                          filter.c_str(),
                                           "StartingIndex",
                                           G_TYPE_UINT,
-                                          (unsigned int)0,
+                                          startingIndex,
                                           "RequestedCount",
                                           G_TYPE_UINT,
-                                          (unsigned int)0,
+                                          requestedCount,
                                           "SortCriteria",
                                           G_TYPE_STRING,
-                                          "",
+                                          sortCriteria.c_str(),
                                           NULL);
     if (NULL == actionProxy)
     {
@@ -243,9 +299,65 @@ void UpnpContentDirectory::getSearchResultCb(GUPnPServiceProxy *proxy,
     UpnpRequest::requestDone(request, status);
 }
 
-bool UpnpContentDirectory::getSearchResult(UpnpRequest *request)
+bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< string, string > &queryParams)
 {
     DEBUG_PRINT("");
+
+    string containerId = "0";
+    string searchCriteria = "*";
+    string filter = "*";
+    int startingIndex = 0;
+    int requestedCount = 20; // limited by default
+    string sortCriteria = "";
+
+    if (! queryParams.empty()) {
+        auto it = queryParams.find("containerId");
+        if (it != queryParams.end()) {
+            containerId = it->second;
+            DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
+        }
+
+        it = queryParams.find("searchCriteria");
+        if (it != queryParams.end()) {
+            searchCriteria = it->second;
+            DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
+        }
+
+        it = queryParams.find("filter");
+        if (it != queryParams.end()) {
+            filter = it->second;
+            DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
+        }
+
+        it = queryParams.find("startingIndex");
+        if (it != queryParams.end()) {
+            try {
+                startingIndex = std::stoi(it->second);
+                startingIndex = std::max(0, startingIndex);
+                DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
+            } catch (const std::invalid_argument& ia) {
+                ERROR_PRINT("Invalid search queryParam " << it->first << "=" << it->second);
+            }
+        }
+
+        it = queryParams.find("requestedCount");
+        if (it != queryParams.end()) {
+            try {
+                requestedCount = std::stoi(it->second);
+                requestedCount = std::max(0, requestedCount);
+                DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
+            } catch (const std::invalid_argument& ia) {
+                ERROR_PRINT("Invalid search queryParam " << it->first << "=" << it->second);
+            }
+        }
+
+        it = queryParams.find("sortCriteria");
+        if (it != queryParams.end()) {
+            sortCriteria = it->second;
+            DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
+        }
+    }
+
     GUPnPServiceProxyAction *actionProxy =
         gupnp_service_proxy_begin_action (m_proxy,
                                           "Search",
@@ -253,22 +365,22 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request)
                                           (gpointer *) request,
                                           "ContainerID",
                                           G_TYPE_STRING,
-                                          "0",
+                                          containerId.c_str(),
                                           "SearchCriteria",
                                           G_TYPE_STRING,
-                                          "*",
+                                          searchCriteria.c_str(),
                                           "Filter",
                                           G_TYPE_STRING,
-                                          "*",
+                                          filter.c_str(),
                                           "StartingIndex",
                                           G_TYPE_UINT,
-                                          (unsigned int)0,
+                                          startingIndex,
                                           "RequestedCount",
                                           G_TYPE_UINT,
-                                          (unsigned int)10, // limit to 10
+                                          requestedCount,
                                           "SortCriteria",
                                           G_TYPE_STRING,
-                                          "",
+                                          sortCriteria.c_str(),
                                           NULL);
     if (NULL == actionProxy)
     {
@@ -302,7 +414,7 @@ bool UpnpContentDirectory::getAttributesRequest(UpnpRequest *request,
         if (attr != this->GetAttributeActionMap.end())
         {
             GetAttributeHandler fp = attr->second;
-            result = (this->*fp)(request);
+            result = (this->*fp)(request, queryParams);
         }
         else if (string(attrInfo->actions[0].name) != "")
         {
