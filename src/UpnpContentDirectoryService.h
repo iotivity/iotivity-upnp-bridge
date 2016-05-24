@@ -37,7 +37,7 @@ class UpnpContentDirectory: public UpnpService
         friend class UpnpService;
 
     public:
-        typedef bool (UpnpContentDirectory::*GetAttributeHandler)(UpnpRequest *);
+        typedef bool (UpnpContentDirectory::*GetAttributeHandler)(UpnpRequest *, const map< string, string > &);
         typedef bool (UpnpContentDirectory::*SetAttributeHandler)(GUPnPServiceProxy *, UpnpRequest *,
                 UpnpAttributeInfo *, RCSResourceAttributes);
 
@@ -60,12 +60,12 @@ class UpnpContentDirectory: public UpnpService
         static void getBrowseResultCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
                                       gpointer userData);
 
-        bool getBrowseResult(UpnpRequest *request);
+        bool getBrowseResult(UpnpRequest *request, const map< string, string > &queryParams);
 
         static void getSearchResultCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
                                       gpointer userData);
 
-        bool getSearchResult(UpnpRequest *request);
+        bool getSearchResult(UpnpRequest *request, const map< string, string > &queryParams);
 };
 
 #endif
