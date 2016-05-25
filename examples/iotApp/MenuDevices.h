@@ -29,8 +29,7 @@
 
 #include "IotivityUtility.h"
 #include "MenuBase.h"
-#include "MenuBinarySwitch.h"
-#include "MenuBrightness.h"
+#include "MenuLight.h"
 
 class MenuDevices: public MenuBase
 {
@@ -178,7 +177,9 @@ void MenuDevices::run(const std::vector<std::string>& cmd, std::stack<std::uniqu
         } else if("lan" == cmd[0]) {
             std::cout << "LAN Menu not yet Implemented" << std::endl;
         } else if("light" == cmd[0]) {
-            std::cout << "Light Menu not yet Implemented" << std::endl;
+            std::unique_ptr<MenuLight> menuItem(new MenuLight);
+            menuItem->init(m_light);
+            menuStack.push(std::move(menuItem));
         } else if("mrenderer" == cmd[0]) {
             std::cout << "Media Renderer Menu not yet Implemented" << std::endl;
         } else if("mserver" == cmd[0]) {

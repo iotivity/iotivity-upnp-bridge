@@ -3,24 +3,14 @@ Import('iotivity_resource_inc_paths')
 
 oic_libs = ['oc', 'octbstack', 'oc_logger', 'rcs_container', 'rcs_client', 'rcs_server', 'rcs_common']
 
-#env_clClient = env.Clone()
-#env_clClient.AppendUnique(LIBS = oic_libs)
-#clClient_cpp = ['clClient.cpp']
-#clClient_obj = env_clClient.Object(clClient)
-#clClient_bins = env_clClient.Program(clClient_obj)
-
 env_samples = env.Clone()
 env_samples['CPPPATH'] = iotivity_resource_inc_paths
 env_samples.AppendUnique(CPPPATH = ['#/include/'])
 env_samples['LIBS'] = [oic_libs, 'pthread']
 env_samples['LIBPATH'] = ['${IOTIVITY_BASE}/out/linux/${TARGET_ARCH}/${IOTIVITY_LIB_TYPE}']
 
-iotApp_cpp = ['iotApp.cpp', 'BinarySwitch.cpp', 'Brightness.cpp']
+iotApp_cpp = ['iotApp.cpp', 'BinarySwitch.cpp', 'Brightness.cpp', 'Light.cpp']
 iotApp_obj = env_samples.Object(iotApp_cpp)
 iotApp_bins = env_samples.Program('iotApp', iotApp_obj)
-
-# examples_bins.extend(env_samples.Program('Client.cpp'))
-# examples_bins.extend(env_samples.Program('Client2.cpp'))
-#examples_bins.extend(env_samples.Program('Observer.cpp'))
 
 env.Install('#/${BUILD_DIR}/bin', iotApp_bins)
