@@ -42,7 +42,7 @@ public:
      *
      * \return true if switch is on false if switch is off
      */
-    bool getBrightness();
+    bool isOn();
 
     /**
      * This is a helper function that calls isOn() if the switch is on
