@@ -25,15 +25,11 @@ using namespace OC;
 
 Brightness::Brightness() : m_resource(nullptr), m_brightness(100)
 {
-    m_getCB = bind(&Brightness::onGetBrightness, this, placeholders::_1, placeholders::_2, placeholders::_3);
-    m_postCB = bind(&Brightness::onPostBrightness, this, placeholders::_1, placeholders::_2, placeholders::_3);
 }
 
 Brightness::Brightness(std::shared_ptr<OC::OCResource> resource) :
     m_resource(resource), m_brightness(100)
 {
-    m_getCB = bind(&Brightness::onGetBrightness, this, placeholders::_1, placeholders::_2, placeholders::_3);
-    m_postCB = bind(&Brightness::onPostBrightness, this, placeholders::_1, placeholders::_2, placeholders::_3);
 }
 Brightness::~Brightness() {}
 Brightness::Brightness( const Brightness& other ){
@@ -44,8 +40,6 @@ Brightness& Brightness::operator=(const Brightness& other)
     // check for self-assignment
     if(&other == this)
         return *this;
-    m_getCB = bind(&Brightness::onGetBrightness, this, placeholders::_1, placeholders::_2, placeholders::_3);
-    m_postCB = bind(&Brightness::onPostBrightness, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource = other.m_resource;
     m_brightness = other.m_brightness;
     // do not copy the mutex or condition_variable
@@ -55,6 +49,7 @@ Brightness& Brightness::operator=(const Brightness& other)
 int Brightness::getBrightness()
 {
     std::unique_lock<std::mutex> brightnessChangeLock(m_mutex);
+    m_getCB = bind(&Brightness::onGetBrightness, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource->get(QueryParamsMap(), m_getCB);
     m_cv.wait(brightnessChangeLock);
     return m_brightness;
@@ -66,7 +61,7 @@ bool Brightness::setBrightness(int brightness)
     OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
     rep.setValue("brightness", brightness);
-    //currently no callback is used in this code
+    m_postCB = bind(&Brightness::onPostBrightness, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_postCB);
     m_cv.wait(brightnessChangeLock);
     return (m_eCode == OC_STACK_OK);
@@ -77,7 +72,7 @@ void Brightness::getBrightnessAsync(OC::GetCallback getBrightnessCB)
 {
         m_resource->get(QueryParamsMap(), getBrightnessCB);
 }
-void Brightness::setBrgithnessAsync(int brightness, OC::PostCallback setBrightnessCB) const
+void Brightness::setBrightnessAsync(int brightness, OC::PostCallback setBrightnessCB) const
 {
     OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());

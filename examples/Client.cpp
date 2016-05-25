@@ -61,7 +61,7 @@ class Light
     public:
         std::shared_ptr< OCResource > m_resource;
         std::string m_uri; // need to keep uri here, due to OCRepresentation bug
-        PowerSwitch m_powerSwitch;
+        PowerSwitch m_binarySwitch;
         Brightness m_brightness;
 
         Light() :
@@ -122,7 +122,7 @@ class Light
                                                 {
                                                     if (l.hasAttribute("href"))
                                                     {
-                                                        if (l.getValue("href", m_powerSwitch.m_uri))
+                                                        if (l.getValue("href", m_binarySwitch.m_uri))
                                                         {
                                                             //std::cout << "href: " << m_powerSwitch.m_uri << std::endl;
                                                         }
@@ -180,9 +180,9 @@ class Light
                     {
                         if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
                         {
-                            if (resource->uri() == m_powerSwitch.m_uri)
+                            if (resource->uri() == m_binarySwitch.m_uri)
                             {
-                                m_powerSwitch.m_resource = resource;
+                                m_binarySwitch.m_resource = resource;
                             }
                         }
                         else if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
@@ -509,10 +509,10 @@ void onPostLight(const HeaderOptions &headerOptions, const OCRepresentation &rep
             std::cout << "POST request successful from uri: " << repUri << std::endl;
             for (auto &lp : s_lightLookup)
             {
-                if (lp.second.m_powerSwitch.m_uri == repUri)
+                if (lp.second.m_binarySwitch.m_uri == repUri)
                 {
-                    rep.getValue("state", lp.second.m_powerSwitch.m_state);
-                    cout << "\tPower Switch state: " << ((lp.second.m_powerSwitch.m_state) ? "ON" : "OFF") << endl;
+                    rep.getValue("state", lp.second.m_binarySwitch.m_state);
+                    cout << "\tPower Switch state: " << ((lp.second.m_binarySwitch.m_state) ? "ON" : "OFF") << endl;
                 }
                 if (lp.second.m_brightness.m_uri == repUri)
                 {
@@ -579,29 +579,29 @@ void onOffLight(string uri, bool state)
     auto lightItr = s_lightLookup.find(uri);
     if (lightItr != s_lightLookup.end())
     {
-        std::cout << "Sending POST request to: " << lightItr->second.m_powerSwitch.m_uri << std::endl;
+        std::cout << "Sending POST request to: " << lightItr->second.m_binarySwitch.m_uri << std::endl;
         OCRepresentation rep;
-        rep.setValue("uri", lightItr->second.m_powerSwitch.m_uri);
+        rep.setValue("uri", lightItr->second.m_binarySwitch.m_uri);
         rep.setValue("value", state);
-        cout << "Sending POST request to: " << lightItr->second.m_powerSwitch.m_uri << " value: " << ((
+        cout << "Sending POST request to: " << lightItr->second.m_binarySwitch.m_uri << " value: " << ((
                     state) ? "ON" : "OFF") << endl;
-        lightItr->second.m_powerSwitch.m_resource->post(rep, QueryParamsMap(), &onPostLight);
+        lightItr->second.m_binarySwitch.m_resource->post(rep, QueryParamsMap(), &onPostLight);
     }
     else
     {
         bool found = false;
         for (auto &l : s_lightLookup)
         {
-            if (l.second.m_powerSwitch.m_uri == uri)
+            if (l.second.m_binarySwitch.m_uri == uri)
             {
                 found = true;
-                std::cout << "Sending POST request to: " << l.second.m_powerSwitch.m_uri << " value: " << ((
+                std::cout << "Sending POST request to: " << l.second.m_binarySwitch.m_uri << " value: " << ((
                               state) ? "ON" : "OFF") << endl;
                 OCRepresentation rep;
                 rep.setValue("uri", uri);
                 rep.setValue("value", state);
                 cout << "Posting to uri: " << uri << " value: " << ((state) ? "ON" : "OFF") << endl;
-                l.second.m_powerSwitch.m_resource->post(rep, QueryParamsMap(), &onPostLight);
+                l.second.m_binarySwitch.m_resource->post(rep, QueryParamsMap(), &onPostLight);
             }
         }
         if (!found)
@@ -644,7 +644,7 @@ void toggleLight(string uri)
     auto lightItr = s_lightLookup.find(uri);
     if (lightItr != s_lightLookup.end())
     {
-        lightItr->second.m_powerSwitch.m_resource->get(QueryParamsMap(), &onGetToggleLight);
+        lightItr->second.m_binarySwitch.m_resource->get(QueryParamsMap(), &onGetToggleLight);
     }
     else
     {
