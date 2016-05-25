@@ -77,7 +77,7 @@ void Brightness::getBrightnessAsync(OC::GetCallback getBrightnessCB)
 {
         m_resource->get(QueryParamsMap(), getBrightnessCB);
 }
-void Brightness::setBrgithnessAsync(int brightness, OC::PostCallback setBrightnessCB) const
+void Brightness::setBrightnessAsync(int brightness, OC::PostCallback setBrightnessCB) const
 {
     OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());

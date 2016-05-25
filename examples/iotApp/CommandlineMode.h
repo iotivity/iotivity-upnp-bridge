@@ -239,7 +239,7 @@ void CommandlineMode::testBrightness(std::shared_ptr< OC::OCResource > resource)
             }
             brightness -= 20;
             brightness = ((brightness < 20) ? 100 : brightness); //don't drop below 20% so we can tell light is on
-            b.setBrgithnessAsync(brightness, [](const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode){});
+            b.setBrightnessAsync(brightness, [](const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode){});
         }
             });
 }

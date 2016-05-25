@@ -81,7 +81,7 @@ void MenuBrightness::print()
     std::cout << "------------------------------------" << std::endl;
     std::cout << "find) Discover any brightness services " << std::endl;
     std::cout << "list) list currently discovered brightness services (" << m_brightnessVector.size() << " found)" << std::endl;
-    std::cout << "get) get <#> or ison all - get the brightness" << std::endl;
+    std::cout << "get) get <#> or get all - get the brightness" << std::endl;
     std::cout << "set) set <#> <0-100> or set all - set the brightness %0-100" << std::endl;
     std::cout << "clear) clear all discovered brightness service(s)" << std::endl;
     std::cout << "b) Back" << std::endl;
@@ -171,12 +171,12 @@ void MenuBrightness::run(const std::vector<std::string>& cmd, std::stack<std::un
                         return;
                     }
                     Brightness b(m_brightnessVector[i]);
-                    b.setBrgithnessAsync(brightness, [](const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode){});
+                    b.setBrightnessAsync(brightness, [](const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode){});
                 } catch (const std::invalid_argument& ia) {
                     if ("all" == cmd[1]) {
                         for (auto r : m_brightnessVector) {
                             Brightness b(r);
-                            b.setBrgithnessAsync(brightness, [](const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode) {});
+                            b.setBrightnessAsync(brightness, [](const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode) {});
                         }
                     }
                 }

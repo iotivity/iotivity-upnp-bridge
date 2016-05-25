@@ -49,7 +49,7 @@ BinarySwitch& BinarySwitch::operator=(const BinarySwitch& other)
 
 void BinarySwitch::toggle()
 {
-    if(getBrightness()) {
+    if(isOn()) {
         turnOn(false);
     } else {
         turnOn(true);
@@ -67,7 +67,7 @@ bool BinarySwitch::turnOn(bool isOn)
     return (m_eCode == OC_STACK_OK);
 }
 
-bool BinarySwitch::getBrightness()
+bool BinarySwitch::isOn()
 {
     std::unique_lock<std::mutex> powerChangeLock(m_mutex);
     m_resource->get(QueryParamsMap(), m_getCB);
