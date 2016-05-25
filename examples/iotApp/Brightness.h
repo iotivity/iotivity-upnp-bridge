@@ -55,7 +55,7 @@ public:
     bool setBrightness(int brightness);
 
     void getBrightnessAsync(OC::GetCallback isOnCB);
-    void setBrgithnessAsync(int brightness, OC::PostCallback turnOnCB) const;
+    void setBrightnessAsync(int brightness, OC::PostCallback turnOnCB) const;
 
 
     //Overloaded operator used for putting into a 'set'
