@@ -27,8 +27,6 @@ BinarySwitch::BinarySwitch() {}
 BinarySwitch::BinarySwitch(std::shared_ptr<OC::OCResource> resource) :
     m_resource(resource), m_powerState(false)
 {
-    m_getCB = bind(&BinarySwitch::onGetPowerSwitch, this, placeholders::_1, placeholders::_2, placeholders::_3);
-    m_postCB = bind(&BinarySwitch::onPostPowerSwitch, this, placeholders::_1, placeholders::_2, placeholders::_3);
 }
 BinarySwitch::~BinarySwitch() {}
 BinarySwitch::BinarySwitch( const BinarySwitch& other ){
@@ -39,8 +37,6 @@ BinarySwitch& BinarySwitch::operator=(const BinarySwitch& other)
     // check for self-assignment
     if(&other == this)
         return *this;
-    m_getCB = bind(&BinarySwitch::onGetPowerSwitch, this, placeholders::_1, placeholders::_2, placeholders::_3);
-    m_postCB = bind(&BinarySwitch::onPostPowerSwitch, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource = other.m_resource;
     m_powerState = other.m_powerState;
     // do not copy the mutex or condition_variable
@@ -49,7 +45,7 @@ BinarySwitch& BinarySwitch::operator=(const BinarySwitch& other)
 
 void BinarySwitch::toggle()
 {
-    if(getBrightness()) {
+    if(isOn()) {
         turnOn(false);
     } else {
         turnOn(true);
@@ -61,15 +57,16 @@ bool BinarySwitch::turnOn(bool isOn)
     OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
     rep.setValue("value", isOn);
-    //currently no callback is used in this code
+    m_postCB = bind(&BinarySwitch::onPostPowerSwitch, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_postCB);
     m_cv.wait(powerChangeLock);
     return (m_eCode == OC_STACK_OK);
 }
 
-bool BinarySwitch::getBrightness()
+bool BinarySwitch::isOn()
 {
     std::unique_lock<std::mutex> powerChangeLock(m_mutex);
+    m_getCB = bind(&BinarySwitch::onGetPowerSwitch, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource->get(QueryParamsMap(), m_getCB);
     m_cv.wait(powerChangeLock);
     return m_powerState;
