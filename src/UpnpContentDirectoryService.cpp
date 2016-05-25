@@ -100,9 +100,7 @@ UpnpContentDirectory::GetAttributeActionMap =
 
 // TODO Implement optional actions as necessary
 
-// TODO Browse and Search are not complete, to be functional there will need
-// to be a fix for IOT-971 item 6 (query params in resource container)
-// or some workaround.  Also, the didl-lite xml that is returned must
+// TODO Browse and Search are not complete, the didl-lite xml that is returned must
 // be sent to iotivity in some other form.
 
 void UpnpContentDirectory::getBrowseResultCb(GUPnPServiceProxy *proxy,
@@ -110,7 +108,7 @@ void UpnpContentDirectory::getBrowseResultCb(GUPnPServiceProxy *proxy,
         gpointer userData)
 {
     GError *error = NULL;
-    const char *result;
+    char *result;
     int numberReturned;
     int totalMatches;
     int updateId;
@@ -149,6 +147,8 @@ void UpnpContentDirectory::getBrowseResultCb(GUPnPServiceProxy *proxy,
         browseResult["numberReturned"] = numberReturned;
         browseResult["totalMatches"] = totalMatches;
         browseResult["updateId"] = updateId;
+
+        g_free(result);
 
         request->resource->setAttribute("browseResult", browseResult, false);
     }
@@ -253,7 +253,7 @@ void UpnpContentDirectory::getSearchResultCb(GUPnPServiceProxy *proxy,
         gpointer userData)
 {
     GError *error = NULL;
-    const char *result;
+    char *result;
     int numberReturned;
     int totalMatches;
     int updateId;
@@ -292,6 +292,8 @@ void UpnpContentDirectory::getSearchResultCb(GUPnPServiceProxy *proxy,
         searchResult["numberReturned"] = numberReturned;
         searchResult["totalMatches"] = totalMatches;
         searchResult["updateId"] = updateId;
+
+        g_free(result);
 
         request->resource->setAttribute("searchResult", searchResult, false);
     }
