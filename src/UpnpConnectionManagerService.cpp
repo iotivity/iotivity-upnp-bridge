@@ -73,8 +73,8 @@ void UpnpConnectionManager::getProtocolInfoCb(GUPnPServiceProxy *proxy,
         gpointer userData)
 {
     GError *error = NULL;
-    const char *sourceProtocolInfo;
-    const char *sinkProtocolInfo;
+    char *sourceProtocolInfo;
+    char *sinkProtocolInfo;
 
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
@@ -102,6 +102,9 @@ void UpnpConnectionManager::getProtocolInfoCb(GUPnPServiceProxy *proxy,
         DEBUG_PRINT("source=" << sourceProtocolInfo << ", sink=" << sinkProtocolInfo);
         protocolInfo["source"] = string(sourceProtocolInfo);
         protocolInfo["sink"] = string(sinkProtocolInfo);
+
+        g_free(sourceProtocolInfo);
+        g_free(sinkProtocolInfo);
 
         request->resource->setAttribute("protocolInfo", protocolInfo, false);
     }
