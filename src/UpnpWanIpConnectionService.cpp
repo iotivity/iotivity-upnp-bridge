@@ -67,7 +67,7 @@ vector <UpnpAttributeInfo> UpnpWanIpConnection::Attributes =
     },
     {
         "connectionTypeInfo",
-        "", G_TYPE_NONE, false,
+        "", G_TYPE_NONE, true,
         {   {"GetConnectionTypeInfo", UPNP_ACTION_GET,  NULL, G_TYPE_NONE},
             {"SetConnectionType",     UPNP_ACTION_POST, NULL, G_TYPE_NONE}
         },

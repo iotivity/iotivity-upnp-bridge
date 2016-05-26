@@ -35,8 +35,11 @@ typedef enum
 typedef struct _AttrDesc
 {
     AttrType   type;
-    bool       observable; // ignore, if this is a sub-attribute and the hosting
-    // attribute is observable set to "true"
+    bool       observable; // Indicates whether an attribute is
+                           // observable. In case of a composite
+                           // attribute, the flag should be set to "true",
+                           // if any of the sub attributes are
+                           // observalble.
     std::map <std::string, _AttrDesc> *composite;
 } AttrDesc;
 
@@ -67,23 +70,23 @@ std::map <std::string, AttrDesc>WanIfConfigConnInfoAttrs =
 std::map <std::string, AttrDesc> WanIfConfigConnLinkPropertiesAttrs =
 {
     {"accessType",     {ATTR_TYPE_STRING, false, NULL}},
-    {"linkStatus",     {ATTR_TYPE_STRING, false, NULL}},
+    {"linkStatus",     {ATTR_TYPE_STRING, true,  NULL}},
     {"upMaxBitrate",   {ATTR_TYPE_INT,    false, NULL}},
     {"downMaxBitrate", {ATTR_TYPE_INT,    false, NULL}}
 };
 
 std::map <std::string, AttrDesc> WanIfConfigAttrs =
 {
-    {"inetEnabled",        {ATTR_TYPE_BOOL,   true, NULL}},
-    {"linkProperties",     {ATTR_TYPE_VECTOR, true, &WanIfConfigConnLinkPropertiesAttrs}},
+    {"inetEnabled",        {ATTR_TYPE_BOOL,   true,  NULL}},
+    {"linkProperties",     {ATTR_TYPE_VECTOR, true,  &WanIfConfigConnLinkPropertiesAttrs}},
     {"wanAccesssProvider", {ATTR_TYPE_STRING, false, NULL}},
     {"maxConnections",     {ATTR_TYPE_INT,    false, NULL}},
     {"bytesSent",          {ATTR_TYPE_INT,    false, NULL}},
     {"bytesReceived",      {ATTR_TYPE_INT,    false, NULL}},
     {"packetsSent",        {ATTR_TYPE_INT,    false, NULL}},
     {"packetsReceived",    {ATTR_TYPE_INT,    false, NULL}},
-    {"numConnections",     {ATTR_TYPE_INT,    true, NULL}},
-    {"connectionInfo",     {ATTR_TYPE_VECTOR, true, &WanIfConfigConnInfoAttrs}}
+    {"numConnections",     {ATTR_TYPE_INT,    true,  NULL}},
+    {"connectionInfo",     {ATTR_TYPE_VECTOR, false, &WanIfConfigConnInfoAttrs}}
 };
 
 // Layer3Forwarding
@@ -120,8 +123,8 @@ std::map <std::string, AttrDesc> LanHostConfigAttrs =
 // WANIPConnection
 std::map <std::string, AttrDesc> WanIpConnectionTypeInfoAttrs =
 {
-    {"type",         {ATTR_TYPE_STRING, false,  NULL}},
-    {"allTypes",     {ATTR_TYPE_STRING, false,  NULL}}
+    {"type",         {ATTR_TYPE_STRING, false, NULL}},
+    {"allTypes",     {ATTR_TYPE_STRING, true,  NULL}}
 };   
 
 std::map <std::string, AttrDesc> WanIpConnectionNatStatusAttrs =
@@ -136,10 +139,10 @@ std::map <std::string, AttrDesc> WanIpConnectionAttrs =
     {"idleDiscoTime",      {ATTR_TYPE_INT,    false, NULL}},
     {"warnDiscoTime",      {ATTR_TYPE_INT,    false, NULL}},
     {"externAddr",         {ATTR_TYPE_STRING, true,  NULL}},
-    {"connectionTypeInfo", {ATTR_TYPE_VECTOR, false, &WanIpConnectionTypeInfoAttrs}},
+    {"connectionTypeInfo", {ATTR_TYPE_VECTOR, true,  &WanIpConnectionTypeInfoAttrs}},
     {"nat",                {ATTR_TYPE_VECTOR, false, &WanIpConnectionNatStatusAttrs}},
-    {"updateId",           {ATTR_TYPE_INT,    true, NULL}},
-    {"sizePortMap",        {ATTR_TYPE_INT,    true, NULL}},
+    {"updateId",           {ATTR_TYPE_INT,    true,  NULL}},
+    {"sizePortMap",        {ATTR_TYPE_INT,    true,  NULL}},
 };
 
 // Media Server / Media Renderer
