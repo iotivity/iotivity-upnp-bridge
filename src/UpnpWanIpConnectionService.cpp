@@ -72,7 +72,7 @@ vector <UpnpAttributeInfo> UpnpWanIpConnection::Attributes =
             {"SetConnectionType",     UPNP_ACTION_POST, NULL, G_TYPE_NONE}
         },
         {   {"type",     "ConnectionType", G_TYPE_STRING, false},
-            {"allTypes", "PossibleConnectionTypes", G_TYPE_BOOLEAN, false}
+            {"allTypes", "PossibleConnectionTypes", G_TYPE_STRING, true}
         }
     },
     {
