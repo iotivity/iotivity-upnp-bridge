@@ -126,10 +126,10 @@ void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
         gpointer userData)
 {
     GError *error = NULL;
-    const char *accessType;
+    char *accessType;
     int upBitrate;
     int downBitrate;
-    const char *linkStatus;
+    char *linkStatus;
 
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
@@ -168,6 +168,8 @@ void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
         properties["linkStatus"]     = string(linkStatus);
 
         request->resource->setAttribute("linkProperties", properties, false);
+        g_free(accessType);
+        g_free(linkStatus);
     }
 
     UpnpRequest::requestDone(request, status);
@@ -195,8 +197,8 @@ void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
         gpointer userData)
 {
     GError *error = NULL;
-    const char *serviceId;
-    const char *deviceContainer;
+    char *serviceId;
+    char *deviceContainer;
     UpnpAttributeInfo *attrInfo;
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
     UpnpWanCommonInterfaceConfig *pService = static_cast<UpnpWanCommonInterfaceConfig *>
@@ -232,6 +234,9 @@ void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
         properties["serviceId"] = string(serviceId);
 
         (pService->m_ConnectionInfoRequestMap[request]).push_back(properties);
+
+        g_free(serviceId);
+        g_free(deviceContainer);
     }
 
     attrInfo = it->second.first;

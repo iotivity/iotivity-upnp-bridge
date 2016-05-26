@@ -124,8 +124,8 @@ void UpnpLanHostConfigManagement::getAddressRangeCb(GUPnPServiceProxy *proxy,
                                                     gpointer userData)
 {
     GError *error = NULL;
-    const char *minAddress;
-    const char *maxAddress;
+    char *minAddress;
+    char *maxAddress;
 
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
@@ -154,6 +154,8 @@ void UpnpLanHostConfigManagement::getAddressRangeCb(GUPnPServiceProxy *proxy,
         addrRange["minAddress"]   = string(minAddress);
         addrRange["maxAddress"]   = string(maxAddress);
         request->resource->setAttribute("addrRange", addrRange, false);
+        g_free(minAddress);
+        g_free(maxAddress);
     }
 
     UpnpRequest::requestDone(request, status);
