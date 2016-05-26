@@ -177,8 +177,8 @@ void UpnpWanIpConnection::getConnectionTypeInfoCb(GUPnPServiceProxy *proxy,
                                                   gpointer userData)
 {
     GError *error = NULL;
-    const char *connType;
-    const char *allTypes;
+    char *connType;
+    char *allTypes;
 
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
@@ -207,6 +207,8 @@ void UpnpWanIpConnection::getConnectionTypeInfoCb(GUPnPServiceProxy *proxy,
         connTypeInfo["type"] = string(connType);
         connTypeInfo["allTypes"] = string(allTypes);
         request->resource->setAttribute("connectionTypeInfo", connTypeInfo, false);
+        g_free(connType);
+        g_free(allTypes);
     }
 
     UpnpRequest::requestDone(request, status);

@@ -26,7 +26,16 @@ void UpnpRenderingControlAttribute::getCb(GUPnPServiceProxy *proxy,
         gpointer userData)
 {
     GError *error = NULL;
-    UpnpVar value;
+    union
+    {
+        gboolean     var_boolean;
+        guint        var_uint;
+        gint         var_int;
+        guint64      var_uint64;
+        gint64       var_int64;
+        gchar        *var_pchar;
+    } value;
+
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
     UpnpAttributeInfo *attrInfo;
 
@@ -61,7 +70,11 @@ void UpnpRenderingControlAttribute::getCb(GUPnPServiceProxy *proxy,
                 {
                     DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(string) " <<
                                 string(static_cast<const char *>(value.var_pchar)));
-                    request->resource->setAttribute(attrInfo->name, string(value.var_pchar), false);
+                    if (NULL != value.var_pchar)
+                    {
+                        request->resource->setAttribute(attrInfo->name, string(value.var_pchar), false);
+                        g_free(value.var_pchar);
+                    }
                     break;
                 }
             case G_TYPE_BOOLEAN:
