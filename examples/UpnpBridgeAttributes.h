@@ -125,13 +125,20 @@ std::map <std::string, AttrDesc> WanIpConnectionTypeInfoAttrs =
 {
     {"type",         {ATTR_TYPE_STRING, false, NULL}},
     {"allTypes",     {ATTR_TYPE_STRING, true,  NULL}}
-};   
+};
 
 std::map <std::string, AttrDesc> WanIpConnectionNatStatusAttrs =
 {
     {"rsip",        {ATTR_TYPE_BOOL, false,  NULL}},
     {"enabled",     {ATTR_TYPE_BOOL, false,  NULL}}
-};   
+};
+
+std::map <std::string, AttrDesc> WanIpConnectionStateAttrs =
+{
+    {"status",      {ATTR_TYPE_STRING, true, NULL}},
+    {"lastError",   {ATTR_TYPE_STRING, false,  NULL}},
+    {"uptime",      {ATTR_TYPE_INT, false,  NULL}},
+};
 
 std::map <std::string, AttrDesc> WanIpConnectionAttrs =
 {
@@ -143,6 +150,7 @@ std::map <std::string, AttrDesc> WanIpConnectionAttrs =
     {"nat",                {ATTR_TYPE_VECTOR, false, &WanIpConnectionNatStatusAttrs}},
     {"updateId",           {ATTR_TYPE_INT,    true,  NULL}},
     {"sizePortMap",        {ATTR_TYPE_INT,    true,  NULL}},
+    {"connectionState",    {ATTR_TYPE_VECTOR, true,  &WanIpConnectionStateAttrs}},
 };
 
 // Media Server / Media Renderer
@@ -192,18 +200,18 @@ std::map <std::string, AttrDesc> ScheduledRecordingAttrs =
 
 std::map <std::string, std::map <std::string, AttrDesc> & > ResourceAttrMap =
 {
-    {UPNP_OIC_TYPE_POWER_SWITCH,         BinarySwitchAttrs},
-    {UPNP_OIC_TYPE_BRIGHTNESS ,          BrightnessAttrs},
-    {UPNP_OIC_TYPE_WAN_IF_CONFIG,        WanIfConfigAttrs},
-    {UPNP_OIC_TYPE_LAYER3_FORWARDING,    L3FAttrs},
-    {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,  WanEthConfigAttrs},
+    //{UPNP_OIC_TYPE_POWER_SWITCH,         BinarySwitchAttrs},
+    //{UPNP_OIC_TYPE_BRIGHTNESS ,          BrightnessAttrs},
+    //{UPNP_OIC_TYPE_WAN_IF_CONFIG,        WanIfConfigAttrs},
+    //{UPNP_OIC_TYPE_LAYER3_FORWARDING,    L3FAttrs},
+    //{UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,  WanEthConfigAttrs},
     {UPNP_OIC_TYPE_WAN_IP_CONNECTION,    WanIpConnectionAttrs},
-    {UPNP_OIC_TYPE_LAN_HOST_CONFIG,      LanHostConfigAttrs},
-    {UPNP_OIC_TYPE_AV_TRANSPORT,         AvTransportAttrs},
-    {UPNP_OIC_TYPE_CONNECTION_MANAGER,   ConnectionManagerAttrs},
-    {UPNP_OIC_TYPE_CONTENT_DIRECTORY,    ContentDirectoryAttrs},
-    {UPNP_OIC_TYPE_RENDERING_CONTROL,    RenderingControlAttrs},
-    {UPNP_OIC_TYPE_SCHEDULED_RECORDING,  ScheduledRecordingAttrs},
+    //{UPNP_OIC_TYPE_LAN_HOST_CONFIG,      LanHostConfigAttrs},
+    //{UPNP_OIC_TYPE_AV_TRANSPORT,         AvTransportAttrs},
+    // {UPNP_OIC_TYPE_CONNECTION_MANAGER,   ConnectionManagerAttrs},
+    //{UPNP_OIC_TYPE_CONTENT_DIRECTORY,    ContentDirectoryAttrs},
+    //{UPNP_OIC_TYPE_RENDERING_CONTROL,    RenderingControlAttrs},
+    //{UPNP_OIC_TYPE_SCHEDULED_RECORDING,  ScheduledRecordingAttrs},
 };
 
 #endif
