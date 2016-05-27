@@ -76,12 +76,26 @@ class UpnpWanIpConnection: public UpnpService
 
         bool getConnectionTypeInfo(UpnpRequest *request);
 
-        static void setConnectionTypeInfoCb(GUPnPServiceProxy *proxy,
+        static void getStatusInfoCb(GUPnPServiceProxy *proxy,
+                                    GUPnPServiceProxyAction *action,
+                                    gpointer userData);
+
+        bool getStatusInfo(UpnpRequest *request);
+
+       static void setConnectionTypeInfoCb(GUPnPServiceProxy *proxy,
                                             GUPnPServiceProxyAction *action,
                                             gpointer userData);
 
         bool setConnectionTypeInfo(UpnpRequest *request,
                                    RCSResourceAttributes::Value *value);
+    
+        static void changeConnectionStatusCb(GUPnPServiceProxy *proxy,
+                                             GUPnPServiceProxyAction *action,
+                                             gpointer userData);
+
+        bool changeConnectionStatus(UpnpRequest *request,
+                                    RCSResourceAttributes::Value *value);
+
 };
 
 #endif

@@ -97,6 +97,22 @@ vector <UpnpAttributeInfo> UpnpWanIpConnection::Attributes =
         "PortMappingNumberOfEntries", G_TYPE_UINT, true,
         {{"", UPNP_ACTION_GET, "", G_TYPE_NONE}}, {}
     },
+    {
+        "connectionState",
+        "", G_TYPE_NONE, true,
+        {{"GetStatusInfo", UPNP_ACTION_GET,  NULL, G_TYPE_NONE},
+         {"RequestConnection", UPNP_ACTION_POST, NULL, G_TYPE_NONE}},
+        {   {"status",    "ConnectionStatus", G_TYPE_STRING, true},
+            {"lastError", "LastConnectionError", G_TYPE_STRING, false},
+            {"uptime",    "Uptime", G_TYPE_INT, false},
+            // Special case: "statusUpdateRequest" attribute that supports only POST operation:
+            // maps to RequestConnection, RequestTermination, ForceTermination
+            // actions. As the result of the POST request, the "status"
+            // attribute will be updated based on observation of
+            // "ConnectionStatus" state variable.
+            {"statusUpdateRequest", "", G_TYPE_STRING, false}
+        }
+    },
 };
 
 // Custom action map:
@@ -105,7 +121,8 @@ map <const string, UpnpWanIpConnection::GetAttributeHandler>
 UpnpWanIpConnection::GetAttributeActionMap =
 {
     {"nat", &UpnpWanIpConnection::getNatStatus},
-    {"connectionTypeInfo", &UpnpWanIpConnection::getConnectionTypeInfo}
+    {"connectionTypeInfo", &UpnpWanIpConnection::getConnectionTypeInfo},
+    {"connectionState", &UpnpWanIpConnection::getStatusInfo},
 };
 
 // Custom action map:
@@ -113,7 +130,8 @@ UpnpWanIpConnection::GetAttributeActionMap =
 map <const string, UpnpWanIpConnection::SetAttributeHandler>
 UpnpWanIpConnection::SetAttributeActionMap =
 {
-    {"connectionTypeInfo", &UpnpWanIpConnection::setConnectionTypeInfo}
+    {"connectionTypeInfo", &UpnpWanIpConnection::setConnectionTypeInfo},
+    {"connectionState", &UpnpWanIpConnection::changeConnectionStatus}
 };
 
 void UpnpWanIpConnection::getNatStatusCb(GUPnPServiceProxy *proxy,
@@ -164,6 +182,73 @@ bool UpnpWanIpConnection::getNatStatus(UpnpRequest *request)
                                            getNatStatusCb,
                                            (gpointer *) request,
                                            NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void UpnpWanIpConnection::getStatusInfoCb(GUPnPServiceProxy *proxy,
+                                          GUPnPServiceProxyAction *actionProxy,
+                                          gpointer userData)
+{
+    GError *error = NULL;
+    int uptime;
+    char *lastError;
+    char *connStatus;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  "NewConnectionStatus",
+                                                  G_TYPE_STRING,
+                                                  &connStatus,
+                                                  "NewLastConnectionError",
+                                                  G_TYPE_STRING,
+                                                  &lastError,
+                                                  "NewUptime",
+                                                  G_TYPE_INT,
+                                                  &uptime,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("GetStatusInfo failed: " << error->code << ", " << error->message);
+        g_error_free (error);
+        status = false;
+    }
+
+    if (status)
+    {
+        RCSResourceAttributes connState;
+
+        DEBUG_PRINT("connStatus=" << connStatus << ", lastError=" << lastError << ", uptime=" << uptime);
+        connState["status"] = string(connStatus);
+        connState["lastError"] = string(lastError);
+        connState["uptime"] = uptime;
+        connState["statusUpdateRequest"] = "";
+
+        request->resource->setAttribute("connectionState", connState, false);
+
+        g_free(connStatus);
+        g_free(lastError);
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpWanIpConnection::getStatusInfo(UpnpRequest *request)
+{
+    DEBUG_PRINT("");
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "GetStatusInfo",
+                                          getStatusInfoCb,
+                                          (gpointer *) request,
+                                          NULL);
     if (NULL == actionProxy)
     {
         return false;
@@ -238,6 +323,7 @@ void UpnpWanIpConnection::setConnectionTypeInfoCb(GUPnPServiceProxy *proxy,
     GError *error = NULL;
 
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+    DEBUG_PRINT("from map ( " << request->proxyMap[actionProxy].second[0].var_pchar <<" , "  << &request->proxyMap[actionProxy].second[0] << " )");
 
     bool status = gupnp_service_proxy_end_action (proxy,
                                                   actionProxy,
@@ -262,9 +348,9 @@ void UpnpWanIpConnection::setConnectionTypeInfoCb(GUPnPServiceProxy *proxy,
 
         // Important! Values need to retrieved in the same order they
         // have been stored
-        type = it->second.second[0].var_pchar;
-        allTypes = it->second.second[1].var_pchar;
-
+        type = (it->second).second[0].var_pchar;
+        allTypes = (it->second).second[1].var_pchar;
+        DEBUG_PRINT("( " << it->second.second[0].var_pchar <<" , "  << &it->second.second[0] << " )");
         DEBUG_PRINT("type=" << type << ", allTypes=" << allTypes);
         connTypeInfo["type"]   = string(type);
         connTypeInfo["allTypes"]   = string(allTypes);
@@ -281,30 +367,30 @@ bool UpnpWanIpConnection::setConnectionTypeInfo(UpnpRequest *request,
     GUPnPServiceProxyAction *actionProxy;
     const char *sNewType;
     const char *sAllTypes;
-    UpnpVar value;
     int count = 0;
 
-    const auto &attrVector = attrValue->get< vector< RCSResourceAttributes > >();
-    for (const auto &attrs : attrVector)
+    const auto &attrs = attrValue->get< RCSResourceAttributes >();
+    for (const auto &kvPair : attrs)
     {
-        for (const auto &kvPair : attrs)
+        if (kvPair.key() == "type")
         {
             string sValue = (kvPair.value()). get < string> ();
-            if (kvPair.key() == "type")
-            {
-                sNewType = sValue.c_str();
-                count++;
-            }
-            else if (kvPair.key() == "allTypes")
-            {
-                sAllTypes = sValue.c_str();
-                count++;
-            }
-            else
-            {
-                ERROR_PRINT("Invalid attribute name:" << kvPair.key());
-                return false;
-            }
+            sNewType = sValue.c_str();
+            DEBUG_PRINT("type: " << sNewType);
+            count++;
+        }
+        else if (kvPair.key() == "allTypes")
+        {
+            string sValue = (kvPair.value()). get < string> ();
+            sAllTypes = sValue.c_str();
+            DEBUG_PRINT("allTypes: " << sAllTypes);
+
+            count++;
+        }
+        else
+        {
+            ERROR_PRINT("Invalid attribute name:" << kvPair.key());
+            return false;
         }
     }
 
@@ -330,14 +416,70 @@ bool UpnpWanIpConnection::setConnectionTypeInfo(UpnpRequest *request,
     }
 
     request->proxyMap[actionProxy].first  = m_attributeMap["connectionTypeInfo"].first;
+    return true;
+}
 
-    // Important! Values need to be stored in the same order they
-    // going to be retrieved
-    value.var_pchar = sNewType;
-    request->proxyMap[actionProxy].second.push_back(value);
-    value.var_pchar = sAllTypes;
-    request->proxyMap[actionProxy].second.push_back(value);
+void UpnpWanIpConnection::changeConnectionStatusCb(GUPnPServiceProxy *proxy,
+                                                   GUPnPServiceProxyAction *actionProxy,
+                                                   gpointer userData)
+{
+    GError *error = NULL;
 
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("ChangeConnectionStatus failed: " << error->code << ", " << error->message);
+        g_error_free (error);
+        status = false;
+    }
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpWanIpConnection::changeConnectionStatus(UpnpRequest *request,
+                                                 RCSResourceAttributes::Value *attrValue)
+{
+    DEBUG_PRINT("");
+    GUPnPServiceProxyAction *actionProxy;
+    bool found = false;
+    string sValue;
+
+    const auto &attrs = attrValue->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
+    {
+        if (kvPair.key() == "statusUpdateRequest")
+        {
+            sValue = (kvPair.value()). get < string> ();
+            DEBUG_PRINT("action (string): " << sValue);
+            DEBUG_PRINT("action (c_string): " << sValue.c_str());
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        ERROR_PRINT("ChangeConnectionStatus failed: \"stateUpdateRequest\" not found");
+        return false;
+    }
+
+    actionProxy = gupnp_service_proxy_begin_action (m_proxy,
+                                                    sValue.c_str(),
+                                                    changeConnectionStatusCb,
+                                                    (gpointer *) request,
+                                                    NULL);
+    if (NULL == actionProxy)
+    {
+        ERROR_PRINT("ChangeConnectionStatus failed: " << sValue);
+        return false;
+    }
+
+    request->proxyMap[actionProxy].first  = m_attributeMap["connectionTypeInfo"].first;
     return true;
 }
 
