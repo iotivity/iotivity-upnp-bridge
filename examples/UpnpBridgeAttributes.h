@@ -125,13 +125,20 @@ std::map <std::string, AttrDesc> WanIpConnectionTypeInfoAttrs =
 {
     {"type",         {ATTR_TYPE_STRING, false, NULL}},
     {"allTypes",     {ATTR_TYPE_STRING, true,  NULL}}
-};   
+};
 
 std::map <std::string, AttrDesc> WanIpConnectionNatStatusAttrs =
 {
     {"rsip",        {ATTR_TYPE_BOOL, false,  NULL}},
     {"enabled",     {ATTR_TYPE_BOOL, false,  NULL}}
-};   
+};
+
+std::map <std::string, AttrDesc> WanIpConnectionStateAttrs =
+{
+    {"status",      {ATTR_TYPE_STRING, true, NULL}},
+    {"lastError",   {ATTR_TYPE_STRING, false,  NULL}},
+    {"uptime",      {ATTR_TYPE_INT, false,  NULL}},
+};
 
 std::map <std::string, AttrDesc> WanIpConnectionAttrs =
 {
@@ -143,6 +150,7 @@ std::map <std::string, AttrDesc> WanIpConnectionAttrs =
     {"nat",                {ATTR_TYPE_VECTOR, false, &WanIpConnectionNatStatusAttrs}},
     {"updateId",           {ATTR_TYPE_INT,    true,  NULL}},
     {"sizePortMap",        {ATTR_TYPE_INT,    true,  NULL}},
+    {"connectionState",    {ATTR_TYPE_VECTOR, true,  &WanIpConnectionStateAttrs}},
 };
 
 // Media Server / Media Renderer
