@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_ea45d6b3",
+        "filename": "examples/iotApp/Light.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-05-27T20:41:51Z",
+      "side": 1,
+      "message": "remove this",
+      "range": {
+        "startLine": 154,
+        "startChar": 2,
+        "endLine": 154,
+        "endChar": 36
+      },
+      "revId": "b0e7764b90c9624c4de113e588ba8fcec7bfa043",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
