@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_ad7e08e3",
+        "filename": "src/UpnpWanIpConnectionService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-05-31T23:27:14Z",
+      "side": 1,
+      "message": "I have a build warning.. Need to test for NULL\n\nsrc/UpnpWanIpConnectionService.cpp:448:26: warning: \u0027actionName\u0027 may be used uninitialized in this function [-Wmaybe-uninitialized]\n         delete actionName;",
+      "range": {
+        "startLine": 448,
+        "startChar": 15,
+        "endLine": 448,
+        "endChar": 25
+      },
+      "revId": "1631d332749051e67a1dd0fa16441a157781c671",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
