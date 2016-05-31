@@ -37,11 +37,19 @@ class UpnpRequest
         std::function< void(bool) > finish;
         int expected;
         int done;
+        void *buffer; // managed allocated buffer
 
         UpnpResource *resource;
         // We have to keep attribute info
         std::map < GUPnPServiceProxyAction *, UpnpAttributeInfo * > proxyMap;
 
+        UpnpRequest()
+        {
+            done = 0;
+            expected = 0;
+            buffer = NULL;
+        }
+    
         static void requestDone (UpnpRequest *request, bool status)
         {
             request->done++;

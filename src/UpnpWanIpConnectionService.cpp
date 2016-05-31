@@ -399,6 +399,9 @@ void UpnpWanIpConnection::changeConnectionStatusCb(GUPnPServiceProxy *proxy,
         g_error_free (error);
         status = false;
     }
+
+    delete ((char *) request->buffer);
+
     UpnpRequest::requestDone(request, status);
 }
 
@@ -409,6 +412,7 @@ bool UpnpWanIpConnection::changeConnectionStatus(UpnpRequest *request,
     GUPnPServiceProxyAction *actionProxy;
     bool found = false;
     string sValue;
+    char *actionName;
 
     const auto &attrs = attrValue->get< RCSResourceAttributes >();
 
@@ -417,8 +421,11 @@ bool UpnpWanIpConnection::changeConnectionStatus(UpnpRequest *request,
         if (kvPair.key() == "statusUpdateRequest")
         {
             sValue = (kvPair.value()). get < string> ();
-            DEBUG_PRINT("action (string): " << sValue);
-            DEBUG_PRINT("action (c_string): " << sValue.c_str());
+            size_t len = sValue.length() + 1;
+            actionName = new char[len];
+            memcpy(actionName, sValue.c_str(), len);
+
+            DEBUG_PRINT("action (string): " << actionName);
             found = true;
             break;
         }
@@ -431,17 +438,21 @@ bool UpnpWanIpConnection::changeConnectionStatus(UpnpRequest *request,
     }
 
     actionProxy = gupnp_service_proxy_begin_action (m_proxy,
-                                                    sValue.c_str(),
+                                                    (const char *)actionName,
                                                     changeConnectionStatusCb,
                                                     (gpointer *) request,
                                                     NULL);
     if (NULL == actionProxy)
     {
         ERROR_PRINT("ChangeConnectionStatus failed: " << sValue);
+        delete actionName;
         return false;
     }
 
     request->proxyMap[actionProxy]  = m_attributeMap["connectionTypeInfo"].first;
+
+    request->buffer = (void *) actionName;
+
     return true;
 }
 
