@@ -364,10 +364,9 @@ bool UpnpWanIpConnection::setConnectionTypeInfo(UpnpRequest *request,
     DEBUG_PRINT("");
     GUPnPServiceProxyAction *actionProxy;
     const char *sNewType;
-    const char *sAllTypes;
-    int count = 0;
-
     const auto &attrs = attrValue->get< RCSResourceAttributes >();
+    bool found = false;
+
     for (const auto &kvPair : attrs)
     {
         if (kvPair.key() == "type")
@@ -375,28 +374,13 @@ bool UpnpWanIpConnection::setConnectionTypeInfo(UpnpRequest *request,
             string sValue = (kvPair.value()). get < string> ();
             sNewType = sValue.c_str();
             DEBUG_PRINT("type: " << sNewType);
-            count++;
-        }
-        else if (kvPair.key() == "allTypes")
-        {
-            string sValue = (kvPair.value()). get < string> ();
-            sAllTypes = sValue.c_str();
-            DEBUG_PRINT("allTypes: " << sAllTypes);
-
-            count++;
-        }
-        else
-        {
-            ERROR_PRINT("Invalid attribute name:" << kvPair.key());
-            return false;
+            found = true;
         }
     }
 
-    // Check, if all the sub-attributes have been initialized.
-    // In case of "connectionTypeInfo", there are 2 sub-attributes: "type" and "allTypes"
-    if (count < 2)
+    if (!found)
     {
-        ERROR_PRINT("Incomplete attribute");
+        ERROR_PRINT("Invalid attribute");
         return false;
     }
 
