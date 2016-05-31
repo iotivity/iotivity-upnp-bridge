@@ -100,8 +100,8 @@ UpnpContentDirectory::GetAttributeActionMap =
 
 // TODO Implement optional actions as necessary
 
-// TODO Browse and Search are not complete, the didl-lite xml that is returned must
-// be sent to iotivity in some other form.
+// Potential TODO:  Browse and Search currently return didl-lite xml data.
+// Future data models may require something different.
 
 void UpnpContentDirectory::getBrowseResultCb(GUPnPServiceProxy *proxy,
         GUPnPServiceProxyAction *actionProxy,
