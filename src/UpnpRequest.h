@@ -39,9 +39,8 @@ class UpnpRequest
         int done;
 
         UpnpResource *resource;
-        // We have to keep attribute info and (optional) set value(s)
-        std::map <GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >
-        proxyMap;
+        // We have to keep attribute info
+        std::map < GUPnPServiceProxyAction *, UpnpAttributeInfo * > proxyMap;
 
         static void requestDone (UpnpRequest *request, bool status)
         {

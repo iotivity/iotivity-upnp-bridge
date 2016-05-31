@@ -167,7 +167,7 @@ typedef union _UpnpVar
     gint         var_int;
     guint64      var_uint64;
     gint64       var_int64;
-    const gchar *var_pchar;
+    gchar       *var_pchar;
 } UpnpVar;
 
 #define ERROR_PRINT(x) do { std::cerr << MODULE << ":" << __func__ << "(): ERROR: " << x << std::endl; } while (0)
