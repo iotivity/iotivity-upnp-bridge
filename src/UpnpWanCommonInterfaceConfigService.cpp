@@ -122,8 +122,8 @@ UpnpWanCommonInterfaceConfig::GetAttributeActionMap =
 };
 
 void UpnpWanCommonInterfaceConfig::getLinkPropertiesCb(GUPnPServiceProxy *proxy,
-        GUPnPServiceProxyAction *actionProxy,
-        gpointer userData)
+                                                       GUPnPServiceProxyAction *actionProxy,
+                                                       gpointer userData)
 {
     GError *error = NULL;
     char *accessType;
@@ -188,13 +188,13 @@ bool UpnpWanCommonInterfaceConfig::getLinkProperties(UpnpRequest *request)
         return false;
     }
 
-    request->proxyMap[actionProxy].first = m_attributeMap["linkProperties"].first;
+    request->proxyMap[actionProxy] = m_attributeMap["linkProperties"].first;
     return true;
 }
 
 void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
-        GUPnPServiceProxyAction *actionProxy,
-        gpointer userData)
+                                                       GUPnPServiceProxyAction *actionProxy,
+                                                       gpointer userData)
 {
     GError *error = NULL;
     char *serviceId;
@@ -204,8 +204,8 @@ void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
     UpnpWanCommonInterfaceConfig *pService = static_cast<UpnpWanCommonInterfaceConfig *>
             (request->resource);
 
-    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >::iterator
-    it = request->proxyMap.find(actionProxy);
+    std::map< GUPnPServiceProxyAction *, UpnpAttributeInfo * >::iterator
+        it = request->proxyMap.find(actionProxy);
     assert(it != request->proxyMap.end());
 
     bool status = gupnp_service_proxy_end_action (proxy,
@@ -239,7 +239,7 @@ void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
         g_free(deviceContainer);
     }
 
-    attrInfo = it->second.first;
+    attrInfo = it->second;
 
     // Remove action proxy entry from request's proxy map
     request->proxyMap.erase(it);
@@ -247,9 +247,9 @@ void UpnpWanCommonInterfaceConfig::getConnectionInfoCb(GUPnPServiceProxy *proxy,
     // Check if we got all the expected callbacks
     for (it = request->proxyMap.begin(); it != request->proxyMap.end(); ++it)
     {
-        if (it->second.first == attrInfo)
+        if (it->second == attrInfo)
         {
-            // More callbacks are pending
+            // More callbacks of this type are pending
             return;
         }
     }
@@ -292,10 +292,10 @@ bool UpnpWanCommonInterfaceConfig::getConnectionInfo(UpnpRequest *request)
         if (actionProxy != NULL)
         {
             // Use proxy map to track the completion of cumulative action
-            request->proxyMap[actionProxy].first = m_attributeMap["connectionInfo"].first;
-            request->proxyMap[actionProxy].second = {};
+            request->proxyMap[actionProxy] = m_attributeMap["connectionInfo"].first;
         }
     }
+
     if (status == false)
     {
         // If none of the UPnP "GetActiveConnectionInfo" actions
@@ -378,8 +378,9 @@ bool UpnpWanCommonInterfaceConfig::setAttributesRequest(const RCSResourceAttribu
     return status;
 }
 
-bool UpnpWanCommonInterfaceConfig::processNotification(string attrName, string parent,
-        GValue *value)
+bool UpnpWanCommonInterfaceConfig::processNotification(string attrName,
+                                                       string parent,
+                                                       GValue *value)
 {
 
     if (attrName == "numConnections")

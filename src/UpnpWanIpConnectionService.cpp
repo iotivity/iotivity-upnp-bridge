@@ -335,26 +335,6 @@ void UpnpWanIpConnection::setConnectionTypeInfoCb(GUPnPServiceProxy *proxy,
         status = false;
     }
 
-    if (status)
-    {
-        const char *type;
-        const char *allTypes;
-        RCSResourceAttributes connTypeInfo;
-        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >::iterator
-        it = request->proxyMap.find(actionProxy);
-
-        assert(it != request->proxyMap.end());
-
-        // Important! Values need to retrieved in the same order they
-        // have been stored
-        type = (it->second).second[0].var_pchar;
-        allTypes = (it->second).second[1].var_pchar;
-        DEBUG_PRINT("type=" << type << ", allTypes=" << allTypes);
-        connTypeInfo["type"]   = string(type);
-        connTypeInfo["allTypes"]   = string(allTypes);
-        request->resource->setAttribute("connectionTypeInfo", connTypeInfo, false);
-    }
-
     UpnpRequest::requestDone(request, status);
 }
 
@@ -397,7 +377,7 @@ bool UpnpWanIpConnection::setConnectionTypeInfo(UpnpRequest *request,
         return false;
     }
 
-    request->proxyMap[actionProxy].first  = m_attributeMap["connectionTypeInfo"].first;
+    request->proxyMap[actionProxy]  = m_attributeMap["connectionTypeInfo"].first;
     return true;
 }
 
@@ -461,7 +441,7 @@ bool UpnpWanIpConnection::changeConnectionStatus(UpnpRequest *request,
         return false;
     }
 
-    request->proxyMap[actionProxy].first  = m_attributeMap["connectionTypeInfo"].first;
+    request->proxyMap[actionProxy]  = m_attributeMap["connectionTypeInfo"].first;
     return true;
 }
 

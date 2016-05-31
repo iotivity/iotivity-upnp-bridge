@@ -125,7 +125,7 @@ bool UpnpConnectionManager::getProtocolInfo(UpnpRequest *request)
         return false;
     }
 
-    request->proxyMap[actionProxy].first = m_attributeMap["protocolInfo"].first;
+    request->proxyMap[actionProxy] = m_attributeMap["protocolInfo"].first;
     return true;
 }
 

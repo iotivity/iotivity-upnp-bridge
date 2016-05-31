@@ -26,25 +26,17 @@ void UpnpRenderingControlAttribute::getCb(GUPnPServiceProxy *proxy,
         gpointer userData)
 {
     GError *error = NULL;
-    union
-    {
-        gboolean     var_boolean;
-        guint        var_uint;
-        gint         var_int;
-        guint64      var_uint64;
-        gint64       var_int64;
-        gchar        *var_pchar;
-    } value;
+    UpnpVar value;
 
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
     UpnpAttributeInfo *attrInfo;
 
-    std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >::iterator
-    it = request->proxyMap.find(actionProxy);
+    std::map< GUPnPServiceProxyAction *, UpnpAttributeInfo * >::iterator
+        it = request->proxyMap.find(actionProxy);
 
     assert(it != request->proxyMap.end());
 
-    attrInfo = it->second.first;
+    attrInfo = it->second;
     DEBUG_PRINT(attrInfo->actions[0].varName);
     bool status = gupnp_service_proxy_end_action (proxy,
                                                   actionProxy,
@@ -122,7 +114,6 @@ bool UpnpRenderingControlAttribute::get(GUPnPServiceProxy *serviceProxy,
                                         UpnpAttributeInfo *attrInfo)
 {
     GUPnPServiceProxyAction *actionProxy;
-    UpnpVar value;
 
     DEBUG_PRINT("action: " << attrInfo->actions[1].name << "( " << attrInfo->actions[1].varName <<
                 " )");
@@ -160,19 +151,16 @@ bool UpnpRenderingControlAttribute::get(GUPnPServiceProxy *serviceProxy,
         return false;
     }
 
-    request->proxyMap[actionProxy].first = attrInfo;
-    value.var_int64 = 0;
-    request->proxyMap[actionProxy].second.push_back(value);
+    request->proxyMap[actionProxy] = attrInfo;
     return true;
 }
 
 void UpnpRenderingControlAttribute::setCb(GUPnPServiceProxy *proxy,
-        GUPnPServiceProxyAction *proxyAction,
-        gpointer userData)
+                                          GUPnPServiceProxyAction *proxyAction,
+                                          gpointer userData)
 {
     GError *error = NULL;
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
-    UpnpAttributeInfo *attrInfo;
 
     bool status = gupnp_service_proxy_end_action (proxy,
                   proxyAction,
@@ -183,59 +171,6 @@ void UpnpRenderingControlAttribute::setCb(GUPnPServiceProxy *proxy,
         ERROR_PRINT("Set action failed: " << error->code << ", " << error->message);
         g_error_free (error);
         status = false;
-    }
-
-    if (status)
-    {
-        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >::iterator
-        it = request->proxyMap.find(proxyAction);
-
-        if (it != request->proxyMap.end())
-        {
-            attrInfo = it->second.first;
-            UpnpVar value = it->second.second[0];
-
-            switch (attrInfo->actions[1].varType)
-            {
-                case G_TYPE_STRING:
-                    {
-                        DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(string) " <<
-                                    string(value.var_pchar));
-                        request->resource->setAttribute(attrInfo->name, string(value.var_pchar), false);
-                        break;
-                    }
-                case G_TYPE_BOOLEAN:
-                    {
-                        bool vbool = value.var_boolean;
-                        DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(bool) " <<
-                                    vbool);
-                        request->resource->setAttribute(attrInfo->name, vbool, false);
-                        break;
-                    }
-                case G_TYPE_INT:
-                case G_TYPE_UINT:
-                    {
-                        DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(int) " <<
-                                    value.var_int);
-                        request->resource->setAttribute(attrInfo->name, value.var_int, false);
-                        break;
-                    }
-                case G_TYPE_INT64:
-                case G_TYPE_UINT64:
-                    {
-                        DEBUG_PRINT("resource: " << request->resource->m_uri << ", " << attrInfo->name << ":(int64) " <<
-                                    value.var_uint64);
-                        request->resource->setAttribute(attrInfo->name, static_cast<double>(value.var_int64), false);
-                        break;
-                    }
-                default:
-                    {
-                        //TODO: handle additional types?
-                        ERROR_PRINT("Type handling not implemented!");
-                        assert(0);
-                    }
-            }
-        }
     }
 
     UpnpRequest::requestDone(request, status);
@@ -262,7 +197,7 @@ bool UpnpRenderingControlAttribute::set(GUPnPServiceProxy *serviceProxy,
                 {
                     const char *sValue = (attrValue->get< string >()).c_str();
                     DEBUG_PRINT("resource: " << request->resource->m_uri << ", (string) " << sValue);
-                    value.var_pchar = sValue;
+                    value.var_pchar = (char *) sValue;
                     break;
                 }
             case G_TYPE_BOOLEAN:
@@ -340,7 +275,6 @@ bool UpnpRenderingControlAttribute::set(GUPnPServiceProxy *serviceProxy,
         return false;
     }
 
-    request->proxyMap[actionProxy].first = attrInfo;
-    request->proxyMap[actionProxy].second.push_back(value);
+    request->proxyMap[actionProxy] = attrInfo;
     return true;
 }

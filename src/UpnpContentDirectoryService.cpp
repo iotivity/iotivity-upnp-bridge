@@ -244,7 +244,7 @@ bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request, const map< stri
         return false;
     }
 
-    request->proxyMap[actionProxy].first = m_attributeMap["browseResult"].first;
+    request->proxyMap[actionProxy] = m_attributeMap["browseResult"].first;
     return true;
 }
 
@@ -389,7 +389,7 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< stri
         return false;
     }
 
-    request->proxyMap[actionProxy].first = m_attributeMap["searchResult"].first;
+    request->proxyMap[actionProxy] = m_attributeMap["searchResult"].first;
     return true;
 }
 

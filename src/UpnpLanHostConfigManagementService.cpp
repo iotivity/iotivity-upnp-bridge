@@ -197,27 +197,6 @@ void UpnpLanHostConfigManagement::setAddressRangeCb(GUPnPServiceProxy *proxy,
         status = false;
     }
 
-    if (status)
-    {
-        const char *minAddress;
-        const char *maxAddress;
-        RCSResourceAttributes addrRange;
-        std::map< GUPnPServiceProxyAction *, std::pair <UpnpAttributeInfo *, std::vector <UpnpVar> > >::iterator
-        it = request->proxyMap.find(actionProxy);
-
-        assert(it != request->proxyMap.end());
-
-        // Important! Values need to retrieved in the same order they
-        // have been stored
-        minAddress = it->second.second[0].var_pchar;
-        maxAddress = it->second.second[1].var_pchar;
-
-        DEBUG_PRINT("minAddress=" << minAddress << ", maxAddress=" << maxAddress);
-        addrRange["minAddress"]   = string(minAddress);
-        addrRange["maxAddress"]   = string(maxAddress);
-        request->resource->setAttribute("addrRange", addrRange, false);
-    }
-
     UpnpRequest::requestDone(request, status);
 }
 
@@ -228,7 +207,6 @@ bool UpnpLanHostConfigManagement::setAddressRange(UpnpRequest *request,
     GUPnPServiceProxyAction *actionProxy;
     const char *sMinAddr;
     const char *sMaxAddr;
-    UpnpVar value;
     int count = 0;
 
     const auto &attrVector = attrValue->get< vector< RCSResourceAttributes > >();
@@ -279,14 +257,7 @@ bool UpnpLanHostConfigManagement::setAddressRange(UpnpRequest *request,
         return false;
     }
 
-    request->proxyMap[actionProxy].first  = m_attributeMap["addrRange"].first;
-
-    // Important! Values need to be stored in the same order they
-    // going to be retrieved
-    value.var_pchar = sMinAddr;
-    request->proxyMap[actionProxy].second.push_back(value);
-    value.var_pchar = sMaxAddr;
-    request->proxyMap[actionProxy].second.push_back(value);
+    request->proxyMap[actionProxy]  = m_attributeMap["addrRange"].first;
 
     return true;
 }
