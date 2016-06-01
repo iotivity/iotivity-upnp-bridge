@@ -61,7 +61,7 @@ vector <UpnpAttributeInfo> UpnpRenderingControl::Attributes =
     }
 };
 
-// TODO Implement various OCF attributes/UPnP Actions
+// TODO Implement additional OCF attributes/UPnP Actions as necessary
 
 bool UpnpRenderingControl::getAttributesRequest(UpnpRequest *request,
                                                 const map< string, string > &queryParams)

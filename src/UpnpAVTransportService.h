@@ -37,9 +37,8 @@ class UpnpAVTransport: public UpnpService
         friend class UpnpService;
 
     public:
-        typedef GUPnPServiceProxyAction *(UpnpAVTransport::*GetAttributeHandler)(UpnpRequest *);
-        typedef GUPnPServiceProxyAction *(UpnpAVTransport::*SetAttributeHandler)(
-            RCSResourceAttributes::Value &, UpnpRequest *);
+    typedef bool (UpnpAVTransport::*GetAttributeHandler)(UpnpRequest *, const map< string, string > &);
+    typedef bool (UpnpAVTransport::*SetAttributeHandler)(UpnpRequest *, RCSResourceAttributes::Value *, const map< string, string > &);
 
         UpnpAVTransport(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
             UpnpService(serviceInfo, UPNP_OIC_TYPE_AV_TRANSPORT, requestState, &Attributes)
@@ -47,13 +46,58 @@ class UpnpAVTransport: public UpnpService
         }
 
     private:
+        static map< const string, UpnpAVTransport::GetAttributeHandler > GetAttributeActionMap;
+        static map< const string, UpnpAVTransport::SetAttributeHandler > SetAttributeActionMap;
+
         static vector< UpnpAttributeInfo > Attributes;
 
-        bool getAttributesRequest(UpnpRequest *request,
-                                  const map< string, string > &queryParams);
-        bool setAttributesRequest(const RCSResourceAttributes &attrs,
-                                  UpnpRequest *request,
-                                  const map< string, string > &queryParams);
+        bool getAttributesRequest(UpnpRequest *request, const map< string, string > &queryParams);
+        bool setAttributesRequest(const RCSResourceAttributes &attrs, UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void getCurrentTransportActionsCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool getCurrentTransportActions(UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void getDeviceCapabilitiesCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool getDeviceCapabilities(UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void getMediaInfoCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool getMediaInfo(UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void getPositionInfoCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool getPositionInfo(UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void getTransportInfoCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool getTransportInfo(UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void getTransportSettingsCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool getTransportSettings(UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void setAvTransportUriCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool setAvTransportUri(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
+
+        static void setNextAvTransportUriCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool setNextAvTransportUri(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
+
+        static void setPlayModeCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool setPlayMode(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
+
+        static void nextCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool next(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
+
+        static void pauseCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool pause(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
+
+        static void playCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool play(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
+
+        static void previousCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool previous(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
+
+        static void seekCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool seek(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
+
+        static void stopCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool stop(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
 };
 
 #endif
