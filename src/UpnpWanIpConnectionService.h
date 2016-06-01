@@ -53,6 +53,8 @@ class UpnpWanIpConnection: public UpnpService
         static map <const string, GetAttributeHandler> GetAttributeActionMap;
         static map <const string, SetAttributeHandler> SetAttributeActionMap;
         static vector <UpnpAttributeInfo> Attributes;
+        static vector <const char *> statusUpdateActions;
+
         int m_sizePortMap;
 
         bool getAttributesRequest(UpnpRequest *request,

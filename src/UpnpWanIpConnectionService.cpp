@@ -118,7 +118,7 @@ vector <UpnpAttributeInfo> UpnpWanIpConnection::Attributes =
 // Custom action map:
 // "attribute name" -> GET request handlers
 map <const string, UpnpWanIpConnection::GetAttributeHandler>
-UpnpWanIpConnection::GetAttributeActionMap =
+    UpnpWanIpConnection::GetAttributeActionMap =
 {
     {"nat", &UpnpWanIpConnection::getNatStatus},
     {"connectionTypeInfo", &UpnpWanIpConnection::getConnectionTypeInfo},
@@ -128,10 +128,15 @@ UpnpWanIpConnection::GetAttributeActionMap =
 // Custom action map:
 // "attribute name" -> SET request handlers
 map <const string, UpnpWanIpConnection::SetAttributeHandler>
-UpnpWanIpConnection::SetAttributeActionMap =
+    UpnpWanIpConnection::SetAttributeActionMap =
 {
     {"connectionTypeInfo", &UpnpWanIpConnection::setConnectionTypeInfo},
     {"connectionState", &UpnpWanIpConnection::changeConnectionStatus}
+};
+
+vector <const char *> UpnpWanIpConnection::statusUpdateActions =
+{
+    "RequestConnection", "RequestTermination", "ForceTermination"
 };
 
 void UpnpWanIpConnection::getNatStatusCb(GUPnPServiceProxy *proxy,
@@ -407,8 +412,8 @@ bool UpnpWanIpConnection::changeConnectionStatus(UpnpRequest *request,
 {
     DEBUG_PRINT("");
     GUPnPServiceProxyAction *actionProxy;
+    const char *action;
     bool found = false;
-    string sValue;
 
     const auto &attrs = attrValue->get< RCSResourceAttributes >();
 
@@ -416,28 +421,33 @@ bool UpnpWanIpConnection::changeConnectionStatus(UpnpRequest *request,
     {
         if (kvPair.key() == "statusUpdateRequest")
         {
-            sValue = (kvPair.value()). get < string> ();
-            DEBUG_PRINT("action (string): " << sValue);
-            DEBUG_PRINT("action (c_string): " << sValue.c_str());
-            found = true;
+            for (auto actionName : statusUpdateActions)
+            {
+                if (kvPair.value() == string(actionName))
+                {
+                    found = true;
+                    action = actionName;
+                    break;
+                }
+            }
             break;
         }
     }
 
     if (!found)
     {
-        ERROR_PRINT("ChangeConnectionStatus failed: \"stateUpdateRequest\" not found");
+        ERROR_PRINT("ChangeConnectionStatus failed: invalid attribute");
         return false;
     }
 
     actionProxy = gupnp_service_proxy_begin_action (m_proxy,
-                                                    sValue.c_str(),
+                                                    action,
                                                     changeConnectionStatusCb,
                                                     (gpointer *) request,
                                                     NULL);
     if (NULL == actionProxy)
     {
-        ERROR_PRINT("ChangeConnectionStatus failed: " << sValue);
+        ERROR_PRINT("ChangeConnectionStatus failed: " << action);
         return false;
     }
 
