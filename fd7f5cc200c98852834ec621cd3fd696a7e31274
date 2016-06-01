@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_80050bc4",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-01T21:58:08Z",
+      "side": 1,
+      "message": "In case of invalid index ID, is the intention to proceed with indexID set to 0, or should we just return \"false\"?",
+      "range": {
+        "startLine": 614,
+        "startChar": 0,
+        "endLine": 614,
+        "endChar": 12
+      },
+      "revId": "fd7f5cc200c98852834ec621cd3fd696a7e31274",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
