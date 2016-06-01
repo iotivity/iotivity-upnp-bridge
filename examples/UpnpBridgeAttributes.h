@@ -156,8 +156,59 @@ std::map <std::string, AttrDesc> WanIpConnectionAttrs =
 // Media Server / Media Renderer
 
 // AV Tranport
+std::map <std::string, AttrDesc> DeviceCapabilitiesAttrs =
+{
+    {"playMedia",       {ATTR_TYPE_STRING, false, NULL}},
+    {"recMedia",        {ATTR_TYPE_STRING, false, NULL}},
+    {"recQualityModes", {ATTR_TYPE_STRING, false, NULL}},
+};
+
+std::map <std::string, AttrDesc> MediaInfoAttrs =
+{
+    {"nrTracks",           {ATTR_TYPE_INT,    false, NULL}},
+    {"mediaDuration",      {ATTR_TYPE_STRING, false, NULL}},
+    {"currentUri",         {ATTR_TYPE_STRING, false, NULL}},
+    {"currentUriMetadata", {ATTR_TYPE_STRING, false, NULL}},
+    {"nextUri",            {ATTR_TYPE_STRING, false, NULL}},
+    {"nextUriMetadata",    {ATTR_TYPE_STRING, false, NULL}},
+    {"playMedium",         {ATTR_TYPE_STRING, false, NULL}},
+    {"recordMedium",       {ATTR_TYPE_STRING, false, NULL}},
+    {"writeStatus",        {ATTR_TYPE_STRING, false, NULL}},
+};
+
+std::map <std::string, AttrDesc> PositionInfoAttrs =
+{
+    {"track",         {ATTR_TYPE_INT,    false, NULL}},
+    {"trackDuration", {ATTR_TYPE_STRING, false, NULL}},
+    {"trackMetadata", {ATTR_TYPE_STRING, false, NULL}},
+    {"trackUri",      {ATTR_TYPE_STRING, false, NULL}},
+    {"relTime",       {ATTR_TYPE_STRING, false, NULL}},
+    {"absTime",       {ATTR_TYPE_STRING, false, NULL}},
+    {"relCount",      {ATTR_TYPE_INT,    false, NULL}},
+    {"absCount",      {ATTR_TYPE_INT,    false, NULL}},
+};
+
+std::map <std::string, AttrDesc> TransportInfoAttrs =
+{
+    {"transportState",  {ATTR_TYPE_STRING, false, NULL}},
+    {"transportStatus", {ATTR_TYPE_STRING, false, NULL}},
+    {"speed",           {ATTR_TYPE_STRING, false, NULL}},
+};
+
+std::map <std::string, AttrDesc> TransportSettingsAttrs =
+{
+    {"playMode",       {ATTR_TYPE_STRING, false, NULL}},
+    {"recQualityMode", {ATTR_TYPE_STRING, false, NULL}},
+};
+
 std::map <std::string, AttrDesc> AvTransportAttrs =
 {
+    {"currentTransportActions", {ATTR_TYPE_STRING, false, NULL}},
+    {"deviceCapabilities",      {ATTR_TYPE_VECTOR, false, &DeviceCapabilitiesAttrs}},
+    {"mediaInfo",               {ATTR_TYPE_VECTOR, false, &MediaInfoAttrs}},
+    {"positionInfo",            {ATTR_TYPE_VECTOR, false, &PositionInfoAttrs}},
+    {"transportInfo",           {ATTR_TYPE_VECTOR, false, &TransportInfoAttrs}},
+    {"transportSettings",       {ATTR_TYPE_VECTOR, false, &TransportSettingsAttrs}},
 };
 
 // Connection Manager
@@ -178,7 +229,7 @@ std::map <std::string, AttrDesc> ConnectionManagerAttrs =
 std::map <std::string, AttrDesc> ContentDirectoryAttrs =
 {
     {"searchCaps",     {ATTR_TYPE_STRING, false, NULL}},
-    {"searchCaps",     {ATTR_TYPE_STRING, false, NULL}},
+    {"sortCaps",       {ATTR_TYPE_STRING, false, NULL}},
     {"systemUpdateId", {ATTR_TYPE_INT,    true,  NULL}},
     {"resetToken",     {ATTR_TYPE_STRING, false, NULL}},
     {"featureList",    {ATTR_TYPE_STRING, false, NULL}},
