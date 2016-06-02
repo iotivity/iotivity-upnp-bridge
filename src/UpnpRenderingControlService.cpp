@@ -36,6 +36,12 @@ static const string MODULE = "UpnpRenderingControlService";
 vector <UpnpAttributeInfo> UpnpRenderingControl::Attributes =
 {
     {
+        "lastChange",
+        "LastChange", G_TYPE_STRING, true,
+        {},
+        {}
+    },
+    {
         "presetNamelist",
         "PresetNameList", G_TYPE_STRING, false,
         {   {"ListPresets", UPNP_ACTION_GET, "CurrentPresetNameList", G_TYPE_STRING},
