@@ -55,6 +55,20 @@ vector <UpnpAttributeInfo> UpnpConnectionManager::Attributes =
         "FeatureList", G_TYPE_STRING, false,
         {{"GetFeatureList", UPNP_ACTION_GET, "FeatureList", G_TYPE_STRING}},
         {}
+    },
+    {
+        "currentConnectionInfo",
+        "", G_TYPE_NONE, false,
+        {{"GetCurrentConnectionInfo", UPNP_ACTION_GET, "", G_TYPE_NONE}},
+        {
+            {"rcsId", "RcsID", G_TYPE_UINT, false},
+            {"avTransportId", "AVTransportID", G_TYPE_UINT, false},
+            {"protocolInfo", "ProtocolInfo", G_TYPE_STRING, false},
+            {"peerConnectionManager", "PeerConnectionManager", G_TYPE_STRING, false},
+            {"peerConnectionId", "PeerConnectionID", G_TYPE_UINT, false},
+            {"direction", "Direction", G_TYPE_STRING, false},
+            {"status", "Status", G_TYPE_STRING, false}
+        }
     }
 };
 
@@ -63,10 +77,11 @@ vector <UpnpAttributeInfo> UpnpConnectionManager::Attributes =
 map <const string, UpnpConnectionManager::GetAttributeHandler>
 UpnpConnectionManager::GetAttributeActionMap =
 {
-    {"protocolInfo", &UpnpConnectionManager::getProtocolInfo}
+    {"protocolInfo", &UpnpConnectionManager::getProtocolInfo},
+    {"currentConnectionInfo", &UpnpConnectionManager::getCurrentConnectionInfo}
 };
 
-// TODO Implement various OCF attributes/UPnP Actions
+// TODO Implement additional OCF attributes/UPnP Actions as necessary
 
 void UpnpConnectionManager::getProtocolInfoCb(GUPnPServiceProxy *proxy,
         GUPnPServiceProxyAction *actionProxy,
@@ -112,7 +127,7 @@ void UpnpConnectionManager::getProtocolInfoCb(GUPnPServiceProxy *proxy,
     UpnpRequest::requestDone(request, status);
 }
 
-bool UpnpConnectionManager::getProtocolInfo(UpnpRequest *request)
+bool UpnpConnectionManager::getProtocolInfo(UpnpRequest *request, const map< string, string > &queryParams)
 {
     DEBUG_PRINT("");
     GUPnPServiceProxyAction *actionProxy = gupnp_service_proxy_begin_action (m_proxy,
@@ -126,6 +141,119 @@ bool UpnpConnectionManager::getProtocolInfo(UpnpRequest *request)
     }
 
     request->proxyMap[actionProxy] = m_attributeMap["protocolInfo"].first;
+    return true;
+}
+
+void UpnpConnectionManager::getCurrentConnectionInfoCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+{
+    GError *error = NULL;
+    int rcsId;
+    int avTransportId;
+    char *protocolInfo;
+    char *peerConnectionManager;
+    int peerConnectionId;
+    char *direction;
+    char *connectionStatus;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  "RcsID",
+                                                  G_TYPE_UINT,
+                                                  &rcsId,
+                                                  "AVTransportID",
+                                                  G_TYPE_UINT,
+                                                  &avTransportId,
+                                                  "ProtocolInfo",
+                                                  G_TYPE_STRING,
+                                                  &protocolInfo,
+                                                  "PeerConnectionManager",
+                                                  G_TYPE_STRING,
+                                                  &peerConnectionManager,
+                                                  "PeerConnectionID",
+                                                  G_TYPE_UINT,
+                                                  &peerConnectionId,
+                                                  "Direction",
+                                                  G_TYPE_STRING,
+                                                  &direction,
+                                                  "Status",
+                                                  G_TYPE_STRING,
+                                                  &connectionStatus,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("GetCurrentConnectionInfo failed: " << error->code << ", " << error->message);
+        g_error_free(error);
+        status = false;
+    }
+
+    if (status)
+    {
+        RCSResourceAttributes currentConnectionInfo;
+
+        DEBUG_PRINT("Current Connection Info rcsId=" << rcsId);
+        DEBUG_PRINT("Current Connection Info avTransportId=" << avTransportId);
+        DEBUG_PRINT("Current Connection Info protocolInfo=" << protocolInfo);
+        DEBUG_PRINT("Current Connection Info peerConnectionManager=" << peerConnectionManager);
+        DEBUG_PRINT("Current Connection Info peerConnectionId=" << peerConnectionId);
+        DEBUG_PRINT("Current Connection Info direction=" << direction);
+        DEBUG_PRINT("Current Connection Info status=" << connectionStatus);
+
+        currentConnectionInfo["rcsId"] = rcsId;
+        currentConnectionInfo["avTransportId"] = avTransportId;
+        currentConnectionInfo["protocolInfo"] = string(protocolInfo);
+        currentConnectionInfo["peerConnectionManager"] = string(peerConnectionManager);
+        currentConnectionInfo["peerConnectionId"] = peerConnectionId;
+        currentConnectionInfo["direction"] = string(direction);
+        currentConnectionInfo["status"] = string(connectionStatus);
+
+        g_free(protocolInfo);
+        g_free(peerConnectionManager);
+        g_free(direction);
+        g_free(connectionStatus);
+
+        request->resource->setAttribute("currentConnectionInfo", currentConnectionInfo, false);
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpConnectionManager::getCurrentConnectionInfo(UpnpRequest *request, const map< string, string > &queryParams)
+{
+    DEBUG_PRINT("");
+
+    int connectionId = 0;
+
+    if (! queryParams.empty()) {
+        auto it = queryParams.find("connectionId");
+        if (it != queryParams.end()) {
+            try {
+                connectionId = std::stoi(it->second);
+                connectionId = std::max(0, connectionId);
+                DEBUG_PRINT("getCurrentConnectionInfo queryParam " << it->first << "=" << it->second);
+            } catch (const std::invalid_argument& ia) {
+                ERROR_PRINT("Invalid getCurrentConnectionInfo queryParam " << it->first << "=" << it->second);
+            }
+        }
+    }
+
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "GetCurrentConnectionInfo",
+                                          getCurrentConnectionInfoCb,
+                                          (gpointer *) request,
+                                          "ConnectionID",
+                                          G_TYPE_UINT,
+                                          connectionId,
+                                          NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy] = m_attributeMap["currentConnectionInfo"].first;
     return true;
 }
 
@@ -152,7 +280,7 @@ bool UpnpConnectionManager::getAttributesRequest(UpnpRequest *request,
         if (attr != this->GetAttributeActionMap.end())
         {
             GetAttributeHandler fp = attr->second;
-            result = (this->*fp)(request);
+            result = (this->*fp)(request, queryParams);
         }
         else if (string(attrInfo->actions[0].name) != "")
         {

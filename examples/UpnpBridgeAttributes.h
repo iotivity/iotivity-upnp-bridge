@@ -219,11 +219,23 @@ std::map <std::string, AttrDesc> ProtocolInfoAttrs =
     {"sink",   {ATTR_TYPE_STRING, false, NULL}}
 };
 
+std::map <std::string, AttrDesc> CurrentConnectionInfoAttrs =
+{
+    {"rcsId",                 {ATTR_TYPE_INT,    false, NULL}},
+    {"avTransportId",         {ATTR_TYPE_INT, false, NULL}},
+    {"protocolInfo",          {ATTR_TYPE_STRING, false, NULL}},
+    {"peerConnectionManager", {ATTR_TYPE_STRING, false, NULL}},
+    {"peerConnectionId",      {ATTR_TYPE_INT, false, NULL}},
+    {"direction",             {ATTR_TYPE_STRING, false, NULL}},
+    {"status",                {ATTR_TYPE_STRING, false, NULL}},
+};
+
 std::map <std::string, AttrDesc> ConnectionManagerAttrs =
 {
-    {"protocolInfo",         {ATTR_TYPE_VECTOR, false, &ProtocolInfoAttrs}},
-    {"currentConnectionIds", {ATTR_TYPE_STRING, false, NULL}},
-    {"featureList",          {ATTR_TYPE_STRING, false, NULL}},
+    {"protocolInfo",          {ATTR_TYPE_VECTOR, false, &ProtocolInfoAttrs}},
+    {"currentConnectionIds",  {ATTR_TYPE_STRING, false, NULL}},
+    {"currentConnectionInfo", {ATTR_TYPE_VECTOR, false, &CurrentConnectionInfoAttrs}},
+    {"featureList",           {ATTR_TYPE_STRING, false, NULL}},
 };
 
 // Content Directory
