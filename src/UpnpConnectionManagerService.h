@@ -37,9 +37,7 @@ class UpnpConnectionManager: public UpnpService
         friend class UpnpService;
 
     public:
-        typedef bool (UpnpConnectionManager::*GetAttributeHandler)(UpnpRequest *);
-        typedef bool (UpnpConnectionManager::*SetAttributeHandler)(
-            GUPnPServiceProxy *, UpnpRequest *, UpnpAttributeInfo *, RCSResourceAttributes);
+        typedef bool (UpnpConnectionManager::*GetAttributeHandler)(UpnpRequest *, const map< string, string > &);
 
         UpnpConnectionManager(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
             UpnpService(serviceInfo, UPNP_OIC_TYPE_CONNECTION_MANAGER, requestState, &Attributes)
@@ -61,7 +59,12 @@ class UpnpConnectionManager: public UpnpService
         static void getProtocolInfoCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
                                       gpointer userData);
 
-        bool getProtocolInfo(UpnpRequest *request);
+        bool getProtocolInfo(UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void getCurrentConnectionInfoCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action,
+                                      gpointer userData);
+
+        bool getCurrentConnectionInfo(UpnpRequest *request, const map< string, string > &queryParams);
 };
 
 #endif
