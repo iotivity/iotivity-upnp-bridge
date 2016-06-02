@@ -140,6 +140,30 @@
       "revId": "c4fc6e4560023da532c0e578cb94cb64e9587e68",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_607247e7",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-02T18:34:35Z",
+      "side": 1,
+      "message": "Thanks I missed the free on line 561.",
+      "parentUuid": "da87b5cf_8063cb19",
+      "range": {
+        "startLine": 518,
+        "startChar": 4,
+        "endLine": 518,
+        "endChar": 25
+      },
+      "revId": "c4fc6e4560023da532c0e578cb94cb64e9587e68",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
