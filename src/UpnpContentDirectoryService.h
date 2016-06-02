@@ -38,8 +38,6 @@ class UpnpContentDirectory: public UpnpService
 
     public:
         typedef bool (UpnpContentDirectory::*GetAttributeHandler)(UpnpRequest *, const map< string, string > &);
-        typedef bool (UpnpContentDirectory::*SetAttributeHandler)(GUPnPServiceProxy *, UpnpRequest *,
-                UpnpAttributeInfo *, RCSResourceAttributes);
 
         UpnpContentDirectory(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
             UpnpService(serviceInfo, UPNP_OIC_TYPE_CONTENT_DIRECTORY, requestState, &Attributes)
