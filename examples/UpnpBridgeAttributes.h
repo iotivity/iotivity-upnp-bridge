@@ -203,6 +203,7 @@ std::map <std::string, AttrDesc> TransportSettingsAttrs =
 
 std::map <std::string, AttrDesc> AvTransportAttrs =
 {
+    {"lastChange",              {ATTR_TYPE_STRING, false, NULL}},
     {"currentTransportActions", {ATTR_TYPE_STRING, false, NULL}},
     {"deviceCapabilities",      {ATTR_TYPE_VECTOR, false, &DeviceCapabilitiesAttrs}},
     {"mediaInfo",               {ATTR_TYPE_VECTOR, false, &MediaInfoAttrs}},
@@ -238,6 +239,7 @@ std::map <std::string, AttrDesc> ContentDirectoryAttrs =
 // Rendering Control
 std::map <std::string, AttrDesc> RenderingControlAttrs =
 {
+    {"lastChange",     {ATTR_TYPE_STRING, false, NULL}},
     {"presetNameList", {ATTR_TYPE_STRING, false, NULL}},
     {"mute",           {ATTR_TYPE_BOOL,   false, NULL}},
     {"volume",         {ATTR_TYPE_INT,    false, NULL}},

@@ -36,6 +36,12 @@ static const string MODULE = "UpnpAVTransportService";
 vector <UpnpAttributeInfo> UpnpAVTransport::Attributes =
 {
     {
+        "lastChange",
+        "LastChange", G_TYPE_STRING, true,
+        {},
+        {}
+    },
+    {
         "currentTransportActions",
         "CurrentTransportActions", G_TYPE_STRING, false,
         {{"GetCurrentTransportActions", UPNP_ACTION_GET, "CurrentTransportActions", G_TYPE_STRING}},
@@ -101,95 +107,113 @@ vector <UpnpAttributeInfo> UpnpAVTransport::Attributes =
             {"recQualityMode", "RecQualityMode", G_TYPE_STRING, false}
         }
     },
-//    {
-//        "avTransportUri",
-//        "", G_TYPE_NONE, false,
-//        {{}, {"SetAVTransportURI", UPNP_ACTION_POST, "", G_TYPE_NONE},
-//        },
-//        {
-//            {"instanceId", "InstanceID", G_TYPE_UINT, false},
-//            {"currentUri", "CurrentURI", G_TYPE_STRING, false},
-//            {"currentUriMetadata", "CurrentURIMetaData", G_TYPE_STRING, false}
-//        }
-//    },
-//    {
-//        "nextAvTransportUri",
-//        "", G_TYPE_NONE, false,
-//        {{}, {"SetNextAVTransportURI", UPNP_ACTION_POST, "", G_TYPE_NONE},
-//        },
-//        {
-//            {"instanceId", "InstanceID", G_TYPE_UINT, false},
-//            {"nextUri", "NextURI", G_TYPE_STRING, false},
-//            {"nextUriMetadata", "NextURIMetaData", G_TYPE_STRING, false}
-//        }
-//    },
-//    {
-//        "playMode",
-//        "", G_TYPE_NONE, false,
-//        {{}, {"SetPlayMode", UPNP_ACTION_POST, "", G_TYPE_NONE},
-//        },
-//        {
-//            {"instanceId", "InstanceID", G_TYPE_UINT, false},
-//            {"newPlayMode", "NewPlayMode", G_TYPE_STRING, false}
-//        }
-//    },
-//    {
-//        "next",
-//        "", G_TYPE_NONE, false,
-//        {{}, {"Next", UPNP_ACTION_POST, "", G_TYPE_NONE},
-//        },
-//        {
-//            {"instanceId", "InstanceID", G_TYPE_UINT, false}
-//        }
-//    },
-//    {
-//        "play",
-//        "", G_TYPE_NONE, false,
-//        {{}, {"Play", UPNP_ACTION_POST, "", G_TYPE_NONE},
-//        },
-//        {
-//            {"instanceId", "InstanceID", G_TYPE_UINT, false},
-//            {"speed", "Speed", G_TYPE_STRING, false}
-//        }
-//    },
-//    {
-//        "pause",
-//        "", G_TYPE_NONE, false,
-//        {{}, {"Pause", UPNP_ACTION_POST, "", G_TYPE_NONE},
-//        },
-//        {
-//            {"instanceId", "InstanceID", G_TYPE_UINT, false}
-//        }
-//    },
-//    {
-//        "previous",
-//        "", G_TYPE_NONE, false,
-//        {{}, {"Previous", UPNP_ACTION_POST, "", G_TYPE_NONE},
-//        },
-//        {
-//            {"instanceId", "InstanceID", G_TYPE_UINT, false}
-//        }
-//    },
-//    {
-//        "seek",
-//        "", G_TYPE_NONE, false,
-//        {{}, {"Seek", UPNP_ACTION_POST, "", G_TYPE_NONE},
-//        },
-//        {
-//            {"instanceId", "InstanceID", G_TYPE_UINT, false},
-//            {"unit", "Unit", G_TYPE_STRING, false},
-//            {"target", "Target", G_TYPE_STRING, false}
-//        }
-//    },
-//    {
-//        "stop",
-//        "", G_TYPE_NONE, false,
-//        {{}, {"Stop", UPNP_ACTION_POST, "", G_TYPE_NONE},
-//        },
-//        {
-//            {"instanceId", "InstanceID", G_TYPE_UINT, false}
-//        }
-//    },
+    {
+        "avTransportUri",
+        "", G_TYPE_NONE, false,
+        {
+            {"", UPNP_ACTION_GET, "", G_TYPE_NONE},
+            {"SetAVTransportURI", UPNP_ACTION_POST, "", G_TYPE_NONE}
+        },
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false},
+            {"currentUri", "CurrentURI", G_TYPE_STRING, false},
+            {"currentUriMetadata", "CurrentURIMetaData", G_TYPE_STRING, false}
+        }
+    },
+    {
+        "nextAvTransportUri",
+        "", G_TYPE_NONE, false,
+        {
+            {"", UPNP_ACTION_GET, "", G_TYPE_NONE},
+            {"SetNextAVTransportURI", UPNP_ACTION_POST, "", G_TYPE_NONE}
+        },
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false},
+            {"nextUri", "NextURI", G_TYPE_STRING, false},
+            {"nextUriMetadata", "NextURIMetaData", G_TYPE_STRING, false}
+        }
+    },
+    {
+        "playMode",
+        "", G_TYPE_NONE, false,
+        {
+            {"", UPNP_ACTION_GET, "", G_TYPE_NONE},
+            {"SetPlayMode", UPNP_ACTION_POST, "", G_TYPE_NONE}
+        },
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false},
+            {"newPlayMode", "NewPlayMode", G_TYPE_STRING, false}
+        }
+    },
+    {
+        "next",
+        "", G_TYPE_NONE, false,
+        {
+            {"", UPNP_ACTION_GET, "", G_TYPE_NONE},
+            {"Next", UPNP_ACTION_POST, "", G_TYPE_NONE}
+        },
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false}
+        }
+    },
+    {
+        "play",
+        "", G_TYPE_NONE, false,
+        {
+            {"", UPNP_ACTION_GET, "", G_TYPE_NONE},
+            {"Play", UPNP_ACTION_POST, "", G_TYPE_NONE}
+        },
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false},
+            {"speed", "Speed", G_TYPE_STRING, false}
+        }
+    },
+    {
+        "pause",
+        "", G_TYPE_NONE, false,
+        {
+            {"", UPNP_ACTION_GET, "", G_TYPE_NONE},
+            {"Pause", UPNP_ACTION_POST, "", G_TYPE_NONE}
+        },
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false}
+        }
+    },
+    {
+        "previous",
+        "", G_TYPE_NONE, false,
+        {
+            {"", UPNP_ACTION_GET, "", G_TYPE_NONE},
+            {"Previous", UPNP_ACTION_POST, "", G_TYPE_NONE}
+        },
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false}
+        }
+    },
+    {
+        "seek",
+        "", G_TYPE_NONE, false,
+        {
+            {"", UPNP_ACTION_GET, "", G_TYPE_NONE},
+            {"Seek", UPNP_ACTION_POST, "", G_TYPE_NONE}
+        },
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false},
+            {"unit", "Unit", G_TYPE_STRING, false},
+            {"target", "Target", G_TYPE_STRING, false}
+        }
+    },
+    {
+        "stop",
+        "", G_TYPE_NONE, false,
+        {
+            {"", UPNP_ACTION_GET, "", G_TYPE_NONE},
+            {"Stop", UPNP_ACTION_POST, "", G_TYPE_NONE}
+        },
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false}
+        }
+    },
 };
 
 // Custom action maps:
@@ -209,15 +233,15 @@ map <const string, UpnpAVTransport::GetAttributeHandler>
 map <const string, UpnpAVTransport::SetAttributeHandler>
     UpnpAVTransport::SetAttributeActionMap =
 {
-//    {"avTransportUri", &UpnpAVTransport::setAvTransportUri},
-//    {"nextAvTransportUri", &UpnpAVTransport::setNextAvTransportUri},
-//    {"playMode", &UpnpAVTransport::setPlayMode},
-//    {"next", &UpnpAVTransport::next},
-//    {"pause", &UpnpAVTransport::pause},
-//    {"play", &UpnpAVTransport::play},
-//    {"previous", &UpnpAVTransport::previous},
-//    {"seek", &UpnpAVTransport::seek},
-//    {"stop", &UpnpAVTransport::stop},
+    {"avTransportUri", &UpnpAVTransport::setAvTransportUri},
+    {"nextAvTransportUri", &UpnpAVTransport::setNextAvTransportUri},
+    {"playMode", &UpnpAVTransport::setPlayMode},
+    {"next", &UpnpAVTransport::next},
+    {"pause", &UpnpAVTransport::pause},
+    {"play", &UpnpAVTransport::play},
+    {"previous", &UpnpAVTransport::previous},
+    {"seek", &UpnpAVTransport::seek},
+    {"stop", &UpnpAVTransport::stop},
 };
 
 // TODO Implement additional OCF attributes/UPnP Actions as necessary
@@ -802,9 +826,623 @@ bool UpnpAVTransport::getTransportSettings(UpnpRequest *request, const map< stri
     return true;
 }
 
+void UpnpAVTransport::setAvTransportUriCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+{
+    GError *error = NULL;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("setAvTransportUri failed: " << error->code << ", " << error->message);
+        g_error_free(error);
+        status = false;
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
 bool UpnpAVTransport::setAvTransportUri(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
 {
     DEBUG_PRINT("");
+
+    int instanceId = 0;
+    string currentUri = "";
+    string currentUriMetadata = "";
+
+    const auto &attrs = value->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
+    {
+        DEBUG_PRINT("setAvTransportUri kvPair key=" << kvPair.key());
+        DEBUG_PRINT("setAvTransportUri kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
+        {
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("setAvTransportUri instanceId=" << instanceId);
+        }
+
+        if (kvPair.key() == "currentUri")
+        {
+            currentUri = (kvPair.value()).get< string >();
+            DEBUG_PRINT("setAvTransportUri currentUri=" << currentUri);
+        }
+
+        if (kvPair.key() == "currentUriMetadata")
+        {
+            currentUriMetadata = (kvPair.value()).get< string >();
+            DEBUG_PRINT("setAvTransportUri currentUriMetadata=" << currentUriMetadata);
+        }
+    }
+
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "SetAvTransportUri",
+                                          playCb,
+                                          (gpointer *) request,
+                                          "InstanceID",
+                                          G_TYPE_UINT,
+                                          instanceId,
+                                          "CurrentURI",
+                                          G_TYPE_STRING,
+                                          currentUri.c_str(),
+                                          "CurrentURIMetaData",
+                                          G_TYPE_STRING,
+                                          currentUriMetadata.c_str(),
+                                          NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy] = m_attributeMap["setAvTransportUri"].first;
+
+    return true;
+}
+
+void UpnpAVTransport::setNextAvTransportUriCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+{
+    GError *error = NULL;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("SetNextAvTransportUri failed: " << error->code << ", " << error->message);
+        g_error_free(error);
+        status = false;
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpAVTransport::setNextAvTransportUri(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+{
+    DEBUG_PRINT("");
+
+    int instanceId = 0;
+    string nextUri = "";
+    string nextUriMetadata = "";
+
+    const auto &attrs = value->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
+    {
+        DEBUG_PRINT("setNextAvTransportUri kvPair key=" << kvPair.key());
+        DEBUG_PRINT("setNextAvTransportUri kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
+        {
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("setNextAvTransportUri instanceId=" << instanceId);
+        }
+
+        if (kvPair.key() == "nextUri")
+        {
+            nextUri = (kvPair.value()).get< string >();
+            DEBUG_PRINT("setNextAvTransportUri nextUri=" << nextUri);
+        }
+
+        if (kvPair.key() == "nextUriMetadata")
+        {
+            nextUriMetadata = (kvPair.value()).get< string >();
+            DEBUG_PRINT("setNextAvTransportUri nextUriMetadata=" << nextUriMetadata);
+        }
+    }
+
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "SetNextAvTransportUri",
+                                          playCb,
+                                          (gpointer *) request,
+                                          "InstanceID",
+                                          G_TYPE_UINT,
+                                          instanceId,
+                                          "NextURI",
+                                          G_TYPE_STRING,
+                                          nextUri.c_str(),
+                                          "NextURIMetaData",
+                                          G_TYPE_STRING,
+                                          nextUriMetadata.c_str(),
+                                          NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy] = m_attributeMap["setNextAvTransportUri"].first;
+
+    return true;
+}
+
+void UpnpAVTransport::setPlayModeCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+{
+    GError *error = NULL;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("SetPlayMode failed: " << error->code << ", " << error->message);
+        g_error_free(error);
+        status = false;
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpAVTransport::setPlayMode(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+{
+    DEBUG_PRINT("");
+
+    int instanceId = 0;
+    string newPlayMode = "NORMAL";
+
+    const auto &attrs = value->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
+    {
+        DEBUG_PRINT("setPlayMode kvPair key=" << kvPair.key());
+        DEBUG_PRINT("setPlayMode kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
+        {
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("setPlayMode instanceId=" << instanceId);
+        }
+
+        if (kvPair.key() == "newPlayMode")
+        {
+            newPlayMode = (kvPair.value()).get< string >();
+            DEBUG_PRINT("setPlayMode newPlayMode=" << newPlayMode);
+        }
+    }
+
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "SetPlayMode",
+                                          playCb,
+                                          (gpointer *) request,
+                                          "InstanceID",
+                                          G_TYPE_UINT,
+                                          instanceId,
+                                          "NewPlayMode",
+                                          G_TYPE_STRING,
+                                          newPlayMode.c_str(),
+                                          NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy] = m_attributeMap["setPlayMode"].first;
+
+    return true;
+}
+
+void UpnpAVTransport::nextCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+{
+    GError *error = NULL;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("Next failed: " << error->code << ", " << error->message);
+        g_error_free(error);
+        status = false;
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpAVTransport::next(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+{
+    DEBUG_PRINT("");
+
+    int instanceId = 0;
+
+    const auto &attrs = value->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
+    {
+        DEBUG_PRINT("next kvPair key=" << kvPair.key());
+        DEBUG_PRINT("next kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
+        {
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("next instanceId=" << instanceId);
+        }
+    }
+
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "Next",
+                                          nextCb,
+                                          (gpointer *) request,
+                                          "InstanceID",
+                                          G_TYPE_UINT,
+                                          instanceId,
+                                          NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy] = m_attributeMap["next"].first;
+
+    return true;
+}
+
+void UpnpAVTransport::playCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+{
+    GError *error = NULL;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("Play failed: " << error->code << ", " << error->message);
+        g_error_free(error);
+        status = false;
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpAVTransport::play(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+{
+    DEBUG_PRINT("");
+
+    int instanceId = 0;
+    string speed = "1";
+
+    const auto &attrs = value->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
+    {
+        DEBUG_PRINT("play kvPair key=" << kvPair.key());
+        DEBUG_PRINT("play kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
+        {
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("play instanceId=" << instanceId);
+        }
+
+        if (kvPair.key() == "speed")
+        {
+            speed = (kvPair.value()).get< string >();
+            DEBUG_PRINT("play speed=" << speed);
+        }
+    }
+
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "Play",
+                                          playCb,
+                                          (gpointer *) request,
+                                          "InstanceID",
+                                          G_TYPE_UINT,
+                                          instanceId,
+                                          "Speed",
+                                          G_TYPE_STRING,
+                                          speed.c_str(),
+                                          NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy] = m_attributeMap["play"].first;
+
+    return true;
+}
+
+void UpnpAVTransport::pauseCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+{
+    GError *error = NULL;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("Pause failed: " << error->code << ", " << error->message);
+        g_error_free(error);
+        status = false;
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpAVTransport::pause(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+{
+    DEBUG_PRINT("");
+
+    int instanceId = 0;
+
+    const auto &attrs = value->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
+    {
+        DEBUG_PRINT("pause kvPair key=" << kvPair.key());
+        DEBUG_PRINT("pause kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
+        {
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("pause instanceId=" << instanceId);
+        }
+    }
+
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "Pause",
+                                          pauseCb,
+                                          (gpointer *) request,
+                                          "InstanceID",
+                                          G_TYPE_UINT,
+                                          instanceId,
+                                          NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy] = m_attributeMap["pause"].first;
+
+    return true;
+}
+
+void UpnpAVTransport::previousCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+{
+    GError *error = NULL;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("Previous failed: " << error->code << ", " << error->message);
+        g_error_free(error);
+        status = false;
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpAVTransport::previous(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+{
+    DEBUG_PRINT("");
+
+    int instanceId = 0;
+
+    const auto &attrs = value->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
+    {
+        DEBUG_PRINT("previous kvPair key=" << kvPair.key());
+        DEBUG_PRINT("previous kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
+        {
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("previous instanceId=" << instanceId);
+        }
+    }
+
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "Previous",
+                                          previousCb,
+                                          (gpointer *) request,
+                                          "InstanceID",
+                                          G_TYPE_UINT,
+                                          instanceId,
+                                          NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy] = m_attributeMap["previous"].first;
+
+    return true;
+}
+
+void UpnpAVTransport::seekCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+{
+    GError *error = NULL;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("Seek failed: " << error->code << ", " << error->message);
+        g_error_free(error);
+        status = false;
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpAVTransport::seek(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+{
+    DEBUG_PRINT("");
+
+    int instanceId = 0;
+    string unit = "TRACK_NR";
+    string target = "0";
+
+    const auto &attrs = value->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
+    {
+        DEBUG_PRINT("seek kvPair key=" << kvPair.key());
+        DEBUG_PRINT("seek kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
+        {
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("seek instanceId=" << instanceId);
+        }
+
+        if (kvPair.key() == "unit")
+        {
+            unit = (kvPair.value()).get< string >();
+            DEBUG_PRINT("seek unit=" << unit);
+        }
+
+        if (kvPair.key() == "target")
+        {
+            target = (kvPair.value()).get< string >();
+            DEBUG_PRINT("seek target=" << target);
+        }
+    }
+
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "Seek",
+                                          seekCb,
+                                          (gpointer *) request,
+                                          "InstanceID",
+                                          G_TYPE_UINT,
+                                          instanceId,
+                                          "Unit",
+                                          G_TYPE_STRING,
+                                          unit.c_str(),
+                                          "Target",
+                                          G_TYPE_STRING,
+                                          target.c_str(),
+                                          NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy] = m_attributeMap["seek"].first;
+
+    return true;
+}
+
+void UpnpAVTransport::stopCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+{
+    GError *error = NULL;
+
+    UpnpRequest *request = static_cast<UpnpRequest *> (userData);
+
+    bool status = gupnp_service_proxy_end_action (proxy,
+                                                  actionProxy,
+                                                  &error,
+                                                  NULL);
+    if (error)
+    {
+        ERROR_PRINT("Stop failed: " << error->code << ", " << error->message);
+        g_error_free(error);
+        status = false;
+    }
+
+    UpnpRequest::requestDone(request, status);
+}
+
+bool UpnpAVTransport::stop(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+{
+    DEBUG_PRINT("");
+
+    int instanceId = 0;
+
+    const auto &attrs = value->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
+    {
+        DEBUG_PRINT("stop kvPair key=" << kvPair.key());
+        DEBUG_PRINT("stop kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
+        {
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("stop instanceId=" << instanceId);
+        }
+    }
+
+    GUPnPServiceProxyAction *actionProxy =
+        gupnp_service_proxy_begin_action (m_proxy,
+                                          "Stop",
+                                          stopCb,
+                                          (gpointer *) request,
+                                          "InstanceID",
+                                          G_TYPE_UINT,
+                                          instanceId,
+                                          NULL);
+    if (NULL == actionProxy)
+    {
+        return false;
+    }
+
+    request->proxyMap[actionProxy] = m_attributeMap["stop"].first;
+
     return true;
 }
 
