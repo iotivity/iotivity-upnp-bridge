@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_20d8bfee",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-02T16:28:11Z",
+      "side": 1,
+      "message": "I understand that you don\u0027t want to recreate this work but we should not be committing large chunks of commented out code.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 8
+      },
+      "revId": "c4fc6e4560023da532c0e578cb94cb64e9587e68",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_c0e473ae",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-02T16:28:11Z",
+      "side": 1,
+      "message": "Should not commit large chunks off commented out code.",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 39
+      },
+      "revId": "c4fc6e4560023da532c0e578cb94cb64e9587e68",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_00025b3e",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-02T16:28:11Z",
+      "side": 1,
+      "message": "just a quick thought since this is a pointer does it need to be freed as well?  like the char*?",
+      "range": {
+        "startLine": 518,
+        "startChar": 4,
+        "endLine": 518,
+        "endChar": 25
+      },
+      "revId": "c4fc6e4560023da532c0e578cb94cb64e9587e68",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
