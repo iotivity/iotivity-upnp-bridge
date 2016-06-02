@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_c0a9d325",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-06-02T18:10:57Z",
+      "side": 1,
+      "message": "only commented out for now... it won\u0027t be commented out in a few days",
+      "parentUuid": "da87b5cf_20d8bfee",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 8
+      },
+      "revId": "c4fc6e4560023da532c0e578cb94cb64e9587e68",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_c0e473ae",
         "filename": "src/UpnpAVTransportService.cpp",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_e0a65753",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-06-02T18:10:57Z",
+      "side": 1,
+      "message": "Will soon be uncommented-out",
+      "parentUuid": "da87b5cf_c0e473ae",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 39
+      },
+      "revId": "c4fc6e4560023da532c0e578cb94cb64e9587e68",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_00025b3e",
         "filename": "src/UpnpAVTransportService.cpp",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2016-06-02T16:28:11Z",
       "side": 1,
       "message": "just a quick thought since this is a pointer does it need to be freed as well?  like the char*?",
+      "range": {
+        "startLine": 518,
+        "startChar": 4,
+        "endLine": 518,
+        "endChar": 25
+      },
+      "revId": "c4fc6e4560023da532c0e578cb94cb64e9587e68",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_8063cb19",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-06-02T18:10:57Z",
+      "side": 1,
+      "message": "if allocated, freed on line 561",
+      "parentUuid": "da87b5cf_00025b3e",
       "range": {
         "startLine": 518,
         "startChar": 4,
