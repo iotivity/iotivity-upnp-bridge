@@ -46,6 +46,30 @@
       "revId": "a62abf6bd6f3b1f399161f3c8b842c5710655e42",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_c31f9db6",
+        "filename": "src/UpnpWanCableLinkConfigService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-03T22:16:56Z",
+      "side": 1,
+      "message": "it\u0027s managed by gupnp library. will be freed when  corresponding gupnp_service_proxy_end_action() is called.",
+      "parentUuid": "da87b5cf_430ced94",
+      "range": {
+        "startLine": 156,
+        "startChar": 29,
+        "endLine": 156,
+        "endChar": 40
+      },
+      "revId": "a62abf6bd6f3b1f399161f3c8b842c5710655e42",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
