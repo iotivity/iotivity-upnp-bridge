@@ -101,6 +101,27 @@ std::map <std::string, AttrDesc> WanEthConfigAttrs =
     {"linkStatus",  {ATTR_TYPE_STRING,   true, NULL}}
 };
 
+// WANCableLinkConfig
+std::map <std::string, AttrDesc> WanCableConfigLinkInfoAttrs =
+{
+    {"linkState",  {ATTR_TYPE_STRING,   false, NULL}},
+    {"linkType",   {ATTR_TYPE_STRING,   false, NULL}}
+};
+
+std::map <std::string, AttrDesc> WanCableConfigAttrs =
+{
+    {"downFrequency",      {ATTR_TYPE_INT,    false, NULL}},
+    {"downModulation",     {ATTR_TYPE_STRING, false, NULL}},
+    {"upFrequency",        {ATTR_TYPE_INT,    false, NULL}},
+    {"upModulation",       {ATTR_TYPE_STRING, false, NULL}},
+    {"upChannelId",        {ATTR_TYPE_INT,    false, NULL}},
+    {"upPowerLevel",       {ATTR_TYPE_INT,    false, NULL}},
+    {"bpiEncrypt",         {ATTR_TYPE_BOOL,   false, NULL}},
+    {"configFile",         {ATTR_TYPE_STRING, false, NULL}},
+    {"tftp",               {ATTR_TYPE_STRING, false, NULL}},
+    {"linkInfo",           {ATTR_TYPE_VECTOR, false, &WanCableConfigLinkInfoAttrs}}
+};
+
 // LANHostConfigManagement
 std::map <std::string, AttrDesc> LanHostConfigAddrRangeAttrs =
 {
@@ -265,18 +286,19 @@ std::map <std::string, AttrDesc> ScheduledRecordingAttrs =
 
 std::map <std::string, std::map <std::string, AttrDesc> & > ResourceAttrMap =
 {
-    {UPNP_OIC_TYPE_POWER_SWITCH,         BinarySwitchAttrs},
-    {UPNP_OIC_TYPE_BRIGHTNESS ,          BrightnessAttrs},
-    {UPNP_OIC_TYPE_WAN_IF_CONFIG,        WanIfConfigAttrs},
-    {UPNP_OIC_TYPE_LAYER3_FORWARDING,    L3FAttrs},
-    {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,  WanEthConfigAttrs},
-    {UPNP_OIC_TYPE_WAN_IP_CONNECTION,    WanIpConnectionAttrs},
-    {UPNP_OIC_TYPE_LAN_HOST_CONFIG,      LanHostConfigAttrs},
-    {UPNP_OIC_TYPE_AV_TRANSPORT,         AvTransportAttrs},
-    {UPNP_OIC_TYPE_CONNECTION_MANAGER,   ConnectionManagerAttrs},
-    {UPNP_OIC_TYPE_CONTENT_DIRECTORY,    ContentDirectoryAttrs},
-    {UPNP_OIC_TYPE_RENDERING_CONTROL,    RenderingControlAttrs},
-    {UPNP_OIC_TYPE_SCHEDULED_RECORDING,  ScheduledRecordingAttrs},
+    {UPNP_OIC_TYPE_POWER_SWITCH,           BinarySwitchAttrs},
+    {UPNP_OIC_TYPE_BRIGHTNESS ,            BrightnessAttrs},
+    {UPNP_OIC_TYPE_WAN_IF_CONFIG,          WanIfConfigAttrs},
+    {UPNP_OIC_TYPE_LAYER3_FORWARDING,      L3FAttrs},
+    {UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG,  WanCableConfigAttrs},
+    {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,    WanEthConfigAttrs},
+    {UPNP_OIC_TYPE_WAN_IP_CONNECTION,      WanIpConnectionAttrs},
+    {UPNP_OIC_TYPE_LAN_HOST_CONFIG,        LanHostConfigAttrs},
+    {UPNP_OIC_TYPE_AV_TRANSPORT,           AvTransportAttrs},
+    {UPNP_OIC_TYPE_CONNECTION_MANAGER,     ConnectionManagerAttrs},
+    {UPNP_OIC_TYPE_CONTENT_DIRECTORY,      ContentDirectoryAttrs},
+    {UPNP_OIC_TYPE_RENDERING_CONTROL,      RenderingControlAttrs},
+    {UPNP_OIC_TYPE_SCHEDULED_RECORDING,    ScheduledRecordingAttrs},
 };
 
 #endif
