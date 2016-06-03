@@ -22,6 +22,30 @@
       "revId": "a62abf6bd6f3b1f399161f3c8b842c5710655e42",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_0326e516",
+        "filename": "src/UpnpWanCableLinkConfigService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-06-03T22:16:26Z",
+      "side": 1,
+      "message": "according to doc, it is freed when gupnp_service_proxy_end_action() is called in the callback",
+      "parentUuid": "da87b5cf_430ced94",
+      "range": {
+        "startLine": 156,
+        "startChar": 29,
+        "endLine": 156,
+        "endChar": 40
+      },
+      "revId": "a62abf6bd6f3b1f399161f3c8b842c5710655e42",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
