@@ -34,6 +34,7 @@
 #include "UpnpScheduledRecordingService.h"
 #include "UpnpWanCableLinkConfigService.h"
 #include "UpnpWanCommonInterfaceConfigService.h"
+#include "UpnpWanDslLinkConfigService.h"
 #include "UpnpWanEthernetLinkConfigService.h"
 #include "UpnpWanIpConnectionService.h"
 
@@ -424,6 +425,10 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     else if (resourceType == UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG)
     {
         return (std::make_shared < UpnpWanCableLinkConfig > (serviceInfo, requestState));
+    }
+    else if (resourceType == UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG)
+    {
+        return (std::make_shared < UpnpWanDslLinkConfig > (serviceInfo, requestState));
     }
     else
     {

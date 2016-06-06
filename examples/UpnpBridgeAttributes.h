@@ -122,6 +122,23 @@ std::map <std::string, AttrDesc> WanCableConfigAttrs =
     {"linkInfo",           {ATTR_TYPE_VECTOR, false, &WanCableConfigLinkInfoAttrs}}
 };
 
+// WANDSLLinkConfig
+std::map <std::string, AttrDesc> WanDslConfigLinkInfoAttrs =
+{
+    {"linkType",     {ATTR_TYPE_STRING,   false, NULL}},
+    {"linkStatus",   {ATTR_TYPE_STRING,   true, NULL}}
+};
+
+std::map <std::string, AttrDesc> WanDslConfigAttrs =
+{
+    {"autoConfig",         {ATTR_TYPE_BOOL,    true,  NULL}},
+    {"modulationType",     {ATTR_TYPE_STRING,  false, NULL}},
+    {"destAddr",           {ATTR_TYPE_STRING,  false, NULL}},
+    {"atmEncapsulation",   {ATTR_TYPE_STRING,  false, NULL}},
+    {"fcs",                {ATTR_TYPE_BOOL,    false, NULL}},
+    {"linkInfo",           {ATTR_TYPE_VECTOR,  true,  &WanDslConfigLinkInfoAttrs}}
+};
+
 // LANHostConfigManagement
 std::map <std::string, AttrDesc> LanHostConfigAddrRangeAttrs =
 {
@@ -291,6 +308,7 @@ std::map <std::string, std::map <std::string, AttrDesc> & > ResourceAttrMap =
     {UPNP_OIC_TYPE_WAN_IF_CONFIG,          WanIfConfigAttrs},
     {UPNP_OIC_TYPE_LAYER3_FORWARDING,      L3FAttrs},
     {UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG,  WanCableConfigAttrs},
+    {UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG,    WanDslConfigAttrs},
     {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,    WanEthConfigAttrs},
     {UPNP_OIC_TYPE_WAN_IP_CONNECTION,      WanIpConnectionAttrs},
     {UPNP_OIC_TYPE_LAN_HOST_CONFIG,        LanHostConfigAttrs},
