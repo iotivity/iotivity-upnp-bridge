@@ -40,6 +40,7 @@ upnp_iotivity_bridge_cpp = ['UpnpManager.cpp',
                             'UpnpLanHostConfigManagementService.cpp',
                             'UpnpWanCommonInterfaceConfigService.cpp',
                             'UpnpWanCableLinkConfigService.cpp',
+                            'UpnpWanDslLinkConfigService.cpp',
                             'UpnpWanEthernetLinkConfigService.cpp',
                             'UpnpWanIpConnectionService.cpp']
 #upnp_iotivity_bridge_obj = env.SharedObject(upnp_iotivity_bridge_cpp)
