@@ -19,7 +19,7 @@
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #ifndef UPNP_WAN_CABLE_LINK_CONFIG_SERVICE_H_
-#define UPNP_WAN_CANLE_LINK_CONFIG_SERVICE_H_
+#define UPNP_WAN_CABLE_LINK_CONFIG_SERVICE_H_
 
 #include <string>
 #include <map>
