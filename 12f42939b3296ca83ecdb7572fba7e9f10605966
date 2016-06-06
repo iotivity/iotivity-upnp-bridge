@@ -22,6 +22,30 @@
       "revId": "12f42939b3296ca83ecdb7572fba7e9f10605966",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_1e4b9c2c",
+        "filename": "src/UpnpWanDslLinkConfigService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-06T20:02:53Z",
+      "side": 1,
+      "message": "request is not allocated. it\u0027s local in UpnpService and is staying valid until the processing inside get/set handlers is done.",
+      "parentUuid": "da87b5cf_beee3021",
+      "range": {
+        "startLine": 164,
+        "startChar": 4,
+        "endLine": 164,
+        "endChar": 65
+      },
+      "revId": "12f42939b3296ca83ecdb7572fba7e9f10605966",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
