@@ -884,7 +884,7 @@ bool UpnpAVTransport::setAvTransportUri(UpnpRequest *request, RCSResourceAttribu
     GUPnPServiceProxyAction *actionProxy =
         gupnp_service_proxy_begin_action (m_proxy,
                                           "SetAvTransportUri",
-                                          playCb,
+                                          setAvTransportUriCb,
                                           (gpointer *) request,
                                           "InstanceID",
                                           G_TYPE_UINT,
@@ -964,7 +964,7 @@ bool UpnpAVTransport::setNextAvTransportUri(UpnpRequest *request, RCSResourceAtt
     GUPnPServiceProxyAction *actionProxy =
         gupnp_service_proxy_begin_action (m_proxy,
                                           "SetNextAvTransportUri",
-                                          playCb,
+                                          setNextAvTransportUriCb,
                                           (gpointer *) request,
                                           "InstanceID",
                                           G_TYPE_UINT,
@@ -1037,7 +1037,7 @@ bool UpnpAVTransport::setPlayMode(UpnpRequest *request, RCSResourceAttributes::V
     GUPnPServiceProxyAction *actionProxy =
         gupnp_service_proxy_begin_action (m_proxy,
                                           "SetPlayMode",
-                                          playCb,
+                                          setPlayModeCb,
                                           (gpointer *) request,
                                           "InstanceID",
                                           G_TYPE_UINT,
