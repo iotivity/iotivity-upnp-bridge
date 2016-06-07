@@ -32,13 +32,14 @@ Brightness::Brightness(std::shared_ptr<OC::OCResource> resource) :
 {
 }
 Brightness::~Brightness() {}
-Brightness::Brightness( const Brightness& other ){
+Brightness::Brightness( const Brightness &other )
+{
     *this = other;
 }
-Brightness& Brightness::operator=(const Brightness& other)
+Brightness &Brightness::operator=(const Brightness &other)
 {
     // check for self-assignment
-    if(&other == this)
+    if (&other == this)
         return *this;
     m_resource = other.m_resource;
     m_brightness = other.m_brightness;
@@ -49,7 +50,8 @@ Brightness& Brightness::operator=(const Brightness& other)
 int Brightness::getBrightness()
 {
     std::unique_lock<std::mutex> brightnessChangeLock(m_mutex);
-    m_getCB = bind(&Brightness::onGetBrightness, this, placeholders::_1, placeholders::_2, placeholders::_3);
+    m_getCB = bind(&Brightness::onGetBrightness, this, placeholders::_1, placeholders::_2,
+                   placeholders::_3);
     m_resource->get(QueryParamsMap(), m_getCB);
     m_cv.wait(brightnessChangeLock);
     return m_brightness;
@@ -61,7 +63,8 @@ bool Brightness::setBrightness(int brightness)
     OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
     rep.setValue("brightness", brightness);
-    m_postCB = bind(&Brightness::onPostBrightness, this, placeholders::_1, placeholders::_2, placeholders::_3);
+    m_postCB = bind(&Brightness::onPostBrightness, this, placeholders::_1, placeholders::_2,
+                    placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_postCB);
     m_cv.wait(brightnessChangeLock);
     return (m_eCode == OC_STACK_OK);
@@ -70,7 +73,7 @@ bool Brightness::setBrightness(int brightness)
 
 void Brightness::getBrightnessAsync(OC::GetCallback getBrightnessCB)
 {
-        m_resource->get(QueryParamsMap(), getBrightnessCB);
+    m_resource->get(QueryParamsMap(), getBrightnessCB);
 }
 void Brightness::setBrightnessAsync(int brightness, OC::PostCallback setBrightnessCB) const
 {
@@ -87,21 +90,24 @@ bool Brightness::operator<(const Brightness &other) const
     return ((*m_resource) < (*(other.m_resource)));
 }
 
-void Brightness::onGetBrightness(const HeaderOptions &headerOptions, const OCRepresentation &rep, const int eCode)
+void Brightness::onGetBrightness(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                 const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
         string uri;
         rep.getValue("uri", uri);
-        if(uri == m_resource->uri()) {
+        if (uri == m_resource->uri())
+        {
             rep.getValue("brightness", m_brightness);
         }
     }
     m_cv.notify_one();
 }
 
-void Brightness::onPostBrightness(const HeaderOptions &headerOptions, const OCRepresentation &rep, const int eCode)
+void Brightness::onPostBrightness(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                  const int eCode)
 {
     (void) headerOptions;
     (void) rep;

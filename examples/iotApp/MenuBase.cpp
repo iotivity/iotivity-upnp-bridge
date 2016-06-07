@@ -18,30 +18,7 @@
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#ifndef MENUBASE_H_
-#define MENUBASE_H_
+#include "MenuBase.h"
 
-#include <vector>
-#include <string>
-#include <stack>
-#include <csignal>
-#include <memory>
-
-class MenuBase
-{
-    public:
-        MenuBase();
-        virtual ~MenuBase();
-        virtual std::string getName() = 0;
-        // The menu specific help message
-        virtual void help() = 0;
-        // print the actual commandline menu.
-        virtual void print() = 0;
-        // Method responsible for parsing the commands entered on the commandline.
-        virtual void run(const std::vector<std::string> &cmd,
-                         std::stack<std::unique_ptr<MenuBase>> &menuStack) = 0;
-        //returns true if the user has asked to quite the program
-        virtual bool quit() = 0;
-};
-
-#endif /* MENUBASE_H_ */
+MenuBase::MenuBase() {}
+MenuBase::~MenuBase() {}

@@ -30,49 +30,51 @@
 
 class Brightness
 {
-public:
-    Brightness();
-    Brightness(std::shared_ptr<OC::OCResource> resource);
-    virtual ~Brightness();
-    Brightness( const Brightness& other );
-    Brightness& operator=(const Brightness& other);
+    public:
+        Brightness();
+        Brightness(std::shared_ptr<OC::OCResource> resource);
+        virtual ~Brightness();
+        Brightness( const Brightness &other );
+        Brightness &operator=(const Brightness &other);
 
-    /**
-     * Used to get the Brightness 0-100
-     *
-     * The integer is the percentage of of brightness 100 is max value.
-     *
-     * \return brightness level between 0 and 100;
-     */
-    int getBrightness();
+        /**
+         * Used to get the Brightness 0-100
+         *
+         * The integer is the percentage of of brightness 100 is max value.
+         *
+         * \return brightness level between 0 and 100;
+         */
+        int getBrightness();
 
-    /**
-     * Used to set brightness percentage value is between 0 and 100
-     *
-     * \param brightness brightness from 0% to 100%
-     * return true if the brightness was set
-     */
-    bool setBrightness(int brightness);
+        /**
+         * Used to set brightness percentage value is between 0 and 100
+         *
+         * \param brightness brightness from 0% to 100%
+         * return true if the brightness was set
+         */
+        bool setBrightness(int brightness);
 
-    void getBrightnessAsync(OC::GetCallback isOnCB);
-    void setBrightnessAsync(int brightness, OC::PostCallback turnOnCB) const;
+        void getBrightnessAsync(OC::GetCallback isOnCB);
+        void setBrightnessAsync(int brightness, OC::PostCallback turnOnCB) const;
 
 
-    //Overloaded operator used for putting into a 'set'
-    bool operator<(const Brightness &other) const;
-    const std::shared_ptr<OC::OCResource> getResource() const {return m_resource;}
-private:
-    void onGetBrightness(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode);
-    void onPostBrightness(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode);
+        //Overloaded operator used for putting into a 'set'
+        bool operator<(const Brightness &other) const;
+        const std::shared_ptr<OC::OCResource> getResource() const {return m_resource;}
+    private:
+        void onGetBrightness(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                             const int eCode);
+        void onPostBrightness(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                              const int eCode);
 
-    OC::GetCallback m_getCB;
-    OC::PostCallback m_postCB;
-    std::shared_ptr<OC::OCResource> m_resource;
-    int m_brightness;
-    int m_eCode;
-    //used to turn the async get call to a sync method call
-    std::mutex m_mutex;
-    std::condition_variable m_cv;
+        OC::GetCallback m_getCB;
+        OC::PostCallback m_postCB;
+        std::shared_ptr<OC::OCResource> m_resource;
+        int m_brightness;
+        int m_eCode;
+        //used to turn the async get call to a sync method call
+        std::mutex m_mutex;
+        std::condition_variable m_cv;
 };
 
 #endif /* BRIGHTNESS_H_ */

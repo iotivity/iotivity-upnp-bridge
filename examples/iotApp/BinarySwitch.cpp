@@ -29,13 +29,14 @@ BinarySwitch::BinarySwitch(std::shared_ptr<OC::OCResource> resource) :
 {
 }
 BinarySwitch::~BinarySwitch() {}
-BinarySwitch::BinarySwitch( const BinarySwitch& other ){
+BinarySwitch::BinarySwitch( const BinarySwitch &other )
+{
     *this = other;
 }
-BinarySwitch& BinarySwitch::operator=(const BinarySwitch& other)
+BinarySwitch &BinarySwitch::operator=(const BinarySwitch &other)
 {
     // check for self-assignment
-    if(&other == this)
+    if (&other == this)
         return *this;
     m_resource = other.m_resource;
     m_powerState = other.m_powerState;
@@ -45,9 +46,12 @@ BinarySwitch& BinarySwitch::operator=(const BinarySwitch& other)
 
 void BinarySwitch::toggle()
 {
-    if(isOn()) {
+    if (isOn())
+    {
         turnOn(false);
-    } else {
+    }
+    else
+    {
         turnOn(true);
     }
 }
@@ -57,7 +61,8 @@ bool BinarySwitch::turnOn(bool isOn)
     OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
     rep.setValue("value", isOn);
-    m_postCB = bind(&BinarySwitch::onPostPowerSwitch, this, placeholders::_1, placeholders::_2, placeholders::_3);
+    m_postCB = bind(&BinarySwitch::onPostPowerSwitch, this, placeholders::_1, placeholders::_2,
+                    placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_postCB);
     m_cv.wait(powerChangeLock);
     return (m_eCode == OC_STACK_OK);
@@ -66,7 +71,8 @@ bool BinarySwitch::turnOn(bool isOn)
 bool BinarySwitch::isOn()
 {
     std::unique_lock<std::mutex> powerChangeLock(m_mutex);
-    m_getCB = bind(&BinarySwitch::onGetPowerSwitch, this, placeholders::_1, placeholders::_2, placeholders::_3);
+    m_getCB = bind(&BinarySwitch::onGetPowerSwitch, this, placeholders::_1, placeholders::_2,
+                   placeholders::_3);
     m_resource->get(QueryParamsMap(), m_getCB);
     m_cv.wait(powerChangeLock);
     return m_powerState;
@@ -74,7 +80,7 @@ bool BinarySwitch::isOn()
 
 void BinarySwitch::isOnAsync(OC::GetCallback isOnCB)
 {
-        m_resource->get(QueryParamsMap(), isOnCB);
+    m_resource->get(QueryParamsMap(), isOnCB);
 }
 void BinarySwitch::turnOnAsync(bool isOn, OC::PostCallback turnOnCB) const
 {
@@ -91,21 +97,24 @@ bool BinarySwitch::operator<(const BinarySwitch &other) const
     return ((*m_resource) < (*(other.m_resource)));
 }
 
-void BinarySwitch::onGetPowerSwitch(const HeaderOptions &headerOptions, const OCRepresentation &rep, const int eCode)
+void BinarySwitch::onGetPowerSwitch(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                    const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
         string uri;
         rep.getValue("uri", uri);
-        if(uri == m_resource->uri()) {
+        if (uri == m_resource->uri())
+        {
             rep.getValue("value", m_powerState);
         }
     }
     m_cv.notify_one();
 }
 
-void BinarySwitch::onPostPowerSwitch(const HeaderOptions &headerOptions, const OCRepresentation &rep, const int eCode)
+void BinarySwitch::onPostPowerSwitch(const HeaderOptions &headerOptions,
+                                     const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     (void) rep;

@@ -22,43 +22,16 @@
 
 #include <memory>
 
-#include "MenuMain.h"
+#include "MenuBase.h"
 
-class InteractiveMode {
-public:
-    InteractiveMode();
-    void run();
-private:
-    std::vector<std::string> parseCmd(const std::string &cmd);
-    std::stack<std::unique_ptr<MenuBase>> menuStack;
+class InteractiveMode
+{
+    public:
+        InteractiveMode();
+        void run();
+    private:
+        std::vector<std::string> parseCmd(const std::string &cmd);
+        std::stack<std::unique_ptr<MenuBase>> menuStack;
 };
-
-InteractiveMode::InteractiveMode() {
-    menuStack.push(std::unique_ptr<MenuBase>(new MenuMain));
-}
-void InteractiveMode::run() {
-    std::cout << "Enter command or type help" << std::endl;
-    std::string cmd;
-    do {
-        std::cout << menuStack.top()->getName() << "> ";
-
-        getline(std::cin, cmd);
-        std::vector<std::string> cmds = parseCmd(cmd);
-        menuStack.top()->run(cmds, menuStack);
-    } while(!menuStack.top()->quit());
-    std::cout << "Exiting please wait..." << std::endl;
-}
-
-std::vector<std::string> InteractiveMode::parseCmd(const std::string &cmd) {
-        std::vector<std::string> token;
-        std::stringstream ss(cmd);
-        std::string tok;
-        while (getline(ss, tok, ' ')) {
-            if(!tok.empty()){
-                token.push_back(tok);
-            }
-        }
-        return token;
-    }
 
 #endif /* INTERACTIVEMODE_H_ */
