@@ -46,6 +46,30 @@
       "revId": "2a317e3a185795f838773adc95ca21dada78e636",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_39f6bad8",
+        "filename": "examples/iotApp/MenuIotivity.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-07T20:09:15Z",
+      "side": 1,
+      "message": "We should only have function definitions in the h (header) files and the actual functions source code in cpp files. This should be done for all your h files. I noticed a couple of the h files under examples/iotApp need to be broken up",
+      "parentUuid": "da87b5cf_590ffee1",
+      "range": {
+        "startLine": 299,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 44
+      },
+      "revId": "2a317e3a185795f838773adc95ca21dada78e636",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
