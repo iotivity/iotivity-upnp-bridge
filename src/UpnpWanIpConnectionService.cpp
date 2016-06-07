@@ -102,9 +102,9 @@ vector <UpnpAttributeInfo> UpnpWanIpConnection::Attributes =
         "", G_TYPE_NONE, true,
         {{"GetStatusInfo", UPNP_ACTION_GET,  NULL, G_TYPE_NONE},
          {"RequestConnection", UPNP_ACTION_POST, NULL, G_TYPE_NONE}},
-        {   {"status",    "ConnectionStatus", G_TYPE_STRING, true},
+        {   {"status",    "ConnectionStatus",    G_TYPE_STRING, true},
             {"lastError", "LastConnectionError", G_TYPE_STRING, false},
-            {"uptime",    "Uptime", G_TYPE_INT, false},
+            {"uptime",    "Uptime",              G_TYPE_UINT, false},
             // Special case: "statusUpdateRequest" attribute that supports only POST operation:
             // maps to RequestConnection, RequestTermination, ForceTermination
             // actions. As the result of the POST request, the "status"
@@ -216,7 +216,7 @@ void UpnpWanIpConnection::getStatusInfoCb(GUPnPServiceProxy *proxy,
                                                   G_TYPE_STRING,
                                                   &lastError,
                                                   "NewUptime",
-                                                  G_TYPE_INT,
+                                                  G_TYPE_UINT,
                                                   &uptime,
                                                   NULL);
     if (error)
