@@ -43,7 +43,4 @@ public:
     virtual bool quit() = 0;
 };
 
-MenuBase::MenuBase() {}
-MenuBase::~MenuBase() {}
-
 #endif /* MENUBASE_H_ */
