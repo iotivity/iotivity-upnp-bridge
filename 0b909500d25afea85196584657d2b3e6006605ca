@@ -22,6 +22,30 @@
       "revId": "0b909500d25afea85196584657d2b3e6006605ca",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_79cf62b1",
+        "filename": "src/UpnpWanPotsLinkConfigService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-07T18:20:01Z",
+      "side": 1,
+      "message": "Won\u0027t hurt doing this, since gupnp manual is not very conclusive on what happens when the error is set.\nBut I\u0027d prefer to this is a par of a separate commit",
+      "parentUuid": "da87b5cf_19ddf670",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 22
+      },
+      "revId": "0b909500d25afea85196584657d2b3e6006605ca",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
