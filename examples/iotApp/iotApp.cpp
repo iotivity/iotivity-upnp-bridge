@@ -35,20 +35,26 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     bool interactiveMode = false;
-    if(argc == 1) {
+    if (argc == 1)
+    {
         interactiveMode = true;
     }
 
     PlatformConfig cfg =
-    { OC::ServiceType::InProc, OC::ModeType::Both, "0.0.0.0", 0, OC::QualityOfService::LowQos,
-    NULL };
+    {
+        OC::ServiceType::InProc, OC::ModeType::Both, "0.0.0.0", 0, OC::QualityOfService::LowQos,
+        NULL
+    };
     OCPlatform::Configure(cfg);
 
-    if(interactiveMode) {
+    if (interactiveMode)
+    {
         std::cout << "running in interactive mode\n";
         InteractiveMode i;
         i.run();
-    } else {
+    }
+    else
+    {
         CommandlineMode cl;
         cl.run(argc, argv);
     }

@@ -33,92 +33,93 @@
 
 class Light
 {
-public:
-    Light();
-    Light(OC::OCResource::Ptr resource);
-    virtual ~Light();
-    Light( const Light& other );
-    Light& operator=(const Light& other);
+    public:
+        Light();
+        Light(OC::OCResource::Ptr resource);
+        virtual ~Light();
+        Light( const Light &other );
+        Light &operator=(const Light &other);
 
-    /**
-     * Used to check is the BinarySwitch is off or on
-     *
-     * \return true if switch is on false if switch is off
-     */
-    bool isOn();
+        /**
+         * Used to check is the BinarySwitch is off or on
+         *
+         * \return true if switch is on false if switch is off
+         */
+        bool isOn();
 
-    /**
-     * This is a helper function that toggles the switch state.
-     * Internally, it usues isOn() and turnOn() to check and change the switch state.
-     *
-     * The function is synchronous, i.e., it will not return till the switch state is changed.
-     *
-     * If you want async behavoir then use the isOnAsyn() and
-     * turnOnAsync() member functions.
-     */
-    void toggle();
+        /**
+         * This is a helper function that toggles the switch state.
+         * Internally, it usues isOn() and turnOn() to check and change the switch state.
+         *
+         * The function is synchronous, i.e., it will not return till the switch state is changed.
+         *
+         * If you want async behavoir then use the isOnAsyn() and
+         * turnOnAsync() member functions.
+         */
+        void toggle();
 
-    /**
-     * Used to turn the switch on or off
-     *
-     * \param isOn set to true to turn switch on set to false to turn switch off
-     * \return true if the
-     */
-    bool turnOn(bool isOn);
+        /**
+         * Used to turn the switch on or off
+         *
+         * \param isOn set to true to turn switch on set to false to turn switch off
+         * \return true if the
+         */
+        bool turnOn(bool isOn);
 
-    void isOnAsync(OC::GetCallback isOnCB);
-    void turnOnAsync(bool isOn, OC::PostCallback turnOnCB) const;
+        void isOnAsync(OC::GetCallback isOnCB);
+        void turnOnAsync(bool isOn, OC::PostCallback turnOnCB) const;
 
-    /**
-     * Used to get the Brightness 0-100
-     *
-     * The integer is the percentage of of brightness 100 is max value.
-     *
-     * \return brightness level between 0 and 100;
-     */
-    int getBrightness();
+        /**
+         * Used to get the Brightness 0-100
+         *
+         * The integer is the percentage of of brightness 100 is max value.
+         *
+         * \return brightness level between 0 and 100;
+         */
+        int getBrightness();
 
-    /**
-     * Used to set brightness percentage value is between 0 and 100
-     *
-     * \param brightness brightness from 0% to 100%
-     * \return true if the brightness was set
-     */
-    bool setBrightness(int brightness);
+        /**
+         * Used to set brightness percentage value is between 0 and 100
+         *
+         * \param brightness brightness from 0% to 100%
+         * \return true if the brightness was set
+         */
+        bool setBrightness(int brightness);
 
-    void getBrightnessAsync(OC::GetCallback isOnCB);
-    void setBrightnessAsync(int brightness, OC::PostCallback turnOnCB);
+        void getBrightnessAsync(OC::GetCallback isOnCB);
+        void setBrightnessAsync(int brightness, OC::PostCallback turnOnCB);
 
-    //Overloaded operator used for putting into a 'set'
-    bool operator<(const Light &other) const;
-    const OC::OCResource::Ptr getResource() const {return m_resource;}
-private:
-    /*
-     * Intended to be called before using the remote service to verify remote methods that discover
-     * services have completed.
-     */
-    bool init();
-    void onGetServices(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode);
-    void onFoundBinarySwitch(OC::OCResource::Ptr resource);
-    void onFoundBrightness(OC::OCResource::Ptr resource);
+        //Overloaded operator used for putting into a 'set'
+        bool operator<(const Light &other) const;
+        const OC::OCResource::Ptr getResource() const {return m_resource;}
+    private:
+        /*
+         * Intended to be called before using the remote service to verify remote methods that discover
+         * services have completed.
+         */
+        bool init();
+        void onGetServices(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                           const int eCode);
+        void onFoundBinarySwitch(OC::OCResource::Ptr resource);
+        void onFoundBrightness(OC::OCResource::Ptr resource);
 
-    OC::GetCallback onGetServicesCB;
-    OC::GetCallback m_getCB;
-    OC::PostCallback m_postCB;
+        OC::GetCallback onGetServicesCB;
+        OC::GetCallback m_getCB;
+        OC::PostCallback m_postCB;
 
-    OC::OCResource::Ptr m_resource;
-    bool m_supported_services_known;
-    bool m_lightSupportsBrightness;
-    bool m_lightSupportsSwitch;
-    BinarySwitch m_binarySwitch;
-    Brightness m_brightness;
+        OC::OCResource::Ptr m_resource;
+        bool m_supported_services_known;
+        bool m_lightSupportsBrightness;
+        bool m_lightSupportsSwitch;
+        BinarySwitch m_binarySwitch;
+        Brightness m_brightness;
 
-    bool m_powerState;
-    int m_eCode;
-    // used to turn the async get call to a sync method call as well as make sure services are
-    // discovered before they are used.
-    std::mutex m_mutex;
-    std::condition_variable m_cv;
+        bool m_powerState;
+        int m_eCode;
+        // used to turn the async get call to a sync method call as well as make sure services are
+        // discovered before they are used.
+        std::mutex m_mutex;
+        std::condition_variable m_cv;
 };
 
 #endif /* LIGHT_H_ */
