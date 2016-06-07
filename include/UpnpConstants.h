@@ -50,6 +50,7 @@ static const std::string UPNP_OIC_TYPE_LAYER3_FORWARDING          = "oic.r.l3f";
 static const std::string UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG      = "oic.r.wan.cable";
 static const std::string UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG        = "oic.r.wan.dsl";
 static const std::string UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG        = "oic.r.wan.ethernet";
+static const std::string UPNP_OIC_TYPE_WAN_POTS_LINK_CONFIG       = "oic.r.wan.pots";
 static const std::string UPNP_OIC_TYPE_WAN_IP_CONNECTION          = "oic.r.wan.ip";
 static const std::string UPNP_OIC_TYPE_LAN_HOST_CONFIG            = "oic.r.lan.config";
 
@@ -65,6 +66,7 @@ static const std::string UPNP_OIC_URI_PREFIX_WAN_IF_CONFIG          = "/oic/upnp
 static const std::string UPNP_OIC_URI_PREFIX_WAN_CABLE_LINK_CONFIG  = "/oic/upnp/wan/cableconfig";
 static const std::string UPNP_OIC_URI_PREFIX_WAN_DSL_LINK_CONFIG    = "/oic/upnp/wan/dslconfig";
 static const std::string UPNP_OIC_URI_PREFIX_WAN_ETHERNET_CONFIG    = "/oic/upnp/wan/ethernetconfig";
+static const std::string UPNP_OIC_URI_PREFIX_WAN_POTS_LINK_CONFIG   = "/oic/upnp/wan/potsconfig";
 static const std::string UPNP_OIC_URI_PREFIX_WAN_CONNECTION         = "/oic/upnp/wan/connection";
 static const std::string UPNP_OIC_URI_PREFIX_WAN_IP_CONNECTION      = "/oic/upnp/wan/ip";
 static const std::string UPNP_OIC_URI_PREFIX_LAN                    = "/oic/upnp/lan";

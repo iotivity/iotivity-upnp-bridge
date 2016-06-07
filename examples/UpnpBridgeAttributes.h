@@ -139,6 +139,31 @@ std::map <std::string, AttrDesc> WanDslConfigAttrs =
     {"linkInfo",           {ATTR_TYPE_VECTOR,  true,  &WanDslConfigLinkInfoAttrs}}
 };
 
+// WANDSLLinkConfig
+std::map <std::string, AttrDesc> WanPotsConfigIspAttrs =
+{
+    {"phoneNumber",  {ATTR_TYPE_STRING,   false, NULL}},
+    {"info",         {ATTR_TYPE_STRING,   false, NULL}},
+    {"linkType",     {ATTR_TYPE_STRING,   false, NULL}}
+};
+
+std::map <std::string, AttrDesc> WanPotsConfigCallRetryAttrs =
+{
+    {"numRetries",  {ATTR_TYPE_INT,   false, NULL}},
+    {"interval",    {ATTR_TYPE_INT,   false, NULL}}
+};
+
+std::map <std::string, AttrDesc> WanPotsConfigAttrs =
+{
+    {"fclass",             {ATTR_TYPE_STRING,  false, NULL}},
+    {"dataModulation",     {ATTR_TYPE_STRING,  false, NULL}},
+    {"dataProtocol",       {ATTR_TYPE_STRING,  false, NULL}},
+    {"dataCmpression",     {ATTR_TYPE_STRING,  false, NULL}},
+    {"vtrCommand",         {ATTR_TYPE_BOOL,    false, NULL}},
+    {"isp",                {ATTR_TYPE_VECTOR,  false, &WanPotsConfigIspAttrs}},
+    {"callRetry",          {ATTR_TYPE_VECTOR,  false, &WanPotsConfigCallRetryAttrs}},
+};
+
 // LANHostConfigManagement
 std::map <std::string, AttrDesc> LanHostConfigAddrRangeAttrs =
 {
@@ -310,6 +335,7 @@ std::map <std::string, std::map <std::string, AttrDesc> & > ResourceAttrMap =
     {UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG,  WanCableConfigAttrs},
     {UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG,    WanDslConfigAttrs},
     {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,    WanEthConfigAttrs},
+    {UPNP_OIC_TYPE_WAN_POTS_LINK_CONFIG,   WanPotsConfigAttrs},
     {UPNP_OIC_TYPE_WAN_IP_CONNECTION,      WanIpConnectionAttrs},
     {UPNP_OIC_TYPE_LAN_HOST_CONFIG,        LanHostConfigAttrs},
     {UPNP_OIC_TYPE_AV_TRANSPORT,           AvTransportAttrs},
