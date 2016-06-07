@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_19af36e5",
+        "filename": "src/UpnpRenderingControlService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-06-07T16:18:58Z",
+      "side": 1,
+      "message": "Only the required attributes are exposed here.  There are many other optional attributes in the spec.",
+      "parentUuid": "da87b5cf_f95e1212",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 69
+      },
+      "revId": "62a22a360178e5aa239f5eca102bc017e93fb638",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_b9a08af5",
         "filename": "src/UpnpRenderingControlService.cpp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-06-07T16:06:24Z",
       "side": 1,
       "message": "Am I missing where you are checking that the call to m_attributeMap[attrName].first returned a valid pointer.  You did not check that *attrInfo was not nullptr then you dereference the pointer down on line 644.  If this is null it would segfault.",
+      "range": {
+        "startLine": 634,
+        "startChar": 0,
+        "endLine": 634,
+        "endChar": 69
+      },
+      "revId": "62a22a360178e5aa239f5eca102bc017e93fb638",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_99826651",
+        "filename": "src/UpnpRenderingControlService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-06-07T16:18:58Z",
+      "side": 1,
+      "message": "Good point.  This is an idiom that I\u0027ve copied from place to place.  I should fix them all.",
+      "parentUuid": "da87b5cf_b9a08af5",
       "range": {
         "startLine": 634,
         "startChar": 0,
