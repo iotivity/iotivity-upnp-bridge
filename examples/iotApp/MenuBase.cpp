@@ -1,3 +1,4 @@
+//******************************************************************
 //
 // Copyright 2016 Intel Corporation All Rights Reserved.
 //
@@ -17,20 +18,7 @@
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#ifndef INTERACTIVEMODE_H_
-#define INTERACTIVEMODE_H_
-
-#include <memory>
-
 #include "MenuBase.h"
 
-class InteractiveMode {
-public:
-    InteractiveMode();
-    void run();
-private:
-    std::vector<std::string> parseCmd(const std::string &cmd);
-    std::stack<std::unique_ptr<MenuBase>> menuStack;
-};
-
-#endif /* INTERACTIVEMODE_H_ */
+MenuBase::MenuBase() {}
+MenuBase::~MenuBase() {}
