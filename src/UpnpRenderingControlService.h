@@ -29,7 +29,6 @@
 #include "UpnpResource.h"
 #include "UpnpInternal.h"
 #include "UpnpService.h"
-#include "UpnpRenderingControlAttribute.h"
 
 using namespace std;
 
@@ -38,9 +37,8 @@ class UpnpRenderingControl: public UpnpService
         friend class UpnpService;
 
     public:
-        typedef GUPnPServiceProxyAction *(UpnpRenderingControl::*GetAttributeHandler)(UpnpRequest *);
-        typedef GUPnPServiceProxyAction *(UpnpRenderingControl::*SetAttributeHandler)(
-            GUPnPServiceProxy *, UpnpRequest *, UpnpAttributeInfo *, RCSResourceAttributes);
+        typedef bool (UpnpRenderingControl::*GetAttributeHandler)(UpnpRequest *, const map< string, string > &);
+        typedef bool (UpnpRenderingControl::*SetAttributeHandler)(UpnpRequest *, RCSResourceAttributes::Value *, const map< string, string > &);
 
         UpnpRenderingControl(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState) :
             UpnpService(serviceInfo, UPNP_OIC_TYPE_RENDERING_CONTROL, requestState, &Attributes)
@@ -48,13 +46,31 @@ class UpnpRenderingControl: public UpnpService
         }
 
     private:
+        static map< const string, UpnpRenderingControl::GetAttributeHandler > GetAttributeActionMap;
+        static map< const string, UpnpRenderingControl::SetAttributeHandler > SetAttributeActionMap;
+
         static vector< UpnpAttributeInfo > Attributes;
 
-        bool getAttributesRequest(UpnpRequest *request,
-                                  const map< string, string > &queryParams);
-        bool setAttributesRequest(const RCSResourceAttributes &attrs,
-                                  UpnpRequest *request,
-                                  const map< string, string > &queryParams);
+        bool getAttributesRequest(UpnpRequest *request, const map< string, string > &queryParams);
+        bool setAttributesRequest(const RCSResourceAttributes &attrs, UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void getPresetNameListCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool getPresetNameList(UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void setPresetNameCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool setPresetName(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
+
+        static void getMuteCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool getMute(UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void setMuteCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool setMute(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
+
+        static void getVolumeCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool getVolume(UpnpRequest *request, const map< string, string > &queryParams);
+
+        static void setVolumeCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *action, gpointer userData);
+        bool setVolume(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams);
 };
 
 #endif
