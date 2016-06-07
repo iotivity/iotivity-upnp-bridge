@@ -296,6 +296,34 @@ void MenuIotivity::onResponse(const OC::HeaderOptions&, const OC::OCRepresentati
         }
         for (OC::OCRepresentation::const_iterator it = rep.begin(); it != rep.end(); ++it) {
             std::cout << "\t" << it->attrname() << " " << it->getValueToString() << std::endl;
+            if ("links" == it->attrname()) {
+                OC::AttributeValue links;
+                rep.getAttributeValue("links", links);
+                auto rep_links = boost::get<std::vector<OC::OCRepresentation> >(links);
+                // TODO investigate why this fails compilation
+                //std::vector<OC::OCRepresentation> rep_links = it->getValue();
+                size_t linkCount = 0;
+                for(auto r : rep_links) {
+                    std::cout << "\t[link " << linkCount++ << "]" << std::endl;
+                    if (!r.getResourceTypes().empty()) {
+                        std::cout << "\t\tresourceTypes ";
+                        for(auto rt : r.getResourceTypes()) {
+                            std::cout << rt << " ";
+                        }
+                        std::cout << std::endl;
+                    }
+                    if (!r.getResourceInterfaces().empty()) {
+                        std::cout << "\t\tresourceInterfaces ";
+                        for (auto ri : r.getResourceInterfaces()) {
+                            std::cout << ri << " ";
+                        }
+                        std::cout << std::endl;
+                    }
+                    for (OC::OCRepresentation::const_iterator rit = r.begin(); rit != r.end(); ++rit) {
+                        std::cout << "\t\t" << rit->attrname() << " " << rit->getValueToString() << std::endl;
+                    }
+                }
+            }
             // TODO type, base_type, depth
         }
     }
