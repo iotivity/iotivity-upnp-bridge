@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_39ff9a36",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-08T18:00:34Z",
+      "side": 1,
+      "message": "Do we ever expect attrInfo to be NULL? I do not see the scenario. We are iterating over m_attributeMap, that has been constructed based on the introspection for supported actions(attributes) and every \"attrInfo\" entry points to an element in static vector \u003cUpnpAttributeInfo\u003e UpnpAVTransport::Attributes...",
+      "range": {
+        "startLine": 1473,
+        "startChar": 18,
+        "endLine": 1473,
+        "endChar": 26
+      },
+      "revId": "a95174e032d02cf259d5e7cf5e119982a28e6581",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
