@@ -418,7 +418,7 @@ bool UpnpContentDirectory::getAttributesRequest(UpnpRequest *request,
             GetAttributeHandler fp = attr->second;
             result = (this->*fp)(request, queryParams);
         }
-        else if (string(attrInfo->actions[0].name) != "")
+        else if ((attrInfo != NULL) && string(attrInfo->actions[0].name) != "")
         {
             result = UpnpAttribute::get(m_proxy, request, attrInfo);
         }

@@ -1470,7 +1470,7 @@ bool UpnpAVTransport::getAttributesRequest(UpnpRequest *request, const map< stri
             GetAttributeHandler fp = attr->second;
             result = (this->*fp)(request, queryParams);
         }
-        else if (string(attrInfo->actions[0].name) != "")
+        else if ((attrInfo != NULL) && string(attrInfo->actions[0].name) != "")
         {
             result = UpnpAttribute::get(m_proxy, request, attrInfo);
         }
@@ -1516,7 +1516,7 @@ bool UpnpAVTransport::setAttributesRequest(const RCSResourceAttributes &value,
             SetAttributeHandler fp = attr->second;
             result = (this->*fp)(request, &attrValue, queryParams);
         }
-        else if (string(attrInfo->actions[0].name) != "")
+        else if ((attrInfo != NULL) && string(attrInfo->actions[0].name) != "")
         {
             result = UpnpAttribute::set(m_proxy, request, attrInfo, &attrValue);
         }
