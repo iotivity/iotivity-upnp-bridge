@@ -46,6 +46,30 @@
       "revId": "a95174e032d02cf259d5e7cf5e119982a28e6581",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_59b61e8c",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-08T18:39:52Z",
+      "side": 1,
+      "message": "I just saw that we were dereferencing the attrInfo pointer that had not been checked for NULL if it is ever NULL this would result in a segfault.  This could be a result of me spending too much time looking over static analysis tools that point out this sort of programming issue.  If we absolutely know the call to attrInfo-\u003eactions[0] will not result in a nullptr dereference then we are good.  Typically even it we don\u0027t think there is a chance its good idea to put the check into the code.",
+      "parentUuid": "da87b5cf_f9f8524b",
+      "range": {
+        "startLine": 1473,
+        "startChar": 18,
+        "endLine": 1473,
+        "endChar": 26
+      },
+      "revId": "a95174e032d02cf259d5e7cf5e119982a28e6581",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
