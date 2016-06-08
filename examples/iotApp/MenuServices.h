@@ -44,17 +44,24 @@ class MenuServices: public MenuBase
                          std::stack<std::unique_ptr<MenuBase>> &menuStack);
         virtual bool quit();
     private:
-        void onFindResource(std::shared_ptr< OC::OCResource > resource);
+        void onFindResource(OC::OCResource::Ptr resource);
 
-        std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> m_avTransport;
-        std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> m_binarySwitch;
-        std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> m_brightness;
-        std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> m_connectionManager;
-        std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> m_contentDirectory;
-        std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> m_layer3Forwarding;
-        std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> m_renderingControl;
-        std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> m_schedualedRecording;
-        std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> m_wanIfConfig;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_avTransport;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_binarySwitch;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_brightness;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_connectionManager;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_contentDirectory;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_layer3Forwarding;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_renderingControl;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_schedualedRecording;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_wanIfConfig;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_wanCableLinkConfig;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_wanDSLLinkConfig;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_wanEthernetConfig;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_wanPotsLinkConfig;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_wanIPConnection;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_lanHostConfig;
+
 
 
         bool m_quit;
