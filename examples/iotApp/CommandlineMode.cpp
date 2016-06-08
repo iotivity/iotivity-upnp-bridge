@@ -263,18 +263,18 @@ void CommandlineMode::testBrightness(std::shared_ptr< OC::OCResource > resource)
     {
         if (eCode == OC_STACK_OK)
         {
-            int brightness;
+            int brightness = 100;
             std::string uri;
             rep.getValue("uri", uri);
             if (uri == b.getResource()->uri())
             {
                 rep.getValue("brightness", brightness);
+                brightness -= 20;
+                brightness = ((brightness < 20) ? 100 :
+                        brightness); //don't drop below 20% so we can tell light is on
+                b.setBrightnessAsync(brightness, [](const OC::HeaderOptions & headerOptions,
+                                     const OC::OCRepresentation & rep, const int eCode) {});
             }
-            brightness -= 20;
-            brightness = ((brightness < 20) ? 100 :
-                          brightness); //don't drop below 20% so we can tell light is on
-            b.setBrightnessAsync(brightness, [](const OC::HeaderOptions & headerOptions,
-            const OC::OCRepresentation & rep, const int eCode) {});
         }
     });
 }
@@ -287,15 +287,15 @@ void CommandlineMode::testSwitch(std::shared_ptr< OC::OCResource > resource)
     {
         if (eCode == OC_STACK_OK)
         {
-            bool powerState;
+            bool powerState = true;
             std::string uri;
             rep.getValue("uri", uri);
             if (uri == s.getResource()->uri())
             {
                 rep.getValue("value", powerState);
+                s.turnOnAsync(!powerState, [](const OC::HeaderOptions & headerOptions,
+                              const OC::OCRepresentation & rep, const int eCode) {});
             }
-            s.turnOnAsync(!powerState, [](const OC::HeaderOptions & headerOptions,
-            const OC::OCRepresentation & rep, const int eCode) {});
         }
     });
 }
