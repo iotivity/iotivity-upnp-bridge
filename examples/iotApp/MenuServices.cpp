@@ -57,9 +57,21 @@ void MenuServices::print()
               " found)" << std::endl;
     std::cout << "rendering) " << UPNP_OIC_TYPE_RENDERING_CONTROL << " (" << m_renderingControl.size()
               << " found)" << std::endl;
-    std::cout << "recording) " << UPNP_OIC_TYPE_SCHEDULED_RECORDING << " (" << m_renderingControl.size()
+    std::cout << "recording) " << UPNP_OIC_TYPE_SCHEDULED_RECORDING << " (" << m_scheduledRecording.size()
               << " found)" << std::endl;
     std::cout << "ifconfig) " << UPNP_OIC_TYPE_WAN_IF_CONFIG << " (" << m_wanIfConfig.size() <<
+              " found)" << std::endl;
+    std::cout << "cableconfig) " << UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG << " (" << m_wanCableLinkConfig.size() <<
+              " found)" << std::endl;
+    std::cout << "dslconfig) " << UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG << " (" << m_wanDSLLinkConfig.size() <<
+              " found)" << std::endl;
+    std::cout << "netconfig) " << UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG << " (" << m_wanEthernetConfig.size() <<
+              " found)" << std::endl;
+    std::cout << "potsconfig) " << UPNP_OIC_TYPE_WAN_POTS_LINK_CONFIG << " (" << m_wanPotsLinkConfig.size() <<
+              " found)" << std::endl;
+    std::cout << "ipconnection) " << UPNP_OIC_TYPE_WAN_IP_CONNECTION << " (" << m_wanIPConnection.size() <<
+              " found)" << std::endl;
+    std::cout << "lanhost) " << UPNP_OIC_TYPE_LAN_HOST_CONFIG << " (" << m_lanHostConfig.size() <<
               " found)" << std::endl;
     std::cout << "clear) clear all found services" << std::endl;
     std::cout << "b) Back" << std::endl;
@@ -90,6 +102,13 @@ void MenuServices::run(const std::vector<std::string> &cmd,
                 std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_SCHEDULED_RECORDING,
                 std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_WAN_IF_CONFIG,
                 std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_LAYER3_FORWARDING,
+                std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG,
+                std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG,
+                std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,
+                std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_WAN_POTS_LINK_CONFIG,
+                std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_WAN_IP_CONNECTION,
+                std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_LAN_HOST_CONFIG
+
             };
             for (auto service : knownServices)
             {
@@ -170,11 +189,11 @@ void MenuServices::run(const std::vector<std::string> &cmd,
                     std::cout << std::endl;
                 }
             }
-            if (!m_schedualedRecording.empty())
+            if (!m_scheduledRecording.empty())
             {
                 std::cout << "Scheduled Recording Service(s) found:" << std::endl;
                 std::cout << "---------------------------------------------" << std::endl;
-                for ( auto r : m_schedualedRecording)
+                for ( auto r : m_scheduledRecording)
                 {
                     printResourceCompact(r);
                     std::cout << std::endl;
@@ -185,6 +204,66 @@ void MenuServices::run(const std::vector<std::string> &cmd,
                 std::cout << "WAN IF Config Service(s) found:" << std::endl;
                 std::cout << "---------------------------------------------" << std::endl;
                 for ( auto r : m_wanIfConfig)
+                {
+                    printResourceCompact(r);
+                    std::cout << std::endl;
+                }
+            }
+            if (!m_wanCableLinkConfig.empty())
+            {
+                std::cout << "WAN Cable Link Config Service(s) found:" << std::endl;
+                std::cout << "---------------------------------------------" << std::endl;
+                for ( auto r : m_wanCableLinkConfig)
+                {
+                    printResourceCompact(r);
+                    std::cout << std::endl;
+                }
+            }
+            if (!m_wanDSLLinkConfig.empty())
+            {
+                std::cout << "WAN DSL Link Config Service(s) found:" << std::endl;
+                std::cout << "---------------------------------------------" << std::endl;
+                for ( auto r : m_wanDSLLinkConfig)
+                {
+                    printResourceCompact(r);
+                    std::cout << std::endl;
+                }
+            }
+            if (!m_wanEthernetConfig.empty())
+            {
+                std::cout << "WAN Ethernet Config Service(s) found:" << std::endl;
+                std::cout << "---------------------------------------------" << std::endl;
+                for ( auto r : m_wanEthernetConfig)
+                {
+                    printResourceCompact(r);
+                    std::cout << std::endl;
+                }
+            }
+            if (!m_wanPotsLinkConfig.empty())
+            {
+                std::cout << "WAN POTS Config Service(s) found:" << std::endl;
+                std::cout << "---------------------------------------------" << std::endl;
+                for ( auto r : m_wanPotsLinkConfig)
+                {
+                    printResourceCompact(r);
+                    std::cout << std::endl;
+                }
+            }
+            if (!m_wanIPConnection.empty())
+            {
+                std::cout << "WAN IP Connection Service(s) found:" << std::endl;
+                std::cout << "---------------------------------------------" << std::endl;
+                for ( auto r : m_wanIPConnection)
+                {
+                    printResourceCompact(r);
+                    std::cout << std::endl;
+                }
+            }
+            if (!m_lanHostConfig.empty())
+            {
+                std::cout << "LAN Host Config Service(s) found:" << std::endl;
+                std::cout << "---------------------------------------------" << std::endl;
+                for ( auto r : m_lanHostConfig)
                 {
                     printResourceCompact(r);
                     std::cout << std::endl;
@@ -231,6 +310,30 @@ void MenuServices::run(const std::vector<std::string> &cmd,
         {
             std::cout << "WAN IF Config Menu not yet Implemented" << std::endl;
         }
+        else if ("cableconfig" == cmd[0])
+        {
+            std::cout << "WAN Cable Link Config Menu not yet Implemented" << std::endl;
+        }
+        else if ("dslconfig" == cmd[0])
+        {
+            std::cout << "WAN DSL Link Config Menu not yet Implemented" << std::endl;
+        }
+        else if ("netconfig" == cmd[0])
+        {
+            std::cout << "WAN Ethernet Config Menu not yet Implemented" << std::endl;
+        }
+        else if ("potsconfig" == cmd[0])
+        {
+            std::cout << "WAN POTS Config Menu not yet Implemented" << std::endl;
+        }
+        else if ("ipconnection" == cmd[0])
+        {
+            std::cout << "WAN IP Connection Menu not yet Implemented" << std::endl;
+        }
+        else if ("lanhost" == cmd[0])
+        {
+            std::cout << "LAN Host Config Menu not yet Implemented" << std::endl;
+        }
         else if ("clear" == cmd[0])
         {
             m_avTransport.clear();
@@ -240,7 +343,7 @@ void MenuServices::run(const std::vector<std::string> &cmd,
             m_contentDirectory.clear();
             m_layer3Forwarding.clear();
             m_renderingControl.clear();
-            m_schedualedRecording.clear();
+            m_scheduledRecording.clear();
             m_wanIfConfig.clear();
             print();
         }
@@ -278,7 +381,7 @@ bool MenuServices::quit()
     return m_quit;
 }
 
-void MenuServices::onFindResource(std::shared_ptr< OC::OCResource > resource)
+void MenuServices::onFindResource(OC::OCResource::Ptr resource)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::cout << "Found resource" << std::endl;
@@ -349,9 +452,9 @@ void MenuServices::onFindResource(std::shared_ptr< OC::OCResource > resource)
                 }
                 else if (resourceType == UPNP_OIC_TYPE_SCHEDULED_RECORDING)
                 {
-                    if (m_schedualedRecording.find(resource) == m_schedualedRecording.end())
+                    if (m_scheduledRecording.find(resource) == m_scheduledRecording.end())
                     {
-                        m_schedualedRecording.insert(resource);
+                        m_scheduledRecording.insert(resource);
                         isNewServiceFound = true;
                     }
                 }
@@ -360,6 +463,54 @@ void MenuServices::onFindResource(std::shared_ptr< OC::OCResource > resource)
                     if (m_wanIfConfig.find(resource) == m_wanIfConfig.end())
                     {
                         m_wanIfConfig.insert(resource);
+                        isNewServiceFound = true;
+                    }
+                }
+                else if (resourceType == UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG)
+                {
+                    if (m_wanCableLinkConfig.find(resource) == m_wanCableLinkConfig.end())
+                    {
+                        m_wanCableLinkConfig.insert(resource);
+                        isNewServiceFound = true;
+                    }
+                }
+                else if (resourceType == UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG)
+                {
+                    if (m_wanDSLLinkConfig.find(resource) == m_wanDSLLinkConfig.end())
+                    {
+                        m_wanDSLLinkConfig.insert(resource);
+                        isNewServiceFound = true;
+                    }
+                }
+                else if (resourceType == UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG)
+                {
+                    if (m_wanEthernetConfig.find(resource) == m_wanEthernetConfig.end())
+                    {
+                        m_wanEthernetConfig.insert(resource);
+                        isNewServiceFound = true;
+                    }
+                }
+                else if (resourceType == UPNP_OIC_TYPE_WAN_POTS_LINK_CONFIG)
+                {
+                    if (m_wanPotsLinkConfig.find(resource) == m_wanPotsLinkConfig.end())
+                    {
+                        m_wanPotsLinkConfig.insert(resource);
+                        isNewServiceFound = true;
+                    }
+                }
+                else if (resourceType == UPNP_OIC_TYPE_WAN_IP_CONNECTION)
+                {
+                    if (m_wanIPConnection.find(resource) == m_wanIPConnection.end())
+                    {
+                        m_wanIPConnection.insert(resource);
+                        isNewServiceFound = true;
+                    }
+                }
+                else if (resourceType == UPNP_OIC_TYPE_LAN_HOST_CONFIG)
+                {
+                    if (m_lanHostConfig.find(resource) == m_lanHostConfig.end())
+                    {
+                        m_lanHostConfig.insert(resource);
                         isNewServiceFound = true;
                     }
                 }
