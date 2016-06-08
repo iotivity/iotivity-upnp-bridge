@@ -118,6 +118,30 @@
       "revId": "a95174e032d02cf259d5e7cf5e119982a28e6581",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_d9578e25",
+        "filename": "src/UpnpAVTransportService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-06-08T21:02:41Z",
+      "side": 1,
+      "message": "That\u0027s a good point too.  For now I will abandon this change and we discuss at a later time.",
+      "parentUuid": "da87b5cf_d980ee8d",
+      "range": {
+        "startLine": 1473,
+        "startChar": 18,
+        "endLine": 1473,
+        "endChar": 26
+      },
+      "revId": "a95174e032d02cf259d5e7cf5e119982a28e6581",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
