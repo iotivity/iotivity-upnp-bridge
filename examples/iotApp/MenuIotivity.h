@@ -42,12 +42,12 @@ class MenuIotivity: public MenuBase
                          std::stack<std::unique_ptr<MenuBase>> &menuStack);
         virtual bool quit();
     private:
-        void onFindResource(std::shared_ptr< OC::OCResource > resource);
+        void onFindResource(OC::OCResource::Ptr resource);
         void onResponse(const OC::HeaderOptions &, const OC::OCRepresentation &rep, const int eCode);
         void onObserve(const OC::HeaderOptions &, const OC::OCRepresentation &rep, const int eCode,
                        const int sequenceNumber);
 
-        std::vector< std::shared_ptr< OC::OCResource > > m_resources;
+        std::vector< OC::OCResource::Ptr > m_resources;
         bool m_quit;
         std::mutex m_mutex;
 

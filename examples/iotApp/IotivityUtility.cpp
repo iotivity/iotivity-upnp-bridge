@@ -80,3 +80,66 @@ void printResourceCompact(std::shared_ptr< OC::OCResource > resource)
         std::cerr << "Caught exception in printResourceInformation: " << e.what() << std::endl;
     }
 }
+
+void processAttributes(const OC::OCRepresentation &rep,
+                              const std::map <std::string, AttrDesc> *attrMap,
+                              std::string prefix)
+{
+    for (auto &attr : *attrMap)
+    {
+        if (rep.hasAttribute(attr.first))
+        {
+            std::cout << prefix << attr.first << "";
+        }
+        else
+        {
+            continue;
+        }
+
+        switch (attr.second.type)
+        {
+            case ATTR_TYPE_BOOL:
+            {
+                bool value;
+                rep.getValue(attr.first, value);
+                std::cout << " (bool):\t " << ((value) ? "TRUE" : "FALSE") << std::endl;
+                break;
+            }
+            case ATTR_TYPE_INT:
+            {
+                int value;
+                rep.getValue(attr.first, value);
+                std::cout << " (int):\t " << value << std::endl;
+                break;
+            }
+            case ATTR_TYPE_INT64:
+            {
+                double value;
+                rep.getValue(attr.first, value);
+                std::cout << " (int64): \t " << value << std::endl;
+                break;
+            }
+            case ATTR_TYPE_STRING:
+            {
+                std::string value;
+                rep.getValue(attr.first, value);
+                std::cout << " (string): \t " << value << std::endl;
+                break;
+            }
+            case ATTR_TYPE_VECTOR:
+            {
+                OC::OCRepresentation internal;
+                rep.getValue(attr.first, internal);
+                std::cout << std::endl;
+                processAttributes(internal, attr.second.composite, prefix + "\t");
+                break;
+            }
+            default:
+            {
+                std::cout << "not handled yet" << std::endl;
+                break;
+            }
+        }
+    }
+
+}
