@@ -19,8 +19,10 @@
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #include <UpnpConstants.h>
+#include <UpnpBridgeAttributes.h>
 
 #include "MenuIotivity.h"
+#include "IotivityUtility.h"
 
 MenuIotivity::MenuIotivity():
     m_resources(), m_quit(false)
@@ -312,12 +314,11 @@ bool MenuIotivity::quit()
     return m_quit;
 }
 
-void MenuIotivity::onFindResource(std::shared_ptr< OC::OCResource > resource)
+void MenuIotivity::onFindResource(OC::OCResource::Ptr resource)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::cout << "Found resource" << std::endl;
     m_resources.push_back(resource);
-    printResourceCompact(resource);
 }
 
 void MenuIotivity::onResponse(const OC::HeaderOptions &, const OC::OCRepresentation &rep,
@@ -332,7 +333,7 @@ void MenuIotivity::onResponse(const OC::HeaderOptions &, const OC::OCRepresentat
         if (!rep.getResourceTypes().empty())
         {
             std::cout << "\tresourceTypes ";
-            for (auto rt : rep.getResourceTypes())
+            for (auto &rt : rep.getResourceTypes())
             {
                 std::cout << rt << " ";
             }
@@ -386,6 +387,28 @@ void MenuIotivity::onResponse(const OC::HeaderOptions &, const OC::OCRepresentat
                 }
             }
             // TODO type, base_type, depth
+        }
+        for(auto foundResource : m_resources) {
+            if (foundResource->uri() == rep.getUri()) {
+                std::cout << "\n*********************** RESOURCE DETAILS *****************\n";
+                for (auto &rt : foundResource->getResourceTypes()) {
+                    std::cout << "\tResource Type:\n\t\t" <<  rt << std::endl;
+                    auto it = ResourceAttrMap.find(rt);
+
+                    if (it == ResourceAttrMap.end())
+                    {
+                        std::cout << "\tRESOURCE MAP NOT FOUND" << std::endl;
+                        std::cout << "\n***********************************************************\n";
+                        return;
+                    }
+
+                    auto &attrMap = it->second;
+
+                    processAttributes(rep, &attrMap, "\t");
+
+                    std::cout << "\n***********************************************************\n";
+                }
+            }
         }
     }
 }
