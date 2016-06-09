@@ -21,6 +21,7 @@
 #ifndef UPNP_BRIDGE_ATTRIBUTES_H
 #define UPNP_BRIDGE_ATTRIBUTES_H
 
+#include <map>
 #include <UpnpConstants.h>
 
 typedef enum
@@ -40,19 +41,19 @@ typedef struct _AttrDesc
                            // attribute, the flag should be set to "true",
                            // if any of the sub attributes are
                            // observalble.
-    std::map <std::string, _AttrDesc> *composite;
+    const std::map <std::string, _AttrDesc> *composite;
 } AttrDesc;
 
 // Light
 
 // BinarySwitch
-std::map <std::string, AttrDesc> BinarySwitchAttrs =
+const std::map <std::string, AttrDesc> BinarySwitchAttrs =
 {
     {"value", {ATTR_TYPE_BOOL, true, NULL}}
 };
 
 // Brightness
-std::map <std::string, AttrDesc> BrightnessAttrs =
+const std::map <std::string, AttrDesc> BrightnessAttrs =
 {
     {"brightness", {ATTR_TYPE_INT, true, NULL}}
 };
@@ -61,13 +62,13 @@ std::map <std::string, AttrDesc> BrightnessAttrs =
 
 // WANInterfaceConfig
 
-std::map <std::string, AttrDesc>WanIfConfigConnInfoAttrs =
+const std::map <std::string, AttrDesc>WanIfConfigConnInfoAttrs =
 {
     {"deviceContainer", {ATTR_TYPE_STRING, false, NULL}},
     {"serviceId",       {ATTR_TYPE_STRING, false, NULL}},
 };
 
-std::map <std::string, AttrDesc> WanIfConfigConnLinkPropertiesAttrs =
+const std::map <std::string, AttrDesc> WanIfConfigConnLinkPropertiesAttrs =
 {
     {"accessType",     {ATTR_TYPE_STRING, false, NULL}},
     {"linkStatus",     {ATTR_TYPE_STRING, true,  NULL}},
@@ -75,7 +76,7 @@ std::map <std::string, AttrDesc> WanIfConfigConnLinkPropertiesAttrs =
     {"downMaxBitrate", {ATTR_TYPE_INT,    false, NULL}}
 };
 
-std::map <std::string, AttrDesc> WanIfConfigAttrs =
+const std::map <std::string, AttrDesc> WanIfConfigAttrs =
 {
     {"inetEnabled",        {ATTR_TYPE_BOOL,   true,  NULL}},
     {"linkProperties",     {ATTR_TYPE_VECTOR, true,  &WanIfConfigConnLinkPropertiesAttrs}},
@@ -90,25 +91,25 @@ std::map <std::string, AttrDesc> WanIfConfigAttrs =
 };
 
 // Layer3Forwarding
-std::map <std::string, AttrDesc> L3FAttrs =
+const std::map <std::string, AttrDesc> L3FAttrs =
 {
     {"defaultConnectionService",  {ATTR_TYPE_STRING,   true, NULL}}
 };
 
 // WANEthernetLinkConfig
-std::map <std::string, AttrDesc> WanEthConfigAttrs =
+const std::map <std::string, AttrDesc> WanEthConfigAttrs =
 {
     {"linkStatus",  {ATTR_TYPE_STRING,   true, NULL}}
 };
 
 // WANCableLinkConfig
-std::map <std::string, AttrDesc> WanCableConfigLinkInfoAttrs =
+const std::map <std::string, AttrDesc> WanCableConfigLinkInfoAttrs =
 {
     {"linkState",  {ATTR_TYPE_STRING,   false, NULL}},
     {"linkType",   {ATTR_TYPE_STRING,   false, NULL}}
 };
 
-std::map <std::string, AttrDesc> WanCableConfigAttrs =
+const std::map <std::string, AttrDesc> WanCableConfigAttrs =
 {
     {"downFrequency",      {ATTR_TYPE_INT,    false, NULL}},
     {"downModulation",     {ATTR_TYPE_STRING, false, NULL}},
@@ -123,14 +124,13 @@ std::map <std::string, AttrDesc> WanCableConfigAttrs =
 };
 
 // WANDSLLinkConfig
-std::map <std::string, AttrDesc> WanDslConfigLinkInfoAttrs =
+const std::map <std::string, AttrDesc> WanDslConfigLinkInfoAttrs =
 {
     {"linkType",     {ATTR_TYPE_STRING,   false, NULL}},
     {"linkStatus",   {ATTR_TYPE_STRING,   true, NULL}}
 };
 
-std::map <std::string, AttrDesc> WanDslConfigAttrs =
-{
+const std::map <std::string, AttrDesc> WanDslConfigAttrs ={
     {"autoConfig",         {ATTR_TYPE_BOOL,    true,  NULL}},
     {"modulationType",     {ATTR_TYPE_STRING,  false, NULL}},
     {"destAddr",           {ATTR_TYPE_STRING,  false, NULL}},
@@ -140,20 +140,20 @@ std::map <std::string, AttrDesc> WanDslConfigAttrs =
 };
 
 // WANDSLLinkConfig
-std::map <std::string, AttrDesc> WanPotsConfigIspAttrs =
+const std::map <std::string, AttrDesc> WanPotsConfigIspAttrs =
 {
     {"phoneNumber",  {ATTR_TYPE_STRING,   false, NULL}},
     {"info",         {ATTR_TYPE_STRING,   false, NULL}},
     {"linkType",     {ATTR_TYPE_STRING,   false, NULL}}
 };
 
-std::map <std::string, AttrDesc> WanPotsConfigCallRetryAttrs =
+const std::map <std::string, AttrDesc> WanPotsConfigCallRetryAttrs =
 {
     {"numRetries",  {ATTR_TYPE_INT,   false, NULL}},
     {"interval",    {ATTR_TYPE_INT,   false, NULL}}
 };
 
-std::map <std::string, AttrDesc> WanPotsConfigAttrs =
+const std::map <std::string, AttrDesc> WanPotsConfigAttrs =
 {
     {"fclass",             {ATTR_TYPE_STRING,  false, NULL}},
     {"dataModulation",     {ATTR_TYPE_STRING,  false, NULL}},
@@ -165,13 +165,13 @@ std::map <std::string, AttrDesc> WanPotsConfigAttrs =
 };
 
 // LANHostConfigManagement
-std::map <std::string, AttrDesc> LanHostConfigAddrRangeAttrs =
+const std::map <std::string, AttrDesc> LanHostConfigAddrRangeAttrs =
 {
     {"minAddr",  {ATTR_TYPE_STRING, false, NULL}},
     {"maxAddr",  {ATTR_TYPE_STRING, false, NULL}}
 };
 
-std::map <std::string, AttrDesc> LanHostConfigAttrs =
+const std::map <std::string, AttrDesc> LanHostConfigAttrs =
 {
     {"configurable", {ATTR_TYPE_BOOL,    false, NULL}},
     {"dhcpRelay",    {ATTR_TYPE_BOOL,    false, NULL}},
@@ -184,26 +184,26 @@ std::map <std::string, AttrDesc> LanHostConfigAttrs =
 };
 
 // WANIPConnection
-std::map <std::string, AttrDesc> WanIpConnectionTypeInfoAttrs =
+const std::map <std::string, AttrDesc> WanIpConnectionTypeInfoAttrs =
 {
     {"type",         {ATTR_TYPE_STRING, false, NULL}},
     {"allTypes",     {ATTR_TYPE_STRING, true,  NULL}}
 };
 
-std::map <std::string, AttrDesc> WanIpConnectionNatStatusAttrs =
+const std::map <std::string, AttrDesc> WanIpConnectionNatStatusAttrs =
 {
     {"rsip",        {ATTR_TYPE_BOOL, false,  NULL}},
     {"enabled",     {ATTR_TYPE_BOOL, false,  NULL}}
 };
 
-std::map <std::string, AttrDesc> WanIpConnectionStateAttrs =
+const std::map <std::string, AttrDesc> WanIpConnectionStateAttrs =
 {
     {"status",      {ATTR_TYPE_STRING, true, NULL}},
     {"lastError",   {ATTR_TYPE_STRING, false,  NULL}},
     {"uptime",      {ATTR_TYPE_INT, false,  NULL}},
 };
 
-std::map <std::string, AttrDesc> WanIpConnectionAttrs =
+const std::map <std::string, AttrDesc> WanIpConnectionAttrs =
 {
     {"autoDiscoTime",      {ATTR_TYPE_INT,    false, NULL}},
     {"idleDiscoTime",      {ATTR_TYPE_INT,    false, NULL}},
@@ -219,14 +219,14 @@ std::map <std::string, AttrDesc> WanIpConnectionAttrs =
 // Media Server / Media Renderer
 
 // AV Transport
-std::map <std::string, AttrDesc> DeviceCapabilitiesAttrs =
+const std::map <std::string, AttrDesc> DeviceCapabilitiesAttrs =
 {
     {"playMedia",       {ATTR_TYPE_STRING, false, NULL}},
     {"recMedia",        {ATTR_TYPE_STRING, false, NULL}},
     {"recQualityModes", {ATTR_TYPE_STRING, false, NULL}},
 };
 
-std::map <std::string, AttrDesc> MediaInfoAttrs =
+const std::map <std::string, AttrDesc> MediaInfoAttrs =
 {
     {"nrTracks",           {ATTR_TYPE_INT,    false, NULL}},
     {"mediaDuration",      {ATTR_TYPE_STRING, false, NULL}},
@@ -239,7 +239,7 @@ std::map <std::string, AttrDesc> MediaInfoAttrs =
     {"writeStatus",        {ATTR_TYPE_STRING, false, NULL}},
 };
 
-std::map <std::string, AttrDesc> PositionInfoAttrs =
+const std::map <std::string, AttrDesc> PositionInfoAttrs =
 {
     {"track",         {ATTR_TYPE_INT,    false, NULL}},
     {"trackDuration", {ATTR_TYPE_STRING, false, NULL}},
@@ -251,20 +251,20 @@ std::map <std::string, AttrDesc> PositionInfoAttrs =
     {"absCount",      {ATTR_TYPE_INT,    false, NULL}},
 };
 
-std::map <std::string, AttrDesc> TransportInfoAttrs =
+const std::map <std::string, AttrDesc> TransportInfoAttrs =
 {
     {"transportState",  {ATTR_TYPE_STRING, false, NULL}},
     {"transportStatus", {ATTR_TYPE_STRING, false, NULL}},
     {"speed",           {ATTR_TYPE_STRING, false, NULL}},
 };
 
-std::map <std::string, AttrDesc> TransportSettingsAttrs =
+const std::map <std::string, AttrDesc> TransportSettingsAttrs =
 {
     {"playMode",       {ATTR_TYPE_STRING, false, NULL}},
     {"recQualityMode", {ATTR_TYPE_STRING, false, NULL}},
 };
 
-std::map <std::string, AttrDesc> AvTransportAttrs =
+const std::map <std::string, AttrDesc> AvTransportAttrs =
 {
     {"lastChange",              {ATTR_TYPE_STRING, false, NULL}},
     {"currentTransportActions", {ATTR_TYPE_STRING, false, NULL}},
@@ -276,13 +276,13 @@ std::map <std::string, AttrDesc> AvTransportAttrs =
 };
 
 // Connection Manager
-std::map <std::string, AttrDesc> ProtocolInfoAttrs =
+const std::map <std::string, AttrDesc> ProtocolInfoAttrs =
 {
     {"source", {ATTR_TYPE_STRING, false, NULL}},
     {"sink",   {ATTR_TYPE_STRING, false, NULL}}
 };
 
-std::map <std::string, AttrDesc> CurrentConnectionInfoAttrs =
+const std::map <std::string, AttrDesc> CurrentConnectionInfoAttrs =
 {
     {"rcsId",                 {ATTR_TYPE_INT,    false, NULL}},
     {"avTransportId",         {ATTR_TYPE_INT, false, NULL}},
@@ -293,7 +293,7 @@ std::map <std::string, AttrDesc> CurrentConnectionInfoAttrs =
     {"status",                {ATTR_TYPE_STRING, false, NULL}},
 };
 
-std::map <std::string, AttrDesc> ConnectionManagerAttrs =
+const std::map <std::string, AttrDesc> ConnectionManagerAttrs =
 {
     {"protocolInfo",          {ATTR_TYPE_VECTOR, false, &ProtocolInfoAttrs}},
     {"currentConnectionIds",  {ATTR_TYPE_STRING, false, NULL}},
@@ -302,7 +302,7 @@ std::map <std::string, AttrDesc> ConnectionManagerAttrs =
 };
 
 // Content Directory
-std::map <std::string, AttrDesc> ContentDirectoryAttrs =
+const std::map <std::string, AttrDesc> ContentDirectoryAttrs =
 {
     {"searchCaps",     {ATTR_TYPE_STRING, false, NULL}},
     {"sortCaps",       {ATTR_TYPE_STRING, false, NULL}},
@@ -312,7 +312,7 @@ std::map <std::string, AttrDesc> ContentDirectoryAttrs =
 };
 
 // Rendering Control
-std::map <std::string, AttrDesc> RenderingControlAttrs =
+const std::map <std::string, AttrDesc> RenderingControlAttrs =
 {
     {"lastChange",     {ATTR_TYPE_STRING, false, NULL}},
     {"presetNameList", {ATTR_TYPE_STRING, false, NULL}},
@@ -321,12 +321,12 @@ std::map <std::string, AttrDesc> RenderingControlAttrs =
 };
 
 // Scheduled Recording
-std::map <std::string, AttrDesc> ScheduledRecordingAttrs =
+const std::map <std::string, AttrDesc> ScheduledRecordingAttrs =
 {
     {"stateUpdateId",  {ATTR_TYPE_INT,    false, NULL}},
 };
 
-std::map <std::string, std::map <std::string, AttrDesc> & > ResourceAttrMap =
+const std::map <std::string, const std::map <std::string, AttrDesc> & > ResourceAttrMap =
 {
     {UPNP_OIC_TYPE_POWER_SWITCH,           BinarySwitchAttrs},
     {UPNP_OIC_TYPE_BRIGHTNESS ,            BrightnessAttrs},
