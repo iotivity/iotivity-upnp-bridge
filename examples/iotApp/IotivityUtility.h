@@ -22,11 +22,18 @@
 #define IOTIVITYUTILITY_H_
 
 #include <OCResource.h>
+#include <OCRepresentation.h>
 #include <iostream>
 #include <mutex>
 
+#include <UpnpBridgeAttributes.h>
+
 void printResourceInformation(std::shared_ptr< OC::OCResource > resource);
 void printResourceCompact(std::shared_ptr< OC::OCResource > resource);
+
+void processAttributes(const OC::OCRepresentation &rep,
+                              const std::map <std::string, AttrDesc> *attrMap,
+                              std::string prefix);
 
 // Comparison operator used to insert the OCResources into the sets.
 struct OCResourceComp

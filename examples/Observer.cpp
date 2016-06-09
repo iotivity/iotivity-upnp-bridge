@@ -23,7 +23,7 @@
 #include <OCPlatform.h>
 
 #include <UpnpConstants.h>
-#include "UpnpBridgeAttributes.h"
+#include <UpnpBridgeAttributes.h>
 
 using namespace OC;
 
@@ -33,7 +33,7 @@ std::mutex s_mutexFind;
 static std::map <std::string, std::vector <std::string>> resourceTypeMap;
 
 static void processAttributes(const OCRepresentation &rep,
-                              std::map <std::string, AttrDesc> *attrMap,
+                              const std::map <std::string, AttrDesc> *attrMap,
                               std::string prefix)
 {
     for (auto &attr : *attrMap)
@@ -119,8 +119,7 @@ static void onObserveResource(const HeaderOptions &headerOptions,
             for (auto &resourceType : resourceTypeMap[rep.getUri()])
             {
                 std::cout << "\t\t" << resourceType << std::endl;
-                std::map <std::string, std::map <std::string, AttrDesc>& >::iterator it = ResourceAttrMap.find(
-                            resourceType);
+                auto it = ResourceAttrMap.find(resourceType);
 
                 if (it == ResourceAttrMap.end())
                 {
@@ -128,7 +127,7 @@ static void onObserveResource(const HeaderOptions &headerOptions,
                     return;
                 }
 
-                std::map <std::string, AttrDesc> &attrMap = it->second;
+                const std::map <std::string, AttrDesc> &attrMap = it->second;
 
                 processAttributes(rep, &attrMap, "\t");
 
@@ -177,8 +176,7 @@ static void foundResource(std::shared_ptr< OCResource > resource)
                     for (auto &resourceType : resource->getResourceTypes())
                     {
                         std::cout << "\t\t" << resourceType << std::endl;
-                        std::map <std::string, std::map <std::string, AttrDesc>& >::iterator it = ResourceAttrMap.find(
-                                    resourceType);
+                        auto it = ResourceAttrMap.find(resourceType);
                         resourceTypeMap[resourceUri].push_back(resourceType);
 
                         if (it != ResourceAttrMap.end())
