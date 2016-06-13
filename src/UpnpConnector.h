@@ -55,11 +55,11 @@ class UpnpConnector: public ProtocolBridgeConnector
         void gupnpStart();
         void gupnpStop();
 
-        static void startDiscovery(GUPnPControlPoint *controlPoint, bool findService);
+        static void startDiscovery(GUPnPControlPoint *controlPoint);
 
         // static is necessary for callbacks defined with the c gupnp functions (c code)
         static void onContextAvailable(GUPnPContextManager *manager, GUPnPContext *context);
-        static void onDeviceProxyAvailable(GUPnPControlPoint *cp, GUPnPDeviceProxy *proxy);
+        static void onDeviceProxyAvailable(GUPnPControlPoint *cp, GUPnPDeviceProxy *proxy, gpointer userData);
         static void onDeviceProxyUnavailable(GUPnPControlPoint *cp, GUPnPDeviceProxy *proxy);
         static void onServiceProxyAvailable(GUPnPControlPoint *cp, GUPnPServiceProxy *proxy);
         static void onServiceProxyUnavailable(GUPnPControlPoint *cp, GUPnPServiceProxy *proxy);
