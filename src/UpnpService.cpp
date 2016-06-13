@@ -91,10 +91,8 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
 
 }
 
-UpnpService::~UpnpService()
+void UpnpService::stop()
 {
-    DEBUG_PRINT("(" << std::this_thread::get_id() << "), uri:" << m_uri);
-
     if (!m_stateVarMap.empty())
     {
         std::map<string, StateVarAttr>::iterator it;
@@ -109,7 +107,12 @@ UpnpService::~UpnpService()
         }
         m_stateVarMap.clear();
     }
+}
 
+UpnpService::~UpnpService()
+{
+    DEBUG_PRINT("(" << std::this_thread::get_id() << "), uri:" << m_uri);
+    this->stop();
     m_proxy = nullptr;
 }
 

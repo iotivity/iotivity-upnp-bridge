@@ -63,6 +63,8 @@ class UpnpService: public UpnpResource
 
         string getId();
 
+        void stop();
+
     protected:
         // Map of associated attributes (OIC)
         // "OCF Attribute name" -> (attribute info, supported operations)

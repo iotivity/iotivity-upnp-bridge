@@ -43,16 +43,19 @@ using namespace std;
 
 static const string MODULE = "UpnpManager";
 
-UpnpManager::UpnpManager()
-{
-    m_devices.clear();
-    m_services.clear();
-}
-
 UpnpManager::~UpnpManager()
 {
-    m_devices.clear();
+    this->stop();
+}
+
+void UpnpManager::stop()
+{
+    for (auto service : m_services)
+    {
+        service.second->stop();
+    }
     m_services.clear();
+    m_devices.clear();
 }
 
 UpnpResource::Ptr UpnpManager::processDevice(GUPnPDeviceProxy *proxy,
