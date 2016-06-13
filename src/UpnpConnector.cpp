@@ -49,6 +49,7 @@ static GMainContext *s_mainContext;
 static GUPnPContextManager *s_contextManager;
 static UpnpManager *s_manager;
 static UpnpRequestState s_requestState;
+static map <gulong, GUPnPControlPoint *> s_signalMap;
 
 static bool isRootDiscovery[] = {false, true};
 
@@ -62,12 +63,15 @@ UpnpConnector::UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback l
     s_discoveryCallback = m_discoveryCallback;
     s_lostCallback = m_lostCallback;
     s_manager = new UpnpManager();
+    s_signalMap.clear();
 }
 
 UpnpConnector::~UpnpConnector()
 {
     DEBUG_PRINT("");
+    s_signalMap.clear();
     delete s_manager;
+    s_manager = NULL;
 }
 
 void UpnpConnector::disconnect()
@@ -88,6 +92,7 @@ void UpnpConnector::disconnect()
         std::lock_guard< std::mutex > lock(s_requestState.queueLock);
         request.start = [&] ()
         {
+            s_manager->stop();
             gupnpStop();
             return true;
         };
@@ -111,6 +116,11 @@ void UpnpConnector::gupnpStop()
     g_source_destroy(s_requestState.source);
     s_requestState.sourceId = 0;
 
+    for (auto it : s_signalMap)
+    {
+        g_signal_handler_disconnect (it.second, it.first);
+    }
+
     g_object_unref(s_contextManager);
     g_main_loop_quit(s_mainLoop);
     g_main_loop_unref(s_mainLoop);
@@ -125,21 +135,27 @@ void UpnpConnector::connect()
 
 void UpnpConnector::startDiscovery(GUPnPControlPoint *controlPoint)
 {
+    gulong instanceId;
+
     // the 'device-proxy-unavailable' signal is sent when any devices are lost
-    g_signal_connect(controlPoint, "device-proxy-unavailable",
-                     G_CALLBACK (&UpnpConnector::onDeviceProxyUnavailable), NULL);
+    instanceId = g_signal_connect(controlPoint, "device-proxy-unavailable",
+                                  G_CALLBACK (&UpnpConnector::onDeviceProxyUnavailable), NULL);
+    s_signalMap[instanceId] = controlPoint;
 
     // the 'device-proxy-available' signal is sent when any devices are found
-    g_signal_connect(controlPoint, "device-proxy-available",
-                     G_CALLBACK (&UpnpConnector::onDeviceProxyAvailable), (gpointer *) (&isRootDiscovery[0]));
+    instanceId = g_signal_connect(controlPoint, "device-proxy-available",
+                                  G_CALLBACK (&UpnpConnector::onDeviceProxyAvailable), (gpointer *) (&isRootDiscovery[0]));
+    s_signalMap[instanceId] = controlPoint;
 
     // the 'service-proxy-unavailable' signal is sent when any services are lost
-    g_signal_connect(controlPoint, "service-proxy-unavailable",
-                     G_CALLBACK (&UpnpConnector::onServiceProxyUnavailable), NULL);
+    instanceId = g_signal_connect(controlPoint, "service-proxy-unavailable",
+                                  G_CALLBACK (&UpnpConnector::onServiceProxyUnavailable), NULL);
+    s_signalMap[instanceId] = controlPoint;
 
     // the 'service-proxy-available' signal is sent when any services are found
-    g_signal_connect(controlPoint, "service-proxy-available",
-                     G_CALLBACK (&UpnpConnector::onServiceProxyAvailable), NULL);
+    instanceId = g_signal_connect(controlPoint, "service-proxy-available",
+                                  G_CALLBACK (&UpnpConnector::onServiceProxyAvailable), NULL);
+    s_signalMap[instanceId] = controlPoint;
 
     // tell the control point to start searching
     gssdp_resource_browser_set_active(GSSDP_RESOURCE_BROWSER(controlPoint), true);
@@ -219,6 +235,7 @@ void UpnpConnector::onContextAvailable(GUPnPContextManager *manager, GUPnPContex
 {
     GUPnPControlPoint * controlPointRoot;
     GUPnPControlPoint * controlPointAll;
+    gulong instanceId;
 
     DEBUG_PRINT("context: " << context << ", manager: " << manager);
 
@@ -226,8 +243,9 @@ void UpnpConnector::onContextAvailable(GUPnPContextManager *manager, GUPnPContex
     controlPointRoot = gupnp_control_point_new(context, "upnp:rootdevice");
 
     // the 'device-proxy-available' signal is sent when any devices are found
-    g_signal_connect(controlPointRoot, "device-proxy-available",
-                     G_CALLBACK (&UpnpConnector::onDeviceProxyAvailable), (gpointer *) (&isRootDiscovery[1]));
+    instanceId = g_signal_connect(controlPointRoot, "device-proxy-available",
+                                  G_CALLBACK (&UpnpConnector::onDeviceProxyAvailable), (gpointer *) (&isRootDiscovery[1]));
+    s_signalMap[instanceId] = controlPointRoot;
 
     // let the context manager take care of this control point's life cycle
     gupnp_context_manager_manage_control_point(manager, controlPointRoot);

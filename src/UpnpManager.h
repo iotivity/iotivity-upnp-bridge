@@ -14,7 +14,7 @@ using namespace OIC::Service;
 class UpnpManager
 {
 
-    public:    UpnpManager();
+    public:
         ~UpnpManager();
 
         UpnpResource::Ptr processDevice(GUPnPDeviceProxy *proxy,
@@ -30,6 +30,7 @@ class UpnpManager
         void removeService(GUPnPServiceInfo *info);
         void removeService(string serviceKey);
         void removeDevice(string udn);
+        void stop();
 
         UpnpResource::Ptr findResource(GUPnPServiceInfo *info);
         UpnpResource::Ptr findResource(GUPnPDeviceInfo *info);
