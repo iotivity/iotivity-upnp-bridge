@@ -26,11 +26,11 @@
 
 #include <functional>
 #include <mutex>
+#include <set>
+#include <vector>
 
 #include "IotivityUtility.h"
 #include "MenuBase.h"
-#include "MenuBinarySwitch.h"
-#include "MenuBrightness.h"
 
 class MenuServices: public MenuBase
 {
