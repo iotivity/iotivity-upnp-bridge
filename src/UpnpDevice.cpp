@@ -119,6 +119,13 @@ void UpnpDevice::initBasicAttributes(GUPnPDeviceInfo *deviceInfo)
         }
     }
 
+    char *iconUrl = gupnp_device_info_get_icon_url(deviceInfo, NULL, -1, -1, -1, true, NULL, NULL, NULL, NULL);
+    if (iconUrl != NULL)
+    {
+        BundleResource::setAttribute("icon_url", string(iconUrl));
+        g_free(iconUrl);
+    }
+
     BundleResource::setAttribute("name",
                                  m_name); // need to keep name with attributes (OCRepresentation bug)
     BundleResource::setAttribute("uri",
