@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_af9597e5",
+        "filename": "examples/iotApp/ConnectionManager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-14T18:30:12Z",
+      "side": 1,
+      "message": "need to initilized m_connectionInfo as well.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 1
+      },
+      "revId": "a346ce541b0fe2f7b301fb7affeef4403bbc6dcd",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_ef92bff5",
+        "filename": "examples/iotApp/MenuConnectionManager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-14T18:30:12Z",
+      "side": 1,
+      "message": "delete",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 26
+      },
+      "revId": "a346ce541b0fe2f7b301fb7affeef4403bbc6dcd",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
