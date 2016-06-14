@@ -1,0 +1,9 @@
+Code-Review+1: Larry Sachs <larry.j.sachs@intel.com>
+Code-Review+1: Inga Stotland <inga.stotland@intel.com>
+Code-Review+2: Rick Bell <richard.s.bell@intel.com>
+Verified+1: Rick Bell <richard.s.bell@intel.com>
+Submitted-by: Rick Bell <richard.s.bell@intel.com>
+Submitted-at: Tue, 14 Jun 2016 22:33:44 +0000
+Reviewed-on: https://gerrit.iotivity.org/gerrit/8643
+Project: iotivity-upnp-bridge
+Branch: refs/heads/master
