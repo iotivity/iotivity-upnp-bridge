@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_0f7e03af",
+        "filename": "examples/iotApp/MenuConnectionManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-14T20:16:55Z",
+      "side": 1,
+      "message": "Change space from \"\\tsource :\" to \"\\tsource: \"",
+      "range": {
+        "startLine": 114,
+        "startChar": 33,
+        "endLine": 114,
+        "endChar": 45
+      },
+      "revId": "e46bce2eaa3d429ece18012b5e4ab1fc84f57482",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_ef807f8d",
+        "filename": "examples/iotApp/MenuConnectionManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-14T20:16:55Z",
+      "side": 1,
+      "message": "Change space from \"\\tsource :\" to \"\\tsource: \"",
+      "range": {
+        "startLine": 127,
+        "startChar": 44,
+        "endLine": 127,
+        "endChar": 52
+      },
+      "revId": "e46bce2eaa3d429ece18012b5e4ab1fc84f57482",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_2f5e6746",
+        "filename": "examples/iotApp/MenuConnectionManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-14T20:16:55Z",
+      "side": 1,
+      "message": "Change space on each attribute from \" :\" to \": \"",
+      "range": {
+        "startLine": 191,
+        "startChar": 20,
+        "endLine": 196,
+        "endChar": 85
+      },
+      "revId": "e46bce2eaa3d429ece18012b5e4ab1fc84f57482",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_4f5bab54",
+        "filename": "examples/iotApp/MenuConnectionManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-14T20:16:55Z",
+      "side": 1,
+      "message": "Change space on each attribute from \" :\" to \": \"",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 223,
+        "endChar": 85
+      },
+      "revId": "e46bce2eaa3d429ece18012b5e4ab1fc84f57482",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_ef571f25",
+        "filename": "examples/iotApp/MenuConnectionManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-14T20:16:55Z",
+      "side": 1,
+      "message": "Change space on each attribute from \" :\" to \": \"",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 93
+      },
+      "revId": "e46bce2eaa3d429ece18012b5e4ab1fc84f57482",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_0f55a31c",
+        "filename": "examples/iotApp/MenuConnectionManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-14T20:16:55Z",
+      "side": 1,
+      "message": "Missmatch should be Mismatch",
+      "range": {
+        "startLine": 311,
+        "startChar": 42,
+        "endLine": 311,
+        "endChar": 51
+      },
+      "revId": "e46bce2eaa3d429ece18012b5e4ab1fc84f57482",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_af31170d",
+        "filename": "examples/iotApp/MenuServices.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-14T20:16:55Z",
+      "side": 1,
+      "message": "Capital D",
+      "range": {
+        "startLine": 300,
+        "startChar": 34,
+        "endLine": 300,
+        "endChar": 35
+      },
+      "revId": "e46bce2eaa3d429ece18012b5e4ab1fc84f57482",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
