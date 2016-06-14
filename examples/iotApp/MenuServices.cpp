@@ -21,6 +21,9 @@
 #include <UpnpConstants.h>
 
 #include "MenuServices.h"
+#include "MenuBinarySwitch.h"
+#include "MenuBrightness.h"
+#include "MenuConnectionManager.h"
 
 MenuServices::MenuServices():
     m_quit(false)
@@ -288,7 +291,9 @@ void MenuServices::run(const std::vector<std::string> &cmd,
         }
         else if ("connection" == cmd[0])
         {
-            std::cout << "Connection Manager Menu not yet Implemented" << std::endl;
+            std::unique_ptr<MenuConnectionManager> menuItem(new MenuConnectionManager);
+            menuItem->init(m_connectionManager);
+            menuStack.push(std::move(menuItem));
         }
         else if ("content" == cmd[0])
         {
