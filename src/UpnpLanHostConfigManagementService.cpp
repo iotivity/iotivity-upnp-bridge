@@ -71,7 +71,7 @@ vector <UpnpAttributeInfo> UpnpLanHostConfigManagement::Attributes =
         "addrRange",
         "", G_TYPE_NONE, false,
         {   {"GetAddressRange", UPNP_ACTION_GET, NULL, G_TYPE_NONE},
-            {"SetAddressRange", UPNP_ACTION_GET, NULL, G_TYPE_NONE}
+            {"SetAddressRange", UPNP_ACTION_POST, NULL, G_TYPE_NONE}
         },
         {   {"minAddr", "MinAddress", G_TYPE_STRING, false},
             {"maxAddr", "MaxAddress", G_TYPE_STRING, false}
@@ -81,7 +81,7 @@ vector <UpnpAttributeInfo> UpnpLanHostConfigManagement::Attributes =
         "dnsServers",
         "DNSServers", G_TYPE_STRING, false,
         {   {"GetDNSServers", UPNP_ACTION_GET, "NewDNSServers", G_TYPE_STRING},
-            {"SetDNSServer", UPNP_ACTION_POST, "NewDNSServers", G_TYPE_STRING}
+            {"SetDNSServer",  UPNP_ACTION_POST, "NewDNSServers", G_TYPE_STRING}
         },
         {}
     },
@@ -97,7 +97,7 @@ vector <UpnpAttributeInfo> UpnpLanHostConfigManagement::Attributes =
         "ipRouters",
         "IPRouters", G_TYPE_STRING, false,
         {   {"GetIPRoutersList", UPNP_ACTION_GET, "NewIPRouters", G_TYPE_STRING},
-            {"SetIPRouter",     UPNP_ACTION_POST, "NewIPRouters", G_TYPE_STRING}
+            {"SetIPRouter",      UPNP_ACTION_POST, "NewIPRouters", G_TYPE_STRING}
         },
         {}
     },
