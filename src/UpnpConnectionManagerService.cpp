@@ -61,11 +61,11 @@ vector <UpnpAttributeInfo> UpnpConnectionManager::Attributes =
         "", G_TYPE_NONE, false,
         {{"GetCurrentConnectionInfo", UPNP_ACTION_GET, "", G_TYPE_NONE}},
         {
-            {"rcsId", "RcsID", G_TYPE_UINT, false},
-            {"avTransportId", "AVTransportID", G_TYPE_UINT, false},
+            {"rcsId", "RcsID", G_TYPE_INT, false},
+            {"avTransportId", "AVTransportID", G_TYPE_INT, false},
             {"protocolInfo", "ProtocolInfo", G_TYPE_STRING, false},
             {"peerConnectionManager", "PeerConnectionManager", G_TYPE_STRING, false},
-            {"peerConnectionId", "PeerConnectionID", G_TYPE_UINT, false},
+            {"peerConnectionId", "PeerConnectionID", G_TYPE_INT, false},
             {"direction", "Direction", G_TYPE_STRING, false},
             {"status", "Status", G_TYPE_STRING, false}
         }
