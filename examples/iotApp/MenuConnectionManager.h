@@ -36,10 +36,10 @@ public:
     MenuConnectionManager();
     virtual ~MenuConnectionManager();
      /*
-      * Used to pass in an already discovered list of brightness resources before calling run.
+      * Used to pass in an already discovered list of connectionManager resources before calling run.
       * this is not required to use this class but can give it an initial start state
       */
-     void init(std::set<OC::OCResource::Ptr, OCResourceComp> brightnessSet);
+     void init(std::set<OC::OCResource::Ptr, OCResourceComp> connectionManagerSet);
      virtual std::string getName();
      virtual void help();
      virtual void print();

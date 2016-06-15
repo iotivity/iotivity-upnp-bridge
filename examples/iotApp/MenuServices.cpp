@@ -20,10 +20,11 @@
 
 #include <UpnpConstants.h>
 
-#include "MenuServices.h"
 #include "MenuBinarySwitch.h"
 #include "MenuBrightness.h"
 #include "MenuConnectionManager.h"
+#include "MenuContentDirectory.h"
+#include "MenuServices.h"
 
 MenuServices::MenuServices():
     m_quit(false)
@@ -297,7 +298,9 @@ void MenuServices::run(const std::vector<std::string> &cmd,
         }
         else if ("content" == cmd[0])
         {
-            std::cout << "Content Directory Menu not yet Implemented" << std::endl;
+            std::unique_ptr<MenuContentDirectory> menuItem(new MenuContentDirectory);
+            menuItem->init(m_contentDirectory);
+            menuStack.push(std::move(menuItem));
         }
         else if ("layer3" == cmd[0])
         {
