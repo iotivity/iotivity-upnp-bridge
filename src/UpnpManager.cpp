@@ -29,6 +29,7 @@
 #include "UpnpDimmingService.h"
 #include "UpnpLanHostConfigManagementService.h"
 #include "UpnpLayer3ForwardingService.h"
+#include "UpnpDeviceProtectionService.h"
 #include "UpnpPowerSwitchService.h"
 #include "UpnpRenderingControlService.h"
 #include "UpnpScheduledRecordingService.h"
@@ -437,6 +438,10 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     else if (resourceType == UPNP_OIC_TYPE_WAN_POTS_LINK_CONFIG)
     {
         return (std::make_shared < UpnpWanPotsLinkConfig > (serviceInfo, requestState));
+    }
+    else if (resourceType == UPNP_OIC_TYPE_DEVICE_PROTECTION)
+    {
+        return (std::make_shared < UpnpDeviceProtection > (serviceInfo, requestState));
     }
     else
     {
