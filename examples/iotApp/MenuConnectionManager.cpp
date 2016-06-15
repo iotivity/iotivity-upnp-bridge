@@ -24,8 +24,6 @@
 MenuConnectionManager::MenuConnectionManager() :
     m_quit(false), m_mutex()
 {
-    onFindResourceCb = std::bind(&MenuConnectionManager::onFindResource, this, std::placeholders::_1);
-
 }
 
 MenuConnectionManager::~MenuConnectionManager()
@@ -59,7 +57,7 @@ void MenuConnectionManager::print()
     std::cout << "find) Discover any connection manager service(s) " << std::endl;
     std::cout << "list) list currently discovered connection manager services (" << m_connectionManagerVector.size() <<
               " found)" << std::endl;
-    std::cout << "getpi) getpi <#> or getpi all - get the get the protocol info" << std::endl;
+    std::cout << "getpi) getpi <#> or getpi all - get the protocol info" << std::endl;
     std::cout << "getccid) getccid <#> or getccid all - get the current connection IDs" << std::endl;
     std::cout << "getcci) getcci <#> [connectionID] or getcci all - get the current connection Info" << std::endl;
     std::cout << "        if connectionID is not provided, connectionID '0' will be used by default." << std::endl;
@@ -80,6 +78,7 @@ void MenuConnectionManager::run(const std::vector<std::string> &cmd,
     {
         if (cmd[0] == "find")
         {
+            onFindResourceCb = std::bind(&MenuConnectionManager::onFindResource, this, std::placeholders::_1);
             OCStackResult result = OC::OCPlatform::findResource("",
                                    std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_CONNECTION_MANAGER, CT_DEFAULT,
                                    onFindResourceCb);
