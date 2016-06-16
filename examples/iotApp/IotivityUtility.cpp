@@ -21,12 +21,29 @@
 #include <OCResource.h>
 #include <iostream>
 #include <mutex>
+#include <condition_variable>
 
 #include "IotivityUtility.h"
 
 // mutex used in a lock_guard to prevent multiple items printing at the same time making the output
 // unreadable
 static std::mutex g_iotivity_utility_print_mutex;
+static std::condition_variable g_iotivity_utility_condition_variable;
+
+void on_iotivity_utility_get(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode)
+{
+    (void) headerOptions;
+        if (eCode == OC_STACK_OK)
+        {
+            if(rep.hasAttribute("name"))
+            {
+                std::string name = "";
+                rep.getValue("name", name);
+                std::cout << "\tname " << name << std::endl;
+            }
+        }
+        g_iotivity_utility_condition_variable.notify_one();
+}
 
 void printResourceInformation(std::shared_ptr< OC::OCResource > resource)
 {
@@ -57,9 +74,11 @@ void printResourceInformation(std::shared_ptr< OC::OCResource > resource)
 
 void printResourceCompact(std::shared_ptr< OC::OCResource > resource)
 {
-    std::lock_guard<std::mutex> lock(g_iotivity_utility_print_mutex);
+    std::unique_lock<std::mutex> lock(g_iotivity_utility_print_mutex);
     try
     {
+        resource->get(OC::QueryParamsMap(), &on_iotivity_utility_get);
+        g_iotivity_utility_condition_variable.wait(lock);
         std::cout << "\t" << resource->host() << resource->uri() << std::endl // uri is links.href
                   << "\tresourceTypes ";
         for (auto rt : resource->getResourceTypes())
