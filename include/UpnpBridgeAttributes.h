@@ -96,6 +96,21 @@ const std::map <std::string, AttrDesc> L3FAttrs =
     {"defaultConnectionService",  {ATTR_TYPE_STRING,   true, NULL}}
 };
 
+// DeviceProtection
+const std::map <std::string, AttrDesc> DeviceProtectionSetupMessageAttrs =
+{
+    {"protocol",  {ATTR_TYPE_STRING,   false, NULL}},
+    {"message",   {ATTR_TYPE_STRING,   false, NULL}}
+};
+
+const std::map <std::string, AttrDesc> DeviceProtectionAttrs =
+{
+    {"setupMessage",      {ATTR_TYPE_VECTOR, false, &DeviceProtectionSetupMessageAttrs}},
+    {"setupReady",        {ATTR_TYPE_BOOL,   true,  NULL}},
+    {"protocolList",      {ATTR_TYPE_STRING, false, NULL}},
+    {"roleList",          {ATTR_TYPE_STRING, false, NULL}},
+};
+
 // WANEthernetLinkConfig
 const std::map <std::string, AttrDesc> WanEthConfigAttrs =
 {
@@ -333,6 +348,7 @@ const std::map <std::string, const std::map <std::string, AttrDesc> & > Resource
     {UPNP_OIC_TYPE_BRIGHTNESS ,            BrightnessAttrs},
     {UPNP_OIC_TYPE_WAN_IF_CONFIG,          WanIfConfigAttrs},
     {UPNP_OIC_TYPE_LAYER3_FORWARDING,      L3FAttrs},
+    {UPNP_OIC_TYPE_DEVICE_PROTECTION,      DeviceProtectionAttrs},
     {UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG,  WanCableConfigAttrs},
     {UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG,    WanDslConfigAttrs},
     {UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG,    WanEthConfigAttrs},
