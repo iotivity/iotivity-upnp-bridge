@@ -353,7 +353,7 @@ void MenuBinarySwitch::onFindResource(std::shared_ptr< OC::OCResource > resource
                         m_binarySwitchVector.push_back(resource);
                         if (m_binarySwitchSet.size() != m_binarySwitchVector.size())
                         {
-                            std::cerr << "Missmatch in discovered devices. Reinitilizing.";
+                            std::cerr << "Mismatch in discovered devices. Reinitilizing.";
                             init(m_binarySwitchSet);
                         }
                         isNewServiceFound = true;
