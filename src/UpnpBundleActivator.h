@@ -48,7 +48,7 @@ class UpnpBundleActivator: public BundleActivator
 
         UpnpConnector *m_connector;
 
-        void connectorDiscoveryCb(UpnpResource::Ptr pBundleResource);
+        int connectorDiscoveryCb(UpnpResource::Ptr pBundleResource);
         void connectorLostCb(UpnpResource::Ptr pBundleResource);
 
 };
