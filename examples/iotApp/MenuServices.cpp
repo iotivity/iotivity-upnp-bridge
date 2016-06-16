@@ -116,8 +116,7 @@ void MenuServices::run(const std::vector<std::string> &cmd,
             };
             for (auto service : knownServices)
             {
-                OCStackResult result = OC::OCPlatform::findResource("", service, CT_DEFAULT, onFindResourceCb);
-                std::cout << "findResource(" + service + ") - " << result << std::endl;
+                OC::OCPlatform::findResource("", service, CT_DEFAULT, onFindResourceCb);
             }
 
         }
@@ -392,8 +391,6 @@ bool MenuServices::quit()
 void MenuServices::onFindResource(OC::OCResource::Ptr resource)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    std::cout << "Found resource" << std::endl;
-    printResourceCompact(resource);
 
     try
     {
@@ -401,13 +398,12 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
         {
             for (auto &resourceType : resource->getResourceTypes())
             {
-                bool isNewServiceFound = false;
+                std::cout << "Found "  << resourceType << " resource" << std::endl;
                 if (resourceType == UPNP_OIC_TYPE_AV_TRANSPORT)
                 {
                     if (m_avTransport.find(resource) == m_avTransport.end())
                     {
                         m_avTransport.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
@@ -415,7 +411,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_binarySwitch.find(resource) == m_binarySwitch.end())
                     {
                         m_binarySwitch.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
@@ -423,7 +418,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_brightness.find(resource) == m_brightness.end())
                     {
                         m_brightness.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_CONNECTION_MANAGER)
@@ -431,7 +425,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_connectionManager.find(resource) == m_connectionManager.end())
                     {
                         m_connectionManager.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY)
@@ -439,7 +432,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_contentDirectory.find(resource) == m_contentDirectory.end())
                     {
                         m_contentDirectory.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_LAYER3_FORWARDING)
@@ -447,7 +439,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_layer3Forwarding.find(resource) == m_layer3Forwarding.end())
                     {
                         m_layer3Forwarding.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_RENDERING_CONTROL)
@@ -455,7 +446,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_renderingControl.find(resource) == m_renderingControl.end())
                     {
                         m_renderingControl.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_SCHEDULED_RECORDING)
@@ -463,7 +453,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_scheduledRecording.find(resource) == m_scheduledRecording.end())
                     {
                         m_scheduledRecording.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_WAN_IF_CONFIG)
@@ -471,7 +460,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_wanIfConfig.find(resource) == m_wanIfConfig.end())
                     {
                         m_wanIfConfig.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG)
@@ -479,7 +467,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_wanCableLinkConfig.find(resource) == m_wanCableLinkConfig.end())
                     {
                         m_wanCableLinkConfig.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG)
@@ -487,7 +474,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_wanDSLLinkConfig.find(resource) == m_wanDSLLinkConfig.end())
                     {
                         m_wanDSLLinkConfig.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG)
@@ -495,7 +481,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_wanEthernetConfig.find(resource) == m_wanEthernetConfig.end())
                     {
                         m_wanEthernetConfig.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_WAN_POTS_LINK_CONFIG)
@@ -503,7 +488,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_wanPotsLinkConfig.find(resource) == m_wanPotsLinkConfig.end())
                     {
                         m_wanPotsLinkConfig.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_WAN_IP_CONNECTION)
@@ -511,7 +495,6 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_wanIPConnection.find(resource) == m_wanIPConnection.end())
                     {
                         m_wanIPConnection.insert(resource);
-                        isNewServiceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_LAN_HOST_CONFIG)
@@ -519,12 +502,7 @@ void MenuServices::onFindResource(OC::OCResource::Ptr resource)
                     if (m_lanHostConfig.find(resource) == m_lanHostConfig.end())
                     {
                         m_lanHostConfig.insert(resource);
-                        isNewServiceFound = true;
                     }
-                }
-                if (isNewServiceFound)
-                {
-                    print();
                 }
             }
         }

@@ -80,11 +80,9 @@ void MenuLight::run(const std::vector<std::string> &cmd,
     {
         if (cmd[0] == "find")
         {
-            OCStackResult result = OC::OCPlatform::findResource("",
-                                   std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_DEVICE_LIGHT, CT_DEFAULT,
-                                   onFindResourceCb);
-            std::cout << "findResource(" + std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" +
-                      UPNP_OIC_TYPE_DEVICE_LIGHT + ") - " << result << std::endl;
+            OC::OCPlatform::findResource("",
+                                         std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_DEVICE_LIGHT, CT_DEFAULT,
+                                         onFindResourceCb);
         }
         else if (cmd[0] == "list")
         {
@@ -399,8 +397,6 @@ void MenuLight::onFindResource(std::shared_ptr< OC::OCResource > resource)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::cout << "Found resource" << std::endl;
-    //printResourceCompact(resource);
-    printResourceInformation(resource);
 
     try
     {
@@ -408,7 +404,6 @@ void MenuLight::onFindResource(std::shared_ptr< OC::OCResource > resource)
         {
             for (auto &resourceType : resource->getResourceTypes())
             {
-                bool isNewServiceFound = false;
                 if (resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT)
                 {
                     if (m_lightSet.find(resource) == m_lightSet.end())
@@ -421,12 +416,7 @@ void MenuLight::onFindResource(std::shared_ptr< OC::OCResource > resource)
                             std::cerr << "Mismatch in discovered devices. Reinitilizing.";
                             init(m_lightSet);
                         }
-                        isNewServiceFound = true;
                     }
-                }
-                if (isNewServiceFound)
-                {
-                    print();
                 }
             }
         }
