@@ -38,8 +38,8 @@ class MenuBinarySwitch: public MenuBase
         MenuBinarySwitch();
         virtual ~MenuBinarySwitch();
         /*
-         * Used to pass in an already discovered list of binaryswitch resources before calling run.
-         * this is not required to use this class but can give it an initial start state
+         * The init member function is optional.
+         * Used to pass in an already discovered binary switch resources before calling run.
          */
         void init(std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> binarySwitchSet);
         virtual std::string getName();
