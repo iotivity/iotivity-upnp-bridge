@@ -290,7 +290,6 @@ void MenuConnectionManager::onFindResource(std::shared_ptr< OC::OCResource > res
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::cout << "Found resource" << std::endl;
-    printResourceCompact(resource);
 
     try
     {
@@ -298,7 +297,6 @@ void MenuConnectionManager::onFindResource(std::shared_ptr< OC::OCResource > res
         {
             for (auto &resourceType : resource->getResourceTypes())
             {
-                bool isNewServiceFound = false;
                 if (resourceType == UPNP_OIC_TYPE_CONNECTION_MANAGER)
                 {
                     if (m_connectionManagerSet.find(resource) == m_connectionManagerSet.end())
@@ -310,12 +308,7 @@ void MenuConnectionManager::onFindResource(std::shared_ptr< OC::OCResource > res
                             std::cerr << "Mismatch in discovered Services. Reinitializing.";
                             init(m_connectionManagerSet);
                         }
-                        isNewServiceFound = true;
                     }
-                }
-                if (isNewServiceFound)
-                {
-                    print();
                 }
             }
         }

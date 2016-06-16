@@ -353,7 +353,6 @@ void MenuContentDirectory::onFindResource(std::shared_ptr< OC::OCResource > reso
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::cout << "Found resource" << std::endl;
-    printResourceCompact(resource);
 
     try
     {
@@ -361,7 +360,6 @@ void MenuContentDirectory::onFindResource(std::shared_ptr< OC::OCResource > reso
         {
             for (auto &resourceType : resource->getResourceTypes())
             {
-                bool isNewServiceFound = false;
                 if (resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY)
                 {
                     if (m_contentDirectorySet.find(resource) == m_contentDirectorySet.end())
@@ -373,12 +371,7 @@ void MenuContentDirectory::onFindResource(std::shared_ptr< OC::OCResource > reso
                             std::cerr << "Mismatch in discovered Services. Reinitializing.";
                             init(m_contentDirectorySet);
                         }
-                        isNewServiceFound = true;
                     }
-                }
-                if (isNewServiceFound)
-                {
-                    print();
                 }
             }
         }
