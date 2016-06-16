@@ -28,7 +28,6 @@
 
 // Resource type: devices
 static const std::string UPNP_OIC_TYPE_DEVICE_LIGHT               = "oic.d.light";
-static const std::string UPNP_OIC_TYPE_DEVICE_FAN                 = "oic.d.fan";
 static const std::string UPNP_OIC_TYPE_DEVICE_INET_GATEWAY        = "oic.d.inet.gateway";
 static const std::string UPNP_OIC_TYPE_DEVICE_WAN                 = "oic.d.wan";
 static const std::string UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION      = "oic.d.wan.connection";
@@ -38,7 +37,6 @@ static const std::string UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER        = "oic.d.media
 
 // Resource type: services
 static const std::string UPNP_OIC_TYPE_BRIGHTNESS                 = "oic.r.light.brightness";
-static const std::string UPNP_OIC_TYPE_DIMMING                    = "oic.r.light.dimming";
 static const std::string UPNP_OIC_TYPE_POWER_SWITCH               = "oic.r.switch.binary";
 static const std::string UPNP_OIC_TYPE_CONNECTION_MANAGER         = "oic.r.connection.manager";
 static const std::string UPNP_OIC_TYPE_AV_TRANSPORT               = "oic.r.av.transport";
@@ -57,7 +55,6 @@ static const std::string UPNP_OIC_TYPE_LAN_HOST_CONFIG            = "oic.r.lan.c
 
 // URI prefix (URI = URI_PREFIX + UDN)
 static const std::string UPNP_OIC_URI_PREFIX_LIGHT                  = "/oic/upnp/light/";
-static const std::string UPNP_OIC_URI_PREFIX_DIMMING                = "/oic/upnp/dimming/";
 static const std::string UPNP_OIC_IRI_PREFIX_BRIGHTNESS             = "/oic/upnp/brightness/";
 static const std::string UPNP_OIC_URI_PREFIX_POWER_SWITCH           = "/oic/upnp/switch/";
 static const std::string UPNP_OIC_URI_PREFIX_INET_GATEWAY           = "/oic/upnp/igd/";
