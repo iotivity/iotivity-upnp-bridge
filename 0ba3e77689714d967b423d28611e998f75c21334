@@ -22,6 +22,30 @@
       "revId": "0ba3e77689714d967b423d28611e998f75c21334",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_d59aee13",
+        "filename": "examples/iotApp/IotivityUtility.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-16T21:32:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da87b5cf_f5fb7245",
+      "range": {
+        "startLine": 28,
+        "startChar": 19,
+        "endLine": 28,
+        "endChar": 29
+      },
+      "revId": "0ba3e77689714d967b423d28611e998f75c21334",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
