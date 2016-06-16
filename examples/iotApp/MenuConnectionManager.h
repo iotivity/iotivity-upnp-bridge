@@ -35,10 +35,10 @@ class MenuConnectionManager: public MenuBase
 public:
     MenuConnectionManager();
     virtual ~MenuConnectionManager();
-     /*
-      * Used to pass in an already discovered list of connectionManager resources before calling run.
-      * this is not required to use this class but can give it an initial start state
-      */
+    /*
+     * The init member function is optional.
+     * Used to pass in an already discovered connection manager resources before calling run.
+     */
      void init(std::set<OC::OCResource::Ptr, OCResourceComp> connectionManagerSet);
      virtual std::string getName();
      virtual void help();

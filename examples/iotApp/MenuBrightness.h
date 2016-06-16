@@ -35,8 +35,8 @@ class MenuBrightness: public MenuBase
         MenuBrightness();
         virtual ~MenuBrightness();
         /*
-         * Used to pass in an already discovered list of brightness resources before calling run.
-         * this is not required to use this class but can give it an initial start state
+         * The init member function is optional.
+         * Used to pass in an already discovered brightness resources before calling run.
          */
         void init(std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> brightnessSet);
         virtual std::string getName();
