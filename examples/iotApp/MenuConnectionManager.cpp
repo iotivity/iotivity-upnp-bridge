@@ -82,8 +82,6 @@ void MenuConnectionManager::run(const std::vector<std::string> &cmd,
             OCStackResult result = OC::OCPlatform::findResource("",
                                    std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_CONNECTION_MANAGER, CT_DEFAULT,
                                    onFindResourceCb);
-            std::cout << "findResource(" + std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" +
-                    UPNP_OIC_TYPE_CONNECTION_MANAGER + ") - " << result << std::endl;
         }
         else if (cmd[0] == "list")
         {
@@ -290,7 +288,6 @@ void MenuConnectionManager::onFindResource(std::shared_ptr< OC::OCResource > res
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::cout << "Found resource" << std::endl;
-    printResourceCompact(resource);
 
     try
     {
@@ -298,7 +295,6 @@ void MenuConnectionManager::onFindResource(std::shared_ptr< OC::OCResource > res
         {
             for (auto &resourceType : resource->getResourceTypes())
             {
-                bool isNewServiceFound = false;
                 if (resourceType == UPNP_OIC_TYPE_CONNECTION_MANAGER)
                 {
                     if (m_connectionManagerSet.find(resource) == m_connectionManagerSet.end())
@@ -310,12 +306,7 @@ void MenuConnectionManager::onFindResource(std::shared_ptr< OC::OCResource > res
                             std::cerr << "Mismatch in discovered Services. Reinitializing.";
                             init(m_connectionManagerSet);
                         }
-                        isNewServiceFound = true;
                     }
-                }
-                if (isNewServiceFound)
-                {
-                    print();
                 }
             }
         }

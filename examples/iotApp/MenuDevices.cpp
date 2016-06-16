@@ -85,7 +85,6 @@ void MenuDevices::run(const std::vector<std::string> &cmd,
             for (auto device : knownDevices)
             {
                 OCStackResult result = OC::OCPlatform::findResource("", device, CT_DEFAULT, onFindResourceCb);
-                std::cout << "findResource(" + device + ") - " << result << std::endl;
             }
 
         }
@@ -240,8 +239,6 @@ bool MenuDevices::quit()
 void MenuDevices::onFindResource(std::shared_ptr< OC::OCResource > resource)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    std::cout << "Found resource" << std::endl;
-    printResourceCompact(resource);
 
     try
     {
@@ -249,13 +246,12 @@ void MenuDevices::onFindResource(std::shared_ptr< OC::OCResource > resource)
         {
             for (auto &resourceType : resource->getResourceTypes())
             {
-                bool isNewDeviceFound = false;
+                std::cout << "Found "  << resourceType << " resource" << std::endl;
                 if (resourceType == UPNP_OIC_TYPE_DEVICE_INET_GATEWAY)
                 {
                     if (m_inetGateway.find(resource) == m_inetGateway.end())
                     {
                         m_inetGateway.insert(resource);
-                        isNewDeviceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_DEVICE_LAN)
@@ -263,7 +259,6 @@ void MenuDevices::onFindResource(std::shared_ptr< OC::OCResource > resource)
                     if (m_lan.find(resource) == m_lan.end())
                     {
                         m_lan.insert(resource);
-                        isNewDeviceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT)
@@ -271,7 +266,6 @@ void MenuDevices::onFindResource(std::shared_ptr< OC::OCResource > resource)
                     if (m_light.find(resource) == m_light.end())
                     {
                         m_light.insert(resource);
-                        isNewDeviceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER)
@@ -279,7 +273,6 @@ void MenuDevices::onFindResource(std::shared_ptr< OC::OCResource > resource)
                     if (m_mediaRenderer.find(resource) == m_mediaRenderer.end())
                     {
                         m_mediaRenderer.insert(resource);
-                        isNewDeviceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER)
@@ -287,7 +280,6 @@ void MenuDevices::onFindResource(std::shared_ptr< OC::OCResource > resource)
                     if (m_mediaServer.find(resource) == m_mediaServer.end())
                     {
                         m_mediaServer.insert(resource);
-                        isNewDeviceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_DEVICE_WAN)
@@ -295,7 +287,6 @@ void MenuDevices::onFindResource(std::shared_ptr< OC::OCResource > resource)
                     if (m_wan.find(resource) == m_wan.end())
                     {
                         m_wan.insert(resource);
-                        isNewDeviceFound = true;
                     }
                 }
                 else if (resourceType == UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION)
@@ -303,12 +294,7 @@ void MenuDevices::onFindResource(std::shared_ptr< OC::OCResource > resource)
                     if (m_wanConnection.find(resource) == m_wanConnection.end())
                     {
                         m_wanConnection.insert(resource);
-                        isNewDeviceFound = true;
                     }
-                }
-                if (isNewDeviceFound)
-                {
-                    print();
                 }
             }
         }

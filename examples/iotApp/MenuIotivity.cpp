@@ -104,7 +104,6 @@ void MenuIotivity::run(const std::vector<std::string> &cmd,
                     requestURI = cmd[1];
                 }
                 OCStackResult result = OC::OCPlatform::findResource("", requestURI, CT_DEFAULT, onFindResourceCb);
-                std::cout << "findResource(" + requestURI + ") - " << result << std::endl;
             }
             else
             {

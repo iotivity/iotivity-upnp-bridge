@@ -247,7 +247,6 @@ void MenuBrightness::onFindResource(std::shared_ptr< OC::OCResource > resource)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::cout << "Found resource" << std::endl;
-    printResourceCompact(resource);
 
     try
     {
@@ -255,7 +254,6 @@ void MenuBrightness::onFindResource(std::shared_ptr< OC::OCResource > resource)
         {
             for (auto &resourceType : resource->getResourceTypes())
             {
-                bool isNewServiceFound = false;
                 if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
                 {
                     if (m_brightnessSet.find(resource) == m_brightnessSet.end())
@@ -267,12 +265,7 @@ void MenuBrightness::onFindResource(std::shared_ptr< OC::OCResource > resource)
                             std::cerr << "Missmatch in discovered Services. Reinitilizing.";
                             init(m_brightnessSet);
                         }
-                        isNewServiceFound = true;
                     }
-                }
-                if (isNewServiceFound)
-                {
-                    print();
                 }
             }
         }
