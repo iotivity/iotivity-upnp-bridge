@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_f5fb7245",
+        "filename": "examples/iotApp/IotivityUtility.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-16T21:25:07Z",
+      "side": 1,
+      "message": "This should be changed unique_lock",
+      "range": {
+        "startLine": 28,
+        "startChar": 19,
+        "endLine": 28,
+        "endChar": 29
+      },
+      "revId": "0ba3e77689714d967b423d28611e998f75c21334",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
