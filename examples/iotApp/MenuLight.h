@@ -41,7 +41,7 @@ class MenuLight: public MenuBase
         MenuLight();
         virtual ~MenuLight();
         /*
-         * Used to pass in an already discovered list of binaryswitch resources before calling run.
+         * Used to pass in an already discovered list of light resources before calling run.
          * this is not required to use this class but can give it an initial start state
          */
         void init(std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> lightSet);

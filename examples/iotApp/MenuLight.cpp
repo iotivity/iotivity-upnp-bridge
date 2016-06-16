@@ -413,7 +413,7 @@ void MenuLight::onFindResource(std::shared_ptr< OC::OCResource > resource)
                         m_light_instance_vector.push_back(Light(resource));
                         if (m_lightSet.size() != m_lightVector.size())
                         {
-                            std::cerr << "Missmatch in discovered devices. Reinitilizing.";
+                            std::cerr << "Mismatch in discovered devices. Reinitilizing.";
                             init(m_lightSet);
                         }
                     }

@@ -262,7 +262,7 @@ void MenuBrightness::onFindResource(std::shared_ptr< OC::OCResource > resource)
                         m_brightnessVector.push_back(resource);
                         if (m_brightnessSet.size() != m_brightnessVector.size())
                         {
-                            std::cerr << "Missmatch in discovered Services. Reinitilizing.";
+                            std::cerr << "Mismatch in discovered Services. Reinitilizing.";
                             init(m_brightnessSet);
                         }
                     }
