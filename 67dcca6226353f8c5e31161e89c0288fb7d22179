@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_55cede5b",
+        "filename": "examples/iotApp/MenuContentDirectory.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-16T17:34:12Z",
+      "side": 1,
+      "message": "This should be moved",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 6
+      },
+      "revId": "67dcca6226353f8c5e31161e89c0288fb7d22179",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_f5da9216",
+        "filename": "examples/iotApp/MenuContentDirectory.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-16T17:34:12Z",
+      "side": 1,
+      "message": "This should be removed",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 6
+      },
+      "revId": "67dcca6226353f8c5e31161e89c0288fb7d22179",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
