@@ -36,8 +36,8 @@ public:
     MenuContentDirectory();
     virtual ~MenuContentDirectory();
     /*
-     * Used to pass in an already discovered list of contentDirectory resources before calling run.
-     * this is not required to use this class but can give it an initial start state
+     * The init member function is optional.
+     * Used to pass in an already discovered content directory resources before calling run.
      */
     void init(std::set<OC::OCResource::Ptr, OCResourceComp> contentDirectorySet);
     virtual std::string getName();

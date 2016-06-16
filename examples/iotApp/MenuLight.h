@@ -41,8 +41,8 @@ class MenuLight: public MenuBase
         MenuLight();
         virtual ~MenuLight();
         /*
-         * Used to pass in an already discovered list of light resources before calling run.
-         * this is not required to use this class but can give it an initial start state
+         * The init member function is optional.
+         * Used to pass in an already discovered light resources before calling run.
          */
         void init(std::set<std::shared_ptr<OC::OCResource>, OCResourceComp> lightSet);
         virtual std::string getName();
