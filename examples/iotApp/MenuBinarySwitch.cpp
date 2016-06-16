@@ -336,7 +336,6 @@ void MenuBinarySwitch::onFindResource(std::shared_ptr< OC::OCResource > resource
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::cout << "Found resource" << std::endl;
-    printResourceCompact(resource);
 
     try
     {
@@ -344,7 +343,6 @@ void MenuBinarySwitch::onFindResource(std::shared_ptr< OC::OCResource > resource
         {
             for (auto &resourceType : resource->getResourceTypes())
             {
-                bool isNewServiceFound = false;
                 if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
                 {
                     if (m_binarySwitchSet.find(resource) == m_binarySwitchSet.end())
@@ -356,12 +354,7 @@ void MenuBinarySwitch::onFindResource(std::shared_ptr< OC::OCResource > resource
                             std::cerr << "Missmatch in discovered devices. Reinitilizing.";
                             init(m_binarySwitchSet);
                         }
-                        isNewServiceFound = true;
                     }
-                }
-                if (isNewServiceFound)
-                {
-                    print();
                 }
             }
         }

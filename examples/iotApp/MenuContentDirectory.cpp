@@ -84,11 +84,9 @@ void MenuContentDirectory::run(const std::vector<std::string> &cmd,
         if ("find" == cmd[0])
         {
             onFindResourceCb = std::bind(&MenuContentDirectory::onFindResource, this, std::placeholders::_1);
-            OCStackResult result = OC::OCPlatform::findResource("",
-                                   std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_CONTENT_DIRECTORY, CT_DEFAULT,
-                                   onFindResourceCb);
-            std::cout << "findResource(" + std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" +
-                    UPNP_OIC_TYPE_CONTENT_DIRECTORY + ") - " << result << std::endl;
+            OC::OCPlatform::findResource("",
+                    std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_CONTENT_DIRECTORY, CT_DEFAULT,
+                    onFindResourceCb);
         }
         else if (cmd[0] == "list")
         {
@@ -353,7 +351,6 @@ void MenuContentDirectory::onFindResource(std::shared_ptr< OC::OCResource > reso
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::cout << "Found resource" << std::endl;
-    printResourceCompact(resource);
 
     try
     {
@@ -361,7 +358,6 @@ void MenuContentDirectory::onFindResource(std::shared_ptr< OC::OCResource > reso
         {
             for (auto &resourceType : resource->getResourceTypes())
             {
-                bool isNewServiceFound = false;
                 if (resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY)
                 {
                     if (m_contentDirectorySet.find(resource) == m_contentDirectorySet.end())
@@ -373,12 +369,7 @@ void MenuContentDirectory::onFindResource(std::shared_ptr< OC::OCResource > reso
                             std::cerr << "Mismatch in discovered Services. Reinitializing.";
                             init(m_contentDirectorySet);
                         }
-                        isNewServiceFound = true;
                     }
-                }
-                if (isNewServiceFound)
-                {
-                    print();
                 }
             }
         }
