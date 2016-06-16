@@ -40,7 +40,7 @@ using namespace OIC::Service;
 class UpnpConnector: public ProtocolBridgeConnector
 {
     public:
-        typedef std::function< void(UpnpResource::Ptr) > DiscoveryCallback;
+        typedef std::function< int(UpnpResource::Ptr) > DiscoveryCallback;
         typedef std::function< void(UpnpResource::Ptr) > LostCallback;
         UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback lostCallback);
         virtual ~UpnpConnector();

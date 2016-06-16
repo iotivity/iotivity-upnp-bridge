@@ -46,13 +46,20 @@ UpnpBundleActivator::~UpnpBundleActivator()
  This method gets called back from the connector whenever a resource is
  discovered on the bridged protocol
  */
-void UpnpBundleActivator::connectorDiscoveryCb(UpnpResource::Ptr pUpnpResource)
+int UpnpBundleActivator::connectorDiscoveryCb(UpnpResource::Ptr pUpnpResource)
 {
+    int result;
     pUpnpResource->m_bundleId = m_bundleId;
 
     DEBUG_PRINT("UpnpResource URI " << pUpnpResource->m_uri);
-    m_pResourceContainer->registerResource(pUpnpResource);
-    m_vecResources.push_back(pUpnpResource);
+    result = m_pResourceContainer->registerResource(pUpnpResource);
+    if (result == 0)
+    {
+        m_vecResources.push_back(pUpnpResource);
+    } else {
+        ERROR_PRINT(result << " Failed to register resource: " << pUpnpResource->m_uri);
+    }
+    return result;
 }
 
 /*

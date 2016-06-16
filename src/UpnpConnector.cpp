@@ -301,8 +301,16 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
     if (pUpnpResource != nullptr && !pUpnpResource->isRegistered())
     {
         DEBUG_PRINT("Register device resource: " << pUpnpResource->m_uri);
-        s_discoveryCallback(pUpnpResource);
-        pUpnpResource->setRegistered(true);
+        if (s_discoveryCallback(pUpnpResource) == 0)
+        {
+            pUpnpResource->setRegistered(true);
+        }
+        else
+        {
+            pUpnpResource->setRegistered(false);
+            unregisterDeviceResource(udn);
+            return;
+        }
 
         // Traverse the service list and register all the services where isReady() returns true.
         // This is done in order to catch all the services that have been seen
@@ -447,8 +455,10 @@ void UpnpConnector::unregisterDeviceResource(string udn)
     {
         unregisterDeviceResource(udnChild);
     }
-
-    s_lostCallback(pDevice);
+    if (pDevice->isRegistered())
+    {
+        s_lostCallback(pDevice);
+    }
     s_manager->removeDevice(udn);
 }
 
