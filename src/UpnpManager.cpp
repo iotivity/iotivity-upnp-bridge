@@ -38,6 +38,7 @@
 #include "UpnpWanDslLinkConfigService.h"
 #include "UpnpWanEthernetLinkConfigService.h"
 #include "UpnpWanIpConnectionService.h"
+#include "UpnpWanPppConnectionService.h"
 #include "UpnpWanPotsLinkConfigService.h"
 
 using namespace std;
@@ -426,6 +427,10 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     else if (resourceType == UPNP_OIC_TYPE_WAN_IP_CONNECTION)
     {
         return (std::make_shared < UpnpWanIpConnection > (serviceInfo, requestState));
+    }
+    else if (resourceType == UPNP_OIC_TYPE_WAN_PPP_CONNECTION)
+    {
+        return (std::make_shared < UpnpWanPppConnection > (serviceInfo, requestState));
     }
     else if (resourceType == UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG)
     {
