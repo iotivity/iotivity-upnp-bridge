@@ -9,13 +9,26 @@ env_samples.AppendUnique(CPPPATH = ['#/include/'])
 env_samples['LIBS'] = [oic_libs, 'pthread']
 env_samples['LIBPATH'] = ['${IOTIVITY_BASE}/out/linux/${TARGET_ARCH}/${IOTIVITY_LIB_TYPE}']
 
-iotApp_cpp = ['iotApp.cpp', 'BinarySwitch.cpp', 'Brightness.cpp', 'Light.cpp',
-              'CommandlineMode.cpp', 'ContentDirectory.cpp',
-              'ConnectionManager.cpp', 'InteractiveMode.cpp',
-              'IotivityUtility.cpp', 'MenuBase.cpp', 'MenuBinarySwitch.cpp',
-              'MenuBrightness.cpp', 'MenuConnectionManager.cpp',
-              'MenuContentDirectory.cpp', 'MenuDevices.cpp', 'MenuIotivity.cpp',
-              'MenuLight.cpp', 'MenuMain.cpp', 'MenuServices.cpp']
+iotApp_cpp = ['AVTransport.cpp',
+              'iotApp.cpp',
+              'BinarySwitch.cpp',
+              'Brightness.cpp',
+              'Light.cpp',
+              'CommandlineMode.cpp',
+              'ContentDirectory.cpp',
+              'ConnectionManager.cpp',
+              'InteractiveMode.cpp',
+              'IotivityUtility.cpp',
+              'MenuBase.cpp',
+              'MenuBinarySwitch.cpp',
+              'MenuBrightness.cpp',
+              'MenuConnectionManager.cpp',
+              'MenuContentDirectory.cpp',
+              'MenuDevices.cpp',
+              'MenuIotivity.cpp',
+              'MenuLight.cpp',
+              'MenuMain.cpp',
+              'MenuServices.cpp']
 iotApp_obj = env_samples.Object(iotApp_cpp)
 iotApp_bins = env_samples.Program('iotApp', iotApp_obj)
 
