@@ -48,7 +48,7 @@ void MenuBrightness::init(std::set<std::shared_ptr<OC::OCResource>, OCResourceCo
 
 std::string MenuBrightness::getName()
 {
-    return "Binary Switch";
+    return "Brightness";
 }
 
 void MenuBrightness::print()
