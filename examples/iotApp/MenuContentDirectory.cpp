@@ -30,16 +30,13 @@ MenuContentDirectory::~MenuContentDirectory()
 {
 }
 
-#include "ContentDirectory.h"
-#include "MenuConnectionManager.h"
-
-void MenuContentDirectory::init(std::set<OC::OCResource::Ptr, OCResourceComp> brightnessSet)
+void MenuContentDirectory::init(std::set<OC::OCResource::Ptr, OCResourceComp> contentDirectorySet)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_contentDirectorySet.clear();
     m_contentDirectoryVector.clear();
 
-    m_contentDirectorySet = brightnessSet;
+    m_contentDirectorySet = contentDirectorySet;
     for (auto r : m_contentDirectorySet)
     {
         m_contentDirectoryVector.push_back(r);
