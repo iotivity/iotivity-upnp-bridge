@@ -29,19 +29,20 @@
 static std::mutex g_iotivity_utility_print_mutex;
 static std::condition_variable g_iotivity_utility_condition_variable;
 
-void on_iotivity_utility_get(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode)
+void on_iotivity_utility_get(const OC::HeaderOptions &headerOptions,
+                             const OC::OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
-        if (eCode == OC_STACK_OK)
+    if (eCode == OC_STACK_OK)
+    {
+        if (rep.hasAttribute("name"))
         {
-            if(rep.hasAttribute("name"))
-            {
-                std::string name = "";
-                rep.getValue("name", name);
-                std::cout << "\tname " << name << std::endl;
-            }
+            std::string name = "";
+            rep.getValue("name", name);
+            std::cout << "\tname " << name << std::endl;
         }
-        g_iotivity_utility_condition_variable.notify_one();
+    }
+    g_iotivity_utility_condition_variable.notify_one();
 }
 
 void printResourceInformation(std::shared_ptr< OC::OCResource > resource)
@@ -100,8 +101,8 @@ void printResourceCompact(std::shared_ptr< OC::OCResource > resource)
 }
 
 void processAttributes(const OC::OCRepresentation &rep,
-                              const std::map <std::string, AttrDesc> *attrMap,
-                              std::string prefix)
+                       const std::map <std::string, AttrDesc> *attrMap,
+                       std::string prefix)
 {
     for (auto &attr : *attrMap)
     {
@@ -117,46 +118,46 @@ void processAttributes(const OC::OCRepresentation &rep,
         switch (attr.second.type)
         {
             case ATTR_TYPE_BOOL:
-            {
-                bool value;
-                rep.getValue(attr.first, value);
-                std::cout << " (bool):\t " << ((value) ? "TRUE" : "FALSE") << std::endl;
-                break;
-            }
+                {
+                    bool value;
+                    rep.getValue(attr.first, value);
+                    std::cout << " (bool):\t " << ((value) ? "TRUE" : "FALSE") << std::endl;
+                    break;
+                }
             case ATTR_TYPE_INT:
-            {
-                int value;
-                rep.getValue(attr.first, value);
-                std::cout << " (int):\t " << value << std::endl;
-                break;
-            }
+                {
+                    int value;
+                    rep.getValue(attr.first, value);
+                    std::cout << " (int):\t " << value << std::endl;
+                    break;
+                }
             case ATTR_TYPE_INT64:
-            {
-                double value;
-                rep.getValue(attr.first, value);
-                std::cout << " (int64): \t " << value << std::endl;
-                break;
-            }
+                {
+                    double value;
+                    rep.getValue(attr.first, value);
+                    std::cout << " (int64): \t " << value << std::endl;
+                    break;
+                }
             case ATTR_TYPE_STRING:
-            {
-                std::string value;
-                rep.getValue(attr.first, value);
-                std::cout << " (string): \t " << value << std::endl;
-                break;
-            }
+                {
+                    std::string value;
+                    rep.getValue(attr.first, value);
+                    std::cout << " (string): \t " << value << std::endl;
+                    break;
+                }
             case ATTR_TYPE_VECTOR:
-            {
-                OC::OCRepresentation internal;
-                rep.getValue(attr.first, internal);
-                std::cout << std::endl;
-                processAttributes(internal, attr.second.composite, prefix + "\t");
-                break;
-            }
+                {
+                    OC::OCRepresentation internal;
+                    rep.getValue(attr.first, internal);
+                    std::cout << std::endl;
+                    processAttributes(internal, attr.second.composite, prefix + "\t");
+                    break;
+                }
             default:
-            {
-                std::cout << "not handled yet" << std::endl;
-                break;
-            }
+                {
+                    std::cout << "not handled yet" << std::endl;
+                    break;
+                }
         }
     }
 

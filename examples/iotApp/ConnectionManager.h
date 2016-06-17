@@ -32,60 +32,62 @@
 
 class ConnectionManager
 {
-public:
-    ConnectionManager();
-    ConnectionManager(OC::OCResource::Ptr resource);
-    virtual ~ConnectionManager();
+    public:
+        ConnectionManager();
+        ConnectionManager(OC::OCResource::Ptr resource);
+        virtual ~ConnectionManager();
 
-    ConnectionManager(const ConnectionManager &other);
-    ConnectionManager &operator=(const ConnectionManager &other);
+        ConnectionManager(const ConnectionManager &other);
+        ConnectionManager &operator=(const ConnectionManager &other);
 
-    struct ProtocolInfo
-    {
-        std::string sink;
-        std::string source;
-    };
+        struct ProtocolInfo
+        {
+            std::string sink;
+            std::string source;
+        };
 
-    struct ConnectionInfo
-    {
-        int rcsId;
-        int avTransportId;
-        int peerConnectionId;
-        std::string direction;
-        std::string peerConnectionManager;
-        std::string protocolInfo;
-        std::string status;
-    };
+        struct ConnectionInfo
+        {
+            int rcsId;
+            int avTransportId;
+            int peerConnectionId;
+            std::string direction;
+            std::string peerConnectionManager;
+            std::string protocolInfo;
+            std::string status;
+        };
 
-    ProtocolInfo getProtocolInfo();
-    std::string getCurrentConnectionIDs();
-    ConnectionInfo getConnectionInfo(std::string connectionIDs = "0");
+        ProtocolInfo getProtocolInfo();
+        std::string getCurrentConnectionIDs();
+        ConnectionInfo getConnectionInfo(std::string connectionIDs = "0");
 
-    //Overloaded operator used for putting into a 'set'
-    bool operator<(const ConnectionManager &other) const;
-    const std::shared_ptr<OC::OCResource> getResource() const {return m_resource;}
-private:
-    void onGetProtocolInfo(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
-                         const int eCode);
-    void onGetCurrentConnectionIDs(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
-                          const int eCode);
-    void onGetCurrentConnectionInfo(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
-                              const int eCode);
+        //Overloaded operator used for putting into a 'set'
+        bool operator<(const ConnectionManager &other) const;
+        const std::shared_ptr<OC::OCResource> getResource() const {return m_resource;}
+    private:
+        void onGetProtocolInfo(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                               const int eCode);
+        void onGetCurrentConnectionIDs(const OC::HeaderOptions &headerOptions,
+                                       const OC::OCRepresentation &rep,
+                                       const int eCode);
+        void onGetCurrentConnectionInfo(const OC::HeaderOptions &headerOptions,
+                                        const OC::OCRepresentation &rep,
+                                        const int eCode);
 
-    OC::GetCallback m_getProtocolInfoCB;
-    OC::GetCallback m_getCurrentConnectionIDsCB;
-    OC::GetCallback m_getCurrentConnctionInfoCB;
+        OC::GetCallback m_getProtocolInfoCB;
+        OC::GetCallback m_getCurrentConnectionIDsCB;
+        OC::GetCallback m_getCurrentConnctionInfoCB;
 
-    // These are only used to hold return values for async calls
-    ProtocolInfo m_protocolInfo;
-    std::string m_connectionIDs;
-    ConnectionInfo m_connectionInfo;
+        // These are only used to hold return values for async calls
+        ProtocolInfo m_protocolInfo;
+        std::string m_connectionIDs;
+        ConnectionInfo m_connectionInfo;
 
-    OC::OCResource::Ptr m_resource;
+        OC::OCResource::Ptr m_resource;
 
-    //used to turn the async get call to a sync method call
-    std::mutex m_mutex;
-    std::condition_variable m_cv;
+        //used to turn the async get call to a sync method call
+        std::mutex m_mutex;
+        std::condition_variable m_cv;
 };
 
 #endif /* CONNECTIONMANAGER_H_ */

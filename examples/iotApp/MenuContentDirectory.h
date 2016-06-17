@@ -32,29 +32,29 @@
 
 class MenuContentDirectory: public MenuBase
 {
-public:
-    MenuContentDirectory();
-    virtual ~MenuContentDirectory();
-    /*
-     * The init member function is optional.
-     * Used to pass in an already discovered content directory resources before calling run.
-     */
-    void init(std::set<OC::OCResource::Ptr, OCResourceComp> contentDirectorySet);
-    virtual std::string getName();
-    virtual void help();
-    virtual void print();
-    virtual void run(const std::vector<std::string> &cmd,
-                     std::stack<std::unique_ptr<MenuBase>> &menuStack);
-    virtual bool quit();
-private:
-    void onFindResource(OC::OCResource::Ptr);
+    public:
+        MenuContentDirectory();
+        virtual ~MenuContentDirectory();
+        /*
+         * The init member function is optional.
+         * Used to pass in an already discovered content directory resources before calling run.
+         */
+        void init(std::set<OC::OCResource::Ptr, OCResourceComp> contentDirectorySet);
+        virtual std::string getName();
+        virtual void help();
+        virtual void print();
+        virtual void run(const std::vector<std::string> &cmd,
+                         std::stack<std::unique_ptr<MenuBase>> &menuStack);
+        virtual bool quit();
+    private:
+        void onFindResource(OC::OCResource::Ptr);
 
-    std::set<OC::OCResource::Ptr, OCResourceComp> m_contentDirectorySet;
-    std::vector<OC::OCResource::Ptr> m_contentDirectoryVector;
-    bool m_quit;
-    std::mutex m_mutex;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_contentDirectorySet;
+        std::vector<OC::OCResource::Ptr> m_contentDirectoryVector;
+        bool m_quit;
+        std::mutex m_mutex;
 
-    OC::FindCallback onFindResourceCb;
+        OC::FindCallback onFindResourceCb;
 };
 
 #endif /* MENUCONTENTDIRECTORY_H_ */
