@@ -32,29 +32,29 @@
 
 class MenuConnectionManager: public MenuBase
 {
-public:
-    MenuConnectionManager();
-    virtual ~MenuConnectionManager();
-     /*
-      * Used to pass in an already discovered list of connectionManager resources before calling run.
-      * this is not required to use this class but can give it an initial start state
-      */
-     void init(std::set<OC::OCResource::Ptr, OCResourceComp> connectionManagerSet);
-     virtual std::string getName();
-     virtual void help();
-     virtual void print();
-     virtual void run(const std::vector<std::string> &cmd,
-                      std::stack<std::unique_ptr<MenuBase>> &menuStack);
-     virtual bool quit();
- private:
-     void onFindResource(OC::OCResource::Ptr);
+    public:
+        MenuConnectionManager();
+        virtual ~MenuConnectionManager();
+        /*
+         * Used to pass in an already discovered list of connectionManager resources before calling run.
+         * this is not required to use this class but can give it an initial start state
+         */
+        void init(std::set<OC::OCResource::Ptr, OCResourceComp> connectionManagerSet);
+        virtual std::string getName();
+        virtual void help();
+        virtual void print();
+        virtual void run(const std::vector<std::string> &cmd,
+                         std::stack<std::unique_ptr<MenuBase>> &menuStack);
+        virtual bool quit();
+    private:
+        void onFindResource(OC::OCResource::Ptr);
 
-     std::set<OC::OCResource::Ptr, OCResourceComp> m_connectionManagerSet;
-     std::vector<OC::OCResource::Ptr> m_connectionManagerVector;
-     bool m_quit;
-     std::mutex m_mutex;
+        std::set<OC::OCResource::Ptr, OCResourceComp> m_connectionManagerSet;
+        std::vector<OC::OCResource::Ptr> m_connectionManagerVector;
+        bool m_quit;
+        std::mutex m_mutex;
 
-     OC::FindCallback onFindResourceCb;
+        OC::FindCallback onFindResourceCb;
 };
 
 #endif /* MENUCONNECTIONMANAGER_H_ */

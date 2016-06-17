@@ -54,20 +54,27 @@ class ContentDirectory
         std::string getServiceResetToken();
         std::string getFeatureList();
         SearchResult browse(std::string objectId, std::string browseFlag, std::string filter,
-                int startingIndex, int requestedCount, std::string sortCriteria);
+                            int startingIndex, int requestedCount, std::string sortCriteria);
         SearchResult search(std::string containerId, std::string searchCriteria, std::string filter,
-                int startingIndex, int requestedCount, std::string sortCriteria);
+                            int startingIndex, int requestedCount, std::string sortCriteria);
         //Overloaded operator used for putting into a 'set'
         bool operator<(const ContentDirectory &other) const;
         const std::shared_ptr<OC::OCResource> getResource() const {return m_resource;}
     private:
-        void onGetSearchCapabilites(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode);
-        void onGetSortCapabilites(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode);
-        void onGetSystemUpdateId(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode);
-        void onGetServiceResetToken(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode);
-        void onGetFeatureList(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode);
-        void onBrowse(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode);
-        void onSearch(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode);
+        void onGetSearchCapabilites(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                                    const int eCode);
+        void onGetSortCapabilites(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                                  const int eCode);
+        void onGetSystemUpdateId(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                                 const int eCode);
+        void onGetServiceResetToken(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                                    const int eCode);
+        void onGetFeatureList(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                              const int eCode);
+        void onBrowse(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                      const int eCode);
+        void onSearch(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+                      const int eCode);
 
         OC::GetCallback m_getSearchCapabilitiesCB;
         OC::GetCallback m_getSortCapabilitesCB;

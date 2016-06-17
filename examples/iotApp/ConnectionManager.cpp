@@ -30,7 +30,7 @@ ConnectionManager::ConnectionManager() : m_resource(nullptr)
 }
 
 ConnectionManager::ConnectionManager(OC::OCResource::Ptr resource) :
-                m_resource(resource)
+    m_resource(resource)
 {
     m_protocolInfo = ProtocolInfo{"", ""};
     m_connectionInfo = { 0, 0, 0, "", "", "", "" };
@@ -61,7 +61,7 @@ ConnectionManager::ProtocolInfo ConnectionManager::getProtocolInfo()
 {
     std::unique_lock<std::mutex> protocolInfoLock(m_mutex);
     m_getProtocolInfoCB = bind(&ConnectionManager::onGetProtocolInfo, this, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3);
+                               std::placeholders::_2, std::placeholders::_3);
     m_resource->get(OC::QueryParamsMap(), m_getProtocolInfoCB);
     m_cv.wait(protocolInfoLock);
     return m_protocolInfo;
@@ -69,8 +69,9 @@ ConnectionManager::ProtocolInfo ConnectionManager::getProtocolInfo()
 std::string ConnectionManager::getCurrentConnectionIDs()
 {
     std::unique_lock<std::mutex> connectionIDsLock(m_mutex);
-    m_getCurrentConnectionIDsCB = bind(&ConnectionManager::onGetCurrentConnectionIDs, this, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3);
+    m_getCurrentConnectionIDsCB = bind(&ConnectionManager::onGetCurrentConnectionIDs, this,
+                                       std::placeholders::_1,
+                                       std::placeholders::_2, std::placeholders::_3);
     m_resource->get(OC::QueryParamsMap(), m_getCurrentConnectionIDsCB);
     m_cv.wait(connectionIDsLock);
     return m_connectionIDs;
@@ -78,8 +79,9 @@ std::string ConnectionManager::getCurrentConnectionIDs()
 ConnectionManager::ConnectionInfo ConnectionManager::getConnectionInfo(std::string connectionIDs)
 {
     std::unique_lock<std::mutex> protocolInfoLock(m_mutex);
-    m_getCurrentConnctionInfoCB = bind(&ConnectionManager::onGetCurrentConnectionInfo, this, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3);
+    m_getCurrentConnctionInfoCB = bind(&ConnectionManager::onGetCurrentConnectionInfo, this,
+                                       std::placeholders::_1,
+                                       std::placeholders::_2, std::placeholders::_3);
     OC::QueryParamsMap param = {{"connectionId", connectionIDs}};
     m_resource->get(param, m_getCurrentConnctionInfoCB);
     m_cv.wait(protocolInfoLock);
@@ -92,7 +94,8 @@ bool ConnectionManager::operator<(const ConnectionManager &other) const
     return ((*m_resource) < (*(other.m_resource)));
 }
 
-void ConnectionManager::onGetProtocolInfo(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+void ConnectionManager::onGetProtocolInfo(const OC::HeaderOptions &headerOptions,
+        const OC::OCRepresentation &rep,
         const int eCode)
 {
     (void) headerOptions;
@@ -103,7 +106,8 @@ void ConnectionManager::onGetProtocolInfo(const OC::HeaderOptions &headerOptions
         if (uri == m_resource->uri())
         {
             OC::OCRepresentation protocolInfoRep;
-            if (rep.getValue("protocolInfo", protocolInfoRep)) {
+            if (rep.getValue("protocolInfo", protocolInfoRep))
+            {
                 protocolInfoRep.getValue("sink", m_protocolInfo.sink);
                 protocolInfoRep.getValue("source", m_protocolInfo.source);
             }
@@ -111,7 +115,8 @@ void ConnectionManager::onGetProtocolInfo(const OC::HeaderOptions &headerOptions
     }
     m_cv.notify_one();
 }
-void ConnectionManager::onGetCurrentConnectionIDs(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+void ConnectionManager::onGetCurrentConnectionIDs(const OC::HeaderOptions &headerOptions,
+        const OC::OCRepresentation &rep,
         const int eCode)
 {
     (void) headerOptions;
@@ -127,7 +132,8 @@ void ConnectionManager::onGetCurrentConnectionIDs(const OC::HeaderOptions &heade
     }
     m_cv.notify_one();
 }
-void ConnectionManager::onGetCurrentConnectionInfo(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+void ConnectionManager::onGetCurrentConnectionInfo(const OC::HeaderOptions &headerOptions,
+        const OC::OCRepresentation &rep,
         const int eCode)
 {
     (void) headerOptions;
@@ -138,7 +144,8 @@ void ConnectionManager::onGetCurrentConnectionInfo(const OC::HeaderOptions &head
         if (uri == m_resource->uri())
         {
             OC::OCRepresentation currentConnectionInfoRep;
-            if (rep.getValue("currentConnectionInfo", currentConnectionInfoRep)) {
+            if (rep.getValue("currentConnectionInfo", currentConnectionInfoRep))
+            {
                 currentConnectionInfoRep.getValue("rcsId", m_connectionInfo.rcsId);
                 currentConnectionInfoRep.getValue("avTransportId", m_connectionInfo.avTransportId);
                 currentConnectionInfoRep.getValue("protocolInfo", m_connectionInfo.protocolInfo);

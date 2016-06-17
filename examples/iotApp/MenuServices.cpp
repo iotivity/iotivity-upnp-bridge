@@ -61,19 +61,25 @@ void MenuServices::print()
               " found)" << std::endl;
     std::cout << "rendering) " << UPNP_OIC_TYPE_RENDERING_CONTROL << " (" << m_renderingControl.size()
               << " found)" << std::endl;
-    std::cout << "recording) " << UPNP_OIC_TYPE_SCHEDULED_RECORDING << " (" << m_scheduledRecording.size()
+    std::cout << "recording) " << UPNP_OIC_TYPE_SCHEDULED_RECORDING << " (" <<
+              m_scheduledRecording.size()
               << " found)" << std::endl;
     std::cout << "ifconfig) " << UPNP_OIC_TYPE_WAN_IF_CONFIG << " (" << m_wanIfConfig.size() <<
               " found)" << std::endl;
-    std::cout << "cableconfig) " << UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG << " (" << m_wanCableLinkConfig.size() <<
+    std::cout << "cableconfig) " << UPNP_OIC_TYPE_WAN_CABLE_LINK_CONFIG << " (" <<
+              m_wanCableLinkConfig.size() <<
               " found)" << std::endl;
-    std::cout << "dslconfig) " << UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG << " (" << m_wanDSLLinkConfig.size() <<
+    std::cout << "dslconfig) " << UPNP_OIC_TYPE_WAN_DSL_LINK_CONFIG << " (" << m_wanDSLLinkConfig.size()
+              <<
               " found)" << std::endl;
-    std::cout << "netconfig) " << UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG << " (" << m_wanEthernetConfig.size() <<
+    std::cout << "netconfig) " << UPNP_OIC_TYPE_WAN_ETHERNET_CONFIG << " (" <<
+              m_wanEthernetConfig.size() <<
               " found)" << std::endl;
-    std::cout << "potsconfig) " << UPNP_OIC_TYPE_WAN_POTS_LINK_CONFIG << " (" << m_wanPotsLinkConfig.size() <<
+    std::cout << "potsconfig) " << UPNP_OIC_TYPE_WAN_POTS_LINK_CONFIG << " (" <<
+              m_wanPotsLinkConfig.size() <<
               " found)" << std::endl;
-    std::cout << "ipconnection) " << UPNP_OIC_TYPE_WAN_IP_CONNECTION << " (" << m_wanIPConnection.size() <<
+    std::cout << "ipconnection) " << UPNP_OIC_TYPE_WAN_IP_CONNECTION << " (" << m_wanIPConnection.size()
+              <<
               " found)" << std::endl;
     std::cout << "lanhost) " << UPNP_OIC_TYPE_LAN_HOST_CONFIG << " (" << m_lanHostConfig.size() <<
               " found)" << std::endl;

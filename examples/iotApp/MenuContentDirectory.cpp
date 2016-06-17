@@ -58,14 +58,21 @@ void MenuContentDirectory::print()
     std::cout << getName() << std::endl;
     std::cout << "------------------------------------" << std::endl;
     std::cout << "find) Discover any content directory service(s) " << std::endl;
-    std::cout << "list) list currently discovered content directory services (" << m_contentDirectoryVector.size() <<
+    std::cout << "list) list currently discovered content directory services (" <<
+              m_contentDirectoryVector.size() <<
               " found)" << std::endl;
-    std::cout << "getsearchcap) getsearchcap <#> or getsearchcap all - get the search capabilities" << std::endl;
-    std::cout << "getsortcap) getsortcaps <#> or getsortcap all - get the sort capabilities" << std::endl;
+    std::cout << "getsearchcap) getsearchcap <#> or getsearchcap all - get the search capabilities" <<
+              std::endl;
+    std::cout << "getsortcap) getsortcaps <#> or getsortcap all - get the sort capabilities" <<
+              std::endl;
     std::cout << "getsuid) getsuid <#> or getsuid all - get the system update ID" << std::endl;
     std::cout << "getsrt) getsrt <#> or getsuid all - get the service reset token" << std::endl;
-    std::cout << "browse) browse <#> <objectId> <browseFlag> <filter> <startIndex> <requestedCount> <sortCriteria>" << std::endl;
-    std::cout << "search) search <#> <containerId> <searchCriteria> <filter> <startingIndex> <requestCount> <sortCriteria>" << std::endl;
+    std::cout <<
+              "browse) browse <#> <objectId> <browseFlag> <filter> <startIndex> <requestedCount> <sortCriteria>"
+              << std::endl;
+    std::cout <<
+              "search) search <#> <containerId> <searchCriteria> <filter> <startingIndex> <requestCount> <sortCriteria>"
+              << std::endl;
     std::cout << "clear) clear all discovered content directory service(s)" << std::endl;
     std::cout << "b) Back" << std::endl;
     std::cout << "h) Help" << std::endl;
@@ -77,7 +84,7 @@ void MenuContentDirectory::help()
     print();
 }
 void MenuContentDirectory::run(const std::vector<std::string> &cmd,
-                         std::stack<std::unique_ptr<MenuBase>> &menuStack)
+                               std::stack<std::unique_ptr<MenuBase>> &menuStack)
 {
     if (cmd.size() > 0)
     {
@@ -88,7 +95,7 @@ void MenuContentDirectory::run(const std::vector<std::string> &cmd,
                                    std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_CONTENT_DIRECTORY, CT_DEFAULT,
                                    onFindResourceCb);
             std::cout << "findResource(" + std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" +
-                    UPNP_OIC_TYPE_CONTENT_DIRECTORY + ") - " << result << std::endl;
+                      UPNP_OIC_TYPE_CONTENT_DIRECTORY + ") - " << result << std::endl;
         }
         else if (cmd[0] == "list")
         {
@@ -251,7 +258,8 @@ void MenuContentDirectory::run(const std::vector<std::string> &cmd,
                     int startingIndex = std::stoi(cmd[5]);
                     int requestedCount = std::stoi(cmd[6]);
                     // [2]objectId, [3]browseFlag, [4]filter, [5]startingIndex, [6]requestedCount, [7]sourtCriteria
-                    ContentDirectory::SearchResult br = cd.browse(cmd[2], cmd[3], cmd[4], startingIndex, requestedCount,cmd[7]);
+                    ContentDirectory::SearchResult br = cd.browse(cmd[2], cmd[3], cmd[4], startingIndex, requestedCount,
+                                                        cmd[7]);
                     std::cout << m_contentDirectoryVector[i]->uri() << std::endl;
                     std::cout << "Browse Results:" << std::endl;
                     std::cout << "\tresults: " << br.result << std::endl;
@@ -269,43 +277,44 @@ void MenuContentDirectory::run(const std::vector<std::string> &cmd,
                 std::cout << "browse command missing required argument." << std::endl;
             }
 #else
-        std::cout << "browse command not yet implemented." << std::endl;
+            std::cout << "browse command not yet implemented." << std::endl;
 #endif
         }
         else if ("search" == cmd[0])
         {
 #if 0
             if (cmd.size() > 7)
-             {
-                 try
-                 {
-                     size_t i = std::stoi(cmd[1]);
-                     if (i >= m_contentDirectoryVector.size())
-                     {
-                         std::cout << "Invalid resource specified." << std::endl;
-                         return;
-                     }
-                     ContentDirectory cd(m_contentDirectoryVector[i]);
-                     int startingIndex = std::stoi(cmd[5]);
-                     int requestedCount = std::stoi(cmd[6]);
-                     // [2]containerId, [3]searchCriteria, [4]filter, [5]startingIndex, [6]requestedCount, [7]sourtCriteria
-                     ContentDirectory::SearchResult br = cd.browse(cmd[2], cmd[3], cmd[4], startingIndex, requestedCount,cmd[7]);
-                     std::cout << m_contentDirectoryVector[i]->uri() << std::endl;
-                     std::cout << "Search Results:" << std::endl;
-                     std::cout << "\tresults: " << br.result << std::endl;
-                     std::cout << "\tnumber returned: " << br.numberReturned << std::endl;
-                     std::cout << "\ttotal matches: " << br.totalMatches << std::endl;
-                     std::cout << "\tupdate ID: " << br.updateId << std::endl;
-                 }
-                 catch (const std::invalid_argument &ia)
-                 {
-                     std::cout << "invalid argument entered into the browse command" << std::endl;
-                 }
-             }
-             else
-             {
-                 std::cout << "search command missing required argument." << std::endl;
-             }
+            {
+                try
+                {
+                    size_t i = std::stoi(cmd[1]);
+                    if (i >= m_contentDirectoryVector.size())
+                    {
+                        std::cout << "Invalid resource specified." << std::endl;
+                        return;
+                    }
+                    ContentDirectory cd(m_contentDirectoryVector[i]);
+                    int startingIndex = std::stoi(cmd[5]);
+                    int requestedCount = std::stoi(cmd[6]);
+                    // [2]containerId, [3]searchCriteria, [4]filter, [5]startingIndex, [6]requestedCount, [7]sourtCriteria
+                    ContentDirectory::SearchResult br = cd.browse(cmd[2], cmd[3], cmd[4], startingIndex, requestedCount,
+                                                        cmd[7]);
+                    std::cout << m_contentDirectoryVector[i]->uri() << std::endl;
+                    std::cout << "Search Results:" << std::endl;
+                    std::cout << "\tresults: " << br.result << std::endl;
+                    std::cout << "\tnumber returned: " << br.numberReturned << std::endl;
+                    std::cout << "\ttotal matches: " << br.totalMatches << std::endl;
+                    std::cout << "\tupdate ID: " << br.updateId << std::endl;
+                }
+                catch (const std::invalid_argument &ia)
+                {
+                    std::cout << "invalid argument entered into the browse command" << std::endl;
+                }
+            }
+            else
+            {
+                std::cout << "search command missing required argument." << std::endl;
+            }
 #else
             std::cout << "search command not yet implemented." << std::endl;
 #endif
