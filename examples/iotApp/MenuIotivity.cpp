@@ -387,10 +387,13 @@ void MenuIotivity::onResponse(const OC::HeaderOptions &, const OC::OCRepresentat
             }
             // TODO type, base_type, depth
         }
-        for(auto foundResource : m_resources) {
-            if (foundResource->uri() == rep.getUri()) {
+        for (auto foundResource : m_resources)
+        {
+            if (foundResource->uri() == rep.getUri())
+            {
                 std::cout << "\n*********************** RESOURCE DETAILS *****************\n";
-                for (auto &rt : foundResource->getResourceTypes()) {
+                for (auto &rt : foundResource->getResourceTypes())
+                {
                     std::cout << "\tResource Type:\n\t\t" <<  rt << std::endl;
                     auto it = ResourceAttrMap.find(rt);
 

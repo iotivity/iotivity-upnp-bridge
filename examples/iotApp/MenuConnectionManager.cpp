@@ -55,12 +55,15 @@ void MenuConnectionManager::print()
     std::cout << getName() << std::endl;
     std::cout << "------------------------------------" << std::endl;
     std::cout << "find) Discover any connection manager service(s) " << std::endl;
-    std::cout << "list) list currently discovered connection manager services (" << m_connectionManagerVector.size() <<
+    std::cout << "list) list currently discovered connection manager services (" <<
+              m_connectionManagerVector.size() <<
               " found)" << std::endl;
     std::cout << "getpi) getpi <#> or getpi all - get the protocol info" << std::endl;
     std::cout << "getccid) getccid <#> or getccid all - get the current connection IDs" << std::endl;
-    std::cout << "getcci) getcci <#> [connectionID] or getcci all - get the current connection Info" << std::endl;
-    std::cout << "        if connectionID is not provided, connectionID '0' will be used by default." << std::endl;
+    std::cout << "getcci) getcci <#> [connectionID] or getcci all - get the current connection Info" <<
+              std::endl;
+    std::cout << "        if connectionID is not provided, connectionID '0' will be used by default." <<
+              std::endl;
     std::cout << "clear) clear all discovered connection manager service(s)" << std::endl;
     std::cout << "b) Back" << std::endl;
     std::cout << "h) Help" << std::endl;
@@ -72,7 +75,7 @@ void MenuConnectionManager::help()
     print();
 }
 void MenuConnectionManager::run(const std::vector<std::string> &cmd,
-                         std::stack<std::unique_ptr<MenuBase>> &menuStack)
+                                std::stack<std::unique_ptr<MenuBase>> &menuStack)
 {
     if (cmd.size() > 0)
     {
@@ -80,8 +83,8 @@ void MenuConnectionManager::run(const std::vector<std::string> &cmd,
         {
             onFindResourceCb = std::bind(&MenuConnectionManager::onFindResource, this, std::placeholders::_1);
             OC::OCPlatform::findResource("",
-                    std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_CONNECTION_MANAGER, CT_DEFAULT,
-                    onFindResourceCb);
+                                         std::string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_CONNECTION_MANAGER, CT_DEFAULT,
+                                         onFindResourceCb);
         }
         else if (cmd[0] == "list")
         {
