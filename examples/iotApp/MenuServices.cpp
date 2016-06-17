@@ -20,6 +20,7 @@
 
 #include <UpnpConstants.h>
 
+#include "MenuAVTransport.h"
 #include "MenuBinarySwitch.h"
 #include "MenuBrightness.h"
 #include "MenuConnectionManager.h"
@@ -281,7 +282,9 @@ void MenuServices::run(const std::vector<std::string> &cmd,
         }
         else if ("av" == cmd[0])
         {
-            std::cout << "AV Transport Menu not yet Implemented" << std::endl;
+            std::unique_ptr<MenuAVTransport> menuItem(new MenuAVTransport);
+            menuItem->init(m_avTransport);
+            menuStack.push(std::move(menuItem));
         }
         else if ("brightness" == cmd[0])
         {
