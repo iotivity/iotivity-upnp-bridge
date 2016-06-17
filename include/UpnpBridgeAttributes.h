@@ -232,6 +232,28 @@ const std::map <std::string, AttrDesc> WanIpConnectionAttrs =
     {"connectionState",    {ATTR_TYPE_VECTOR, true,  &WanIpConnectionStateAttrs}},
 };
 
+// WANPPPConnection
+const std::map <std::string, AttrDesc> WanPppConnectionMaxBitRateAttrs =
+{
+    {"up",        {ATTR_TYPE_INT, false,  NULL}},
+    {"down",      {ATTR_TYPE_INT, false,  NULL}}
+};
+
+const std::map <std::string, AttrDesc> WanPppConnectionAttrs =
+{
+    {"autoDiscoTime",      {ATTR_TYPE_INT,    false, NULL}},
+    {"idleDiscoTime",      {ATTR_TYPE_INT,    false, NULL}},
+    {"warnDiscoTime",      {ATTR_TYPE_INT,    false, NULL}},
+    {"externAddr",         {ATTR_TYPE_STRING, true,  NULL}},
+    {"sizePortMap",        {ATTR_TYPE_INT,    true,  NULL}},
+    {"user",               {ATTR_TYPE_STRING, false, NULL}},
+    {"pwd",                {ATTR_TYPE_STRING, false, NULL}},
+    {"maxBitRate",         {ATTR_TYPE_VECTOR, false, &WanPppConnectionMaxBitRateAttrs}},
+    {"connectionTypeInfo", {ATTR_TYPE_VECTOR, true,  &WanIpConnectionTypeInfoAttrs}},
+    {"nat",                {ATTR_TYPE_VECTOR, false, &WanIpConnectionNatStatusAttrs}},
+    {"connectionState",    {ATTR_TYPE_VECTOR, true,  &WanIpConnectionStateAttrs}},
+};
+
 // Media Server / Media Renderer
 
 // AV Transport
@@ -355,6 +377,7 @@ const std::map <std::string, const std::map <std::string, AttrDesc> & > Resource
     {UPNP_OIC_TYPE_WAN_POTS_LINK_CONFIG,   WanPotsConfigAttrs},
     {UPNP_OIC_TYPE_WAN_IP_CONNECTION,      WanIpConnectionAttrs},
     {UPNP_OIC_TYPE_LAN_HOST_CONFIG,        LanHostConfigAttrs},
+    {UPNP_OIC_TYPE_WAN_PPP_CONNECTION,     WanPppConnectionAttrs},
     {UPNP_OIC_TYPE_AV_TRANSPORT,           AvTransportAttrs},
     {UPNP_OIC_TYPE_CONNECTION_MANAGER,     ConnectionManagerAttrs},
     {UPNP_OIC_TYPE_CONTENT_DIRECTORY,      ContentDirectoryAttrs},
