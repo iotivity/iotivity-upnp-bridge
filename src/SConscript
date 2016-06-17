@@ -43,6 +43,7 @@ upnp_iotivity_bridge_cpp = ['UpnpManager.cpp',
                             'UpnpWanDslLinkConfigService.cpp',
                             'UpnpWanEthernetLinkConfigService.cpp',
                             'UpnpWanIpConnectionService.cpp',
+                            'UpnpWanPppConnectionService.cpp',
                             'UpnpWanPotsLinkConfigService.cpp']
 #upnp_iotivity_bridge_obj = env.SharedObject(upnp_iotivity_bridge_cpp)
 upnpbundle_lib = env.SharedLibrary('UpnpBundle', upnp_iotivity_bridge_cpp)
