@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_c379d494",
+        "filename": "src/UpnpWanPppConnectionService.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-20T16:33:09Z",
+      "side": 1,
+      "message": "do we care about trailing white space?",
+      "range": {
+        "startLine": 562,
+        "startChar": 65,
+        "endLine": 562,
+        "endChar": 117
+      },
+      "revId": "e37b6df2b3db2f6c507b054d85f1143262081ed8",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
