@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_c3a0f4f6",
+        "filename": "src/UpnpInternal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-20T16:41:50Z",
+      "side": 1,
+      "message": "fixed starting in  patchset #4",
+      "parentUuid": "da87b5cf_233a00ce",
+      "range": {
+        "startLine": 114,
+        "startChar": 79,
+        "endLine": 115,
+        "endChar": 2
+      },
+      "revId": "91cff10e329cbe3c077316e407ec8b1c31f03bf0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_e333b8f4",
         "filename": "src/UpnpManager.cpp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-06-20T16:32:13Z",
       "side": 1,
       "message": "Not sure how this is building when it looks like this was removed fromt he UpnpInternal.h header.",
+      "range": {
+        "startLine": 427,
+        "startChar": 28,
+        "endLine": 427,
+        "endChar": 60
+      },
+      "revId": "91cff10e329cbe3c077316e407ec8b1c31f03bf0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_63a56803",
+        "filename": "src/UpnpManager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-20T16:41:50Z",
+      "side": 1,
+      "message": "This constant is defined in UpnpConstants.h, so the code would build just fine",
+      "parentUuid": "da87b5cf_e333b8f4",
       "range": {
         "startLine": 427,
         "startChar": 28,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_e36178d4",
+        "filename": "src/UpnpWanPppConnectionService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-20T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da87b5cf_a34db074",
+      "range": {
+        "startLine": 129,
+        "startChar": 6,
+        "endLine": 129,
+        "endChar": 9
+      },
+      "revId": "91cff10e329cbe3c077316e407ec8b1c31f03bf0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_c3523413",
         "filename": "src/UpnpWanPppConnectionService.cpp",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_035fbc0f",
+        "filename": "src/UpnpWanPppConnectionService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-20T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da87b5cf_c3523413",
+      "range": {
+        "startLine": 167,
+        "startChar": 28,
+        "endLine": 167,
+        "endChar": 32
+      },
+      "revId": "91cff10e329cbe3c077316e407ec8b1c31f03bf0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_636ec8cb",
         "filename": "src/UpnpWanPppConnectionService.cpp",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2016-06-20T16:32:13Z",
       "side": 1,
       "message": "do we care about trailing white space?",
+      "range": {
+        "startLine": 562,
+        "startChar": 65,
+        "endLine": 562,
+        "endChar": 117
+      },
+      "revId": "91cff10e329cbe3c077316e407ec8b1c31f03bf0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_a39b70c8",
+        "filename": "src/UpnpWanPppConnectionService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-20T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da87b5cf_636ec8cb",
       "range": {
         "startLine": 562,
         "startChar": 65,
