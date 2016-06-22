@@ -118,19 +118,10 @@ void UpnpRenderingControl::getPresetNameListCb(GUPnPServiceProxy *proxy, GUPnPSe
 
     if (status)
     {
-        RCSResourceAttributes presetNameList;
-
         DEBUG_PRINT("GetPresetNameList currentPresetNameList=" << currentPresetNameList);
 
-        presetNameList["presetNameList"] = string(currentPresetNameList);
-
+        request->resource->setAttribute("presetNameList", string(currentPresetNameList), false);
         g_free(currentPresetNameList);
-
-        request->resource->setAttribute("presetNameList", presetNameList, false);
-
-        RCSResourceAttributes presetName;
-        presetNameList["presetName"] = "";
-        request->resource->setAttribute("presetName", presetName, false);
     }
 
     UpnpRequest::requestDone(request, status);
@@ -267,13 +258,9 @@ void UpnpRenderingControl::getMuteCb(GUPnPServiceProxy *proxy, GUPnPServiceProxy
 
     if (status)
     {
-        RCSResourceAttributes mute;
-
         DEBUG_PRINT("GetMute mute=" << currentMute);
 
-        mute["mute"] = currentMute;
-
-        request->resource->setAttribute("mute", mute, false);
+        request->resource->setAttribute("mute", currentMute, false);
     }
 
     UpnpRequest::requestDone(request, status);
@@ -430,13 +417,9 @@ void UpnpRenderingControl::getVolumeCb(GUPnPServiceProxy *proxy, GUPnPServicePro
 
     if (status)
     {
-        RCSResourceAttributes volume;
-
         DEBUG_PRINT("GetVolume volume=" << currentVolume);
 
-        volume["volume"] = currentVolume;
-
-        request->resource->setAttribute("volume", volume, false);
+        request->resource->setAttribute("volume", currentVolume, false);
     }
 
     UpnpRequest::requestDone(request, status);
