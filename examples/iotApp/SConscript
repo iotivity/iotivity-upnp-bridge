@@ -29,7 +29,9 @@ iotApp_cpp = ['AVTransport.cpp',
               'MenuIotivity.cpp',
               'MenuLight.cpp',
               'MenuMain.cpp',
-              'MenuServices.cpp']
+              'MenuServices.cpp',
+              'MenuRenderingControl.cpp',
+              'RenderingControl.cpp']
 iotApp_obj = env_samples.Object(iotApp_cpp)
 iotApp_bins = env_samples.Program('iotApp', iotApp_obj)
 
