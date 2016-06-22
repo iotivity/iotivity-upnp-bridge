@@ -26,6 +26,7 @@
 #include "MenuConnectionManager.h"
 #include "MenuContentDirectory.h"
 #include "MenuServices.h"
+#include "MenuRenderingControl.h"
 
 MenuServices::MenuServices():
     m_quit(false)
@@ -316,7 +317,9 @@ void MenuServices::run(const std::vector<std::string> &cmd,
         }
         else if ("rendering" == cmd[0])
         {
-            std::cout << "Rendering Control Menu not yet Implemented" << std::endl;
+            std::unique_ptr<MenuRenderingControl> menuItem(new MenuRenderingControl);
+            menuItem->init(m_renderingControl);
+            menuStack.push(std::move(menuItem));
         }
         else if ("recording" == cmd[0])
         {
