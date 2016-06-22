@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_a9e90f1c",
+        "filename": "examples/iotApp/RenderingControl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-22T22:39:16Z",
+      "side": 1,
+      "message": "Post?",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 10
+      },
+      "revId": "24a102d6c4eaf5297111b7c3b223ba56e8a5f26c",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
