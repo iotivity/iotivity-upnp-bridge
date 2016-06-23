@@ -22,12 +22,15 @@
 
 #include "IotivityUtility.h"
 #include <UpnpBridgeAttributes.h>
+
+using namespace std;
+using namespace OC;
 AVTransport::AVTransport() :
     m_resource(nullptr)
 {
 }
 
-AVTransport::AVTransport(OC::OCResource::Ptr resource) :
+AVTransport::AVTransport(OCResource::Ptr resource) :
     m_resource(resource)
 {
 }
@@ -37,24 +40,24 @@ AVTransport::~AVTransport()
 {
 }
 
-void AVTransport::setAVTransportURI(unsigned int instanceId, std::string currentURI,
-                                    std::string currentUriMetadata)
+void AVTransport::setAVTransportURI(int instanceId, string currentURI, string currentUriMetadata)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
-    m_setAVTransportURICb = bind(&AVTransport::onSetAVTransportURI, this, std::placeholders::_1,
-                                 std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
-    {
-        {"instanceId", std::to_string(instanceId)},
-        {"currentUri", currentURI},
-        {"currentUriMetadata", currentUriMetadata}
-    };
-    m_resource->get(param, m_setAVTransportURICb);
+    unique_lock<mutex> avTranportLock(m_mutex);
+    OCRepresentation rep;
+    rep.setValue("uri", m_resource->uri());
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    attributes.setValue("currentUri", currentURI);
+    attributes.setValue("currentUriMetadata", currentUriMetadata);
+    rep.setValue("avTransportUri", attributes);
+    m_setAVTransportURICb = bind(&AVTransport::onSetAVTransportURI, this, placeholders::_1,
+                                 placeholders::_2, placeholders::_3);
+    m_resource->post(rep, QueryParamsMap(), m_setAVTransportURICb);
     m_cv.wait(avTranportLock);
 }
 
-void AVTransport::onSetAVTransportURI(const OC::HeaderOptions &headerOptions,
-                                      const OC::OCRepresentation &rep, const int eCode)
+void AVTransport::onSetAVTransportURI(const HeaderOptions &headerOptions,
+                                      const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     (void) rep;
@@ -62,24 +65,24 @@ void AVTransport::onSetAVTransportURI(const OC::HeaderOptions &headerOptions,
     m_cv.notify_one();
 }
 
-void AVTransport::setNextAVTransportURI(unsigned int instanceId, std::string nextUri,
-                                        std::string nextUriMetadata)
+void AVTransport::setNextAVTransportURI(int instanceId, string nextUri, string nextUriMetadata)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
-    m_setNextAVTransportURICb = bind(&AVTransport::onSetNextAVTranportURI, this, std::placeholders::_1,
-                                     std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
-    {
-        {"instanceId", std::to_string(instanceId)},
-        {"nextUri", nextUri},
-        {"nextUriMetadata", nextUriMetadata}
-    };
-    m_resource->get(param, m_setNextAVTransportURICb);
+    unique_lock<mutex> avTranportLock(m_mutex);
+    OCRepresentation rep;
+    rep.setValue("uri", m_resource->uri());
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    attributes.setValue("nextUri", nextUri);
+    attributes.setValue("nextUriMetadata", nextUriMetadata);
+    rep.setValue("avTransportUri", attributes);
+    m_setNextAVTransportURICb = bind(&AVTransport::onSetNextAVTranportURI, this, placeholders::_1,
+                                     placeholders::_2, placeholders::_3);
+    m_resource->post(rep, QueryParamsMap(), m_setNextAVTransportURICb);
     m_cv.wait(avTranportLock);
 }
 
-void AVTransport::onSetNextAVTranportURI(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep, const int eCode)
+void AVTransport::onSetNextAVTranportURI(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     (void) rep;
@@ -87,32 +90,32 @@ void AVTransport::onSetNextAVTranportURI(const OC::HeaderOptions &headerOptions,
     m_cv.notify_one();
 }
 
-AVTransport::MediaInfo AVTransport::getMediaInfo(unsigned int instanceId)
+AVTransport::MediaInfo AVTransport::getMediaInfo(int instanceId)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
+    unique_lock<mutex> avTranportLock(m_mutex);
     m_mediaInfo = {"", "", "", "", "", "", "", "", 0};
-    m_getMediaInfoCb = bind(&AVTransport::onGetMediaInfo, this, std::placeholders::_1,
-                            std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
+    m_getMediaInfoCb = bind(&AVTransport::onGetMediaInfo, this, placeholders::_1, placeholders::_2,
+                            placeholders::_3);
+    QueryParamsMap param =
     {
-        {"instanceId", std::to_string(instanceId)},
+        {"instanceId", to_string(instanceId)},
     };
     m_resource->get(param, m_getMediaInfoCb);
     m_cv.wait(avTranportLock);
     return m_mediaInfo;
 }
 
-void AVTransport::onGetMediaInfo(const OC::HeaderOptions &headerOptions,
-                                 const OC::OCRepresentation &rep, const int eCode)
+void AVTransport::onGetMediaInfo(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                 const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation mediaInfoRep;
+            OCRepresentation mediaInfoRep;
             if (rep.getValue("mediaInfo", mediaInfoRep))
             {
                 mediaInfoRep.getValue("nrTracks", m_mediaInfo.nrTracks);
@@ -130,32 +133,32 @@ void AVTransport::onGetMediaInfo(const OC::HeaderOptions &headerOptions,
     m_cv.notify_one();
 }
 
-AVTransport::TransportInfo AVTransport::getTransportInfo(unsigned int instanceId)
+AVTransport::TransportInfo AVTransport::getTransportInfo(int instanceId)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
+    unique_lock<mutex> avTranportLock(m_mutex);
     m_transportInfo = {"", "", ""};
-    m_getTransportInfoCb = bind(&AVTransport::onGetTransportInfo, this, std::placeholders::_1,
-                                std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
+    m_getTransportInfoCb = bind(&AVTransport::onGetTransportInfo, this, placeholders::_1,
+                                placeholders::_2, placeholders::_3);
+    QueryParamsMap param =
     {
-        {"instanceId", std::to_string(instanceId)},
+        {"instanceId", to_string(instanceId)},
     };
     m_resource->get(param, m_getTransportInfoCb);
     m_cv.wait(avTranportLock);
     return m_transportInfo;
 }
 
-void AVTransport::onGetTransportInfo(const OC::HeaderOptions &headerOptions,
-                                     const OC::OCRepresentation &rep, const int eCode)
+void AVTransport::onGetTransportInfo(const HeaderOptions &headerOptions,
+                                     const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation transportInfoRep;
+            OCRepresentation transportInfoRep;
             if (rep.getValue("transportInfo", transportInfoRep))
             {
                 transportInfoRep.getValue("transportState", m_transportInfo.transportState);
@@ -167,32 +170,32 @@ void AVTransport::onGetTransportInfo(const OC::HeaderOptions &headerOptions,
     m_cv.notify_one();
 }
 
-AVTransport::PositionInfo AVTransport::getPositionInfo(unsigned int instanceId)
+AVTransport::PositionInfo AVTransport::getPositionInfo(int instanceId)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
+    unique_lock<mutex> avTranportLock(m_mutex);
     m_positionInfo = {0, "", 0, "", 0, "", "", ""};
-    m_getPositionInfoCb = bind(&AVTransport::onGetPositionInfo, this, std::placeholders::_1,
-                               std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
+    m_getPositionInfoCb = bind(&AVTransport::onGetPositionInfo, this, placeholders::_1,
+                               placeholders::_2, placeholders::_3);
+    QueryParamsMap param =
     {
-        {"instanceId", std::to_string(instanceId)},
+        {"instanceId", to_string(instanceId)},
     };
     m_resource->get(param, m_getPositionInfoCb);
     m_cv.wait(avTranportLock);
     return m_positionInfo;
 }
 
-void AVTransport::onGetPositionInfo(const OC::HeaderOptions &headerOptions,
-                                    const OC::OCRepresentation &rep, const int eCode)
+void AVTransport::onGetPositionInfo(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                    const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation positionInfoRep;
+            OCRepresentation positionInfoRep;
             if (rep.getValue("positionInfo", positionInfoRep))
             {
                 positionInfoRep.getValue("track", m_positionInfo.track);
@@ -209,32 +212,32 @@ void AVTransport::onGetPositionInfo(const OC::HeaderOptions &headerOptions,
     m_cv.notify_one();
 }
 
-AVTransport::DeviceCapabilities AVTransport::getDeviceCapabilities(unsigned int instanceId)
+AVTransport::DeviceCapabilities AVTransport::getDeviceCapabilities(int instanceId)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
+    unique_lock<mutex> avTranportLock(m_mutex);
     m_deviceCapabilities = {"", "", ""};
-    m_getDeviceCapabilitiesCb = bind(&AVTransport::onGetDeviceCapabilities, this, std::placeholders::_1,
-                                     std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
+    m_getDeviceCapabilitiesCb = bind(&AVTransport::onGetDeviceCapabilities, this, placeholders::_1,
+                                     placeholders::_2, placeholders::_3);
+    QueryParamsMap param =
     {
-        {"instanceId", std::to_string(instanceId)},
+        {"instanceId", to_string(instanceId)},
     };
     m_resource->get(param, m_getDeviceCapabilitiesCb);
     m_cv.wait(avTranportLock);
     return m_deviceCapabilities;
 }
 
-void AVTransport::onGetDeviceCapabilities(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep, const int eCode)
+void AVTransport::onGetDeviceCapabilities(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation deviceCapabilitiesRep;
+            OCRepresentation deviceCapabilitiesRep;
             if (rep.getValue("deviceCapabilities", deviceCapabilitiesRep))
             {
                 deviceCapabilitiesRep.getValue("playMedia", m_deviceCapabilities.playMedia);
@@ -246,32 +249,32 @@ void AVTransport::onGetDeviceCapabilities(const OC::HeaderOptions &headerOptions
     m_cv.notify_one();
 }
 
-AVTransport::TransportSettings AVTransport::getTransportSettings(unsigned int instanceId)
+AVTransport::TransportSettings AVTransport::getTransportSettings(int instanceId)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
+    unique_lock<mutex> avTranportLock(m_mutex);
     m_transportSettings = {"", ""};
-    m_getTransportSettingsCb = bind(&AVTransport::onGetTransportSettings, this, std::placeholders::_1,
-                                    std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
+    m_getTransportSettingsCb = bind(&AVTransport::onGetTransportSettings, this, placeholders::_1,
+                                    placeholders::_2, placeholders::_3);
+    QueryParamsMap param =
     {
-        {"instanceId", std::to_string(instanceId)},
+        {"instanceId", to_string(instanceId)},
     };
     m_resource->get(param, m_getTransportSettingsCb);
     m_cv.wait(avTranportLock);
     return m_transportSettings;
 }
 
-void AVTransport::onGetTransportSettings(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep, const int eCode)
+void AVTransport::onGetTransportSettings(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation transportSettingsRep;
+            OCRepresentation transportSettingsRep;
             if (rep.getValue("transportSettings", transportSettingsRep))
             {
                 transportSettingsRep.getValue("playMode", m_transportSettings.playMode);
@@ -282,20 +285,20 @@ void AVTransport::onGetTransportSettings(const OC::HeaderOptions &headerOptions,
     m_cv.notify_one();
 }
 
-void AVTransport::stop(unsigned int instanceId)
+void AVTransport::stop(int instanceId)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
-    m_stopCb = bind(&AVTransport::onStop, this, std::placeholders::_1, std::placeholders::_2,
-                    std::placeholders::_3);
-    OC::QueryParamsMap param =
-    {
-        {"instanceId", std::to_string(instanceId)}
-    };
-    m_resource->get(param, m_stopCb);
+    unique_lock<mutex> avTranportLock(m_mutex);
+    OCRepresentation rep;
+    rep.setValue("uri", m_resource->uri());
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    rep.setValue("stop", attributes);
+    m_stopCb = bind(&AVTransport::onStop, this, placeholders::_1, placeholders::_2, placeholders::_3);
+    m_resource->post(rep, QueryParamsMap(), m_stopCb);
     m_cv.wait(avTranportLock);
 }
 
-void AVTransport::onStop(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+void AVTransport::onStop(const HeaderOptions &headerOptions, const OCRepresentation &rep,
                          const int eCode)
 {
     (void) headerOptions;
@@ -304,21 +307,21 @@ void AVTransport::onStop(const OC::HeaderOptions &headerOptions, const OC::OCRep
     m_cv.notify_one();
 }
 
-void AVTransport::play(unsigned int instanceId, std::string speed)
+void AVTransport::play(int instanceId, string speed)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
-    m_playCb = bind(&AVTransport::onPlay, this, std::placeholders::_1, std::placeholders::_2,
-                    std::placeholders::_3);
-    OC::QueryParamsMap param =
-    {
-        {"instanceId", std::to_string(instanceId)},
-        {"speed", speed}
-    };
-    m_resource->get(param, m_playCb);
+    unique_lock<mutex> avTranportLock(m_mutex);
+    OCRepresentation rep;
+    rep.setValue("uri", m_resource->uri());
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    attributes.setValue("speed", speed);
+    rep.setValue("play", attributes);
+    m_playCb = bind(&AVTransport::onPlay, this, placeholders::_1, placeholders::_2, placeholders::_3);
+    m_resource->post(rep, QueryParamsMap(), m_playCb);
     m_cv.wait(avTranportLock);
 }
 
-void AVTransport::onPlay(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+void AVTransport::onPlay(const HeaderOptions &headerOptions, const OCRepresentation &rep,
                          const int eCode)
 {
     (void) headerOptions;
@@ -327,20 +330,20 @@ void AVTransport::onPlay(const OC::HeaderOptions &headerOptions, const OC::OCRep
     m_cv.notify_one();
 }
 
-void AVTransport::pause(unsigned int instanceId)
+void AVTransport::pause(int instanceId)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
-    m_pauseCb = bind(&AVTransport::onPause, this, std::placeholders::_1, std::placeholders::_2,
-                     std::placeholders::_3);
-    OC::QueryParamsMap param =
-    {
-        {"instanceId", std::to_string(instanceId)}
-    };
-    m_resource->get(param, m_pauseCb);
+    unique_lock<mutex> avTranportLock(m_mutex);
+    OCRepresentation rep;
+    rep.setValue("uri", m_resource->uri());
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    rep.setValue("pause", attributes);
+    m_pauseCb = bind(&AVTransport::onPause, this, placeholders::_1, placeholders::_2, placeholders::_3);
+    m_resource->post(rep, QueryParamsMap(), m_pauseCb);
     m_cv.wait(avTranportLock);
 }
 
-void AVTransport::onPause(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+void AVTransport::onPause(const HeaderOptions &headerOptions, const OCRepresentation &rep,
                           const int eCode)
 {
     (void) headerOptions;
@@ -349,22 +352,22 @@ void AVTransport::onPause(const OC::HeaderOptions &headerOptions, const OC::OCRe
     m_cv.notify_one();
 }
 
-void AVTransport::seek(unsigned int instanceId, std::string unit, std::string target)
+void AVTransport::seek(int instanceId, string unit, string target)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
-    m_seekCb = bind(&AVTransport::onSeek, this, std::placeholders::_1, std::placeholders::_2,
-                    std::placeholders::_3);
-    OC::QueryParamsMap param =
-    {
-        {"instanceId", std::to_string(instanceId)},
-        {"unit", unit},
-        {"target", target}
-    };
-    m_resource->get(param, m_seekCb);
+    unique_lock<mutex> avTranportLock(m_mutex);
+    OCRepresentation rep;
+    rep.setValue("uri", m_resource->uri());
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    attributes.setValue("unit", unit);
+    attributes.setValue("target", target);
+    rep.setValue("seek", attributes);
+    m_seekCb = bind(&AVTransport::onSeek, this, placeholders::_1, placeholders::_2, placeholders::_3);
+    m_resource->post(rep, QueryParamsMap(), m_seekCb);
     m_cv.wait(avTranportLock);
 }
 
-void AVTransport::onSeek(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+void AVTransport::onSeek(const HeaderOptions &headerOptions, const OCRepresentation &rep,
                          const int eCode)
 {
     (void) headerOptions;
@@ -373,20 +376,20 @@ void AVTransport::onSeek(const OC::HeaderOptions &headerOptions, const OC::OCRep
     m_cv.notify_one();
 }
 
-void AVTransport::next(unsigned int instanceId)
+void AVTransport::next(int instanceId)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
-    m_nextCb = bind(&AVTransport::onNext, this, std::placeholders::_1, std::placeholders::_2,
-                    std::placeholders::_3);
-    OC::QueryParamsMap param =
-    {
-        {"instanceId", std::to_string(instanceId)}
-    };
-    m_resource->get(param, m_nextCb);
+    unique_lock<mutex> avTranportLock(m_mutex);
+    OCRepresentation rep;
+    rep.setValue("uri", m_resource->uri());
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    rep.setValue("next", attributes);
+    m_nextCb = bind(&AVTransport::onNext, this, placeholders::_1, placeholders::_2, placeholders::_3);
+    m_resource->post(rep, QueryParamsMap(), m_nextCb);
     m_cv.wait(avTranportLock);
 }
 
-void AVTransport::onNext(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+void AVTransport::onNext(const HeaderOptions &headerOptions, const OCRepresentation &rep,
                          const int eCode)
 {
     (void) headerOptions;
@@ -395,21 +398,22 @@ void AVTransport::onNext(const OC::HeaderOptions &headerOptions, const OC::OCRep
     m_cv.notify_one();
 }
 
-void AVTransport::previous(unsigned int instanceId)
+void AVTransport::previous(int instanceId)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
-    m_previouseCb = bind(&AVTransport::onPrevious, this, std::placeholders::_1, std::placeholders::_2,
-                         std::placeholders::_3);
-    OC::QueryParamsMap param =
-    {
-        {"instanceId", std::to_string(instanceId)}
-    };
-    m_resource->get(param, m_previouseCb);
+    unique_lock<mutex> avTranportLock(m_mutex);
+    OCRepresentation rep;
+    rep.setValue("uri", m_resource->uri());
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    rep.setValue("previous", attributes);
+    m_previouseCb = bind(&AVTransport::onPrevious, this, placeholders::_1, placeholders::_2,
+                         placeholders::_3);
+    m_resource->post(rep, QueryParamsMap(), m_previouseCb);
     m_cv.wait(avTranportLock);
 }
 
-void AVTransport::onPrevious(const OC::HeaderOptions &headerOptions,
-                             const OC::OCRepresentation &rep, const int eCode)
+void AVTransport::onPrevious(const HeaderOptions &headerOptions,
+                             const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     (void) rep;
@@ -417,22 +421,23 @@ void AVTransport::onPrevious(const OC::HeaderOptions &headerOptions,
     m_cv.notify_one();
 }
 
-void AVTransport::setPlayMode(unsigned int instanceId, std::string newPlayMode)
+void AVTransport::setPlayMode(int instanceId, string newPlayMode)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
-    m_setPlayModeCb = bind(&AVTransport::onSetPlayMode, this, std::placeholders::_1,
-                           std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
-    {
-        {"instanceId", std::to_string(instanceId)},
-        {"newPlayMode", newPlayMode}
-    };
-    m_resource->get(param, m_setPlayModeCb);
+    unique_lock<mutex> avTranportLock(m_mutex);
+    OCRepresentation rep;
+    rep.setValue("uri", m_resource->uri());
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    attributes.setValue("newPlayMode", newPlayMode);
+    rep.setValue("playMode", attributes);
+    m_setPlayModeCb = bind(&AVTransport::onSetPlayMode, this, placeholders::_1, placeholders::_2,
+                           placeholders::_3);
+    m_resource->post(rep, QueryParamsMap(), m_setPlayModeCb);
     m_cv.wait(avTranportLock);
 }
 
-void AVTransport::onSetPlayMode(const OC::HeaderOptions &headerOptions,
-                                const OC::OCRepresentation &rep, const int eCode)
+void AVTransport::onSetPlayMode(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                const int eCode)
 {
     (void) headerOptions;
     (void) rep;
@@ -440,27 +445,27 @@ void AVTransport::onSetPlayMode(const OC::HeaderOptions &headerOptions,
     m_cv.notify_one();
 }
 
-std::string AVTransport::getCurrentTransportActions(unsigned int instanceId)
+string AVTransport::getCurrentTransportActions(int instanceId)
 {
-    std::unique_lock<std::mutex> avTranportLock(m_mutex);
+    unique_lock<mutex> avTranportLock(m_mutex);
     m_getCurrentTransportActionsCb = bind(&AVTransport::onGetCurrentTransportActions, this,
-                                          std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
+                                          placeholders::_1, placeholders::_2, placeholders::_3);
+    QueryParamsMap param =
     {
-        {"instanceId", std::to_string(instanceId)}
+        {"instanceId", to_string(instanceId)}
     };
     m_resource->get(param, m_getCurrentTransportActionsCb);
     m_cv.wait(avTranportLock);
     return m_currentTransportActions;
 }
 
-void AVTransport::onGetCurrentTransportActions(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep, const int eCode)
+void AVTransport::onGetCurrentTransportActions(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {

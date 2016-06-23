@@ -52,11 +52,11 @@ std::string MenuAVTransport::getName()
 void MenuAVTransport::print()
 {
     std::cout << "------------------------------------" << std::endl;
-    std::cout << getName() << std::endl;
+    std::cout << getName() << ": " << m_avTransportVector.size() << " found" << std::endl;
     std::cout << "------------------------------------" << std::endl;
-    std::cout << "find) Discover any AV transport service(s) " << std::endl;
-    std::cout << "list) list currently discovered AV transport services (" << m_avTransportVector.size()
-              << " found)" << std::endl;
+    std::cout << "find) Discover any AV transport services " << std::endl;
+    std::cout << "list) list currently discovered AV transport services " << std::endl;
+    std::cout << "clear) clear all discovered content directory services" << std::endl;
     std::cout <<
               "setavturi) setavturi <#> <instanceId> <currentURI> <currentURIMetaData> - set the  transport URI"
               << std::endl;
@@ -76,7 +76,6 @@ void MenuAVTransport::print()
     std::cout << "pre) pre <#> <instanceId> - previous" << std::endl;
     std::cout << "setpm) setpm <#> <instanceId> <newPlayMode> - set play mode" << std::endl;
     std::cout << "getcta) getcta <#> <instanceId> - get current transport actions" << std::endl;
-    std::cout << "clear) clear all discovered content directory service(s)" << std::endl;
     std::cout << "b) Back" << std::endl;
     std::cout << "h) Help" << std::endl;
     std::cout << "q) Quit" << std::endl;
