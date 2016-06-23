@@ -19,38 +19,85 @@
 
 #include "InteractiveMode.h"
 #include "MenuMain.h"
+#include <string>
+
+using namespace std;
 
 InteractiveMode::InteractiveMode()
 {
-    menuStack.push(std::unique_ptr<MenuBase>(new MenuMain));
+    menuStack.push(unique_ptr<MenuBase>(new MenuMain));
 }
 void InteractiveMode::run()
 {
-    std::cout << "Enter command or type help" << std::endl;
-    std::string cmd;
+    cout << "Enter command or type 'h' for help" << endl;
+    string cmd;
     do
     {
-        std::cout << menuStack.top()->getName() << "> ";
+        cout << menuStack.top()->getName() << "> ";
 
-        getline(std::cin, cmd);
-        std::vector<std::string> cmds = parseCmd(cmd);
+        getline(cin, cmd);
+        vector<string> cmds = parseCmd(cmd);
         menuStack.top()->run(cmds, menuStack);
     }
     while (!menuStack.top()->quit());
-    std::cout << "Exiting please wait..." << std::endl;
+    cout << "Exiting please wait..." << endl;
 }
 
-std::vector<std::string> InteractiveMode::parseCmd(const std::string &cmd)
+vector<string> InteractiveMode::parseCmd(const string &cmd)
 {
-    std::vector<std::string> token;
-    std::stringstream ss(cmd);
-    std::string tok;
-    while (getline(ss, tok, ' '))
+    vector<string> token;
+    size_t lpos = 0; //left position in the string
+    size_t rpos = 0; //right position in the string
+    rpos = cmd.find_first_of(" \"'");
+    while (rpos != string::npos)
     {
-        if (!tok.empty())
+        if (cmd[rpos] == '"')
         {
-            token.push_back(tok);
+            //quote was found with no space before it i.e. token1"token2"
+            if (rpos - lpos > 0)
+            {
+                token.push_back(cmd.substr(lpos, rpos - lpos));
+            }
+            lpos = rpos + 1;
+            rpos = cmd.find_first_of("\"", lpos);
+            if (rpos != string::npos)
+            {
+                token.push_back(cmd.substr(lpos, rpos - lpos));
+            }
         }
+        else if (cmd[rpos] == '\'')
+        {
+            //quote was found with no space before it i.e. token1'token2'
+            if (rpos - lpos > 0)
+            {
+                token.push_back(cmd.substr(lpos, rpos - lpos));
+            }
+            lpos = rpos + 1;
+            rpos = cmd.find_first_of("'", lpos);
+            if (rpos != string::npos)
+            {
+                token.push_back(cmd.substr(lpos, rpos - lpos));
+            }
+        }
+        else
+        {
+            //don't interpret multiple spaces as a tokens
+            if (rpos - lpos > 0)
+            {
+                token.push_back(cmd.substr(lpos, rpos - lpos));
+            }
+        }
+        //only true if mismatched quotes are given i.e. token1 "token2
+        if (rpos != string::npos)
+        {
+            lpos = rpos + 1;
+            rpos = cmd.find_first_of(" \"'", lpos);
+        }
+    }
+    //don't interpret a closing quote as a token
+    if (cmd.size() - lpos > 0)
+    {
+        token.push_back(cmd.substr(lpos, cmd.size() - lpos));
     }
     return token;
 }
