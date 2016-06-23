@@ -84,24 +84,24 @@ class AVTransport
             std::string playMode;
             std::string recQualityMode;
         };
-
-        void setAVTransportURI(unsigned int instanceId, std::string currentURI,
+        //TODO add in way to monitor the lastChange event.
+        void setAVTransportURI(int instanceId, std::string currentURI,
                                std::string currentUriMetadata);
-        void setNextAVTransportURI(unsigned int instanceId, std::string nextUri,
+        void setNextAVTransportURI(int instanceId, std::string nextUri,
                                    std::string nextUriMetadata);
-        MediaInfo getMediaInfo(unsigned int instanceId);
-        TransportInfo getTransportInfo(unsigned int instanceId);
-        PositionInfo getPositionInfo(unsigned int instanceId);
-        DeviceCapabilities getDeviceCapabilities(unsigned int instanceId);
-        TransportSettings getTransportSettings(unsigned int instanceId);
-        void stop(unsigned int instanceId);
-        void play(unsigned int instanceId, std::string speed = "1");
-        void pause(unsigned int instanceId);
-        void seek(unsigned int instanceId, std::string unit, std::string target);
-        void next(unsigned int instanceId);
-        void previous(unsigned int instanceId);
-        void setPlayMode(unsigned int instanceId, std::string newPlayMode);
-        std::string getCurrentTransportActions(unsigned int instanceId);
+        MediaInfo getMediaInfo(int instanceId);
+        TransportInfo getTransportInfo(int instanceId);
+        PositionInfo getPositionInfo(int instanceId);
+        DeviceCapabilities getDeviceCapabilities(int instanceId);
+        TransportSettings getTransportSettings(int instanceId);
+        void stop(int instanceId);
+        void play(int instanceId, std::string speed = "1");
+        void pause(int instanceId);
+        void seek(int instanceId, std::string unit, std::string target);
+        void next(int instanceId);
+        void previous(int instanceId);
+        void setPlayMode(int instanceId, std::string newPlayMode);
+        std::string getCurrentTransportActions(int instanceId);
 
         //Overloaded operator used for putting into a 'set'
         bool operator<(const AVTransport &other) const;
@@ -139,20 +139,20 @@ class AVTransport
         void onGetCurrentTransportActions(const OC::HeaderOptions &headerOptions,
                                           const OC::OCRepresentation &rep, const int eCode);
 
-        OC::GetCallback m_setAVTransportURICb;
-        OC::GetCallback m_setNextAVTransportURICb;
+        OC::PostCallback m_setAVTransportURICb;
+        OC::PostCallback m_setNextAVTransportURICb;
         OC::GetCallback m_getMediaInfoCb;
         OC::GetCallback m_getTransportInfoCb;
         OC::GetCallback m_getPositionInfoCb;
         OC::GetCallback m_getDeviceCapabilitiesCb;
         OC::GetCallback m_getTransportSettingsCb;
-        OC::GetCallback m_stopCb;
-        OC::GetCallback m_playCb;
-        OC::GetCallback m_pauseCb;
-        OC::GetCallback m_seekCb;
-        OC::GetCallback m_nextCb;
-        OC::GetCallback m_previouseCb;
-        OC::GetCallback m_setPlayModeCb;
+        OC::PostCallback m_stopCb;
+        OC::PostCallback m_playCb;
+        OC::PostCallback m_pauseCb;
+        OC::PostCallback m_seekCb;
+        OC::PostCallback m_nextCb;
+        OC::PostCallback m_previouseCb;
+        OC::PostCallback m_setPlayModeCb;
         OC::GetCallback m_getCurrentTransportActionsCb;
 
         MediaInfo m_mediaInfo;
