@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_e49e5e63",
+        "filename": "examples/iotApp/RenderingControl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-23T23:16:19Z",
+      "side": 1,
+      "message": "That input comes in as a string and is converted using std::itoa in the MenuRenderingControl code.  Converting from user input is done as part the the Menu code  since that is where the user enters the values.  I tried to make the classes as close to the data types as possible. This makes it so they are not tied to the user entered strings and could be used with a GUI or other location if we wanted.",
+      "parentUuid": "da87b5cf_24952640",
+      "range": {
+        "startLine": 90,
+        "startChar": 36,
+        "endLine": 90,
+        "endChar": 39
+      },
+      "revId": "bc567823b599889eb4dcf2bbd08c34e3d0562fff",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_c4bf9acf",
         "filename": "examples/iotApp/RenderingControl.cpp",
         "patchSetId": 2
