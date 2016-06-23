@@ -370,6 +370,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_640faee2",
+        "filename": "examples/iotApp/AVTransport.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-23T22:41:03Z",
+      "side": 1,
+      "message": "The this was changed because OCRepresentation only accepts int data type.   Every the instanceId is used with an OCRepresentation (Every time Post is called) I would have to cast it to an int.  Rather than cast it over and over I chose to change the type to int.\n\nthis does not fit with UPnP spec but it fits with the limitations of IoTivity.",
+      "parentUuid": "da87b5cf_a45e16e8",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 62
+      },
+      "revId": "39f2c366970898a9fe3d46326f401d2c6df163d8",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_c4631ab0",
         "filename": "examples/iotApp/MenuAVTransport.cpp",
         "patchSetId": 1
@@ -427,6 +451,30 @@
       "writtenOn": "2016-06-23T22:27:18Z",
       "side": 1,
       "message": "Did you miss the other format and readability changes tht I suggested?",
+      "range": {
+        "startLine": 61,
+        "startChar": 14,
+        "endLine": 78,
+        "endChar": 96
+      },
+      "revId": "39f2c366970898a9fe3d46326f401d2c6df163d8",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_e4f09ecb",
+        "filename": "examples/iotApp/MenuAVTransport.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-23T22:41:03Z",
+      "side": 1,
+      "message": "I only did a part change not full change.\nI want the layout to remain consistent from menu to menu. The changes that I made still keep the same over all look and feel.\n\nIf I changed  \n\n  \"getmi) getmi \u003c#\u003e \u003cinstanceId\u003e - get media info\"\n\nto\n \n  \"getmi -------- get media info\"\n  \"              Usage: getmi \u003c#\u003e \u003cinstanceId\u003e\"\n\nIt would not be consistent with the rest of the iotApp. So if a change is done it will be done across the entire program in one commit not just the AV menu. Hope that makes since.",
+      "parentUuid": "da87b5cf_845d12ec",
       "range": {
         "startLine": 61,
         "startChar": 14,
