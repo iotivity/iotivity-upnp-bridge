@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_a4a136ab",
+        "filename": "examples/iotApp/RenderingControl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-23T22:49:33Z",
+      "side": 1,
+      "message": "int was used because OCRepresentation only accepts int data type.   Every time the instanceId is used with an OCRepresentation (Every time Post is called) I would have to cast it to an int.  Rather than cast it over and over I chose to change the type to int.\n\nThis does not fit with UPnP spec but it fits with the limitations of IoTivity.",
+      "parentUuid": "da87b5cf_a4ba96df",
+      "range": {
+        "startLine": 90,
+        "startChar": 36,
+        "endLine": 90,
+        "endChar": 39
+      },
+      "revId": "bc567823b599889eb4dcf2bbd08c34e3d0562fff",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_c4bf9acf",
         "filename": "examples/iotApp/RenderingControl.cpp",
         "patchSetId": 2
