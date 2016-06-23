@@ -115,7 +115,7 @@ vector <UpnpAttributeInfo> UpnpWanPppConnection::Attributes =
     {
         "connectionConfig",
         "", G_TYPE_NONE, true,
-        {{},
+        { {NULL}, // no GET action,
          {"ConfigureConnection", UPNP_ACTION_POST,  NULL, G_TYPE_NONE}},
         {   {"user",    "UserName", G_TYPE_STRING, false},
             {"pwd",     "Password", G_TYPE_STRING, false}
@@ -150,7 +150,7 @@ vector <UpnpAttributeInfo> UpnpWanPppConnection::Attributes =
     {
         "statusUpdateRequest",
         "", G_TYPE_STRING, false,
-        {{}, // no GET action
+        { {NULL}, // no GET action
          {"RequestConnection", UPNP_ACTION_POST, NULL, G_TYPE_NONE},
          {"RequestTermination", UPNP_ACTION_POST, NULL, G_TYPE_NONE},
          {"ForceTermination", UPNP_ACTION_POST, NULL, G_TYPE_NONE}},

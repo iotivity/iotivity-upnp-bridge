@@ -230,7 +230,10 @@ void UpnpService::processIntrospection(GUPnPServiceProxy *proxy,
             {
                 for (auto action : attr->actions)
                 {
-                    actionMap[action.name] = {attr->name, action.type};
+                    if (action.name != NULL)
+                    {
+                        actionMap[action.name] = {attr->name, action.type};
+                    }
                 }
             }
         }
