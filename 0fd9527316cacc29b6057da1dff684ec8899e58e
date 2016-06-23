@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_045fc20f",
+        "filename": "src/UpnpRenderingControlService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-23T17:24:59Z",
+      "side": 1,
+      "message": "setPresetName",
+      "range": {
+        "startLine": 201,
+        "startChar": 29,
+        "endLine": 201,
+        "endChar": 36
+      },
+      "revId": "0fd9527316cacc29b6057da1dff684ec8899e58e",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_a49b76c8",
+        "filename": "src/UpnpRenderingControlService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-23T17:24:59Z",
+      "side": 1,
+      "message": "setPresetName",
+      "range": {
+        "startLine": 203,
+        "startChar": 37,
+        "endLine": 203,
+        "endChar": 44
+      },
+      "revId": "0fd9527316cacc29b6057da1dff684ec8899e58e",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_c4a0faf6",
+        "filename": "src/UpnpRenderingControlService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-23T17:24:59Z",
+      "side": 1,
+      "message": "Fix format",
+      "range": {
+        "startLine": 195,
+        "startChar": 31,
+        "endLine": 204,
+        "endChar": 13
+      },
+      "revId": "0fd9527316cacc29b6057da1dff684ec8899e58e",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
