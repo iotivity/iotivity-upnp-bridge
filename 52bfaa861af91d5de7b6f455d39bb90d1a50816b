@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_24c44691",
+        "filename": "examples/iotApp/RenderingControl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-06-23T20:54:58Z",
+      "side": 1,
+      "message": "these lines should be removed.",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 37
+      },
+      "revId": "52bfaa861af91d5de7b6f455d39bb90d1a50816b",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
