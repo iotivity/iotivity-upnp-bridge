@@ -92,13 +92,16 @@ void RenderingControl::selectPreset(int instanceId, std::string presetName)
     std::unique_lock<std::mutex> renderingControlLock(m_mutex);
     OC::OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
-    rep.setValue("instanceId", instanceId);
     rep.setValue("presetName", presetName);
 
     m_selectPresetsCb = bind(&RenderingControl::onSelectPresets, this,
                              std::placeholders::_1,
                              std::placeholders::_2, std::placeholders::_3);
-    m_resource->post(rep, OC::QueryParamsMap(), m_selectPresetsCb);
+    OC::QueryParamsMap param =
+    {
+        {"instanceId", std::to_string(instanceId)},
+    };
+    m_resource->post(rep, param, m_selectPresetsCb);
     m_cv.wait(renderingControlLock);
 }
 
@@ -118,12 +121,12 @@ bool RenderingControl::getMute(int instanceId, std::string channel)
     m_getMuteCb = bind(&RenderingControl::onGetMute, this,
                        std::placeholders::_1,
                        std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
+    OC::QueryParamsMap params =
     {
         {"instanceId", std::to_string(instanceId)},
         {"channel", channel}
     };
-    m_resource->get(param, m_getMuteCb);
+    m_resource->get(params, m_getMuteCb);
     m_cv.wait(renderingControlLock);
     return m_currentMute;
 }
@@ -150,14 +153,16 @@ void RenderingControl::setMute(int instanceId, std::string channel, bool desired
     std::unique_lock<std::mutex> renderingControlLock(m_mutex);
     OC::OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
-    rep.setValue("instanceId", instanceId);
-    rep.setValue("channel", channel);
     rep.setValue("mute", desiredMute);
     m_setMuteCb = bind(&RenderingControl::onSetMute, this,
                        std::placeholders::_1,
                        std::placeholders::_2, std::placeholders::_3);
-
-    m_resource->post(rep, OC::QueryParamsMap(), m_setMuteCb);
+    OC::QueryParamsMap params =
+    {
+        {"instanceId", std::to_string(instanceId)},
+        {"channel", channel}
+    };
+    m_resource->post(rep, params, m_setMuteCb);
     m_cv.wait(renderingControlLock);
 }
 
@@ -207,13 +212,16 @@ void RenderingControl::setVolume(int instanceId, std::string channel,
     std::unique_lock<std::mutex> renderingControlLock(m_mutex);
     OC::OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
-    rep.setValue("instanceId", instanceId);
-    rep.setValue("channel", channel);
     rep.setValue("volume", desiredVolume);
     m_setVolumeCb = bind(&RenderingControl::onSetVolume, this,
                          std::placeholders::_1,
                          std::placeholders::_2, std::placeholders::_3);
-    m_resource->post(rep, OC::QueryParamsMap(), m_setVolumeCb);
+    OC::QueryParamsMap params =
+    {
+        {"instanceId", std::to_string(instanceId)},
+        {"channel", channel}
+    };
+    m_resource->post(rep, params, m_setVolumeCb);
     m_cv.wait(renderingControlLock);
 }
 
