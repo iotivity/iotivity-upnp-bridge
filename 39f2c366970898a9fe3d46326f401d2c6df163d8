@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_a45e16e8",
+        "filename": "examples/iotApp/AVTransport.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-23T22:27:18Z",
+      "side": 1,
+      "message": "The spreadsheet and AVTRansport spec shows instanceID ui4. Why are we changes this?",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 62
+      },
+      "revId": "39f2c366970898a9fe3d46326f401d2c6df163d8",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_c4631ab0",
+        "filename": "examples/iotApp/MenuAVTransport.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-23T22:27:18Z",
+      "side": 1,
+      "message": "I see you made this enhancement. I requested. Thanks",
+      "range": {
+        "startLine": 55,
+        "startChar": 68,
+        "endLine": 55,
+        "endChar": 77
+      },
+      "revId": "39f2c366970898a9fe3d46326f401d2c6df163d8",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_2472067d",
+        "filename": "examples/iotApp/MenuAVTransport.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-23T22:27:18Z",
+      "side": 1,
+      "message": "I see you made this enhancement. I requested. Thanks",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 16
+      },
+      "revId": "39f2c366970898a9fe3d46326f401d2c6df163d8",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_845d12ec",
+        "filename": "examples/iotApp/MenuAVTransport.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-23T22:27:18Z",
+      "side": 1,
+      "message": "Did you miss the other format and readability changes tht I suggested?",
+      "range": {
+        "startLine": 61,
+        "startChar": 14,
+        "endLine": 78,
+        "endChar": 96
+      },
+      "revId": "39f2c366970898a9fe3d46326f401d2c6df163d8",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
