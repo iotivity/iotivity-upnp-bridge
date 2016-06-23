@@ -77,7 +77,7 @@ vector <UpnpAttributeInfo> UpnpRenderingControl::Attributes =
 // Custom action maps:
 // "attribute name" -> GET request handlers
 map <const string, UpnpRenderingControl::GetAttributeHandler>
-    UpnpRenderingControl::GetAttributeActionMap =
+UpnpRenderingControl::GetAttributeActionMap =
 {
     {"presetNameList", &UpnpRenderingControl::getPresetNameList},
     {"mute", &UpnpRenderingControl::getMute},
@@ -86,7 +86,7 @@ map <const string, UpnpRenderingControl::GetAttributeHandler>
 
 // "attribute name" -> SET request handlers
 map <const string, UpnpRenderingControl::SetAttributeHandler>
-    UpnpRenderingControl::SetAttributeActionMap =
+UpnpRenderingControl::SetAttributeActionMap =
 {
     {"presetName", &UpnpRenderingControl::setPresetName},
     {"mute", &UpnpRenderingControl::setMute},
@@ -95,7 +95,8 @@ map <const string, UpnpRenderingControl::SetAttributeHandler>
 
 // TODO Implement additional OCF attributes/UPnP Actions as necessary
 
-void UpnpRenderingControl::getPresetNameListCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+void UpnpRenderingControl::getPresetNameListCb(GUPnPServiceProxy *proxy,
+        GUPnPServiceProxyAction *actionProxy, gpointer userData)
 {
     GError *error = NULL;
     char *currentPresetNameList;
@@ -103,12 +104,12 @@ void UpnpRenderingControl::getPresetNameListCb(GUPnPServiceProxy *proxy, GUPnPSe
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  actionProxy,
-                                                  &error,
-                                                  "CurrentPresetNameList",
-                                                  G_TYPE_STRING,
-                                                  &currentPresetNameList,
-                                                  NULL);
+                  actionProxy,
+                  &error,
+                  "CurrentPresetNameList",
+                  G_TYPE_STRING,
+                  &currentPresetNameList,
+                  NULL);
     if (error)
     {
         ERROR_PRINT("GetPresetNameList failed: " << error->code << ", " << error->message);
@@ -127,20 +128,26 @@ void UpnpRenderingControl::getPresetNameListCb(GUPnPServiceProxy *proxy, GUPnPSe
     UpnpRequest::requestDone(request, status);
 }
 
-bool UpnpRenderingControl::getPresetNameList(UpnpRequest *request, const map< string, string > &queryParams)
+bool UpnpRenderingControl::getPresetNameList(UpnpRequest *request,
+        const map< string, string > &queryParams)
 {
     DEBUG_PRINT("");
 
     int instanceId = 0;
 
-    if (! queryParams.empty()) {
+    if (! queryParams.empty())
+    {
         auto it = queryParams.find("instanceId");
-        if (it != queryParams.end()) {
-            try {
+        if (it != queryParams.end())
+        {
+            try
+            {
                 instanceId = std::stoi(it->second);
                 instanceId = std::max(0, instanceId);
                 DEBUG_PRINT("getPresetNameList queryParam " << it->first << "=" << it->second);
-            } catch (const std::invalid_argument& ia) {
+            }
+            catch (const std::invalid_argument &ia)
+            {
                 ERROR_PRINT("Invalid getPresetNameList queryParam " << it->first << "=" << it->second);
             }
         }
@@ -165,16 +172,17 @@ bool UpnpRenderingControl::getPresetNameList(UpnpRequest *request, const map< st
     return true;
 }
 
-void UpnpRenderingControl::setPresetNameCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+void UpnpRenderingControl::setPresetNameCb(GUPnPServiceProxy *proxy,
+        GUPnPServiceProxyAction *actionProxy, gpointer userData)
 {
     GError *error = NULL;
 
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  actionProxy,
-                                                  &error,
-                                                  NULL);
+                  actionProxy,
+                  &error,
+                  NULL);
     if (error)
     {
         ERROR_PRINT("SetPresetName failed: " << error->code << ", " << error->message);
@@ -185,31 +193,29 @@ void UpnpRenderingControl::setPresetNameCb(GUPnPServiceProxy *proxy, GUPnPServic
     UpnpRequest::requestDone(request, status);
 }
 
-bool UpnpRenderingControl::setPresetName(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+bool UpnpRenderingControl::setPresetName(UpnpRequest *request, RCSResourceAttributes::Value *value,
+        const map< string, string > &queryParams)
 {
     DEBUG_PRINT("");
 
     int instanceId = 0;
-    string presetName = "FactoryDefaults";
+    string presetName = value->get< string >();
 
-    const auto &attrs = value->get< RCSResourceAttributes >();
-
-    for (const auto &kvPair : attrs)
+    if (! queryParams.empty())
     {
-        DEBUG_PRINT("setPresetName kvPair key=" << kvPair.key());
-        DEBUG_PRINT("setPresetName kvPair value=" << kvPair.value().toString());
-
-        if (kvPair.key() == "instanceId")
+        auto it = queryParams.find("instanceId");
+        if (it != queryParams.end())
         {
-            instanceId = (kvPair.value()).get< int >();
-            instanceId = std::max(0, instanceId);
-            DEBUG_PRINT("setPresetName instanceId=" << instanceId);
-        }
-
-        if (kvPair.key() == "presetName")
-        {
-            presetName = (kvPair.value()).get< string >();
-            DEBUG_PRINT("setPresetName presetName=" << presetName);
+            try
+            {
+                instanceId = std::stoi(it->second);
+                instanceId = std::max(0, instanceId);
+                DEBUG_PRINT("setPresetName queryParam " << it->first << "=" << it->second);
+            }
+            catch (const std::invalid_argument &ia)
+            {
+                ERROR_PRINT("Invalid setPresetName queryParam " << it->first << "=" << it->second);
+            }
         }
     }
 
@@ -235,7 +241,8 @@ bool UpnpRenderingControl::setPresetName(UpnpRequest *request, RCSResourceAttrib
     return true;
 }
 
-void UpnpRenderingControl::getMuteCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+void UpnpRenderingControl::getMuteCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy,
+                                     gpointer userData)
 {
     GError *error = NULL;
     bool currentMute;
@@ -243,12 +250,12 @@ void UpnpRenderingControl::getMuteCb(GUPnPServiceProxy *proxy, GUPnPServiceProxy
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  actionProxy,
-                                                  &error,
-                                                  "CurrentMute",
-                                                  G_TYPE_BOOLEAN,
-                                                  &currentMute,
-                                                  NULL);
+                  actionProxy,
+                  &error,
+                  "CurrentMute",
+                  G_TYPE_BOOLEAN,
+                  &currentMute,
+                  NULL);
     if (error)
     {
         ERROR_PRINT("GetMute failed: " << error->code << ", " << error->message);
@@ -273,20 +280,26 @@ bool UpnpRenderingControl::getMute(UpnpRequest *request, const map< string, stri
     int instanceId = 0;
     string channel = "Master";
 
-    if (! queryParams.empty()) {
+    if (! queryParams.empty())
+    {
         auto it = queryParams.find("instanceId");
-        if (it != queryParams.end()) {
-            try {
+        if (it != queryParams.end())
+        {
+            try
+            {
                 instanceId = std::stoi(it->second);
                 instanceId = std::max(0, instanceId);
                 DEBUG_PRINT("getMute queryParam " << it->first << "=" << it->second);
-            } catch (const std::invalid_argument& ia) {
+            }
+            catch (const std::invalid_argument &ia)
+            {
                 ERROR_PRINT("Invalid getMute queryParam " << it->first << "=" << it->second);
             }
         }
 
         it = queryParams.find("channel");
-        if (it != queryParams.end()) {
+        if (it != queryParams.end())
+        {
             channel = it->second;
             DEBUG_PRINT("getMute queryParam " << it->first << "=" << it->second);
         }
@@ -314,16 +327,17 @@ bool UpnpRenderingControl::getMute(UpnpRequest *request, const map< string, stri
     return true;
 }
 
-void UpnpRenderingControl::setMuteCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+void UpnpRenderingControl::setMuteCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy,
+                                     gpointer userData)
 {
     GError *error = NULL;
 
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  actionProxy,
-                                                  &error,
-                                                  NULL);
+                  actionProxy,
+                  &error,
+                  NULL);
     if (error)
     {
         ERROR_PRINT("SetMute failed: " << error->code << ", " << error->message);
@@ -334,38 +348,39 @@ void UpnpRenderingControl::setMuteCb(GUPnPServiceProxy *proxy, GUPnPServiceProxy
     UpnpRequest::requestDone(request, status);
 }
 
-bool UpnpRenderingControl::setMute(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+bool UpnpRenderingControl::setMute(UpnpRequest *request, RCSResourceAttributes::Value *value,
+                                   const map< string, string > &queryParams)
 {
     DEBUG_PRINT("");
 
     int instanceId = 0;
     string channel = "Master";
-    bool mute = false;
+    bool mute = value->get< bool >();
 
-    const auto &attrs = value->get< RCSResourceAttributes >();
+    DEBUG_PRINT("setMute mute=" << mute);
 
-    for (const auto &kvPair : attrs)
+    if (! queryParams.empty())
     {
-        DEBUG_PRINT("setMute kvPair key=" << kvPair.key());
-        DEBUG_PRINT("setMute kvPair value=" << kvPair.value().toString());
-
-        if (kvPair.key() == "instanceId")
+        auto it = queryParams.find("instanceId");
+        if (it != queryParams.end())
         {
-            instanceId = (kvPair.value()).get< int >();
-            instanceId = std::max(0, instanceId);
-            DEBUG_PRINT("setMute instanceId=" << instanceId);
+            try
+            {
+                instanceId = std::stoi(it->second);
+                instanceId = std::max(0, instanceId);
+                DEBUG_PRINT("setMute queryParam " << it->first << "=" << it->second);
+            }
+            catch (const std::invalid_argument &ia)
+            {
+                ERROR_PRINT("Invalid setMute queryParam " << it->first << "=" << it->second);
+            }
         }
 
-        if (kvPair.key() == "channel")
+        it = queryParams.find("channel");
+        if (it != queryParams.end())
         {
-            channel = (kvPair.value()).get< string >();
-            DEBUG_PRINT("setMute channel=" << channel);
-        }
-
-        if (kvPair.key() == "mute")
-        {
-            mute = (kvPair.value()).get< bool >();
-            DEBUG_PRINT("setMute mute=" << mute);
+            channel = it->second;
+            DEBUG_PRINT("setMute queryParam " << it->first << "=" << it->second);
         }
     }
 
@@ -394,7 +409,8 @@ bool UpnpRenderingControl::setMute(UpnpRequest *request, RCSResourceAttributes::
     return true;
 }
 
-void UpnpRenderingControl::getVolumeCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+void UpnpRenderingControl::getVolumeCb(GUPnPServiceProxy *proxy,
+                                       GUPnPServiceProxyAction *actionProxy, gpointer userData)
 {
     GError *error = NULL;
     int currentVolume;
@@ -402,12 +418,12 @@ void UpnpRenderingControl::getVolumeCb(GUPnPServiceProxy *proxy, GUPnPServicePro
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  actionProxy,
-                                                  &error,
-                                                  "CurrentVolume",
-                                                  G_TYPE_UINT,
-                                                  &currentVolume,
-                                                  NULL);
+                  actionProxy,
+                  &error,
+                  "CurrentVolume",
+                  G_TYPE_UINT,
+                  &currentVolume,
+                  NULL);
     if (error)
     {
         ERROR_PRINT("GetVolume failed: " << error->code << ", " << error->message);
@@ -432,20 +448,26 @@ bool UpnpRenderingControl::getVolume(UpnpRequest *request, const map< string, st
     int instanceId = 0;
     string channel = "Master";
 
-    if (! queryParams.empty()) {
+    if (! queryParams.empty())
+    {
         auto it = queryParams.find("instanceId");
-        if (it != queryParams.end()) {
-            try {
+        if (it != queryParams.end())
+        {
+            try
+            {
                 instanceId = std::stoi(it->second);
                 instanceId = std::max(0, instanceId);
                 DEBUG_PRINT("getVolume queryParam " << it->first << "=" << it->second);
-            } catch (const std::invalid_argument& ia) {
+            }
+            catch (const std::invalid_argument &ia)
+            {
                 ERROR_PRINT("Invalid getVolume queryParam " << it->first << "=" << it->second);
             }
         }
 
         it = queryParams.find("channel");
-        if (it != queryParams.end()) {
+        if (it != queryParams.end())
+        {
             channel = it->second;
             DEBUG_PRINT("getVolume queryParam " << it->first << "=" << it->second);
         }
@@ -473,16 +495,17 @@ bool UpnpRenderingControl::getVolume(UpnpRequest *request, const map< string, st
     return true;
 }
 
-void UpnpRenderingControl::setVolumeCb(GUPnPServiceProxy *proxy, GUPnPServiceProxyAction *actionProxy, gpointer userData)
+void UpnpRenderingControl::setVolumeCb(GUPnPServiceProxy *proxy,
+                                       GUPnPServiceProxyAction *actionProxy, gpointer userData)
 {
     GError *error = NULL;
 
     UpnpRequest *request = static_cast<UpnpRequest *> (userData);
 
     bool status = gupnp_service_proxy_end_action (proxy,
-                                                  actionProxy,
-                                                  &error,
-                                                  NULL);
+                  actionProxy,
+                  &error,
+                  NULL);
     if (error)
     {
         ERROR_PRINT("SetVolume failed: " << error->code << ", " << error->message);
@@ -493,39 +516,39 @@ void UpnpRenderingControl::setVolumeCb(GUPnPServiceProxy *proxy, GUPnPServicePro
     UpnpRequest::requestDone(request, status);
 }
 
-bool UpnpRenderingControl::setVolume(UpnpRequest *request, RCSResourceAttributes::Value *value, const map< string, string > &queryParams)
+bool UpnpRenderingControl::setVolume(UpnpRequest *request, RCSResourceAttributes::Value *value,
+                                     const map< string, string > &queryParams)
 {
     DEBUG_PRINT("");
 
     int instanceId = 0;
     string channel = "Master";
-    int volume = 0;
+    int volume = value->get< int >();;
 
-    const auto &attrs = value->get< RCSResourceAttributes >();
+    DEBUG_PRINT("volume = " << volume);
 
-    for (const auto &kvPair : attrs)
+    if (!queryParams.empty())
     {
-        DEBUG_PRINT("setVolume kvPair key=" << kvPair.key());
-        DEBUG_PRINT("setVolume kvPair value=" << kvPair.value().toString());
-
-        if (kvPair.key() == "instanceId")
+        auto it = queryParams.find("instanceId");
+        if (it != queryParams.end())
         {
-            instanceId = (kvPair.value()).get< int >();
-            instanceId = std::max(0, instanceId);
-            DEBUG_PRINT("setVolume instanceId=" << instanceId);
+            try
+            {
+                instanceId = std::stoi(it->second);
+                instanceId = std::max(0, instanceId);
+                DEBUG_PRINT("setVolume queryParam " << it->first << "=" << it->second);
+            }
+            catch (const std::invalid_argument &ia)
+            {
+                ERROR_PRINT("Invalid setVolume queryParam " << it->first << "=" << it->second);
+            }
         }
 
-        if (kvPair.key() == "channel")
+        it = queryParams.find("channel");
+        if (it != queryParams.end())
         {
-            channel = (kvPair.value()).get< string >();
-            DEBUG_PRINT("setVolume channel=" << channel);
-        }
-
-        if (kvPair.key() == "volume")
-        {
-            volume = (kvPair.value()).get< int >();
-            volume = std::max(0, volume);
-            DEBUG_PRINT("setVolume volume=" << volume);
+            channel = it->second;
+            DEBUG_PRINT("setVolume queryParam " << it->first << "=" << it->second);
         }
     }
 
@@ -555,7 +578,7 @@ bool UpnpRenderingControl::setVolume(UpnpRequest *request, RCSResourceAttributes
 }
 
 bool UpnpRenderingControl::getAttributesRequest(UpnpRequest *request,
-                                                const map< string, string > &queryParams)
+        const map< string, string > &queryParams)
 {
     bool status = false;
 
@@ -595,8 +618,8 @@ bool UpnpRenderingControl::getAttributesRequest(UpnpRequest *request,
 }
 
 bool UpnpRenderingControl::setAttributesRequest(const RCSResourceAttributes &value,
-                                                UpnpRequest *request,
-                                                const map< string, string > &queryParams)
+        UpnpRequest *request,
+        const map< string, string > &queryParams)
 {
     bool status = false;
 
