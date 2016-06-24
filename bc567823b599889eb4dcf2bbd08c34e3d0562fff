@@ -167,6 +167,54 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_186c069c",
+        "filename": "examples/iotApp/RenderingControl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-24T17:31:33Z",
+      "side": 1,
+      "message": "Thanks for clarifying. I think we should file issue/enhancement for IoTitity for these data types and like you said George will put in some safeguards on another commit.",
+      "parentUuid": "da87b5cf_1855e6c5",
+      "range": {
+        "startLine": 90,
+        "startChar": 36,
+        "endLine": 90,
+        "endChar": 39
+      },
+      "revId": "bc567823b599889eb4dcf2bbd08c34e3d0562fff",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da87b5cf_c48d5a33",
+        "filename": "examples/iotApp/RenderingControl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-06-24T17:31:33Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "da87b5cf_e49e5e63",
+      "range": {
+        "startLine": 90,
+        "startChar": 36,
+        "endLine": 90,
+        "endChar": 39
+      },
+      "revId": "bc567823b599889eb4dcf2bbd08c34e3d0562fff",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_c4bf9acf",
         "filename": "examples/iotApp/RenderingControl.cpp",
         "patchSetId": 2
