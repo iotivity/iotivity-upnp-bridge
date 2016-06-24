@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "da87b5cf_1855e6c5",
+        "filename": "examples/iotApp/RenderingControl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 4995
+      },
+      "writtenOn": "2016-06-24T16:58:02Z",
+      "side": 1,
+      "message": "Currently, the only integer types supported in iotivity (at least from the layer exposed for our purposes) are int and double, see resource/csdk/stack/include/octypes.h\nWe can live with this for the timebeing, but this needs to be addressed eventually. \nMeanwhile, in UPnP bridge code we should insert the safeguards to filter out negative values, i.e. return an error if a negative value is supplied where a positive one is expected. This needs to be done in the bridge framework in a separate commit.",
+      "parentUuid": "da87b5cf_e49e5e63",
+      "range": {
+        "startLine": 90,
+        "startChar": 36,
+        "endLine": 90,
+        "endChar": 39
+      },
+      "revId": "bc567823b599889eb4dcf2bbd08c34e3d0562fff",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da87b5cf_c4bf9acf",
         "filename": "examples/iotApp/RenderingControl.cpp",
         "patchSetId": 2
