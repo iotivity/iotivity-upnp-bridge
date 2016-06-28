@@ -23,16 +23,26 @@
 using namespace std;
 using namespace OC;
 
-BinarySwitch::BinarySwitch() {}
-BinarySwitch::BinarySwitch(std::shared_ptr<OC::OCResource> resource) :
-    m_resource(resource), m_powerState(false)
+BinarySwitch::BinarySwitch() :
+    m_resource(nullptr),
+    m_powerState(false),
+    m_eCode(0)
 {
 }
+
+BinarySwitch::BinarySwitch(std::shared_ptr<OC::OCResource> resource) :
+    m_resource(resource),
+    m_powerState(false),
+    m_eCode(0)
+{
+}
+
 BinarySwitch::~BinarySwitch() {}
 BinarySwitch::BinarySwitch( const BinarySwitch &other )
 {
     *this = other;
 }
+
 BinarySwitch &BinarySwitch::operator=(const BinarySwitch &other)
 {
     // check for self-assignment

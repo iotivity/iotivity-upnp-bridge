@@ -29,23 +29,25 @@ Light::Light() :
     m_supported_services_known(false),
     m_lightSupportsBrightness(false),
     m_lightSupportsSwitch(false),
-    m_powerState(false)
+    m_powerState(false),
+    m_eCode(0)
 {
 }
 
-Light::Light(OC::OCResource::Ptr resource) :
+Light::Light(OCResource::Ptr resource) :
     m_resource(resource),
     m_supported_services_known(false),
     m_lightSupportsBrightness(false),
     m_lightSupportsSwitch(false),
-    m_powerState(false)
+    m_powerState(false),
+    m_eCode(0)
 {
     init();
 }
 
 Light::~Light()
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
+    unique_lock<mutex> lock(m_mutex);
 }
 
 Light::Light( const Light &other )
@@ -55,24 +57,24 @@ Light::Light( const Light &other )
 
 bool Light::init()
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
+    unique_lock<mutex> lock(m_mutex);
     while (!m_supported_services_known)
     {
-        onGetServicesCB = std::bind(&Light::onGetServices, this, std::placeholders::_1,
-                                    std::placeholders::_2, std::placeholders::_3);
-        m_resource->get(OC::QueryParamsMap(), onGetServicesCB);
+        onGetServicesCB = bind(&Light::onGetServices, this, placeholders::_1, placeholders::_2,
+                               placeholders::_3);
+        m_resource->get(QueryParamsMap(), onGetServicesCB);
         m_cv.wait(lock); // may want this to timeout
     }
     return true;
 }
 Light &Light::operator=(const Light &other)
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
+    unique_lock<mutex> lock(m_mutex);
     // check for self-assignment
     if (this != &other)
     {
-        onGetServicesCB = std::bind(&Light::onGetServices, this, std::placeholders::_1,
-                                    std::placeholders::_2, std::placeholders::_3);
+        onGetServicesCB = bind(&Light::onGetServices, this, placeholders::_1, placeholders::_2,
+                               placeholders::_3);
         m_resource = other.m_resource;
         m_supported_services_known = other.m_supported_services_known;
         m_lightSupportsBrightness = other.m_lightSupportsBrightness;
@@ -107,12 +109,12 @@ bool Light::isOn()
     return m_binarySwitch.isOn();
 }
 
-void Light::isOnAsync(OC::GetCallback isOnCB)
+void Light::isOnAsync(GetCallback isOnCB)
 {
     m_binarySwitch.isOnAsync(isOnCB);
 }
 
-void Light::turnOnAsync(bool isOn, OC::PostCallback turnOnCB) const
+void Light::turnOnAsync(bool isOn, PostCallback turnOnCB) const
 {
     m_binarySwitch.turnOnAsync(isOn, turnOnCB);
 }
@@ -127,12 +129,12 @@ bool Light::setBrightness(int brightness)
     return m_brightness.setBrightness(brightness);
 }
 
-void Light::getBrightnessAsync(OC::GetCallback getBrightnessCB)
+void Light::getBrightnessAsync(GetCallback getBrightnessCB)
 {
     m_brightness.getBrightnessAsync(getBrightnessCB);
 }
 
-void Light::setBrightnessAsync(int brightness, OC::PostCallback setBrightnessCB)
+void Light::setBrightnessAsync(int brightness, PostCallback setBrightnessCB)
 {
     m_brightness.setBrightnessAsync(brightness, setBrightnessCB);
 }
@@ -142,47 +144,43 @@ bool Light::operator<(const Light &other) const
     return ((*m_resource) < (*(other.m_resource)));
 }
 
-void Light::onGetServices(const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep,
+void Light::onGetServices(const HeaderOptions &headerOptions, const OCRepresentation &rep,
                           const int eCode)
 {
-    OC::AttributeValue links;
+    AttributeValue links;
     if (rep.hasAttribute("links"))
     {
         if (rep.getAttributeValue("links", links))
         {
             try
             {
-                auto linkRepresentation = boost::get<std::vector<OC::OCRepresentation> >(links);
+                auto linkRepresentation = boost::get<vector<OCRepresentation> >(links);
                 for (auto l : linkRepresentation)
                 {
                     if (l.hasAttribute("rel"))
                     {
-                        std::string rel;
+                        string rel;
                         if (l.getValue("rel", rel))
                         {
-                            std::cout << "rel: " << rel << std::endl;
+                            cout << "rel: " << rel << endl;
                             if ("contains" == rel)
                             {
                                 if (l.hasAttribute("rt"))
                                 {
-                                    std::string rt;
+                                    string rt;
                                     if (l.getValue("rt", rt))
                                     {
-                                        std::cout << "rt: " << rt << std::endl;
+                                        cout << "rt: " << rt << endl;
                                         if ("oic.r.switch.binary" == rt)
                                         {
                                             if (l.hasAttribute("href"))
                                             {
-                                                std::string href;
+                                                string href;
                                                 l.getValue("href", href);
-                                                std::cout << "href: " << href << std::endl;
+                                                cout << "href: " << href << endl;
                                                 m_lightSupportsSwitch = true;
-                                                OC::OCResource::Ptr resource = OC::OCPlatform::constructResourceObject(m_resource->host(),
-                                                                               href,
-                                                                               m_resource->connectivityType(),
-                                                                               true,
-                                                {rt},
-                                                {"oic.if.baseline", "oic.if.a"});
+                                                OCResource::Ptr resource = OCPlatform::constructResourceObject(m_resource->host(), href,
+                                                                           m_resource->connectivityType(), true, {rt}, {"oic.if.baseline", "oic.if.a"});
                                                 m_binarySwitch = BinarySwitch(resource);
                                             }
                                         }
@@ -190,16 +188,12 @@ void Light::onGetServices(const OC::HeaderOptions &headerOptions, const OC::OCRe
                                         {
                                             if (l.hasAttribute("href"))
                                             {
-                                                std::string href;
+                                                string href;
                                                 l.getValue("href", href);
-                                                std::cout << "href: " << href << std::endl;
+                                                cout << "href: " << href << endl;
                                                 m_lightSupportsBrightness = true;
-                                                OC::OCResource::Ptr resource = OC::OCPlatform::constructResourceObject(m_resource->host(),
-                                                                               href,
-                                                                               m_resource->connectivityType(),
-                                                                               true,
-                                                {rt},
-                                                {"oic.if.baseline", "oic.if.a"});
+                                                OCResource::Ptr resource = OCPlatform::constructResourceObject(m_resource->host(), href,
+                                                                           m_resource->connectivityType(), true, {rt}, {"oic.if.baseline", "oic.if.a"});
                                                 m_brightness = Brightness(resource);
                                             }
                                         }
@@ -212,15 +206,15 @@ void Light::onGetServices(const OC::HeaderOptions &headerOptions, const OC::OCRe
             }
             catch (boost::bad_get &e)
             {
-                std::cout << e.what() << std::endl;
-                std::cout << "falure to getValue for links" << std::endl;
-                std::cout << rep.getValueToString("links");
+                cout << e.what() << endl;
+                cout << "falure to getValue for links" << endl;
+                cout << rep.getValueToString("links");
             }
         }
         else
         {
-            std::cout << "falure to getValue for links" << std::endl;
-            std::cout << rep.getValueToString("links");
+            cout << "falure to getValue for links" << endl;
+            cout << rep.getValueToString("links");
         }
     }
     m_supported_services_known = true;

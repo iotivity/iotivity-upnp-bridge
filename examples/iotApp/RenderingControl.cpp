@@ -21,11 +21,17 @@
 #include "RenderingControl.h"
 
 RenderingControl::RenderingControl() :
+    m_presetNameList(""),
+    m_currentMute(false),
+    m_currentVolume(50),
     m_resource(nullptr)
 {
 }
 
 RenderingControl::RenderingControl(OC::OCResource::Ptr resource) :
+    m_presetNameList(""),
+    m_currentMute(false),
+    m_currentVolume(50),
     m_resource(resource)
 {
 }
