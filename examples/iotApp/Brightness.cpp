@@ -23,19 +23,29 @@
 using namespace std;
 using namespace OC;
 
-Brightness::Brightness() : m_resource(nullptr), m_brightness(100)
+Brightness::Brightness() :
+    m_resource(nullptr),
+    m_brightness(100),
+    m_eCode(0)
 {
 }
 
 Brightness::Brightness(std::shared_ptr<OC::OCResource> resource) :
-    m_resource(resource), m_brightness(100)
+    m_resource(resource),
+    m_brightness(100),
+    m_eCode(0)
 {
 }
-Brightness::~Brightness() {}
+
+Brightness::~Brightness()
+{
+}
+
 Brightness::Brightness( const Brightness &other )
 {
     *this = other;
 }
+
 Brightness &Brightness::operator=(const Brightness &other)
 {
     // check for self-assignment
@@ -69,7 +79,6 @@ bool Brightness::setBrightness(int brightness)
     m_cv.wait(brightnessChangeLock);
     return (m_eCode == OC_STACK_OK);
 }
-
 
 void Brightness::getBrightnessAsync(OC::GetCallback getBrightnessCB)
 {
