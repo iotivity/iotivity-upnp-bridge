@@ -28,6 +28,8 @@
 
 #include <UpnpBridgeAttributes.h>
 
+const int MAX_WAIT_TIME_FOR_BLOCKING_CALL = 20;
+
 void printResourceInformation(std::shared_ptr< OC::OCResource > resource);
 void printResourceCompact(std::shared_ptr< OC::OCResource > resource);
 
