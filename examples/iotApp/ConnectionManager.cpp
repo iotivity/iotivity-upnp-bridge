@@ -23,13 +23,18 @@
 #include "IotivityUtility.h"
 #include <UpnpBridgeAttributes.h>
 
+#include <chrono>
+
+using namespace std;
+using namespace OC;
+
 ConnectionManager::ConnectionManager() : m_resource(nullptr)
 {
     m_protocolInfo = ProtocolInfo{"", ""};
     m_connectionInfo = { 0, 0, 0, "", "", "", "" };
 }
 
-ConnectionManager::ConnectionManager(OC::OCResource::Ptr resource) :
+ConnectionManager::ConnectionManager(OCResource::Ptr resource) :
     m_resource(resource)
 {
     m_protocolInfo = ProtocolInfo{"", ""};
@@ -59,32 +64,44 @@ ConnectionManager &ConnectionManager::operator=(const ConnectionManager &other)
 
 ConnectionManager::ProtocolInfo ConnectionManager::getProtocolInfo()
 {
-    std::unique_lock<std::mutex> protocolInfoLock(m_mutex);
-    m_getProtocolInfoCB = bind(&ConnectionManager::onGetProtocolInfo, this, std::placeholders::_1,
-                               std::placeholders::_2, std::placeholders::_3);
-    m_resource->get(OC::QueryParamsMap(), m_getProtocolInfoCB);
-    m_cv.wait(protocolInfoLock);
+    unique_lock<mutex> protocolInfoLock(m_mutex);
+    m_getProtocolInfoCB = bind(&ConnectionManager::onGetProtocolInfo, this, placeholders::_1,
+                               placeholders::_2, placeholders::_3);
+    m_resource->get(QueryParamsMap(), m_getProtocolInfoCB);
+    if (m_cv.wait_for(protocolInfoLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_protocolInfo;
 }
-std::string ConnectionManager::getCurrentConnectionIDs()
+string ConnectionManager::getCurrentConnectionIDs()
 {
-    std::unique_lock<std::mutex> connectionIDsLock(m_mutex);
+    unique_lock<mutex> connectionIDsLock(m_mutex);
     m_getCurrentConnectionIDsCB = bind(&ConnectionManager::onGetCurrentConnectionIDs, this,
-                                       std::placeholders::_1,
-                                       std::placeholders::_2, std::placeholders::_3);
-    m_resource->get(OC::QueryParamsMap(), m_getCurrentConnectionIDsCB);
-    m_cv.wait(connectionIDsLock);
+                                       placeholders::_1,
+                                       placeholders::_2, placeholders::_3);
+    m_resource->get(QueryParamsMap(), m_getCurrentConnectionIDsCB);
+    if (m_cv.wait_for(connectionIDsLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_connectionIDs;
 }
-ConnectionManager::ConnectionInfo ConnectionManager::getConnectionInfo(std::string connectionIDs)
+ConnectionManager::ConnectionInfo ConnectionManager::getConnectionInfo(string connectionIDs)
 {
-    std::unique_lock<std::mutex> protocolInfoLock(m_mutex);
+    unique_lock<mutex> protocolInfoLock(m_mutex);
     m_getCurrentConnctionInfoCB = bind(&ConnectionManager::onGetCurrentConnectionInfo, this,
-                                       std::placeholders::_1,
-                                       std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param = {{"connectionId", connectionIDs}};
+                                       placeholders::_1,
+                                       placeholders::_2, placeholders::_3);
+    QueryParamsMap param = {{"connectionId", connectionIDs}};
     m_resource->get(param, m_getCurrentConnctionInfoCB);
-    m_cv.wait(protocolInfoLock);
+    if (m_cv.wait_for(protocolInfoLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_connectionInfo;
 }
 
@@ -94,18 +111,18 @@ bool ConnectionManager::operator<(const ConnectionManager &other) const
     return ((*m_resource) < (*(other.m_resource)));
 }
 
-void ConnectionManager::onGetProtocolInfo(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep,
+void ConnectionManager::onGetProtocolInfo(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep,
         const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation protocolInfoRep;
+            OCRepresentation protocolInfoRep;
             if (rep.getValue("protocolInfo", protocolInfoRep))
             {
                 protocolInfoRep.getValue("sink", m_protocolInfo.sink);
@@ -115,35 +132,35 @@ void ConnectionManager::onGetProtocolInfo(const OC::HeaderOptions &headerOptions
     }
     m_cv.notify_one();
 }
-void ConnectionManager::onGetCurrentConnectionIDs(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep,
+void ConnectionManager::onGetCurrentConnectionIDs(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep,
         const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation protocolInfoRep;
+            OCRepresentation protocolInfoRep;
             rep.getValue("currentConnectionIds", m_connectionIDs);
         }
     }
     m_cv.notify_one();
 }
-void ConnectionManager::onGetCurrentConnectionInfo(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep,
+void ConnectionManager::onGetCurrentConnectionInfo(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep,
         const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation currentConnectionInfoRep;
+            OCRepresentation currentConnectionInfoRep;
             if (rep.getValue("currentConnectionInfo", currentConnectionInfoRep))
             {
                 currentConnectionInfoRep.getValue("rcsId", m_connectionInfo.rcsId);

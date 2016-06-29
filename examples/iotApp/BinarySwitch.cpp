@@ -19,6 +19,8 @@
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #include "BinarySwitch.h"
+#include "IotivityUtility.h"
+#include <chrono>
 
 using namespace std;
 using namespace OC;
@@ -74,7 +76,11 @@ bool BinarySwitch::turnOn(bool isOn)
     m_postCB = bind(&BinarySwitch::onPostPowerSwitch, this, placeholders::_1, placeholders::_2,
                     placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_postCB);
-    m_cv.wait(powerChangeLock);
+    if (m_cv.wait_for(powerChangeLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return (m_eCode == OC_STACK_OK);
 }
 
@@ -84,7 +90,11 @@ bool BinarySwitch::isOn()
     m_getCB = bind(&BinarySwitch::onGetPowerSwitch, this, placeholders::_1, placeholders::_2,
                    placeholders::_3);
     m_resource->get(QueryParamsMap(), m_getCB);
-    m_cv.wait(powerChangeLock);
+    if (m_cv.wait_for(powerChangeLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_powerState;
 }
 
