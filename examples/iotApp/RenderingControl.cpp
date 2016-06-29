@@ -20,6 +20,12 @@
 
 #include "RenderingControl.h"
 
+#include <chrono>
+#include "IotivityUtility.h"
+
+using namespace std;
+using namespace OC;
+
 RenderingControl::RenderingControl() :
     m_presetNameList(""),
     m_currentMute(false),
@@ -28,7 +34,7 @@ RenderingControl::RenderingControl() :
 {
 }
 
-RenderingControl::RenderingControl(OC::OCResource::Ptr resource) :
+RenderingControl::RenderingControl(OCResource::Ptr resource) :
     m_presetNameList(""),
     m_currentMute(false),
     m_currentVolume(50),
@@ -60,59 +66,66 @@ RenderingControl &RenderingControl::operator=(const RenderingControl &other)
     return *this;
 }
 
-std::string RenderingControl::listPresets(int instanceId)
+string RenderingControl::listPresets(int instanceId)
 {
-    std::unique_lock<std::mutex> renderingControlLock(m_mutex);
+    unique_lock<mutex> renderingControlLock(m_mutex);
     m_presetNameList = "";
-    m_listPresetsCb = bind(&RenderingControl::onListPresets, this,
-                           std::placeholders::_1,
-                           std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
+    m_listPresetsCb = bind(&RenderingControl::onListPresets, this, placeholders::_1, placeholders::_2,
+                           placeholders::_3);
+    QueryParamsMap param =
     {
-        {"instanceId", std::to_string(instanceId)}
+        {"instanceId", to_string(instanceId)}
     };
     m_resource->get(param, m_listPresetsCb);
-    m_cv.wait(renderingControlLock);
+    if (m_cv.wait_for(renderingControlLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_presetNameList;
 }
 
-void RenderingControl::onListPresets(const OC::HeaderOptions &headerOptions,
-                                     const OC::OCRepresentation &rep, const int eCode)
+void RenderingControl::onListPresets(const HeaderOptions &headerOptions,
+                                     const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation positionInfoRep;
+            OCRepresentation positionInfoRep;
             rep.getValue("presetNameList", m_presetNameList);
         }
     }
     m_cv.notify_one();
 }
 
-void RenderingControl::selectPreset(int instanceId, std::string presetName)
+void RenderingControl::selectPreset(int instanceId, string presetName)
 {
-    std::unique_lock<std::mutex> renderingControlLock(m_mutex);
-    OC::OCRepresentation rep;
+    unique_lock<mutex> renderingControlLock(m_mutex);
+    OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
     rep.setValue("presetName", presetName);
 
     m_selectPresetsCb = bind(&RenderingControl::onSelectPresets, this,
-                             std::placeholders::_1,
-                             std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
+                             placeholders::_1,
+                             placeholders::_2, placeholders::_3);
+    QueryParamsMap param =
     {
-        {"instanceId", std::to_string(instanceId)},
+        {"instanceId", to_string(instanceId)},
     };
     m_resource->post(rep, param, m_selectPresetsCb);
-    m_cv.wait(renderingControlLock);
+    if (m_cv.wait_for(renderingControlLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
-void RenderingControl::onSelectPresets(const OC::HeaderOptions &headerOptions,
-                                       const OC::OCRepresentation &rep, const int eCode)
+void RenderingControl::onSelectPresets(const HeaderOptions &headerOptions,
+                                       const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     (void) rep;
@@ -120,119 +133,131 @@ void RenderingControl::onSelectPresets(const OC::HeaderOptions &headerOptions,
     m_cv.notify_one();
 }
 
-bool RenderingControl::getMute(int instanceId, std::string channel)
+bool RenderingControl::getMute(int instanceId, string channel)
 {
-    std::unique_lock<std::mutex> renderingControlLock(m_mutex);
+    unique_lock<mutex> renderingControlLock(m_mutex);
     m_currentMute = false;
-    m_getMuteCb = bind(&RenderingControl::onGetMute, this,
-                       std::placeholders::_1,
-                       std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap params =
+    m_getMuteCb = bind(&RenderingControl::onGetMute, this, placeholders::_1, placeholders::_2,
+                       placeholders::_3);
+    QueryParamsMap params =
     {
-        {"instanceId", std::to_string(instanceId)},
+        {"instanceId", to_string(instanceId)},
         {"channel", channel}
     };
     m_resource->get(params, m_getMuteCb);
-    m_cv.wait(renderingControlLock);
+    if (m_cv.wait_for(renderingControlLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_currentMute;
 }
 
-void RenderingControl::onGetMute(const OC::HeaderOptions &headerOptions,
-                                 const OC::OCRepresentation &rep, const int eCode)
+void RenderingControl::onGetMute(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                 const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation positionInfoRep;
+            OCRepresentation positionInfoRep;
             rep.getValue("mute", m_currentMute);
         }
     }
     m_cv.notify_one();
 }
 
-void RenderingControl::setMute(int instanceId, std::string channel, bool desiredMute)
+void RenderingControl::setMute(int instanceId, string channel, bool desiredMute)
 {
-    std::unique_lock<std::mutex> renderingControlLock(m_mutex);
-    OC::OCRepresentation rep;
+    unique_lock<mutex> renderingControlLock(m_mutex);
+    OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
     rep.setValue("mute", desiredMute);
-    m_setMuteCb = bind(&RenderingControl::onSetMute, this,
-                       std::placeholders::_1,
-                       std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap params =
+    m_setMuteCb = bind(&RenderingControl::onSetMute, this, placeholders::_1, placeholders::_2,
+                       placeholders::_3);
+    QueryParamsMap params =
     {
-        {"instanceId", std::to_string(instanceId)},
+        {"instanceId", to_string(instanceId)},
         {"channel", channel}
     };
     m_resource->post(rep, params, m_setMuteCb);
-    m_cv.wait(renderingControlLock);
+    if (m_cv.wait_for(renderingControlLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
-void RenderingControl::onSetMute(const OC::HeaderOptions &headerOptions,
-                                 const OC::OCRepresentation &rep, const int eCode)
+void RenderingControl::onSetMute(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                 const int eCode)
 {
     onGetMute(headerOptions, rep, eCode);
 }
 
-int RenderingControl::getVolume(int instanceId, std::string channel)
+int RenderingControl::getVolume(int instanceId, string channel)
 {
-    std::unique_lock<std::mutex> renderingControlLock(m_mutex);
+    unique_lock<mutex> renderingControlLock(m_mutex);
     m_currentVolume = 0;
-    m_getVolumeCb = bind(&RenderingControl::onGetVolume, this,
-                         std::placeholders::_1,
-                         std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap param =
+    m_getVolumeCb = bind(&RenderingControl::onGetVolume, this, placeholders::_1, placeholders::_2,
+                         placeholders::_3);
+    QueryParamsMap param =
     {
-        {"instanceId", std::to_string(instanceId)},
+        {"instanceId", to_string(instanceId)},
         {"channel", channel}
     };
     m_resource->get(param, m_getVolumeCb);
-    m_cv.wait(renderingControlLock);
+    if (m_cv.wait_for(renderingControlLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_currentVolume;
 }
 
-void RenderingControl::onGetVolume(const OC::HeaderOptions &headerOptions,
-                                   const OC::OCRepresentation &rep, const int eCode)
+void RenderingControl::onGetVolume(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                   const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation positionInfoRep;
+            OCRepresentation positionInfoRep;
             rep.getValue("volume", m_currentVolume);
         }
     }
     m_cv.notify_one();
 }
 
-void RenderingControl::setVolume(int instanceId, std::string channel,
+void RenderingControl::setVolume(int instanceId, string channel,
                                  int desiredVolume)
 {
-    std::unique_lock<std::mutex> renderingControlLock(m_mutex);
-    OC::OCRepresentation rep;
+    unique_lock<mutex> renderingControlLock(m_mutex);
+    OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
     rep.setValue("volume", desiredVolume);
-    m_setVolumeCb = bind(&RenderingControl::onSetVolume, this,
-                         std::placeholders::_1,
-                         std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap params =
+    m_setVolumeCb = bind(&RenderingControl::onSetVolume, this, placeholders::_1, placeholders::_2,
+                         placeholders::_3);
+    QueryParamsMap params =
     {
-        {"instanceId", std::to_string(instanceId)},
+        {"instanceId", to_string(instanceId)},
         {"channel", channel}
     };
     m_resource->post(rep, params, m_setVolumeCb);
-    m_cv.wait(renderingControlLock);
+    if (m_cv.wait_for(renderingControlLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
-void RenderingControl::onSetVolume(const OC::HeaderOptions &headerOptions,
-                                   const OC::OCRepresentation &rep, const int eCode)
+void RenderingControl::onSetVolume(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                   const int eCode)
 {
     onGetVolume(headerOptions, rep, eCode);
 }

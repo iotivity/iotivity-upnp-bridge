@@ -19,6 +19,12 @@
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #include "ContentDirectory.h"
+#include "IotivityUtility.h"
+
+#include <chrono>
+
+using namespace std;
+using namespace OC;
 
 ContentDirectory::ContentDirectory() :
     m_searchCaps{""},
@@ -32,7 +38,7 @@ ContentDirectory::ContentDirectory() :
     m_searchResult = {"", 0, 0, 0};
 }
 
-ContentDirectory::ContentDirectory(OC::OCResource::Ptr resource) :
+ContentDirectory::ContentDirectory(OCResource::Ptr resource) :
     m_searchCaps{""},
     m_sortCaps{""},
     m_id{0},
@@ -72,55 +78,62 @@ ContentDirectory &ContentDirectory::operator=(const ContentDirectory &other)
     return *this;
 }
 
-std::string ContentDirectory::getSearchCapabilities()
+string ContentDirectory::getSearchCapabilities()
 {
-    std::unique_lock<std::mutex> contentDirectoryLock(m_mutex);
-    m_getSearchCapabilitiesCB = bind(&ContentDirectory::onGetSearchCapabilites, this,
-                                     std::placeholders::_1,
-                                     std::placeholders::_2, std::placeholders::_3);
-    m_resource->get(OC::QueryParamsMap(), m_getSearchCapabilitiesCB);
-    m_cv.wait(contentDirectoryLock);
+    unique_lock<mutex> contentDirectoryLock(m_mutex);
+    m_getSearchCapabilitiesCB = bind(&ContentDirectory::onGetSearchCapabilites, this, placeholders::_1,
+                                     placeholders::_2, placeholders::_3);
+    m_resource->get(QueryParamsMap(), m_getSearchCapabilitiesCB);
+    if (m_cv.wait_for(contentDirectoryLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_searchCaps;
 }
 
-void ContentDirectory::onGetSearchCapabilites(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep, const int eCode)
+void ContentDirectory::onGetSearchCapabilites(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation protocolInfoRep;
+            OCRepresentation protocolInfoRep;
             rep.getValue("searchCaps", m_searchCaps);
         }
     }
     m_cv.notify_one();
 }
 
-std::string ContentDirectory::getSortCapabilites()
+string ContentDirectory::getSortCapabilites()
 {
-    std::unique_lock<std::mutex> contentDirectoryLock(m_mutex);
-    m_getSortCapabilitesCB = bind(&ContentDirectory::onGetSortCapabilites, this, std::placeholders::_1,
-                                  std::placeholders::_2, std::placeholders::_3);
-    m_resource->get(OC::QueryParamsMap(), m_getSortCapabilitesCB);
-    m_cv.wait(contentDirectoryLock);
+    unique_lock<mutex> contentDirectoryLock(m_mutex);
+    m_getSortCapabilitesCB = bind(&ContentDirectory::onGetSortCapabilites, this, placeholders::_1,
+                                  placeholders::_2, placeholders::_3);
+    m_resource->get(QueryParamsMap(), m_getSortCapabilitesCB);
+    if (m_cv.wait_for(contentDirectoryLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_sortCaps;
 }
 
-void ContentDirectory::onGetSortCapabilites(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep, const int eCode)
+void ContentDirectory::onGetSortCapabilites(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation protocolInfoRep;
+            OCRepresentation protocolInfoRep;
             rep.getValue("sortCaps", m_sortCaps);
         }
     }
@@ -129,118 +142,133 @@ void ContentDirectory::onGetSortCapabilites(const OC::HeaderOptions &headerOptio
 
 int ContentDirectory::getSystemUpdateId()
 {
-    std::unique_lock<std::mutex> contentDirectoryLock(m_mutex);
-    m_getSystemUpdateIdCB = bind(&ContentDirectory::onGetSystemUpdateId, this, std::placeholders::_1,
-                                 std::placeholders::_2, std::placeholders::_3);
-    m_resource->get(OC::QueryParamsMap(), m_getSystemUpdateIdCB);
-    m_cv.wait(contentDirectoryLock);
+    unique_lock<mutex> contentDirectoryLock(m_mutex);
+    m_getSystemUpdateIdCB = bind(&ContentDirectory::onGetSystemUpdateId, this, placeholders::_1,
+                                 placeholders::_2, placeholders::_3);
+    m_resource->get(QueryParamsMap(), m_getSystemUpdateIdCB);
+    if (m_cv.wait_for(contentDirectoryLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_id;
 }
 
-void ContentDirectory::onGetSystemUpdateId(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep, const int eCode)
+void ContentDirectory::onGetSystemUpdateId(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation protocolInfoRep;
+            OCRepresentation protocolInfoRep;
             rep.getValue("systemUpdateId", m_id);
         }
     }
     m_cv.notify_one();
 }
 
-std::string ContentDirectory::getServiceResetToken()
+string ContentDirectory::getServiceResetToken()
 {
-    std::unique_lock<std::mutex> contentDirectoryLock(m_mutex);
-    m_getServiceResetTokenCB = bind(&ContentDirectory::onGetServiceResetToken, this,
-                                    std::placeholders::_1,
-                                    std::placeholders::_2, std::placeholders::_3);
-    m_resource->get(OC::QueryParamsMap(), m_getServiceResetTokenCB);
-    m_cv.wait(contentDirectoryLock);
+    unique_lock<mutex> contentDirectoryLock(m_mutex);
+    m_getServiceResetTokenCB = bind(&ContentDirectory::onGetServiceResetToken, this, placeholders::_1,
+                                    placeholders::_2, placeholders::_3);
+    m_resource->get(QueryParamsMap(), m_getServiceResetTokenCB);
+    if (m_cv.wait_for(contentDirectoryLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_resetToken;
 }
 
-void ContentDirectory::onGetServiceResetToken(const OC::HeaderOptions &headerOptions,
-        const OC::OCRepresentation &rep, const int eCode)
+void ContentDirectory::onGetServiceResetToken(const HeaderOptions &headerOptions,
+        const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation protocolInfoRep;
+            OCRepresentation protocolInfoRep;
             rep.getValue("resetToken", m_resetToken);
         }
     }
     m_cv.notify_one();
 }
 
-std::string ContentDirectory::getFeatureList()
+string ContentDirectory::getFeatureList()
 {
-    std::unique_lock<std::mutex> contentDirectoryLock(m_mutex);
-    m_getFeatureListCB = bind(&ContentDirectory::onGetFeatureList, this, std::placeholders::_1,
-                              std::placeholders::_2, std::placeholders::_3);
-    m_resource->get(OC::QueryParamsMap(), m_getFeatureListCB);
-    m_cv.wait(contentDirectoryLock);
+    unique_lock<mutex> contentDirectoryLock(m_mutex);
+    m_getFeatureListCB = bind(&ContentDirectory::onGetFeatureList, this, placeholders::_1,
+                              placeholders::_2, placeholders::_3);
+    m_resource->get(QueryParamsMap(), m_getFeatureListCB);
+    if (m_cv.wait_for(contentDirectoryLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_featureList;
 }
 
-void ContentDirectory::onGetFeatureList(const OC::HeaderOptions &headerOptions,
-                                        const OC::OCRepresentation &rep, const int eCode)
+void ContentDirectory::onGetFeatureList(const HeaderOptions &headerOptions,
+                                        const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation protocolInfoRep;
+            OCRepresentation protocolInfoRep;
             rep.getValue("featureList", m_featureList);
         }
     }
     m_cv.notify_one();
 }
 
-ContentDirectory::SearchResult ContentDirectory::browse(std::string objectId,
-        std::string browseFlag, std::string filter,
-        int startingIndex, int requestedCount, std::string sortCriteria)
+ContentDirectory::SearchResult ContentDirectory::browse(string objectId, string browseFlag,
+        string filter, int startingIndex, int requestedCount, string sortCriteria)
 {
-    std::unique_lock<std::mutex> contentDirectoryLock(m_mutex);
-    m_browseCB = bind(&ContentDirectory::onBrowse, this, std::placeholders::_1,
-                      std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap params =
+    unique_lock<mutex> contentDirectoryLock(m_mutex);
+    m_browseResult = {"", 0, 0, 0};
+    m_browseCB = bind(&ContentDirectory::onBrowse, this, placeholders::_1,
+                      placeholders::_2, placeholders::_3);
+    QueryParamsMap params =
     {
         {"objectId", objectId},
         {"browseFlag", browseFlag},
         {"filter", filter},
-        {"startingIndex", std::to_string(startingIndex)},
-        {"requestedCount", std::to_string(requestedCount)},
+        {"startingIndex", to_string(startingIndex)},
+        {"requestedCount", to_string(requestedCount)},
         {"sortCriteria", sortCriteria}
     };
     m_resource->get(params, m_browseCB);
-    m_cv.wait(contentDirectoryLock);
+    if (m_cv.wait_for(contentDirectoryLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_browseResult;
 }
 
-void ContentDirectory::onBrowse(const OC::HeaderOptions &headerOptions,
-                                const OC::OCRepresentation &rep, const int eCode)
+void ContentDirectory::onBrowse(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation protocolInfoRep;
+            OCRepresentation protocolInfoRep;
             if (rep.getValue("browseResult", protocolInfoRep))
             {
                 protocolInfoRep.getValue("result", m_searchResult.result);
@@ -253,38 +281,41 @@ void ContentDirectory::onBrowse(const OC::HeaderOptions &headerOptions,
     m_cv.notify_one();
 }
 
-ContentDirectory::SearchResult ContentDirectory::search(std::string containerId,
-        std::string searchCriteria, std::string filter,
-        int startingIndex, int requestedCount, std::string sortCriteria)
+ContentDirectory::SearchResult ContentDirectory::search(string containerId, string searchCriteria,
+        string filter, int startingIndex, int requestedCount, string sortCriteria)
 {
-    std::unique_lock<std::mutex> contentDirectoryLock(m_mutex);
-    m_searchCB = bind(&ContentDirectory::onSearch, this, std::placeholders::_1,
-                      std::placeholders::_2, std::placeholders::_3);
-    OC::QueryParamsMap params =
+    unique_lock<mutex> contentDirectoryLock(m_mutex);
+    m_searchCB = bind(&ContentDirectory::onSearch, this, placeholders::_1,
+                      placeholders::_2, placeholders::_3);
+    QueryParamsMap params =
     {
         {"containerId", containerId},
         {"searchCriteria", searchCriteria},
         {"filter", filter},
-        {"startingIndex", std::to_string(startingIndex)},
-        {"requestedCount", std::to_string(requestedCount)},
+        {"startingIndex", to_string(startingIndex)},
+        {"requestedCount", to_string(requestedCount)},
         {"sortCriteria", sortCriteria}
     };
     m_resource->get(params, m_searchCB);
-    m_cv.wait(contentDirectoryLock);
+    if (m_cv.wait_for(contentDirectoryLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_searchResult;
 }
 
-void ContentDirectory::onSearch(const OC::HeaderOptions &headerOptions,
-                                const OC::OCRepresentation &rep, const int eCode)
+void ContentDirectory::onSearch(const HeaderOptions &headerOptions, const OCRepresentation &rep,
+                                const int eCode)
 {
     (void) headerOptions;
     if (eCode == OC_STACK_OK)
     {
-        std::string uri;
+        string uri;
         rep.getValue("uri", uri);
         if (uri == m_resource->uri())
         {
-            OC::OCRepresentation protocolInfoRep;
+            OCRepresentation protocolInfoRep;
             if (rep.getValue("searchResult", protocolInfoRep))
             {
                 protocolInfoRep.getValue("result", m_searchResult.result);

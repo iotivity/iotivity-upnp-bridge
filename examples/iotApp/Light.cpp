@@ -20,6 +20,7 @@
 
 #include "Light.h"
 #include <OCPlatform.h>
+#include "IotivityUtility.h"
 
 using namespace std;
 using namespace OC;
@@ -63,7 +64,10 @@ bool Light::init()
         onGetServicesCB = bind(&Light::onGetServices, this, placeholders::_1, placeholders::_2,
                                placeholders::_3);
         m_resource->get(QueryParamsMap(), onGetServicesCB);
-        m_cv.wait(lock); // may want this to timeout
+        if (m_cv.wait_for(lock, chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+        {
+            cerr << "Remote device failed to respond to the request." << endl;
+        }
     }
     return true;
 }

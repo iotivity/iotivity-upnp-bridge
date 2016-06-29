@@ -53,7 +53,11 @@ void AVTransport::setAVTransportURI(int instanceId, string currentURI, string cu
     m_setAVTransportURICb = bind(&AVTransport::onSetAVTransportURI, this, placeholders::_1,
                                  placeholders::_2, placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_setAVTransportURICb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
 void AVTransport::onSetAVTransportURI(const HeaderOptions &headerOptions,
@@ -78,7 +82,11 @@ void AVTransport::setNextAVTransportURI(int instanceId, string nextUri, string n
     m_setNextAVTransportURICb = bind(&AVTransport::onSetNextAVTranportURI, this, placeholders::_1,
                                      placeholders::_2, placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_setNextAVTransportURICb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
 void AVTransport::onSetNextAVTranportURI(const HeaderOptions &headerOptions,
@@ -101,7 +109,11 @@ AVTransport::MediaInfo AVTransport::getMediaInfo(int instanceId)
         {"instanceId", to_string(instanceId)},
     };
     m_resource->get(param, m_getMediaInfoCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_mediaInfo;
 }
 
@@ -144,7 +156,11 @@ AVTransport::TransportInfo AVTransport::getTransportInfo(int instanceId)
         {"instanceId", to_string(instanceId)},
     };
     m_resource->get(param, m_getTransportInfoCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_transportInfo;
 }
 
@@ -181,7 +197,11 @@ AVTransport::PositionInfo AVTransport::getPositionInfo(int instanceId)
         {"instanceId", to_string(instanceId)},
     };
     m_resource->get(param, m_getPositionInfoCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_positionInfo;
 }
 
@@ -223,7 +243,11 @@ AVTransport::DeviceCapabilities AVTransport::getDeviceCapabilities(int instanceI
         {"instanceId", to_string(instanceId)},
     };
     m_resource->get(param, m_getDeviceCapabilitiesCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_deviceCapabilities;
 }
 
@@ -260,7 +284,11 @@ AVTransport::TransportSettings AVTransport::getTransportSettings(int instanceId)
         {"instanceId", to_string(instanceId)},
     };
     m_resource->get(param, m_getTransportSettingsCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_transportSettings;
 }
 
@@ -295,7 +323,11 @@ void AVTransport::stop(int instanceId)
     rep.setValue("stop", attributes);
     m_stopCb = bind(&AVTransport::onStop, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_stopCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
 void AVTransport::onStop(const HeaderOptions &headerOptions, const OCRepresentation &rep,
@@ -318,7 +350,11 @@ void AVTransport::play(int instanceId, string speed)
     rep.setValue("play", attributes);
     m_playCb = bind(&AVTransport::onPlay, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_playCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
 void AVTransport::onPlay(const HeaderOptions &headerOptions, const OCRepresentation &rep,
@@ -340,7 +376,11 @@ void AVTransport::pause(int instanceId)
     rep.setValue("pause", attributes);
     m_pauseCb = bind(&AVTransport::onPause, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_pauseCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
 void AVTransport::onPause(const HeaderOptions &headerOptions, const OCRepresentation &rep,
@@ -364,7 +404,11 @@ void AVTransport::seek(int instanceId, string unit, string target)
     rep.setValue("seek", attributes);
     m_seekCb = bind(&AVTransport::onSeek, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_seekCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
 void AVTransport::onSeek(const HeaderOptions &headerOptions, const OCRepresentation &rep,
@@ -386,7 +430,11 @@ void AVTransport::next(int instanceId)
     rep.setValue("next", attributes);
     m_nextCb = bind(&AVTransport::onNext, this, placeholders::_1, placeholders::_2, placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_nextCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
 void AVTransport::onNext(const HeaderOptions &headerOptions, const OCRepresentation &rep,
@@ -409,7 +457,11 @@ void AVTransport::previous(int instanceId)
     m_previouseCb = bind(&AVTransport::onPrevious, this, placeholders::_1, placeholders::_2,
                          placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_previouseCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
 void AVTransport::onPrevious(const HeaderOptions &headerOptions,
@@ -433,7 +485,11 @@ void AVTransport::setPlayMode(int instanceId, string newPlayMode)
     m_setPlayModeCb = bind(&AVTransport::onSetPlayMode, this, placeholders::_1, placeholders::_2,
                            placeholders::_3);
     m_resource->post(rep, QueryParamsMap(), m_setPlayModeCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
 }
 
 void AVTransport::onSetPlayMode(const HeaderOptions &headerOptions, const OCRepresentation &rep,
@@ -455,7 +511,11 @@ string AVTransport::getCurrentTransportActions(int instanceId)
         {"instanceId", to_string(instanceId)}
     };
     m_resource->get(param, m_getCurrentTransportActionsCb);
-    m_cv.wait(avTranportLock);
+    if (m_cv.wait_for(avTranportLock,
+                      chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
+    {
+        cerr << "Remote device failed to respond to the request." << endl;
+    }
     return m_currentTransportActions;
 }
 
