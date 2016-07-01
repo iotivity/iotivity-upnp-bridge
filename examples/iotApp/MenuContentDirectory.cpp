@@ -238,7 +238,6 @@ void MenuContentDirectory::run(const std::vector<std::string> &cmd,
         }
         else if ("browse" == cmd[0])
         {
-#if 0
             if (cmd.size() > 7)
             {
                 try
@@ -271,13 +270,9 @@ void MenuContentDirectory::run(const std::vector<std::string> &cmd,
             {
                 std::cout << "browse command missing required argument." << std::endl;
             }
-#else
-            std::cout << "browse command not yet implemented." << std::endl;
-#endif
         }
         else if ("search" == cmd[0])
         {
-#if 0
             if (cmd.size() > 7)
             {
                 try
@@ -292,7 +287,7 @@ void MenuContentDirectory::run(const std::vector<std::string> &cmd,
                     int startingIndex = std::stoi(cmd[5]);
                     int requestedCount = std::stoi(cmd[6]);
                     // [2]containerId, [3]searchCriteria, [4]filter, [5]startingIndex, [6]requestedCount, [7]sourtCriteria
-                    ContentDirectory::SearchResult br = cd.browse(cmd[2], cmd[3], cmd[4], startingIndex, requestedCount,
+                    ContentDirectory::SearchResult br = cd.search(cmd[2], cmd[3], cmd[4], startingIndex, requestedCount,
                                                         cmd[7]);
                     std::cout << m_contentDirectoryVector[i]->uri() << std::endl;
                     std::cout << "Search Results:" << std::endl;
@@ -310,9 +305,6 @@ void MenuContentDirectory::run(const std::vector<std::string> &cmd,
             {
                 std::cout << "search command missing required argument." << std::endl;
             }
-#else
-            std::cout << "search command not yet implemented." << std::endl;
-#endif
         }
         else if ("clear" == cmd[0])
         {

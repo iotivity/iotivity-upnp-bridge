@@ -242,13 +242,16 @@ ContentDirectory::SearchResult ContentDirectory::browse(string objectId, string 
                       placeholders::_2, placeholders::_3);
     QueryParamsMap params =
     {
-        {"objectId", objectId},
-        {"browseFlag", browseFlag},
-        {"filter", filter},
-        {"startingIndex", to_string(startingIndex)},
-        {"requestedCount", to_string(requestedCount)},
-        {"sortCriteria", sortCriteria}
+        {"oid", objectId},
+        {"bf", browseFlag},
+        {"f", filter},
+        {"si", to_string(startingIndex)},
+        {"rc", to_string(requestedCount)},
+        {"soc", sortCriteria}
     };
+    for (auto p: params) {
+        cout << p.first << " : " << p.second << endl;
+    }
     m_resource->get(params, m_browseCB);
     if (m_cv.wait_for(contentDirectoryLock,
                       chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
@@ -271,10 +274,10 @@ void ContentDirectory::onBrowse(const HeaderOptions &headerOptions, const OCRepr
             OCRepresentation protocolInfoRep;
             if (rep.getValue("browseResult", protocolInfoRep))
             {
-                protocolInfoRep.getValue("result", m_searchResult.result);
-                protocolInfoRep.getValue("numberReturned", m_searchResult.numberReturned);
-                protocolInfoRep.getValue("totalMatches", m_searchResult.totalMatches);
-                protocolInfoRep.getValue("updateId", m_searchResult.updateId);
+                protocolInfoRep.getValue("result", m_browseResult.result);
+                protocolInfoRep.getValue("numberReturned", m_browseResult.numberReturned);
+                protocolInfoRep.getValue("totalMatches", m_browseResult.totalMatches);
+                protocolInfoRep.getValue("updateId", m_browseResult.updateId);
             }
         }
     }
@@ -284,18 +287,24 @@ void ContentDirectory::onBrowse(const HeaderOptions &headerOptions, const OCRepr
 ContentDirectory::SearchResult ContentDirectory::search(string containerId, string searchCriteria,
         string filter, int startingIndex, int requestedCount, string sortCriteria)
 {
+    cout << "search containerId = " << containerId << " searchCriteria = " << searchCriteria << " filter = " << filter
+            << " startIndex = " << startingIndex <<  " requestedCount = " << requestedCount << " sortCriteria = " << sortCriteria << endl;
     unique_lock<mutex> contentDirectoryLock(m_mutex);
     m_searchCB = bind(&ContentDirectory::onSearch, this, placeholders::_1,
                       placeholders::_2, placeholders::_3);
     QueryParamsMap params =
     {
-        {"containerId", containerId},
-        {"searchCriteria", searchCriteria},
-        {"filter", filter},
-        {"startingIndex", to_string(startingIndex)},
-        {"requestedCount", to_string(requestedCount)},
-        {"sortCriteria", sortCriteria}
+        {"cid", containerId},
+        {"sec", searchCriteria},
+        {"f", filter},
+        {"si", to_string(startingIndex)},
+        {"rc", to_string(requestedCount)},
+        {"soc", sortCriteria}
     };
+    for (auto p: params) {
+        cout << p.first << " : " << p.second << endl;
+    }
+
     m_resource->get(params, m_searchCB);
     if (m_cv.wait_for(contentDirectoryLock,
                       chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
