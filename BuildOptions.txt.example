@@ -36,3 +36,7 @@ IOTIVITY_LIB_TYPE = 'release'
 # The IoTivity library must match the desired architecture
 # Values 'x86_64
 TARGET_ARCH = 'x86_64'
+
+# Show full compilation output
+# Values 'yes' or 'no'
+VERBOSE = 'no'

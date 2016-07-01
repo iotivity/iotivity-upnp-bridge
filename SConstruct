@@ -23,6 +23,7 @@ vars.Add(EnumVariable('BUILD_TYPE', 'Specify release or debug build', 'debug', [
 vars.Add(PathVariable('IOTIVITY_BASE', 'Location of the iotivity project', None, PathVariable.PathAccept))
 vars.Add(EnumVariable('IOTIVITY_LIB_TYPE', 'Specify release or debug build', 'release', ['debug','release']))
 vars.Add(EnumVariable('TARGET_ARCH', 'Target architecture', 'x86_64', ['x86_64']))
+vars.Add(BoolVariable('VERBOSE', 'Show compilation', False))
 #vars.Add(EnumVariable('TEST', 'Run unit tests', '0', allowed_values=('0', '1')))
 
 env = Environment(variables = vars);
@@ -38,7 +39,15 @@ The current options are:
 ''')
 Help(vars.GenerateHelpText(env))
 
-
+if env.get('VERBOSE') == False:
+    env['CCCOMSTR'] = "Compiling $TARGET"
+    env['SHCCCOMSTR'] = "Compiling $TARGET"
+    env['CXXCOMSTR'] = "Compiling $TARGET"
+    env['SHCXXCOMSTR'] = "Compiling $TARGET"
+    env['LINKCOMSTR'] = "Linking $TARGET"
+    env['SHLINKCOMSTR'] = "Linking $TARGET"
+    env['ARCOMSTR'] = "Archiving $TARGET"
+    env['RANLIBCOMSTR'] = "Indexing Archive $TARGET"
 
 env['CPPFLAGS'] = ['-std=c++11', '-fvisibility=hidden', '-Wall', '-fPIC']
 if env['BUILD_TYPE'] == 'debug':
