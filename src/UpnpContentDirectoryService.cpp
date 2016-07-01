@@ -168,25 +168,25 @@ bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request, const map< stri
     string sortCriteria = "";
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("objectId");
+        auto it = queryParams.find("oid"); //ObjectId
         if (it != queryParams.end()) {
             objectId = it->second;
             DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("browseFlag");
+        it = queryParams.find("bf"); //BrowseFlag
         if (it != queryParams.end()) {
             browseFlag = it->second;
             DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("filter");
+        it = queryParams.find("f"); //filter
         if (it != queryParams.end()) {
             filter = it->second;
             DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("startingIndex");
+        it = queryParams.find("si"); //startIndex
         if (it != queryParams.end()) {
             try {
                 startingIndex = std::stoi(it->second);
@@ -197,7 +197,7 @@ bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request, const map< stri
             }
         }
 
-        it = queryParams.find("requestedCount");
+        it = queryParams.find("rc"); //Requested Count
         if (it != queryParams.end()) {
             try {
                 requestedCount = std::stoi(it->second);
@@ -208,7 +208,7 @@ bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request, const map< stri
             }
         }
 
-        it = queryParams.find("sortCriteria");
+        it = queryParams.find("soc"); //Sort Criteria
         if (it != queryParams.end()) {
             sortCriteria = it->second;
             DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
@@ -313,25 +313,25 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< stri
     string sortCriteria = "";
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("containerId");
+        auto it = queryParams.find("cid"); //ContainerID
         if (it != queryParams.end()) {
             containerId = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("searchCriteria");
+        it = queryParams.find("sec"); //Search Criteria
         if (it != queryParams.end()) {
             searchCriteria = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("filter");
+        it = queryParams.find("f"); //filter
         if (it != queryParams.end()) {
             filter = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("startingIndex");
+        it = queryParams.find("si"); //Start Index
         if (it != queryParams.end()) {
             try {
                 startingIndex = std::stoi(it->second);
@@ -342,7 +342,7 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< stri
             }
         }
 
-        it = queryParams.find("requestedCount");
+        it = queryParams.find("rc"); // Requested Count
         if (it != queryParams.end()) {
             try {
                 requestedCount = std::stoi(it->second);
@@ -353,7 +353,7 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< stri
             }
         }
 
-        it = queryParams.find("sortCriteria");
+        it = queryParams.find("soc"); //Sort Criteria
         if (it != queryParams.end()) {
             sortCriteria = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
