@@ -242,13 +242,14 @@ ContentDirectory::SearchResult ContentDirectory::browse(string objectId, string 
                       placeholders::_2, placeholders::_3);
     QueryParamsMap params =
     {
-        {"objectId", objectId},
-        {"browseFlag", browseFlag},
-        {"filter", filter},
-        {"startingIndex", to_string(startingIndex)},
-        {"requestedCount", to_string(requestedCount)},
-        {"sortCriteria", sortCriteria}
+        {"oid", objectId},
+        {"bf", browseFlag},
+        {"f", filter},
+        {"si", to_string(startingIndex)},
+        {"rc", to_string(requestedCount)},
+        {"soc", sortCriteria}
     };
+
     m_resource->get(params, m_browseCB);
     if (m_cv.wait_for(contentDirectoryLock,
                       chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
@@ -271,10 +272,10 @@ void ContentDirectory::onBrowse(const HeaderOptions &headerOptions, const OCRepr
             OCRepresentation protocolInfoRep;
             if (rep.getValue("browseResult", protocolInfoRep))
             {
-                protocolInfoRep.getValue("result", m_searchResult.result);
-                protocolInfoRep.getValue("numberReturned", m_searchResult.numberReturned);
-                protocolInfoRep.getValue("totalMatches", m_searchResult.totalMatches);
-                protocolInfoRep.getValue("updateId", m_searchResult.updateId);
+                protocolInfoRep.getValue("result", m_browseResult.result);
+                protocolInfoRep.getValue("numberReturned", m_browseResult.numberReturned);
+                protocolInfoRep.getValue("totalMatches", m_browseResult.totalMatches);
+                protocolInfoRep.getValue("updateId", m_browseResult.updateId);
             }
         }
     }
@@ -289,13 +290,14 @@ ContentDirectory::SearchResult ContentDirectory::search(string containerId, stri
                       placeholders::_2, placeholders::_3);
     QueryParamsMap params =
     {
-        {"containerId", containerId},
-        {"searchCriteria", searchCriteria},
-        {"filter", filter},
-        {"startingIndex", to_string(startingIndex)},
-        {"requestedCount", to_string(requestedCount)},
-        {"sortCriteria", sortCriteria}
+        {"cid", containerId},
+        {"sec", searchCriteria},
+        {"f", filter},
+        {"si", to_string(startingIndex)},
+        {"rc", to_string(requestedCount)},
+        {"soc", sortCriteria}
     };
+
     m_resource->get(params, m_searchCB);
     if (m_cv.wait_for(contentDirectoryLock,
                       chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
