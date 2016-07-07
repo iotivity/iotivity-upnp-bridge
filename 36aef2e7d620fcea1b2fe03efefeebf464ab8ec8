@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da87b5cf_bd262367",
+        "filename": "src/UpnpRenderingControlService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-07-07T18:04:52Z",
+      "side": 1,
+      "message": "I used selectedPresetName here because it made since. However, this could just be presetName but then we would have presetName repeated twice in once in the Attribute again in the composite.  Do you see any issue with this Larry?",
+      "range": {
+        "startLine": 59,
+        "startChar": 14,
+        "endLine": 59,
+        "endChar": 32
+      },
+      "revId": "36aef2e7d620fcea1b2fe03efefeebf464ab8ec8",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
