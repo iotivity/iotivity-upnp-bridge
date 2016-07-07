@@ -52,25 +52,36 @@ vector <UpnpAttributeInfo> UpnpRenderingControl::Attributes =
         "PresetName", G_TYPE_STRING, false,
         {
             {"", UPNP_ACTION_GET, "", G_TYPE_NONE},
-            {"SelectPreset", UPNP_ACTION_POST, "PresetName", G_TYPE_STRING}
+            {"SelectPreset", UPNP_ACTION_POST, "", G_TYPE_NONE}
         },
-        {}
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false},
+            {"selectedPresetName", "PresetName", G_TYPE_STRING, false}
+        }
     },
     {
         "mute",
         "Mute", G_TYPE_BOOLEAN, false,
         {   {"GetMute", UPNP_ACTION_GET, "CurrentMute", G_TYPE_BOOLEAN},
-            {"SetMute", UPNP_ACTION_POST, "DesiredMute", G_TYPE_BOOLEAN}
+            {"SetMute", UPNP_ACTION_POST, "", G_TYPE_NONE}
         },
-        {}
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false},
+            {"channel", "Channel", G_TYPE_STRING, false},
+            {"desiredMute", "DesiredMute", G_TYPE_BOOLEAN, false}
+        }
     },
     {
         "volume",
         "Volume", G_TYPE_UINT, false,
         {   {"GetVolume", UPNP_ACTION_GET, "CurrentVolume", G_TYPE_UINT},
-            {"SetVolume", UPNP_ACTION_POST, "DesiredVolume", G_TYPE_UINT}
+            {"SetVolume", UPNP_ACTION_POST, "", G_TYPE_NONE}
         },
-        {}
+        {
+            {"instanceId", "InstanceID", G_TYPE_UINT, false},
+            {"channel", "Channel", G_TYPE_STRING, false},
+            {"desiredVolume", "DesiredVolume", G_TYPE_UINT, false}
+        }
     }
 };
 
@@ -199,23 +210,26 @@ bool UpnpRenderingControl::setPresetName(UpnpRequest *request, RCSResourceAttrib
     DEBUG_PRINT("");
 
     int instanceId = 0;
-    string presetName = value->get< string >();
+    string presetName = "FactoryDefaults";
 
-    if (! queryParams.empty())
+    const auto &attrs = value->get< RCSResourceAttributes >();
+
+    for (const auto &kvPair : attrs)
     {
-        auto it = queryParams.find("instanceId");
-        if (it != queryParams.end())
+        DEBUG_PRINT("setPresetName kvPair key=" << kvPair.key());
+        DEBUG_PRINT("setPresetName kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
         {
-            try
-            {
-                instanceId = std::stoi(it->second);
-                instanceId = std::max(0, instanceId);
-                DEBUG_PRINT("setPresetName queryParam " << it->first << "=" << it->second);
-            }
-            catch (const std::invalid_argument &ia)
-            {
-                ERROR_PRINT("Invalid setPresetName queryParam " << it->first << "=" << it->second);
-            }
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("setPresetName instanceId=" << instanceId);
+        }
+
+        if (kvPair.key() == "selectedPresetName")
+        {
+            presetName = (kvPair.value()).get< string >();
+            DEBUG_PRINT("setPresetName presetName=" << presetName);
         }
     }
 
@@ -355,32 +369,32 @@ bool UpnpRenderingControl::setMute(UpnpRequest *request, RCSResourceAttributes::
 
     int instanceId = 0;
     string channel = "Master";
-    bool mute = value->get< bool >();
+    bool mute = false;
 
-    DEBUG_PRINT("setMute mute=" << mute);
+    const auto &attrs = value->get< RCSResourceAttributes >();
 
-    if (! queryParams.empty())
+    for (const auto &kvPair : attrs)
     {
-        auto it = queryParams.find("instanceId");
-        if (it != queryParams.end())
+        DEBUG_PRINT("setMute kvPair key=" << kvPair.key());
+        DEBUG_PRINT("setMute kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
         {
-            try
-            {
-                instanceId = std::stoi(it->second);
-                instanceId = std::max(0, instanceId);
-                DEBUG_PRINT("setMute queryParam " << it->first << "=" << it->second);
-            }
-            catch (const std::invalid_argument &ia)
-            {
-                ERROR_PRINT("Invalid setMute queryParam " << it->first << "=" << it->second);
-            }
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("setMute instanceId=" << instanceId);
         }
 
-        it = queryParams.find("channel");
-        if (it != queryParams.end())
+        if (kvPair.key() == "channel")
         {
-            channel = it->second;
-            DEBUG_PRINT("setMute queryParam " << it->first << "=" << it->second);
+            channel = (kvPair.value()).get< string >();
+            DEBUG_PRINT("setMute channel=" << channel);
+        }
+
+        if (kvPair.key() == "desiredMute")
+        {
+            mute = (kvPair.value()).get< bool >();
+            DEBUG_PRINT("setMute mute=" << mute);
         }
     }
 
@@ -523,32 +537,33 @@ bool UpnpRenderingControl::setVolume(UpnpRequest *request, RCSResourceAttributes
 
     int instanceId = 0;
     string channel = "Master";
-    int volume = value->get< int >();;
+    int volume = 0;
 
-    DEBUG_PRINT("volume = " << volume);
+    const auto &attrs = value->get< RCSResourceAttributes >();
 
-    if (!queryParams.empty())
+    for (const auto &kvPair : attrs)
     {
-        auto it = queryParams.find("instanceId");
-        if (it != queryParams.end())
+        DEBUG_PRINT("setVolume kvPair key=" << kvPair.key());
+        DEBUG_PRINT("setVolume kvPair value=" << kvPair.value().toString());
+
+        if (kvPair.key() == "instanceId")
         {
-            try
-            {
-                instanceId = std::stoi(it->second);
-                instanceId = std::max(0, instanceId);
-                DEBUG_PRINT("setVolume queryParam " << it->first << "=" << it->second);
-            }
-            catch (const std::invalid_argument &ia)
-            {
-                ERROR_PRINT("Invalid setVolume queryParam " << it->first << "=" << it->second);
-            }
+            instanceId = (kvPair.value()).get< int >();
+            instanceId = std::max(0, instanceId);
+            DEBUG_PRINT("setVolume instanceId=" << instanceId);
         }
 
-        it = queryParams.find("channel");
-        if (it != queryParams.end())
+        if (kvPair.key() == "channel")
         {
-            channel = it->second;
-            DEBUG_PRINT("setVolume queryParam " << it->first << "=" << it->second);
+            channel = (kvPair.value()).get< string >();
+            DEBUG_PRINT("setVolume channel=" << channel);
+        }
+
+        if (kvPair.key() == "desiredVolume")
+        {
+            volume = (kvPair.value()).get< int >();
+            volume = std::max(0, volume);
+            DEBUG_PRINT("setVolume volume=" << volume);
         }
     }
 
