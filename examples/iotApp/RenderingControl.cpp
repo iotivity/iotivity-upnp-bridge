@@ -107,16 +107,16 @@ void RenderingControl::selectPreset(int instanceId, string presetName)
     unique_lock<mutex> renderingControlLock(m_mutex);
     OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
-    rep.setValue("presetName", presetName);
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    attributes.setValue("selectedPresetName", presetName);
+    rep.setValue("presetName", attributes);
 
     m_selectPresetsCb = bind(&RenderingControl::onSelectPresets, this,
                              placeholders::_1,
                              placeholders::_2, placeholders::_3);
-    QueryParamsMap param =
-    {
-        {"instanceId", to_string(instanceId)},
-    };
-    m_resource->post(rep, param, m_selectPresetsCb);
+
+    m_resource->post(rep, QueryParamsMap(), m_selectPresetsCb);
     if (m_cv.wait_for(renderingControlLock,
                       chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
     {
@@ -175,15 +175,16 @@ void RenderingControl::setMute(int instanceId, string channel, bool desiredMute)
     unique_lock<mutex> renderingControlLock(m_mutex);
     OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
-    rep.setValue("mute", desiredMute);
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    attributes.setValue("channel", channel);
+    attributes.setValue("desiredMute", desiredMute);
+    rep.setValue("mute", attributes);
+
     m_setMuteCb = bind(&RenderingControl::onSetMute, this, placeholders::_1, placeholders::_2,
                        placeholders::_3);
-    QueryParamsMap params =
-    {
-        {"instanceId", to_string(instanceId)},
-        {"channel", channel}
-    };
-    m_resource->post(rep, params, m_setMuteCb);
+
+    m_resource->post(rep, QueryParamsMap(), m_setMuteCb);
     if (m_cv.wait_for(renderingControlLock,
                       chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
     {
@@ -234,21 +235,21 @@ void RenderingControl::onGetVolume(const HeaderOptions &headerOptions, const OCR
     m_cv.notify_one();
 }
 
-void RenderingControl::setVolume(int instanceId, string channel,
-                                 int desiredVolume)
+void RenderingControl::setVolume(int instanceId, string channel, int desiredVolume)
 {
     unique_lock<mutex> renderingControlLock(m_mutex);
     OCRepresentation rep;
     rep.setValue("uri", m_resource->uri());
-    rep.setValue("volume", desiredVolume);
+    OCRepresentation attributes;
+    attributes.setValue("instanceId", instanceId);
+    attributes.setValue("channel", channel);
+    attributes.setValue("desiredVolume", desiredVolume);
+    rep.setValue("volume", attributes);
+
     m_setVolumeCb = bind(&RenderingControl::onSetVolume, this, placeholders::_1, placeholders::_2,
                          placeholders::_3);
-    QueryParamsMap params =
-    {
-        {"instanceId", to_string(instanceId)},
-        {"channel", channel}
-    };
-    m_resource->post(rep, params, m_setVolumeCb);
+
+    m_resource->post(rep, QueryParamsMap(), m_setVolumeCb);
     if (m_cv.wait_for(renderingControlLock,
                       chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)
     {
