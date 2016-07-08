@@ -29,6 +29,7 @@
 #include "MenuLayer3Forwarding.h"
 #include "MenuServices.h"
 #include "MenuRenderingControl.h"
+#include "MenuWANCommonInterface.h"
 
 MenuServices::MenuServices():
     m_quit(false)
@@ -331,7 +332,9 @@ void MenuServices::run(const std::vector<std::string> &cmd,
         }
         else if ("ifconfig" == cmd[0])
         {
-            std::cout << "WAN IF Config Menu not yet Implemented" << std::endl;
+            std::unique_ptr<MenuWANCommonInterface> menuItem(new MenuWANCommonInterface);
+            menuItem->init(m_wanIfConfig);
+            menuStack.push(std::move(menuItem));
         }
         else if ("cableconfig" == cmd[0])
         {
