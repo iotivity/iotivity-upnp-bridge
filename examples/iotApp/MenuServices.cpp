@@ -25,6 +25,7 @@
 #include "MenuBrightness.h"
 #include "MenuConnectionManager.h"
 #include "MenuContentDirectory.h"
+#include "MenuLayer3Forwarding.h"
 #include "MenuServices.h"
 #include "MenuRenderingControl.h"
 
@@ -313,7 +314,9 @@ void MenuServices::run(const std::vector<std::string> &cmd,
         }
         else if ("layer3" == cmd[0])
         {
-            std::cout << "Layer 3 Forwarding Menu not yet Implemented" << std::endl;
+            std::unique_ptr<MenuLayer3Forwarding> menuItem(new MenuLayer3Forwarding);
+            menuItem->init(m_layer3Forwarding);
+            menuStack.push(std::move(menuItem));
         }
         else if ("rendering" == cmd[0])
         {
