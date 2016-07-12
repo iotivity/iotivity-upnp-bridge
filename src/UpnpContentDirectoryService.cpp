@@ -168,25 +168,25 @@ bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request, const map< stri
     string sortCriteria = "";
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("oid"); //ObjectId
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_OBJECT_ID); //ObjectId
         if (it != queryParams.end()) {
             objectId = it->second;
             DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("bf"); //BrowseFlag
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_BROWSE_FLAG); //BrowseFlag
         if (it != queryParams.end()) {
             browseFlag = it->second;
             DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("f"); //filter
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_FILTER); //filter
         if (it != queryParams.end()) {
             filter = it->second;
             DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("si"); //startIndex
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_START_INDEX); //startIndex
         if (it != queryParams.end()) {
             try {
                 startingIndex = std::stoi(it->second);
@@ -197,7 +197,7 @@ bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request, const map< stri
             }
         }
 
-        it = queryParams.find("rc"); //Requested Count
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_REQUESTED_COUNT); //Requested Count
         if (it != queryParams.end()) {
             try {
                 requestedCount = std::stoi(it->second);
@@ -208,7 +208,7 @@ bool UpnpContentDirectory::getBrowseResult(UpnpRequest *request, const map< stri
             }
         }
 
-        it = queryParams.find("soc"); //Sort Criteria
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_SORT_CRITERIA); //Sort Criteria
         if (it != queryParams.end()) {
             sortCriteria = it->second;
             DEBUG_PRINT("browse queryParam " << it->first << "=" << it->second);
@@ -313,25 +313,25 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< stri
     string sortCriteria = "";
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("cid"); //ContainerID
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_CONTAINER_ID); //ContainerID
         if (it != queryParams.end()) {
             containerId = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("sec"); //Search Criteria
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_SEARCH_CRITERIA); //Search Criteria
         if (it != queryParams.end()) {
             searchCriteria = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("f"); //filter
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_FILTER); //filter
         if (it != queryParams.end()) {
             filter = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find("si"); //Start Index
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_START_INDEX); //Start Index
         if (it != queryParams.end()) {
             try {
                 startingIndex = std::stoi(it->second);
@@ -342,7 +342,7 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< stri
             }
         }
 
-        it = queryParams.find("rc"); // Requested Count
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_REQUESTED_COUNT); // Requested Count
         if (it != queryParams.end()) {
             try {
                 requestedCount = std::stoi(it->second);
@@ -353,7 +353,7 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< stri
             }
         }
 
-        it = queryParams.find("soc"); //Sort Criteria
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_SORT_CRITERIA); //Sort Criteria
         if (it != queryParams.end()) {
             sortCriteria = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);

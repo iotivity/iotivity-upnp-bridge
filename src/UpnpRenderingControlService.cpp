@@ -148,7 +148,7 @@ bool UpnpRenderingControl::getPresetNameList(UpnpRequest *request,
 
     if (! queryParams.empty())
     {
-        auto it = queryParams.find("instanceId");
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_INSTANCE_ID);
         if (it != queryParams.end())
         {
             try
@@ -296,7 +296,7 @@ bool UpnpRenderingControl::getMute(UpnpRequest *request, const map< string, stri
 
     if (! queryParams.empty())
     {
-        auto it = queryParams.find("instanceId");
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_INSTANCE_ID);
         if (it != queryParams.end())
         {
             try
@@ -311,7 +311,7 @@ bool UpnpRenderingControl::getMute(UpnpRequest *request, const map< string, stri
             }
         }
 
-        it = queryParams.find("channel");
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_CHANNEL);
         if (it != queryParams.end())
         {
             channel = it->second;
@@ -464,7 +464,7 @@ bool UpnpRenderingControl::getVolume(UpnpRequest *request, const map< string, st
 
     if (! queryParams.empty())
     {
-        auto it = queryParams.find("instanceId");
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_INSTANCE_ID);
         if (it != queryParams.end())
         {
             try
@@ -479,7 +479,7 @@ bool UpnpRenderingControl::getVolume(UpnpRequest *request, const map< string, st
             }
         }
 
-        it = queryParams.find("channel");
+        it = queryParams.find(UPNP_OIC_QUERY_PARAM_CHANNEL);
         if (it != queryParams.end())
         {
             channel = it->second;

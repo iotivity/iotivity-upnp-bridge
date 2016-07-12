@@ -227,7 +227,7 @@ bool UpnpConnectionManager::getCurrentConnectionInfo(UpnpRequest *request, const
     int connectionId = 0;
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("connectionId");
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_CONNECTION_ID);
         if (it != queryParams.end()) {
             try {
                 connectionId = std::stoi(it->second);

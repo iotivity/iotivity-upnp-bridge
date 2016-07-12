@@ -106,7 +106,7 @@ AVTransport::MediaInfo AVTransport::getMediaInfo(int instanceId)
                             placeholders::_3);
     QueryParamsMap param =
     {
-        {"instanceId", to_string(instanceId)},
+        {UPNP_OIC_QUERY_PARAM_INSTANCE_ID, to_string(instanceId)},
     };
     m_resource->get(param, m_getMediaInfoCb);
     if (m_cv.wait_for(avTranportLock,
@@ -153,7 +153,7 @@ AVTransport::TransportInfo AVTransport::getTransportInfo(int instanceId)
                                 placeholders::_2, placeholders::_3);
     QueryParamsMap param =
     {
-        {"instanceId", to_string(instanceId)},
+        {UPNP_OIC_QUERY_PARAM_INSTANCE_ID, to_string(instanceId)},
     };
     m_resource->get(param, m_getTransportInfoCb);
     if (m_cv.wait_for(avTranportLock,
@@ -194,7 +194,7 @@ AVTransport::PositionInfo AVTransport::getPositionInfo(int instanceId)
                                placeholders::_2, placeholders::_3);
     QueryParamsMap param =
     {
-        {"instanceId", to_string(instanceId)},
+        {UPNP_OIC_QUERY_PARAM_INSTANCE_ID, to_string(instanceId)},
     };
     m_resource->get(param, m_getPositionInfoCb);
     if (m_cv.wait_for(avTranportLock,
@@ -240,7 +240,7 @@ AVTransport::DeviceCapabilities AVTransport::getDeviceCapabilities(int instanceI
                                      placeholders::_2, placeholders::_3);
     QueryParamsMap param =
     {
-        {"instanceId", to_string(instanceId)},
+        {UPNP_OIC_QUERY_PARAM_INSTANCE_ID, to_string(instanceId)},
     };
     m_resource->get(param, m_getDeviceCapabilitiesCb);
     if (m_cv.wait_for(avTranportLock,
@@ -281,7 +281,7 @@ AVTransport::TransportSettings AVTransport::getTransportSettings(int instanceId)
                                     placeholders::_2, placeholders::_3);
     QueryParamsMap param =
     {
-        {"instanceId", to_string(instanceId)},
+        {UPNP_OIC_QUERY_PARAM_INSTANCE_ID, to_string(instanceId)},
     };
     m_resource->get(param, m_getTransportSettingsCb);
     if (m_cv.wait_for(avTranportLock,
