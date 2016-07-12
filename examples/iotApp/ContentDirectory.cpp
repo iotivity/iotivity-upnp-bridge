@@ -242,12 +242,12 @@ ContentDirectory::SearchResult ContentDirectory::browse(string objectId, string 
                       placeholders::_2, placeholders::_3);
     QueryParamsMap params =
     {
-        {"oid", objectId},
-        {"bf", browseFlag},
-        {"f", filter},
-        {"si", to_string(startingIndex)},
-        {"rc", to_string(requestedCount)},
-        {"soc", sortCriteria}
+        {UPNP_OIC_QUERY_PARAM_OBJECT_ID, objectId},
+        {UPNP_OIC_QUERY_PARAM_BROWSE_FLAG, browseFlag},
+        {UPNP_OIC_QUERY_PARAM_FILTER, filter},
+        {UPNP_OIC_QUERY_PARAM_START_INDEX, to_string(startingIndex)},
+        {UPNP_OIC_QUERY_PARAM_REQUESTED_COUNT, to_string(requestedCount)},
+        {UPNP_OIC_QUERY_PARAM_SORT_CRITERIA, sortCriteria}
     };
 
     m_resource->get(params, m_browseCB);
@@ -290,12 +290,12 @@ ContentDirectory::SearchResult ContentDirectory::search(string containerId, stri
                       placeholders::_2, placeholders::_3);
     QueryParamsMap params =
     {
-        {"cid", containerId},
-        {"sec", searchCriteria},
-        {"f", filter},
-        {"si", to_string(startingIndex)},
-        {"rc", to_string(requestedCount)},
-        {"soc", sortCriteria}
+        {UPNP_OIC_QUERY_PARAM_CONTAINER_ID, containerId},
+        {UPNP_OIC_QUERY_PARAM_SEARCH_CRITERIA, searchCriteria},
+        {UPNP_OIC_QUERY_PARAM_FILTER, filter},
+        {UPNP_OIC_QUERY_PARAM_START_INDEX, to_string(startingIndex)},
+        {UPNP_OIC_QUERY_PARAM_REQUESTED_COUNT, to_string(requestedCount)},
+        {UPNP_OIC_QUERY_PARAM_SORT_CRITERIA, sortCriteria}
     };
 
     m_resource->get(params, m_searchCB);
