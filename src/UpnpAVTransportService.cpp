@@ -883,7 +883,7 @@ bool UpnpAVTransport::setAvTransportUri(UpnpRequest *request, RCSResourceAttribu
 
     GUPnPServiceProxyAction *actionProxy =
         gupnp_service_proxy_begin_action (m_proxy,
-                                          "SetAvTransportUri",
+                                          "SetAVTransportURI",
                                           setAvTransportUriCb,
                                           (gpointer *) request,
                                           "InstanceID",
@@ -963,7 +963,7 @@ bool UpnpAVTransport::setNextAvTransportUri(UpnpRequest *request, RCSResourceAtt
 
     GUPnPServiceProxyAction *actionProxy =
         gupnp_service_proxy_begin_action (m_proxy,
-                                          "SetNextAvTransportUri",
+                                          "SetNextAVTransportURI",
                                           setNextAvTransportUriCb,
                                           (gpointer *) request,
                                           "InstanceID",
