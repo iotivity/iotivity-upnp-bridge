@@ -132,7 +132,7 @@ bool UpnpDeviceProtection::sendSetupMessage(UpnpRequest *request,
         return false;
     }
 
-    auto it = queryParams.find("message");
+    auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_MESSAGE);
     if (it != queryParams.end())
     {
         inMessage = it->second;
@@ -142,7 +142,7 @@ bool UpnpDeviceProtection::sendSetupMessage(UpnpRequest *request,
         return false;
     }
 
-    it = queryParams.find("protocol");
+    it = queryParams.find(UPNP_OIC_QUERY_PARAM_PROTOCOL);
     if (it != queryParams.end())
     {
         sendRequest = new SendSetupMessageRequest;

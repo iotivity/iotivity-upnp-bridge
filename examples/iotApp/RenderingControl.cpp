@@ -74,7 +74,7 @@ string RenderingControl::listPresets(int instanceId)
                            placeholders::_3);
     QueryParamsMap param =
     {
-        {"instanceId", to_string(instanceId)}
+        {UPNP_OIC_QUERY_PARAM_INSTANCE_ID, to_string(instanceId)}
     };
     m_resource->get(param, m_listPresetsCb);
     if (m_cv.wait_for(renderingControlLock,
@@ -141,8 +141,8 @@ bool RenderingControl::getMute(int instanceId, string channel)
                        placeholders::_3);
     QueryParamsMap params =
     {
-        {"instanceId", to_string(instanceId)},
-        {"channel", channel}
+        {UPNP_OIC_QUERY_PARAM_INSTANCE_ID, to_string(instanceId)},
+        {UPNP_OIC_QUERY_PARAM_CHANNEL, channel}
     };
     m_resource->get(params, m_getMuteCb);
     if (m_cv.wait_for(renderingControlLock,
@@ -206,8 +206,8 @@ int RenderingControl::getVolume(int instanceId, string channel)
                          placeholders::_3);
     QueryParamsMap param =
     {
-        {"instanceId", to_string(instanceId)},
-        {"channel", channel}
+        {UPNP_OIC_QUERY_PARAM_INSTANCE_ID, to_string(instanceId)},
+        {UPNP_OIC_QUERY_PARAM_CHANNEL, channel}
     };
     m_resource->get(param, m_getVolumeCb);
     if (m_cv.wait_for(renderingControlLock,

@@ -95,7 +95,7 @@ ConnectionManager::ConnectionInfo ConnectionManager::getConnectionInfo(string co
     m_getCurrentConnctionInfoCB = bind(&ConnectionManager::onGetCurrentConnectionInfo, this,
                                        placeholders::_1,
                                        placeholders::_2, placeholders::_3);
-    QueryParamsMap param = {{"connectionId", connectionIDs}};
+    QueryParamsMap param = {{UPNP_OIC_QUERY_PARAM_CONNECTION_ID, connectionIDs}};
     m_resource->get(param, m_getCurrentConnctionInfoCB);
     if (m_cv.wait_for(protocolInfoLock,
                       chrono::seconds(MAX_WAIT_TIME_FOR_BLOCKING_CALL)) == cv_status::timeout)

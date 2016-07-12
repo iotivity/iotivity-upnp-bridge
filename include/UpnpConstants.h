@@ -80,4 +80,21 @@ static const std::string UPNP_OIC_URI_PREFIX_CONTENT_DIRECTORY      = "/oic/upnp
 static const std::string UPNP_OIC_URI_PREFIX_RENDERING_CONTROL      = "/oic/upnp/rendering-control/";
 static const std::string UPNP_OIC_URI_PREFIX_SCHEDULED_RECORDING    = "/oic/upnp/scheduled-recording/";
 
+// AV transport service, and Rendering control service query params
+static const std::string UPNP_OIC_QUERY_PARAM_INSTANCE_ID = "iid";
+static const std::string UPNP_OIC_QUERY_PARAM_CHANNEL = "c";
+// Connection manager service query params
+static const std::string UPNP_OIC_QUERY_PARAM_CONNECTION_ID = "cid";
+// Content directory service query params
+static const std::string UPNP_OIC_QUERY_PARAM_BROWSE_FLAG = "bf";
+static const std::string UPNP_OIC_QUERY_PARAM_FILTER = "f";
+static const std::string UPNP_OIC_QUERY_PARAM_START_INDEX = "si";
+static const std::string UPNP_OIC_QUERY_PARAM_REQUESTED_COUNT = "rc";
+static const std::string UPNP_OIC_QUERY_PARAM_SORT_CRITERIA = "soc";
+static const std::string UPNP_OIC_QUERY_PARAM_CONTAINER_ID = "cid";
+static const std::string UPNP_OIC_QUERY_PARAM_SEARCH_CRITERIA = "sec";
+// Device Protection service query params
+static const std::string UPNP_OIC_QUERY_PARAM_MESSAGE = "m";
+static const std::string UPNP_OIC_QUERY_PARAM_PROTOCOL = "p";
+
 #endif

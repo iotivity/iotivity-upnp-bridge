@@ -290,7 +290,7 @@ bool UpnpAVTransport::getCurrentTransportActions(UpnpRequest *request, const map
     int instanceId = 0;
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("instanceId");
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_INSTANCE_ID);
         if (it != queryParams.end()) {
             try {
                 instanceId = std::stoi(it->second);
@@ -378,7 +378,7 @@ bool UpnpAVTransport::getDeviceCapabilities(UpnpRequest *request, const map< str
     int instanceId = 0;
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("instanceId");
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_INSTANCE_ID);
         if (it != queryParams.end()) {
             try {
                 instanceId = std::stoi(it->second);
@@ -507,7 +507,7 @@ bool UpnpAVTransport::getMediaInfo(UpnpRequest *request, const map< string, stri
     int instanceId = 0;
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("instanceId");
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_INSTANCE_ID);
         if (it != queryParams.end()) {
             try {
                 instanceId = std::stoi(it->second);
@@ -627,7 +627,7 @@ bool UpnpAVTransport::getPositionInfo(UpnpRequest *request, const map< string, s
     int instanceId = 0;
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("instanceId");
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_INSTANCE_ID);
         if (it != queryParams.end()) {
             try {
                 instanceId = std::stoi(it->second);
@@ -715,7 +715,7 @@ bool UpnpAVTransport::getTransportInfo(UpnpRequest *request, const map< string, 
     int instanceId = 0;
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("instanceId");
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_INSTANCE_ID);
         if (it != queryParams.end()) {
             try {
                 instanceId = std::stoi(it->second);
@@ -796,7 +796,7 @@ bool UpnpAVTransport::getTransportSettings(UpnpRequest *request, const map< stri
     int instanceId = 0;
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find("instanceId");
+        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_INSTANCE_ID);
         if (it != queryParams.end()) {
             try {
                 instanceId = std::stoi(it->second);
