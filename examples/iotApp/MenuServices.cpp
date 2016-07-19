@@ -25,6 +25,7 @@
 #include "MenuBrightness.h"
 #include "MenuConnectionManager.h"
 #include "MenuContentDirectory.h"
+#include "MenuLANHostConfigManagement.h"
 #include "MenuLayer3Forwarding.h"
 #include "MenuServices.h"
 #include "MenuRenderingControl.h"
@@ -354,7 +355,9 @@ void MenuServices::run(const std::vector<std::string> &cmd,
         }
         else if ("lanhost" == cmd[0])
         {
-            std::cout << "LAN Host Config Menu not yet Implemented" << std::endl;
+            std::unique_ptr<MenuLANHostConfigManagement> menuItem(new MenuLANHostConfigManagement);
+            menuItem->init(m_lanHostConfig);
+            menuStack.push(std::move(menuItem));
         }
         else if ("clear" == cmd[0])
         {
