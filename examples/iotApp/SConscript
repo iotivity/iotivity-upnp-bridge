@@ -37,7 +37,8 @@ iotApp_cpp = ['AVTransport.cpp',
               'MenuRenderingControl.cpp',
               'MenuWANCommonInterface.cpp',
               'RenderingControl.cpp',
-              'WANCommonInterfaceConfig.cpp']
+              'WANCommonInterfaceConfig.cpp',
+              'WANIpConnection.cpp']
 iotApp_obj = env_samples.Object(iotApp_cpp)
 iotApp_bins = env_samples.Program('iotApp', iotApp_obj)
 
