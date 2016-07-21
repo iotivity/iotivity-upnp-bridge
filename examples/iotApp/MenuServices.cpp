@@ -30,6 +30,7 @@
 #include "MenuServices.h"
 #include "MenuRenderingControl.h"
 #include "MenuWANCommonInterface.h"
+#include "MenuWANIpConnection.h"
 
 MenuServices::MenuServices():
     m_quit(false)
@@ -354,7 +355,9 @@ void MenuServices::run(const std::vector<std::string> &cmd,
         }
         else if ("ipconnection" == cmd[0])
         {
-            std::cout << "WAN IP Connection Menu not yet Implemented" << std::endl;
+            std::unique_ptr<MenuWANIpConnection> menuItem(new MenuWANIpConnection);
+            menuItem->init(m_wanIPConnection);
+            menuStack.push(std::move(menuItem));
         }
         else if ("lanhost" == cmd[0])
         {
