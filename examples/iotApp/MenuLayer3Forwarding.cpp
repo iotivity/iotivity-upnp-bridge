@@ -83,7 +83,7 @@ void MenuLayer3Forwarding::run(const vector<string> &cmd,
                                    string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" + UPNP_OIC_TYPE_LAYER3_FORWARDING, CT_DEFAULT,
                                    onFindResourceCb);
             cout << "findResource(" + string(OC_RSRVD_WELL_KNOWN_URI) +  "?rt=" +
-                      UPNP_OIC_TYPE_BRIGHTNESS + ") - " << result << endl;
+                    UPNP_OIC_TYPE_LAYER3_FORWARDING + ") - " << result << endl;
         }
         else if (cmd[0] == "list")
         {
