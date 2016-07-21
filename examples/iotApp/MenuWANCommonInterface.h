@@ -39,7 +39,7 @@ class MenuWANCommonInterface: public MenuBase
          * The init member function is optional.
          * Used to pass in an already discovered AV transport resources before calling run.
          */
-        void init(std::set<OC::OCResource::Ptr, OCResourceComp> avTransportSet);
+        void init(std::set<OC::OCResource::Ptr, OCResourceComp> wanCommonInterfaceSet);
         virtual std::string getName();
         virtual void help();
         virtual void print();

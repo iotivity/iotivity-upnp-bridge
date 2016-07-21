@@ -416,9 +416,10 @@ bool UpnpWanIpConnection::changeConnectionStatus(UpnpRequest *request,
     bool found = false;
 
     const auto &attrs = attrValue->get< RCSResourceAttributes >();
-
     for (const auto &kvPair : attrs)
     {
+        DEBUG_PRINT("kvPair key=" << kvPair.key());
+        DEBUG_PRINT("kvPair value=" << kvPair.value().toString());
         if (kvPair.key() == "statusUpdateRequest")
         {
             for (auto actionName : statusUpdateActions)
