@@ -174,6 +174,18 @@ public class UpnpClientActivity extends Activity implements
         }
     }
 
+    public synchronized void onFindResourceFailed(Throwable throwable, String uri) {
+        if (throwable instanceof OcException) {
+            OcException ocEx = (OcException) throwable;
+            Log.e(TAG, ocEx.toString());
+            ErrorCode errCode = ocEx.getErrorCode();
+            // do something based on errorCode
+            Log.e(TAG, "Uri: " + uri + " Error code: " + errCode);
+        }
+
+        Log.e(TAG, "Find resource failed");
+    }
+
     /**
      * Resource found listener specifically for links.
      */
@@ -241,6 +253,18 @@ public class UpnpClientActivity extends Activity implements
                     }
                 }
             }
+        }
+
+        public synchronized void onFindResourceFailed(Throwable throwable, String uri) {
+            if (throwable instanceof OcException) {
+                OcException ocEx = (OcException) throwable;
+                Log.e(TAG, ocEx.toString());
+                ErrorCode errCode = ocEx.getErrorCode();
+                // do something based on errorCode
+                Log.e(TAG, "Uri: " + uri + " Error code: " + errCode);
+            }
+
+            Log.e(TAG, "Find resource failed");
         }
     }
 
