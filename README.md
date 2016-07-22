@@ -99,7 +99,7 @@ Copy the Android UPnP client app into the IoTivity Android example code.
 
 Edit the settings.gradle file to include the upnpclient.
 
-    $ sed -i "s/$/, ':upnpclient'/" android/examples/settings.gradle
+    $ sed -i "/^include / s/$/, ':upnpclient'/" android/examples/settings.gradle
 
 Build for Android.
 
