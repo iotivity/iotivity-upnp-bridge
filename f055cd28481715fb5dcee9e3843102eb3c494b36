@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_68e23205",
+        "filename": "examples/iotApp/MenuWANCommonInterface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-07-26T21:07:31Z",
+      "side": 1,
+      "message": "changed from inetenabled to \u003ctrue/false\u003e",
+      "parentUuid": "9a91bd0f_a83cba94",
+      "range": {
+        "startLine": 64,
+        "startChar": 33,
+        "endLine": 64,
+        "endChar": 45
+      },
+      "revId": "f055cd28481715fb5dcee9e3843102eb3c494b36",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_48416e0a",
         "filename": "examples/iotApp/MenuWANCommonInterface.cpp",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_a8d83a54",
+        "filename": "examples/iotApp/MenuWANCommonInterface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-07-26T21:07:31Z",
+      "side": 1,
+      "message": "if an invalid value is given this will default to true.  Which is the typical setting for the internet enable flag.",
+      "parentUuid": "9a91bd0f_48416e0a",
+      "range": {
+        "startLine": 124,
+        "startChar": 25,
+        "endLine": 124,
+        "endChar": 38
+      },
+      "revId": "f055cd28481715fb5dcee9e3843102eb3c494b36",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_084b662c",
         "filename": "examples/iotApp/WANCommonInterfaceConfig.cpp",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2016-07-26T19:41:02Z",
       "side": 1,
       "message": "Need to confirm value is set",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 22
+      },
+      "revId": "f055cd28481715fb5dcee9e3843102eb3c494b36",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_08e7e613",
+        "filename": "examples/iotApp/WANCommonInterfaceConfig.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-07-26T21:07:31Z",
+      "side": 1,
+      "message": "Since we don\u0027t return status its not easy to check the value.  So far I have been returning once the call is complete and you will have to call getefi to verify it was changed.\n\nsee jira IOT-971 point 2. why nothing is done here.",
+      "parentUuid": "9a91bd0f_084b662c",
       "range": {
         "startLine": 113,
         "startChar": 0,
