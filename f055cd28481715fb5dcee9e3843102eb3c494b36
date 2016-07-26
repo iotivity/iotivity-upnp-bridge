@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_a83cba94",
+        "filename": "examples/iotApp/MenuWANCommonInterface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-07-26T19:41:02Z",
+      "side": 1,
+      "message": "What is the validate value to use here?\n\nWAN Common Interface Config\u003e getefi 0\n/oic/upnp/wan/ifconfig/WANCommonIFC1/uuid:C6F7C8A2-47E0-A16F-DD73-7A3DCE8227CB\nAccess to and from the internet is enabled.\nWAN Common Interface Config\u003e setefi 0 0\n/oic/upnp/wan/ifconfig/WANCommonIFC1/uuid:C6F7C8A2-47E0-A16F-DD73-7A3DCE8227CB\nSet Enable for Internet flag\nWAN Common Interface Config\u003e setefi 0 1\n/oic/upnp/wan/ifconfig/WANCommonIFC1/uuid:C6F7C8A2-47E0-A16F-DD73-7A3DCE8227CB\nSet Enable for Internet flag\nWAN Common Interface Config\u003e getefi 0\n/oic/upnp/wan/ifconfig/WANCommonIFC1/uuid:C6F7C8A2-47E0-A16F-DD73-7A3DCE8227CB\nAccess to and from the internet is enabled.\nWAN Common Interface Config\u003e setefi 0 enable\n/oic/upnp/wan/ifconfig/WANCommonIFC1/uuid:C6F7C8A2-47E0-A16F-DD73-7A3DCE8227CB\nSet Enable for Internet flag\nWAN Common Interface Config\u003e setefi 0 disable\n/oic/upnp/wan/ifconfig/WANCommonIFC1/uuid:C6F7C8A2-47E0-A16F-DD73-7A3DCE8227CB\nSet Enable for Internet flag\nWAN Common Interface Config\u003e getefi 0\n/oic/upnp/wan/ifconfig/WANCommonIFC1/uuid:C6F7C8A2-47E0-A16F-DD73-7A3DCE8227CB\nAccess to and from the internet is enabled.\nWAN Common Interface Config\u003e",
+      "range": {
+        "startLine": 64,
+        "startChar": 33,
+        "endLine": 64,
+        "endChar": 45
+      },
+      "revId": "f055cd28481715fb5dcee9e3843102eb3c494b36",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_48416e0a",
+        "filename": "examples/iotApp/MenuWANCommonInterface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-07-26T19:41:02Z",
+      "side": 1,
+      "message": "Need to test for valid value",
+      "range": {
+        "startLine": 124,
+        "startChar": 25,
+        "endLine": 124,
+        "endChar": 38
+      },
+      "revId": "f055cd28481715fb5dcee9e3843102eb3c494b36",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_084b662c",
+        "filename": "examples/iotApp/WANCommonInterfaceConfig.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2016-07-26T19:41:02Z",
+      "side": 1,
+      "message": "Need to confirm value is set",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 22
+      },
+      "revId": "f055cd28481715fb5dcee9e3843102eb3c494b36",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
