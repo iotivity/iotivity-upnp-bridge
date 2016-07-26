@@ -50,6 +50,14 @@ if env.get('VERBOSE') == False:
     env['RANLIBCOMSTR'] = "Indexing Archive $TARGET"
 
 env['CPPFLAGS'] = ['-std=c++11', '-fvisibility=hidden', '-Wall', '-fPIC']
+
+# If the gcc version is 4.9 or newer add the diagnostics-color flag
+# the adding diagnostics colors helps discover error quicker.
+gccVer = env['CCVERSION'].split('.')
+if int(gccVer[0]) > 4:
+    env['CPPFLAGS'].append('-fdiagnostics-color');
+elif int(gccVer[0]) == 4 and int(gccVer[1]) >= 9:
+    env['CPPFLAGS'].append('-fdiagnostics-color');
 if env['BUILD_TYPE'] == 'debug':
     env.AppendUnique(CPPFLAGS = ['-g'])
 else:
