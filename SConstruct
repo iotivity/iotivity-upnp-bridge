@@ -49,7 +49,7 @@ if env.get('VERBOSE') == False:
     env['ARCOMSTR'] = "Archiving $TARGET"
     env['RANLIBCOMSTR'] = "Indexing Archive $TARGET"
 
-env['CPPFLAGS'] = ['-std=c++11', '-fvisibility=hidden', '-Wall', '-fPIC']
+env['CPPFLAGS'] = ['-std=c++11', '-fvisibility=hidden', '-Wall', '-fPIC', '-fdiagnostics-color']
 if env['BUILD_TYPE'] == 'debug':
     env.AppendUnique(CPPFLAGS = ['-g'])
 else:
