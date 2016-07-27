@@ -22,6 +22,30 @@
       "revId": "41ac9304e908cdb3b03b957322beff086232bdda",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_2b6f4494",
+        "filename": "examples/iotApp/MenuWANCommonInterface.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-07-27T16:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_0895a63f",
+      "range": {
+        "startLine": 124,
+        "startChar": 25,
+        "endLine": 124,
+        "endChar": 38
+      },
+      "revId": "41ac9304e908cdb3b03b957322beff086232bdda",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
