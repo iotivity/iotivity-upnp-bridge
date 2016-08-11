@@ -24,6 +24,7 @@ vars.Add(PathVariable('IOTIVITY_BASE', 'Location of the iotivity project', None,
 vars.Add(EnumVariable('IOTIVITY_LIB_TYPE', 'Specify release or debug build', 'release', ['debug','release']))
 vars.Add(EnumVariable('TARGET_ARCH', 'Target architecture', 'x86_64', ['x86_64']))
 vars.Add(BoolVariable('VERBOSE', 'Show compilation', False))
+vars.Add(BoolVariable('COLOR', 'Enable color in build diagnostics, if supported by compiler', False))
 #vars.Add(EnumVariable('TEST', 'Run unit tests', '0', allowed_values=('0', '1')))
 
 env = Environment(variables = vars);
@@ -51,13 +52,15 @@ if env.get('VERBOSE') == False:
 
 env['CPPFLAGS'] = ['-std=c++11', '-fvisibility=hidden', '-Wall', '-fPIC']
 
-# If the gcc version is 4.9 or newer add the diagnostics-color flag
-# the adding diagnostics colors helps discover error quicker.
-gccVer = env['CCVERSION'].split('.')
-if int(gccVer[0]) > 4:
-    env['CPPFLAGS'].append('-fdiagnostics-color');
-elif int(gccVer[0]) == 4 and int(gccVer[1]) >= 9:
-    env['CPPFLAGS'].append('-fdiagnostics-color');
+if env.get('COLOR') == True:
+    # If the gcc version is 4.9 or newer add the diagnostics-color flag
+    # the adding diagnostics colors helps discover error quicker.
+    gccVer = env['CCVERSION'].split('.')
+    if int(gccVer[0]) > 4:
+        env['CPPFLAGS'].append('-fdiagnostics-color');
+    elif int(gccVer[0]) == 4 and int(gccVer[1]) >= 9:
+        env['CPPFLAGS'].append('-fdiagnostics-color');
+
 if env['BUILD_TYPE'] == 'debug':
     env.AppendUnique(CPPFLAGS = ['-g'])
 else:
