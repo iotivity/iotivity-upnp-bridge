@@ -94,6 +94,30 @@
       "revId": "b52a1e5dd5fbd7992fc2775d93903ac91a26bc45",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_6f2c5dac",
+        "filename": "src/UpnpDevice.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2016-08-23T18:32:12Z",
+      "side": 1,
+      "message": "Sounds good.",
+      "parentUuid": "9a91bd0f_4f587956",
+      "range": {
+        "startLine": 122,
+        "startChar": 81,
+        "endLine": 122,
+        "endChar": 86
+      },
+      "revId": "b52a1e5dd5fbd7992fc2775d93903ac91a26bc45",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
