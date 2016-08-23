@@ -92,8 +92,12 @@ static const std::string UPNP_OIC_QUERY_PARAM_FILTER = "f";
 static const std::string UPNP_OIC_QUERY_PARAM_START_INDEX = "si";
 static const std::string UPNP_OIC_QUERY_PARAM_REQUESTED_COUNT = "rc";
 static const std::string UPNP_OIC_QUERY_PARAM_SORT_CRITERIA = "soc";
-static const std::string UPNP_OIC_QUERY_PARAM_CONTAINER_ID = "cid";
-static const std::string UPNP_OIC_QUERY_PARAM_SEARCH_CRITERIA = "sec";
+static const std::string UPNP_OIC_SEARCH_QUERY_PARAM_CONTAINER_ID = "cid";
+static const std::string UPNP_OIC_SEARCH_QUERY_PARAM_SEARCH_CRITERIA = "sec";
+static const std::string UPNP_OIC_SEARCH_QUERY_PARAM_FILTER = "sf";
+static const std::string UPNP_OIC_SEARCH_QUERY_PARAM_START_INDEX = "ssi";
+static const std::string UPNP_OIC_SEARCH_QUERY_PARAM_REQUESTED_COUNT = "src";
+static const std::string UPNP_OIC_SEARCH_QUERY_PARAM_SORT_CRITERIA = "ssc";
 // Device Protection service query params
 static const std::string UPNP_OIC_QUERY_PARAM_MESSAGE = "m";
 static const std::string UPNP_OIC_QUERY_PARAM_PROTOCOL = "p";

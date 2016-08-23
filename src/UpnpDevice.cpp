@@ -119,7 +119,7 @@ void UpnpDevice::initBasicAttributes(GUPnPDeviceInfo *deviceInfo)
         }
     }
 
-    char *iconUrl = gupnp_device_info_get_icon_url(deviceInfo, NULL, -1, -1, -1, true, NULL, NULL, NULL, NULL);
+    char *iconUrl = gupnp_device_info_get_icon_url(deviceInfo, NULL, -1, -1, -1, false, NULL, NULL, NULL, NULL);
     if (iconUrl != NULL)
     {
         BundleResource::setAttribute("icon_url", string(iconUrl));

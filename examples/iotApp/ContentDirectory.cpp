@@ -290,12 +290,12 @@ ContentDirectory::SearchResult ContentDirectory::search(string containerId, stri
                       placeholders::_2, placeholders::_3);
     QueryParamsMap params =
     {
-        {UPNP_OIC_QUERY_PARAM_CONTAINER_ID, containerId},
-        {UPNP_OIC_QUERY_PARAM_SEARCH_CRITERIA, searchCriteria},
-        {UPNP_OIC_QUERY_PARAM_FILTER, filter},
-        {UPNP_OIC_QUERY_PARAM_START_INDEX, to_string(startingIndex)},
-        {UPNP_OIC_QUERY_PARAM_REQUESTED_COUNT, to_string(requestedCount)},
-        {UPNP_OIC_QUERY_PARAM_SORT_CRITERIA, sortCriteria}
+        {UPNP_OIC_SEARCH_QUERY_PARAM_CONTAINER_ID, containerId},
+        {UPNP_OIC_SEARCH_QUERY_PARAM_SEARCH_CRITERIA, searchCriteria},
+        {UPNP_OIC_SEARCH_QUERY_PARAM_FILTER, filter},
+        {UPNP_OIC_SEARCH_QUERY_PARAM_START_INDEX, to_string(startingIndex)},
+        {UPNP_OIC_SEARCH_QUERY_PARAM_REQUESTED_COUNT, to_string(requestedCount)},
+        {UPNP_OIC_SEARCH_QUERY_PARAM_SORT_CRITERIA, sortCriteria}
     };
 
     m_resource->get(params, m_searchCB);

@@ -307,31 +307,31 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< stri
 
     string containerId = "0";
     string searchCriteria = "*";
-    string filter = "*";
+    string filter = "";
     int startingIndex = 0;
-    int requestedCount = 20; // limited by default
+    int requestedCount = 1;
     string sortCriteria = "";
 
     if (! queryParams.empty()) {
-        auto it = queryParams.find(UPNP_OIC_QUERY_PARAM_CONTAINER_ID); //ContainerID
+        auto it = queryParams.find(UPNP_OIC_SEARCH_QUERY_PARAM_CONTAINER_ID); //ContainerID
         if (it != queryParams.end()) {
             containerId = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find(UPNP_OIC_QUERY_PARAM_SEARCH_CRITERIA); //Search Criteria
+        it = queryParams.find(UPNP_OIC_SEARCH_QUERY_PARAM_SEARCH_CRITERIA); //Search Criteria
         if (it != queryParams.end()) {
             searchCriteria = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find(UPNP_OIC_QUERY_PARAM_FILTER); //filter
+        it = queryParams.find(UPNP_OIC_SEARCH_QUERY_PARAM_FILTER); //Filter
         if (it != queryParams.end()) {
             filter = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
         }
 
-        it = queryParams.find(UPNP_OIC_QUERY_PARAM_START_INDEX); //Start Index
+        it = queryParams.find(UPNP_OIC_SEARCH_QUERY_PARAM_START_INDEX); //Start Index
         if (it != queryParams.end()) {
             try {
                 startingIndex = std::stoi(it->second);
@@ -342,7 +342,7 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< stri
             }
         }
 
-        it = queryParams.find(UPNP_OIC_QUERY_PARAM_REQUESTED_COUNT); // Requested Count
+        it = queryParams.find(UPNP_OIC_SEARCH_QUERY_PARAM_REQUESTED_COUNT); //Requested Count
         if (it != queryParams.end()) {
             try {
                 requestedCount = std::stoi(it->second);
@@ -353,7 +353,7 @@ bool UpnpContentDirectory::getSearchResult(UpnpRequest *request, const map< stri
             }
         }
 
-        it = queryParams.find(UPNP_OIC_QUERY_PARAM_SORT_CRITERIA); //Sort Criteria
+        it = queryParams.find(UPNP_OIC_SEARCH_QUERY_PARAM_SORT_CRITERIA); //Sort Criteria
         if (it != queryParams.end()) {
             sortCriteria = it->second;
             DEBUG_PRINT("search queryParam " << it->first << "=" << it->second);
