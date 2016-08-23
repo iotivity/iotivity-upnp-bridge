@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_caa55705",
+        "filename": "android/examples/upnpavclient/src/main/AndroidManifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2016-08-23T22:33:05Z",
+      "side": 1,
+      "message": "You are absolutly correct.  Too much late night copy \u0026 paste.",
+      "parentUuid": "9a91bd0f_0a9c9fbf",
+      "range": {
+        "startLine": 1,
+        "startChar": 38,
+        "endLine": 1,
+        "endChar": 42
+      },
+      "revId": "e7717c2050d134d5fd956253ca17de2fea3e4ff6",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_ea0e1b34",
         "filename": "android/examples/upnpavclient/src/main/assets/oic_svr_db_client.json",
         "patchSetId": 1
