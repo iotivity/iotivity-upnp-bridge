@@ -522,7 +522,11 @@ public class UpnpAvClientActivity extends Activity implements
                 }
             }
         });
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         final Button discoverButton = (Button) findViewById(R.id.discover_button);
         discoverButton.setOnClickListener(new View.OnClickListener() {
             @Override

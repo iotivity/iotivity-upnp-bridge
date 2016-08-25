@@ -63,6 +63,7 @@ public class UpnpAvClientBrowseActivity extends Activity implements OcResource.O
 
     static public final String EXTRA_CONTENT_DIRECTORY_OBJECT = "extra.content.directory.object";
     static public final String EXTRA_OBJECT_ID = "extra.object.id";
+    static public final String EXTRA_OBJECT_ID_STACK = "extra.object.id.stack";
 
     static public final String UPNP_OIC_QUERY_PARAM_OBJECT_ID = "oid";
     static public final String UPNP_OIC_QUERY_PARAM_BROWSE_FLAG = "bf";
@@ -88,6 +89,16 @@ public class UpnpAvClientBrowseActivity extends Activity implements OcResource.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mContentDirectory = savedInstanceState.getParcelable(EXTRA_CONTENT_DIRECTORY_OBJECT);
+            Log.d(TAG, "onCreate RestoreInstanceState, mContentDirectory="+mContentDirectory);
+            List<String> objectIdStack = savedInstanceState.getStringArrayList(EXTRA_OBJECT_ID_STACK);
+            if ((objectIdStack != null) && (! objectIdStack.isEmpty())) {
+                mObjectIdStack.clear();
+                mObjectIdStack.addAll(objectIdStack);
+                Log.d(TAG, "onCreate RestoreInstanceState, mObjectIdStack="+mObjectIdStack);
+            }
+        }
         setContentView(R.layout.activity_upnp_av_client_browse);
 
         mMediaObjectList = new ArrayList<MediaObject>() {
@@ -173,7 +184,9 @@ public class UpnpAvClientBrowseActivity extends Activity implements OcResource.O
         });
 
         Bundle extras = getIntent().getExtras();
-        mContentDirectory = extras.getParcelable(EXTRA_CONTENT_DIRECTORY_OBJECT);
+        if (mContentDirectory == null) {
+            mContentDirectory = extras.getParcelable(EXTRA_CONTENT_DIRECTORY_OBJECT);
+        }
         final String objectId = extras.getString(EXTRA_OBJECT_ID);
 
         if (mContentDirectory != null) {
@@ -222,6 +235,29 @@ public class UpnpAvClientBrowseActivity extends Activity implements OcResource.O
         }
 
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(EXTRA_CONTENT_DIRECTORY_OBJECT, mContentDirectory);
+        Log.d(TAG, "onSaveInstanceState, mContentDirectory="+mContentDirectory);
+        ArrayList<String> objectIdList = new ArrayList<>(mObjectIdStack);
+        outState.putStringArrayList(EXTRA_OBJECT_ID_STACK, objectIdList);
+        Log.d(TAG, "onSaveInstanceState, mObjectIdStack="+mObjectIdStack);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mContentDirectory = savedInstanceState.getParcelable(EXTRA_CONTENT_DIRECTORY_OBJECT);
+        Log.d(TAG, "onRestoreInstanceState, mContentDirectory="+mContentDirectory);
+        List<String> objectIdStack = savedInstanceState.getStringArrayList(EXTRA_OBJECT_ID_STACK);
+        if ((objectIdStack != null) && (! objectIdStack.isEmpty())) {
+            mObjectIdStack.clear();
+            mObjectIdStack.addAll(objectIdStack);
+            Log.d(TAG, "onRestoreInstanceState, mObjectIdStack="+mObjectIdStack);
+        }
     }
 
     private void getResourceRepresentation(OcResource ocResource, String objectId, boolean browseMetadata) {

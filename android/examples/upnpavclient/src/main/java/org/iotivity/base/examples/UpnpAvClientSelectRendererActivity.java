@@ -573,6 +573,10 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mMediaItem = savedInstanceState.getParcelable(EXTRA_MEDIA_ITEM_OBJECT);
+            Log.d(TAG, "onCreate RestoreInstanceState, mMediaItem="+mMediaItem);
+        }
         setContentView(R.layout.activity_upnp_av_client_select_renderer);
 
         mDeviceList = new ArrayList<Device>() {
@@ -698,10 +702,14 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
         });
 
         Bundle extras = getIntent().getExtras();
-        mMediaItem = extras.getParcelable(EXTRA_MEDIA_ITEM_OBJECT);
+        if (mMediaItem == null) {
+            mMediaItem = extras.getParcelable(EXTRA_MEDIA_ITEM_OBJECT);
+        }
+    }
 
-        final Collection<OcResource> iotivityResources = new ArrayList<>();
-        iotivityResources.addAll(mIotivityResourceLookup.values());
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         synchronized (mArrayAdapterSync) {
             mResourceLookup.clear();
@@ -750,6 +758,20 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
                 }).start();
             }
         }).start();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(EXTRA_MEDIA_ITEM_OBJECT, mMediaItem);
+        Log.d(TAG, "onSaveInstanceState, mMediaItem="+mMediaItem);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mMediaItem = savedInstanceState.getParcelable(EXTRA_MEDIA_ITEM_OBJECT);
+        Log.d(TAG, "onRestoreInstanceState, mMediaItem="+mMediaItem);
     }
 
     static public OcResource getOcResourceFromUri(String uri) {
