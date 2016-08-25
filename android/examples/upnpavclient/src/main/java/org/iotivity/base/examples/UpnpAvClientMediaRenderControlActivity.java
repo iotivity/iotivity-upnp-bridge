@@ -61,12 +61,26 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mAvTransport = savedInstanceState.getParcelable(EXTRA_AV_TRANSPORT_OBJECT);
+            Log.d(TAG, "onCreate RestoreInstanceState, mAvTransport="+mAvTransport);
+            mRenderingControl = savedInstanceState.getParcelable(EXTRA_RENDERING_CONTROL_OBJECT);
+            Log.d(TAG, "onCreate RestoreInstanceState, mRenderingControl="+mRenderingControl);
+            mMediaItem = savedInstanceState.getParcelable(UpnpAvClientSelectRendererActivity.EXTRA_MEDIA_ITEM_OBJECT);
+            Log.d(TAG, "onCreate RestoreInstanceState, mMediaItem="+mMediaItem);
+        }
         setContentView(R.layout.activity_upnp_av_client_media_render_control);
 
         Bundle extras = getIntent().getExtras();
-        mAvTransport = extras.getParcelable(EXTRA_AV_TRANSPORT_OBJECT);
-        mRenderingControl = extras.getParcelable(EXTRA_RENDERING_CONTROL_OBJECT);
-        mMediaItem = extras.getParcelable(UpnpAvClientSelectRendererActivity.EXTRA_MEDIA_ITEM_OBJECT);
+        if (mAvTransport == null) {
+            mAvTransport = extras.getParcelable(EXTRA_AV_TRANSPORT_OBJECT);
+        }
+        if (mRenderingControl == null) {
+            mRenderingControl = extras.getParcelable(EXTRA_RENDERING_CONTROL_OBJECT);
+        }
+        if (mMediaItem == null) {
+            mMediaItem = extras.getParcelable(UpnpAvClientSelectRendererActivity.EXTRA_MEDIA_ITEM_OBJECT);
+        }
 
         ((TextView) findViewById(R.id.name_text)).setText(mMediaItem.getDisplayName());
         ((TextView) findViewById(R.id.artist_text)).setText(mMediaItem.getArtist());
@@ -187,6 +201,28 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
                 });
             }
         }).start();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(EXTRA_AV_TRANSPORT_OBJECT, mAvTransport);
+        Log.d(TAG, "onSaveInstanceState, mAvTransport="+mAvTransport);
+        outState.putParcelable(EXTRA_RENDERING_CONTROL_OBJECT, mRenderingControl);
+        Log.d(TAG, "onSaveInstanceState, mRenderingControl="+mRenderingControl);
+        outState.putParcelable(UpnpAvClientSelectRendererActivity.EXTRA_MEDIA_ITEM_OBJECT, mMediaItem);
+        Log.d(TAG, "onSaveInstanceState, mMediaItem="+mMediaItem);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mAvTransport = savedInstanceState.getParcelable(EXTRA_AV_TRANSPORT_OBJECT);
+        Log.d(TAG, "onRestoreInstanceState, mAvTransport="+mAvTransport);
+        mRenderingControl = savedInstanceState.getParcelable(EXTRA_RENDERING_CONTROL_OBJECT);
+        Log.d(TAG, "onRestoreInstanceState, mRenderingControl="+mRenderingControl);
+        mMediaItem = savedInstanceState.getParcelable(UpnpAvClientSelectRendererActivity.EXTRA_MEDIA_ITEM_OBJECT);
+        Log.d(TAG, "onRestoreInstanceState, mMediaItem="+mMediaItem);
     }
 
     private void doActionAvTransportRepresentation(String action) {
