@@ -21,7 +21,7 @@
 Import('env')
 Import('iotivity_resource_inc_paths')
 
-oic_libs = ['oc', 'octbstack', 'oc_logger', 'rcs_container', 'rcs_client', 'rcs_server', 'rcs_common']
+oic_libs = ['oc', 'octbstack', 'oc_logger', 'connectivity_abstraction', 'rcs_container', 'rcs_client', 'rcs_server', 'rcs_common']
 
 env_bridge = env.Clone()
 env_bridge.AppendUnique(LIBS = oic_libs)
