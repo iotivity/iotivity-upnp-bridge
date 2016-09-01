@@ -1,7 +1,7 @@
 Import('env')
 Import('iotivity_resource_inc_paths')
 
-oic_libs = ['oc', 'octbstack', 'oc_logger', 'rcs_container', 'rcs_client', 'rcs_server', 'rcs_common']
+oic_libs = ['oc', 'octbstack', 'oc_logger', 'connectivity_abstraction', 'rcs_container', 'rcs_client', 'rcs_server', 'rcs_common']
 
 env_samples = env.Clone()
 env_samples['CPPPATH'] = iotivity_resource_inc_paths

@@ -49,7 +49,7 @@ test_env.AppendUnique(
 
 
 test_env.AppendUnique(CXXFLAGS = ['-std=c++11', '-Wall'])
-oic_libs = ['oc', 'octbstack', 'oc_logger', 'rcs_container', 'rcs_client', 'rcs_server', 'rcs_common']
+oic_libs = ['oc', 'octbstack', 'oc_logger', 'connectivity_abstraction', 'rcs_container', 'rcs_client', 'rcs_server', 'rcs_common']
 
 test_env.PrependUnique(LIBS = [
     gtest,
