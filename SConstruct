@@ -75,7 +75,7 @@ iotivity_resource_inc_paths = ['${IOTIVITY_BASE}/resource/oc_logger/include',
                               '${IOTIVITY_BASE}/resource/csdk/stack/include',
                               '${IOTIVITY_BASE}/resource/c_common',
                               '${IOTIVITY_BASE}/resource/include',
-                              '${IOTIVITY_BASE}/resource/c_common']
+                              '${IOTIVITY_BASE}/resource/c_common/ocrandom/include']
 
 env['CPPPATH'] = ['${IOTIVITY_BASE}/extlibs']
 env.AppendUnique(CPPPATH = iotivity_service_inc_paths)
