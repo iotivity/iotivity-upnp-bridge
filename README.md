@@ -95,12 +95,12 @@ Follow IoTivity instructions for [Android development](https://www.iotivity.org/
 
 Copy the Android UPnP client apps into the IoTivity Android example code.
 
-    $ cp -rv <iotivity-upnp-bridge>/android/examples/upnpclient/ android/examples
-    $ cp -rv <iotivity-upnp-bridge>/android/examples/upnpavclient/ android/examples
+    $ cp -rv <iotivity-upnp-bridge>/android/examples/upnpclient/ java/examples-android
+    $ cp -rv <iotivity-upnp-bridge>/android/examples/upnpavclient/ java/examples-android
 
 Edit the settings.gradle file to include the upnpclients.
 
-    $ sed -i "/^include / s/$/, ':upnpclient', ':upnpavclient'/" android/examples/settings.gradle
+    $ sed -i "/^include / s/$/, ':upnpclient', ':upnpavclient'/" java/examples-android/settings.gradle
 
 Build for Android.
 
@@ -110,8 +110,8 @@ For example, Nexus 7 Table which has arm chipset.
 
     $ scons TARGET_OS=android TARGET_ARCH=armeabi TARGET_TRANSPORT=IP
 
-The UPnP Client Demo Android App, 'upnpclient-debug.apk' is in the 'android/examples/upnpclient/build/outputs/apk' directory.
-The UPnP AV Client Demo Android App, 'upnpavclient-debug.apk' is in the 'android/examples/upnpavclient/build/outputs/apk' directory.
+The UPnP Client Demo Android App, 'upnpclient-debug.apk' is in the 'java/examples-android/upnpclient/build/outputs/apk' directory.
+The UPnP AV Client Demo Android App, 'upnpavclient-debug.apk' is in the 'java/examples-android/upnpavclient/build/outputs/apk' directory.
 
 ## Installing UPnP Client Demo Android App
 Follow IoTivity instructions for installing Andriod example apps.
