@@ -1082,18 +1082,20 @@ bool UpnpAVTransport::next(UpnpRequest *request, RCSResourceAttributes::Value *v
 
     int instanceId = 0;
 
-    const auto &attrs = value->get< RCSResourceAttributes >();
+    if (RCSResourceAttributes::TypeId::ATTRIBUTES == value->getType().getId()) {
+        const auto &attrs = value->get< RCSResourceAttributes >();
 
-    for (const auto &kvPair : attrs)
-    {
-        DEBUG_PRINT("next kvPair key=" << kvPair.key());
-        DEBUG_PRINT("next kvPair value=" << kvPair.value().toString());
-
-        if (kvPair.key() == "instanceId")
+        for (const auto &kvPair : attrs)
         {
-            instanceId = (kvPair.value()).get< int >();
-            instanceId = std::max(0, instanceId);
-            DEBUG_PRINT("next instanceId=" << instanceId);
+            DEBUG_PRINT("next kvPair key=" << kvPair.key());
+            DEBUG_PRINT("next kvPair value=" << kvPair.value().toString());
+
+            if (kvPair.key() == "instanceId")
+            {
+                instanceId = (kvPair.value()).get< int >();
+                instanceId = std::max(0, instanceId);
+                DEBUG_PRINT("next instanceId=" << instanceId);
+            }
         }
     }
 
@@ -1143,24 +1145,26 @@ bool UpnpAVTransport::play(UpnpRequest *request, RCSResourceAttributes::Value *v
     int instanceId = 0;
     string speed = "1";
 
-    const auto &attrs = value->get< RCSResourceAttributes >();
+    if (RCSResourceAttributes::TypeId::ATTRIBUTES == value->getType().getId()) {
+        const auto &attrs = value->get< RCSResourceAttributes >();
 
-    for (const auto &kvPair : attrs)
-    {
-        DEBUG_PRINT("play kvPair key=" << kvPair.key());
-        DEBUG_PRINT("play kvPair value=" << kvPair.value().toString());
-
-        if (kvPair.key() == "instanceId")
+        for (const auto &kvPair : attrs)
         {
-            instanceId = (kvPair.value()).get< int >();
-            instanceId = std::max(0, instanceId);
-            DEBUG_PRINT("play instanceId=" << instanceId);
-        }
+            DEBUG_PRINT("play kvPair key=" << kvPair.key());
+            DEBUG_PRINT("play kvPair value=" << kvPair.value().toString());
 
-        if (kvPair.key() == "speed")
-        {
-            speed = (kvPair.value()).get< string >();
-            DEBUG_PRINT("play speed=" << speed);
+            if (kvPair.key() == "instanceId")
+            {
+                instanceId = (kvPair.value()).get< int >();
+                instanceId = std::max(0, instanceId);
+                DEBUG_PRINT("play instanceId=" << instanceId);
+            }
+
+            if (kvPair.key() == "speed")
+            {
+                speed = (kvPair.value()).get< string >();
+                DEBUG_PRINT("play speed=" << speed);
+            }
         }
     }
 
@@ -1212,18 +1216,20 @@ bool UpnpAVTransport::pause(UpnpRequest *request, RCSResourceAttributes::Value *
 
     int instanceId = 0;
 
-    const auto &attrs = value->get< RCSResourceAttributes >();
+    if (RCSResourceAttributes::TypeId::ATTRIBUTES == value->getType().getId()) {
+        const auto &attrs = value->get< RCSResourceAttributes >();
 
-    for (const auto &kvPair : attrs)
-    {
-        DEBUG_PRINT("pause kvPair key=" << kvPair.key());
-        DEBUG_PRINT("pause kvPair value=" << kvPair.value().toString());
-
-        if (kvPair.key() == "instanceId")
+        for (const auto &kvPair : attrs)
         {
-            instanceId = (kvPair.value()).get< int >();
-            instanceId = std::max(0, instanceId);
-            DEBUG_PRINT("pause instanceId=" << instanceId);
+            DEBUG_PRINT("pause kvPair key=" << kvPair.key());
+            DEBUG_PRINT("pause kvPair value=" << kvPair.value().toString());
+
+            if (kvPair.key() == "instanceId")
+            {
+                instanceId = (kvPair.value()).get< int >();
+                instanceId = std::max(0, instanceId);
+                DEBUG_PRINT("pause instanceId=" << instanceId);
+            }
         }
     }
 
@@ -1272,18 +1278,20 @@ bool UpnpAVTransport::previous(UpnpRequest *request, RCSResourceAttributes::Valu
 
     int instanceId = 0;
 
-    const auto &attrs = value->get< RCSResourceAttributes >();
+    if (RCSResourceAttributes::TypeId::ATTRIBUTES == value->getType().getId()) {
+        const auto &attrs = value->get< RCSResourceAttributes >();
 
-    for (const auto &kvPair : attrs)
-    {
-        DEBUG_PRINT("previous kvPair key=" << kvPair.key());
-        DEBUG_PRINT("previous kvPair value=" << kvPair.value().toString());
-
-        if (kvPair.key() == "instanceId")
+        for (const auto &kvPair : attrs)
         {
-            instanceId = (kvPair.value()).get< int >();
-            instanceId = std::max(0, instanceId);
-            DEBUG_PRINT("previous instanceId=" << instanceId);
+            DEBUG_PRINT("previous kvPair key=" << kvPair.key());
+            DEBUG_PRINT("previous kvPair value=" << kvPair.value().toString());
+
+            if (kvPair.key() == "instanceId")
+            {
+                instanceId = (kvPair.value()).get< int >();
+                instanceId = std::max(0, instanceId);
+                DEBUG_PRINT("previous instanceId=" << instanceId);
+            }
         }
     }
 
@@ -1412,18 +1420,20 @@ bool UpnpAVTransport::stop(UpnpRequest *request, RCSResourceAttributes::Value *v
 
     int instanceId = 0;
 
-    const auto &attrs = value->get< RCSResourceAttributes >();
+    if (RCSResourceAttributes::TypeId::ATTRIBUTES == value->getType().getId()) {
+        const auto &attrs = value->get< RCSResourceAttributes >();
 
-    for (const auto &kvPair : attrs)
-    {
-        DEBUG_PRINT("stop kvPair key=" << kvPair.key());
-        DEBUG_PRINT("stop kvPair value=" << kvPair.value().toString());
-
-        if (kvPair.key() == "instanceId")
+        for (const auto &kvPair : attrs)
         {
-            instanceId = (kvPair.value()).get< int >();
-            instanceId = std::max(0, instanceId);
-            DEBUG_PRINT("stop instanceId=" << instanceId);
+            DEBUG_PRINT("stop kvPair key=" << kvPair.key());
+            DEBUG_PRINT("stop kvPair value=" << kvPair.value().toString());
+
+            if (kvPair.key() == "instanceId")
+            {
+                instanceId = (kvPair.value()).get< int >();
+                instanceId = std::max(0, instanceId);
+                DEBUG_PRINT("stop instanceId=" << instanceId);
+            }
         }
     }
 
