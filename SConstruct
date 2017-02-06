@@ -73,6 +73,7 @@ iotivity_service_inc_paths = ['${IOTIVITY_BASE}/service/resource-container/inclu
                   '${IOTIVITY_BASE}/service/resource-encapsulation/include']
 iotivity_resource_inc_paths = ['${IOTIVITY_BASE}/resource/oc_logger/include',
                               '${IOTIVITY_BASE}/resource/csdk/stack/include',
+                              '${IOTIVITY_BASE}/resource/csdk/include',
                               '${IOTIVITY_BASE}/resource/c_common',
                               '${IOTIVITY_BASE}/resource/include',
                               '${IOTIVITY_BASE}/resource/c_common/ocrandom/include']
