@@ -121,3 +121,4 @@ env.SConscript('examples/SConscript', variant_dir = env['BUILD_DIR'] + '/obj/exa
 
 #build unit tests
 env.SConscript('unittests/SConscript', variant_dir = env['BUILD_DIR'] + '/obj/unittests', exports=['env', 'upnpbundle_lib'], duplicate=0)
+env.SConscript('plugins/SConscript', variant_dir = env['BUILD_DIR'] + '/obj/plugins', exports=['env'], duplicate=0)

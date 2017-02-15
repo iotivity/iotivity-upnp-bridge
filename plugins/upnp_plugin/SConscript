@@ -1,0 +1,107 @@
+#******************************************************************
+#
+# Copyright 2017 Intel Mobile Communications GmbH All Rights Reserved.
+#
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+##
+# upnp Plugin build script
+##
+
+import os
+import os.path
+
+Import('env')
+
+target_os = env.get('TARGET_OS')
+src_dir = '${IOTIVITY_BASE}'
+bridging_path = os.path.join(src_dir, 'bridging')
+
+upnp_env = env.Clone()
+
+print "Reading upnp Plugin script"
+
+######################################################################
+# Build flags
+######################################################################
+def maskFlags(flags):
+    flags = [flags.replace('-Wl,--no-undefined', '' ) for flags in flags]
+    return flags
+upnp_env.PrependUnique(CPPPATH = [ os.path.join(src_dir, 'resource', 'c_common', 'oic_malloc', 'include'),
+                              os.path.join(src_dir, 'resource', 'c_common', 'oic_string', 'include'),
+                              os.path.join(src_dir, 'resource', 'c_common'),
+                              os.path.join(src_dir, 'resource', 'oc_logger', 'include'),
+                              os.path.join(src_dir, 'resource', 'csdk', 'logger', 'include'),
+                              os.path.join(src_dir, 'resource', 'csdk', 'include'),
+                              os.path.join(src_dir, 'resource', 'csdk', 'stack', 'include'),
+                              os.path.join(src_dir, 'resource', 'include'),
+                              os.path.join(src_dir, 'extlibs', 'cjson'),
+                              os.path.join(src_dir, 'extlibs', 'tinycbor', 'src'),
+                              os.path.join(src_dir, 'extlibs', 'rapidjson', 'rapidjson', 'include', 'rapidjson')
+                              ])
+upnp_env.AppendUnique(CPPPATH = [ os.path.join(bridging_path, 'include'),
+                                 '#/include',
+                                 '#/src'])
+
+if target_os not in ['arduino', 'windows']:
+    upnp_env.AppendUnique(CPPDEFINES = ['WITH_POSIX'])
+
+if target_os in ['darwin','ios']:
+    upnp_env.AppendUnique(CPPDEFINES = ['_DARWIN_C_SOURCE'])
+
+if 'g++' in upnp_env.get('CXX'):
+    upnp_env.AppendUnique(CXXFLAGS = ['-std=c++0x', '-Wall', '-Wextra'
+                                      #, '-Werror'
+                                      ])
+
+
+#upnp_env.AppendUnique(RPATH = ['${IOTIVITY_BASE}/out/linux/${TARGET_ARCH}/${IOTIVITY_LIB_TYPE}'])
+upnp_env.AppendUnique(RPATH = [str(upnp_env.Dir('#/${BUILD_DIR}/plugins'))])
+upnp_env.AppendUnique(LIBPATH = ['${IOTIVITY_BASE}/out/linux/${TARGET_ARCH}/${IOTIVITY_LIB_TYPE}',
+                                 '#/${BUILD_DIR}/bin/',
+                                 '#/${BUILD_DIR}/libs/'])
+if upnp_env.get('LOGGING'):
+    upnp_env.AppendUnique(CPPDEFINES = ['TB_LOG'])
+
+upnp_env['LINKFLAGS'] = maskFlags(env['LINKFLAGS'])
+upnp_env.AppendUnique(LINKFLAGS = ['-Wl,--allow-shlib-undefined'])
+upnp_env.AppendUnique(LINKFLAGS = ['-Wl,--whole-archive',
+                                   '${IOTIVITY_BASE}/out/linux/${TARGET_ARCH}/${IOTIVITY_LIB_TYPE}/' +'libmpmcommon.a',
+                                   '-Wl,-no-whole-archive'])
+
+
+upnp_env.PrependUnique(LIBS = ['m',
+                               'octbstack',
+                               'ocsrm',
+                               'connectivity_abstraction',
+                               'coap',
+                               'curl'])
+
+#####################################################################
+# Source files and Target(s)
+######################################################################
+upnp_src = [
+         'upnp_plugin.cpp',
+         'UpnpConnector.cpp',
+         'UpnpException.cpp',
+         'UpnpManager.cpp',
+         'UpnpResource.cpp'
+         ]
+
+upnplib = upnp_env.SharedLibrary('upnpplugin', upnp_src)
+upnp_env.Install('#/${BUILD_DIR}/plugins', upnplib)
+
+
