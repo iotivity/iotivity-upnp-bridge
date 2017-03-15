@@ -110,6 +110,7 @@ extern "C" DLL_PUBLIC MPMResult pluginScan(MPMPluginCtx *, MPMPipeMessage *messa
     printf("***********************************************\n");
     OIC_LOG(INFO, TAG, "Scan called!");
     // Send back scan response to the client.
+    s_upnpConnector->onScan();
     echoResponse(message, "SCAN");
     return MPM_RESULT_OK;
 }

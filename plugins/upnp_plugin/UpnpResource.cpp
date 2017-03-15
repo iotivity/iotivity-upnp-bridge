@@ -30,17 +30,17 @@ static const string MODULE = "UpnpResource";
 
 UpnpResource::UpnpResource()
 {
-    m_ready = false;
-    m_registered = false;
-    m_udn = "";
-    m_links.clear();
+//    m_ready = false;
+//    m_registered = false;
+//    m_udn = "";
+//    m_links.clear();
 }
 
 UpnpResource::~UpnpResource()
 {
-    m_registered = false;
-    m_ready = false;
-    m_links.clear();
+//    m_registered = false;
+//    m_ready = false;
+//    m_links.clear();
 }
 
 void UpnpResource::setRegistered(bool registered)
@@ -55,22 +55,22 @@ bool UpnpResource::isRegistered()
 
 void UpnpResource::addLink(UpnpResource::Ptr pResource)
 {
-    RCSResourceAttributes singleLink ;
-
-    singleLink["href"] = pResource->m_uri;
-    singleLink["rel"] = "contains";
-    singleLink["rt"] = pResource->getResourceType();
-
-    m_links.push_back(singleLink);
+//    RCSResourceAttributes singleLink ;
+//
+//    singleLink["href"] = pResource->m_uri;
+//    singleLink["rel"] = "contains";
+//    singleLink["rt"] = pResource->getResourceType();
+//
+//    m_links.push_back(singleLink);
 }
 
 void UpnpResource::setLinkAttribute()
 {
-    if (!m_links.empty())
-    {
-        DEBUG_PRINT("Setting links");
-        //BundleResource::setAttribute("links", m_links);
-    }
+//    if (!m_links.empty())
+//    {
+//        DEBUG_PRINT("Setting links");
+//        //BundleResource::setAttribute("links", m_links);
+//    }
 }
 
 std::string UpnpResource::getResourceType()

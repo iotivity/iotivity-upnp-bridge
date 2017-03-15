@@ -265,90 +265,90 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
                                            GUPnPDeviceProxy *proxy,
                                            gpointer userData)
 {
-    GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(proxy);
-    UpnpResource::Ptr pUpnpResource;
-    const string udn = gupnp_device_info_get_udn(deviceInfo);
-    bool isRoot = *(static_cast <bool *> (userData));
-
-    DEBUG_PRINT("Device type: " << gupnp_device_info_get_device_type(deviceInfo));
-#ifndef NDEBUG
-    char *devModel = gupnp_device_info_get_model_name(deviceInfo);
-    if (devModel != NULL)
-    {
-        DEBUG_PRINT("\tDevice model: " << devModel);
-        g_free(devModel);
-    }
-
-    char *devName = gupnp_device_info_get_friendly_name(deviceInfo);
-    if (devName != NULL)
-    {
-        DEBUG_PRINT("\tFriendly name: " << devName);
-        g_free(devName);
-    }
-#endif
-    DEBUG_PRINT("\tUdn: " << udn);
-
-    if (isRoot)
-    {
-        // Root device
-        pUpnpResource = s_manager->processDevice(proxy, deviceInfo, true, &s_requestState);
-    }
-    else
-    {
-        pUpnpResource = s_manager->processDevice(proxy, deviceInfo, false, &s_requestState);
-    }
-
-    if (pUpnpResource != nullptr && !pUpnpResource->isRegistered())
-    {
-        DEBUG_PRINT("Register device resource: " << pUpnpResource->m_uri);
-        if (s_discoveryCallback(pUpnpResource) == 0)
-        {
-            pUpnpResource->setRegistered(true);
-        }
-        else
-        {
-            pUpnpResource->setRegistered(false);
-            unregisterDeviceResource(udn);
-            return;
-        }
-
-        // Traverse the service list and register all the services where isReady() returns true.
-        // This is done in order to catch all the services that have been seen
-        // prior to discovering the hosting device.
-        GList *childService = gupnp_device_info_list_services (deviceInfo);
-
-        while (childService)
-        {
-            GUPnPServiceInfo *serviceInfo = GUPNP_SERVICE_INFO (childService->data);
-            std::shared_ptr<UpnpResource> pUpnpResourceService = s_manager->findResource(serviceInfo);
-            if (pUpnpResourceService == nullptr)
-            {
-                DEBUG_PRINT("Registering device: Service link is empty!");
-                // This could happen if support for the service is not implemented
-            }
-            else
-            {
-                DEBUG_PRINT(pUpnpResourceService->m_uri << "ready " << pUpnpResourceService->isReady() <<
-                            " and registered " << pUpnpResourceService->isRegistered());
-                if (pUpnpResourceService->isReady() && !pUpnpResourceService->isRegistered())
-                {
-                    DEBUG_PRINT("Register resource for previously discovered child service: " <<
-                                pUpnpResourceService->m_uri);
-                    s_discoveryCallback(pUpnpResourceService);
-                    pUpnpResourceService->setRegistered(true);
-
-                    // Subscribe to notifications
-                    // Important!!! UpnpService object associated with this info/proxy
-                    // must stay valid until we unsubscribe from notificatons. This
-                    // means we have to keep a reference to the object inside the
-                    // UpnpManager as long as we are subscribed to notifications.
-                    gupnp_service_proxy_set_subscribed(GUPNP_SERVICE_PROXY(serviceInfo), true);
-                }
-            }
-            g_object_unref (childService->data);
-            childService = g_list_delete_link (childService, childService);
-        }
-    }
+//    GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(proxy);
+//    UpnpResource::Ptr pUpnpResource;
+//    const string udn = gupnp_device_info_get_udn(deviceInfo);
+//    bool isRoot = *(static_cast <bool *> (userData));
+//
+//    DEBUG_PRINT("Device type: " << gupnp_device_info_get_device_type(deviceInfo));
+//#ifndef NDEBUG
+//    char *devModel = gupnp_device_info_get_model_name(deviceInfo);
+//    if (devModel != NULL)
+//    {
+//        DEBUG_PRINT("\tDevice model: " << devModel);
+//        g_free(devModel);
+//    }
+//
+//    char *devName = gupnp_device_info_get_friendly_name(deviceInfo);
+//    if (devName != NULL)
+//    {
+//        DEBUG_PRINT("\tFriendly name: " << devName);
+//        g_free(devName);
+//    }
+//#endif
+//    DEBUG_PRINT("\tUdn: " << udn);
+//
+//    if (isRoot)
+//    {
+//        // Root device
+//        pUpnpResource = s_manager->processDevice(proxy, deviceInfo, true, &s_requestState);
+//    }
+//    else
+//    {
+//        pUpnpResource = s_manager->processDevice(proxy, deviceInfo, false, &s_requestState);
+//    }
+//
+//    if (pUpnpResource != nullptr && !pUpnpResource->isRegistered())
+//    {
+//        DEBUG_PRINT("Register device resource: " << pUpnpResource->m_uri);
+//        if (s_discoveryCallback(pUpnpResource) == 0)
+//        {
+//            pUpnpResource->setRegistered(true);
+//        }
+//        else
+//        {
+//            pUpnpResource->setRegistered(false);
+//            unregisterDeviceResource(udn);
+//            return;
+//        }
+//
+//        // Traverse the service list and register all the services where isReady() returns true.
+//        // This is done in order to catch all the services that have been seen
+//        // prior to discovering the hosting device.
+//        GList *childService = gupnp_device_info_list_services (deviceInfo);
+//
+//        while (childService)
+//        {
+//            GUPnPServiceInfo *serviceInfo = GUPNP_SERVICE_INFO (childService->data);
+//            std::shared_ptr<UpnpResource> pUpnpResourceService = s_manager->findResource(serviceInfo);
+//            if (pUpnpResourceService == nullptr)
+//            {
+//                DEBUG_PRINT("Registering device: Service link is empty!");
+//                // This could happen if support for the service is not implemented
+//            }
+//            else
+//            {
+//                DEBUG_PRINT(pUpnpResourceService->m_uri << "ready " << pUpnpResourceService->isReady() <<
+//                            " and registered " << pUpnpResourceService->isRegistered());
+//                if (pUpnpResourceService->isReady() && !pUpnpResourceService->isRegistered())
+//                {
+//                    DEBUG_PRINT("Register resource for previously discovered child service: " <<
+//                                pUpnpResourceService->m_uri);
+//                    s_discoveryCallback(pUpnpResourceService);
+//                    pUpnpResourceService->setRegistered(true);
+//
+//                    // Subscribe to notifications
+//                    // Important!!! UpnpService object associated with this info/proxy
+//                    // must stay valid until we unsubscribe from notificatons. This
+//                    // means we have to keep a reference to the object inside the
+//                    // UpnpManager as long as we are subscribed to notifications.
+//                    gupnp_service_proxy_set_subscribed(GUPNP_SERVICE_PROXY(serviceInfo), true);
+//                }
+//            }
+//            g_object_unref (childService->data);
+//            childService = g_list_delete_link (childService, childService);
+//        }
+//    }
 }
 
 void UpnpConnector::onServiceProxyAvailable(GUPnPControlPoint *controlPoint,
@@ -492,5 +492,13 @@ void UpnpConnector::onServiceProxyUnavailable(GUPnPControlPoint *controlPoint,
             s_lostCallback(pUpnpResourceService);
         }
         s_manager->removeService(info);
+    }
+}
+
+void UpnpConnector::onScan()
+{
+    DEBUG_PRINT("");
+    if (s_manager) {
+        s_manager->onScan();
     }
 }

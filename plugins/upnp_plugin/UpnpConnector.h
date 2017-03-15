@@ -47,6 +47,7 @@ class UpnpConnector
 
         void connect();
         void disconnect();
+        void onScan();
 
     private:
         DiscoveryCallback m_discoveryCallback;

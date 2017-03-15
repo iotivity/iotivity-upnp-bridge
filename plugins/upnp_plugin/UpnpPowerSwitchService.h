@@ -18,48 +18,33 @@
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#ifndef UPNP_RESOURCE_H_
-#define UPNP_RESOURCE_H_
+#ifndef UPNP_POWER_SWITCH_SERVICE_H_
+#define UPNP_POWER_SWITCH_SERVICE_H_
 
-#include <Configuration.h>
-#include <OCPlatform.h>
+#include <string>
+#include <map>
+
 #include <gupnp.h>
 
+#include "UpnpResource.h"
 #include "UpnpInternal.h"
+#include "UpnpService.h"
 
 using namespace std;
 
-class UpnpResource
+class UpnpPowerSwitch: public UpnpService
 {
+        friend class UpnpService;
+
     public:
+        UpnpPowerSwitch(GUPnPServiceInfo *serviceInfo,
+                        UpnpRequestState *requestState):
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_POWER_SWITCH, requestState, &Attributes)
+        {
+        }
 
-        typedef std::shared_ptr< UpnpResource > Ptr;
-
-        UpnpResource();
-        virtual ~UpnpResource();
-
-        virtual void addLink(UpnpResource::Ptr resource);
-        virtual void setLinkAttribute();
-
-        string getResourceType();
-        string getUdn();
-
-        bool isRegistered();
-        void setRegistered(bool registered);
-
-        void setReady(bool isReady);
-        bool isReady();
-
-    //protected:
-        std::string m_name;
-        std::string m_uri;
-        std::string m_resourceType;
-        std::string m_interface;
-        std::string m_address;
-//        CompositeAttribute m_links;
-        string m_udn;
-        bool m_ready;
-        bool m_registered;
+    private:
+        static vector <UpnpAttributeInfo> Attributes;
 };
 
 #endif

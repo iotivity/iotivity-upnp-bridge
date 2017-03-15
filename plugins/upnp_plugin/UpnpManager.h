@@ -9,8 +9,6 @@
 #include "UpnpDevice.h"
 #include "UpnpService.h"
 
-using namespace OIC::Service;
-
 class UpnpManager
 {
 
@@ -31,6 +29,8 @@ class UpnpManager
         void removeService(string serviceKey);
         void removeDevice(string udn);
         void stop();
+
+        void onScan();
 
         UpnpResource::Ptr findResource(GUPnPServiceInfo *info);
         UpnpResource::Ptr findResource(GUPnPDeviceInfo *info);
