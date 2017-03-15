@@ -30,7 +30,7 @@
 //#include "UpnpLanHostConfigManagementService.h"
 //#include "UpnpLayer3ForwardingService.h"
 //#include "UpnpDeviceProtectionService.h"
-//#include "UpnpPowerSwitchService.h"
+#include "UpnpPowerSwitchService.h"
 //#include "UpnpRenderingControlService.h"
 //#include "UpnpScheduledRecordingService.h"
 //#include "UpnpWanCableLinkConfigService.h"
@@ -255,10 +255,10 @@ UpnpResource::Ptr UpnpManager::processService(GUPnPServiceProxy *proxy,
         }
     }
 
-    if (introspection != NULL)
-    {
-        pService->processIntrospection(proxy, introspection);
-    }
+//    if (introspection != NULL)
+//    {
+//        pService->processIntrospection(proxy, introspection);
+//    }
 
     pService->setProxy(proxy);
     pService->setReady(true);
@@ -373,17 +373,42 @@ std::shared_ptr<UpnpService> UpnpManager::findService (GUPnPServiceInfo *info)
     return nullptr;
 }
 
+string getStringField(function< char *(GUPnPServiceInfo *serviceInfo)> f,
+                                   GUPnPServiceInfo *serviceInfo)
+{
+    char *c_field = f(serviceInfo);
+    if (c_field != NULL)
+    {
+        string s_field = string(c_field);
+        g_free(c_field);
+        return s_field;
+    }
+    return "";
+}
+
 std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *serviceInfo,
         UpnpRequestState *requestState)
 {
     // Service type
     string serviceType = gupnp_service_info_get_service_type(serviceInfo);
     string resourceType = findResourceType(serviceType);
-    if (false) { }
-//    if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
-//    {
-//        return (std::make_shared < UpnpPowerSwitch > (serviceInfo, requestState));
-//    }
+    cout << "********service type ********: " << serviceType << endl;
+    cout << "********resource type********: " << resourceType << endl;
+
+    //TODO GEO* remove
+    string udn = gupnp_service_info_get_udn(serviceInfo);
+    cout << "********udn****************  : " << udn << endl;
+    string serviceId = getStringField(gupnp_service_info_get_id, serviceInfo);
+    cout << "********serviceId********: " << serviceId << endl;
+    string name = serviceId.substr(UPNP_PREFIX_SERVICE_ID.size());
+    cout << "********name     ********: " << name << endl;
+    string uri = UpnpUriPrefixMap[resourceType] + name + "/" + udn;
+    cout << "********uri     ********: " << uri << endl;
+
+    if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
+    {
+        return (std::make_shared < UpnpPowerSwitch > (serviceInfo, requestState));
+    }
 //    else if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
 //    {
 //        return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
