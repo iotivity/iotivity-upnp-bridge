@@ -9,8 +9,6 @@
 #include "UpnpDevice.h"
 #include "UpnpService.h"
 
-using namespace OIC::Service;
-
 class UpnpManager
 {
 

@@ -54,7 +54,8 @@ upnp_env.PrependUnique(CPPPATH = [ os.path.join(src_dir, 'resource', 'c_common',
                               ])
 upnp_env.AppendUnique(CPPPATH = [ os.path.join(bridging_path, 'include'),
                                  '#/include',
-                                 '#/src'])
+                                 #'#/src'
+                                 ])
 
 if target_os not in ['arduino', 'windows']:
     upnp_env.AppendUnique(CPPDEFINES = ['WITH_POSIX'])
@@ -98,7 +99,9 @@ upnp_src = [
          'UpnpConnector.cpp',
          'UpnpException.cpp',
          'UpnpManager.cpp',
-         'UpnpResource.cpp'
+         'UpnpPowerSwitchService.cpp',
+         'UpnpResource.cpp',
+         'UpnpService.cpp'
          ]
 
 upnplib = upnp_env.SharedLibrary('upnpplugin', upnp_src)
