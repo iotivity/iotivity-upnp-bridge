@@ -70,15 +70,15 @@ UpnpResource::Ptr UpnpManager::processDevice(GUPnPDeviceProxy *proxy,
 
     if (pDevice == nullptr)
     {
-        if (isRoot)
-        {
-            pDevice = addDevice(deviceInfo, UPNP_ROOT_DEVICE, requestState);
-        }
-        else
-        {
-            DEBUG_PRINT(udn << " is not root and does not have a parent");
-            pDevice = addDevice(deviceInfo, "", requestState);
-        }
+//        if (isRoot)
+//        {
+//            pDevice = addDevice(deviceInfo, UPNP_ROOT_DEVICE, requestState);
+//        }
+//        else
+//        {
+//            DEBUG_PRINT(udn << " is not root and does not have a parent");
+//            pDevice = addDevice(deviceInfo, "", requestState);
+//        }
     }
 
     if (pDevice != nullptr)
@@ -373,13 +373,92 @@ std::shared_ptr<UpnpService> UpnpManager::findService (GUPnPServiceInfo *info)
     return nullptr;
 }
 
+string getStringField(function< char *(GUPnPServiceInfo *serviceInfo)> f,
+                                   GUPnPServiceInfo *serviceInfo)
+{
+    char *c_field = f(serviceInfo);
+    if (c_field != NULL)
+    {
+        string s_field = string(c_field);
+        g_free(c_field);
+        return s_field;
+    }
+    return "";
+}
+
 std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *serviceInfo,
         UpnpRequestState *requestState)
 {
     // Service type
     string serviceType = gupnp_service_info_get_service_type(serviceInfo);
     string resourceType = findResourceType(serviceType);
-    if (false) { }
+    cout << "********service type ********: " << serviceType << endl;
+    cout << "********resource type********: " << resourceType << endl;
+
+    //TODO GEO* remove
+    string udn = gupnp_service_info_get_udn(serviceInfo);
+    cout << "********udn****************  : " << udn << endl;
+    string serviceId = getStringField(gupnp_service_info_get_id, serviceInfo);
+    cout << "********serviceId********: " << serviceId << endl;
+    string name = serviceId.substr(UPNP_PREFIX_SERVICE_ID.size());
+    cout << "********name     ********: " << name << endl;
+    string uri = UpnpUriPrefixMap[resourceType] + name + "/" + udn;
+    cout << "********uri     ********: " << uri << endl;
+
+    if (false) {
+//        DEBUG_PRINT("(" << std::this_thread::get_id() << ")");
+//        m_proxy = nullptr;
+//        m_resourceType = type;
+//
+//        if (attributeInfo == nullptr)
+//        {
+//            ERROR_PRINT("Service attribute table for " << m_resourceType << " not present!");
+//            throw NotImplementedException("UpnpService::ctor: Service attribute table for " + m_resourceType +
+//                                          " not present!");
+//            return;
+//        }
+//
+//        m_serviceAttributeInfo = attributeInfo;
+//        m_requestState = requestState;
+//
+//        //UDN of the hosting device
+//        m_udn = gupnp_service_info_get_udn(serviceInfo);
+
+//
+//        // Service ID (differentiates between different services of identical type hosted by one device).
+//        m_serviceId = getStringField(gupnp_service_info_get_id, serviceInfo);
+//
+//        // Use service ID as basis for resource name, stripping service ID prefix.
+//        // Check that service ID was set. If not, raise exception.
+//        if (m_serviceId == "")
+//        {
+//            //TODO change to invalid exception
+//            ERROR_PRINT("Service ID for " << m_resourceType << " not present!");
+//            throw NotImplementedException("UpnpService::ctor: Service ID for " + m_resourceType +
+//                                          " not present!");
+//            return;
+//        }
+//
+//        if (m_serviceId.compare(0, UPNP_PREFIX_SERVICE_ID.size(), UPNP_PREFIX_SERVICE_ID) != 0)
+//        {
+//            ERROR_PRINT("Invalid service ID format " << m_serviceId);
+//            return;
+//        }
+//
+//        m_name = m_serviceId.substr(UPNP_PREFIX_SERVICE_ID.size());
+//
+//        //TODO: discuss service URI format. Currently: resource_type/service_id/udn
+//        m_uri = UpnpUriPrefixMap[m_resourceType] + m_name + "/" + m_udn;
+//
+//        if (m_uri.length() > MAX_URI_LENGTH)
+//        {
+//            ERROR_PRINT("URI too long " << m_uri << "( " << m_uri.length());
+//            throw BadUriException("UpnpService::ctor: uri length too long");
+//            return;
+//        }
+//
+//        m_interface = UpnpInterfaceMap[m_resourceType];
+    }
 //    if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
 //    {
 //        return (std::make_shared < UpnpPowerSwitch > (serviceInfo, requestState));
