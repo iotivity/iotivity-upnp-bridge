@@ -23,6 +23,8 @@
 #include "UpnpInternal.h"
 #include "UpnpManager.h"
 
+#include "messageHandler.h"
+
 //#include "UpnpAVTransportService.h"
 //#include "UpnpConnectionManagerService.h"
 //#include "UpnpContentDirectoryService.h"
@@ -30,7 +32,7 @@
 //#include "UpnpLanHostConfigManagementService.h"
 //#include "UpnpLayer3ForwardingService.h"
 //#include "UpnpDeviceProtectionService.h"
-//#include "UpnpPowerSwitchService.h"
+#include "UpnpPowerSwitchService.h"
 //#include "UpnpRenderingControlService.h"
 //#include "UpnpScheduledRecordingService.h"
 //#include "UpnpWanCableLinkConfigService.h"
@@ -255,10 +257,10 @@ UpnpResource::Ptr UpnpManager::processService(GUPnPServiceProxy *proxy,
         }
     }
 
-    if (introspection != NULL)
-    {
-        pService->processIntrospection(proxy, introspection);
-    }
+//    if (introspection != NULL)
+//    {
+//        pService->processIntrospection(proxy, introspection);
+//    }
 
     pService->setProxy(proxy);
     pService->setReady(true);
@@ -309,6 +311,14 @@ void UpnpManager::removeDevice(string udn)
     }
 }
 
+void UpnpManager::onScan()
+{
+    for (const auto& service : m_services) {
+        MPMSendResponse(service.second->m_uri.c_str(), service.second->m_uri.size(), MPM_SCAN);
+
+    }
+}
+
 UpnpResource::Ptr UpnpManager::findResource(GUPnPServiceInfo *info)
 {
     return findService(info);
@@ -321,6 +331,7 @@ UpnpResource::Ptr UpnpManager::findResource(GUPnPDeviceInfo *info)
 
 std::shared_ptr<UpnpService>  UpnpManager::findService(std::string serviceKey)
 {
+    DEBUG_PRINT("");
     std::map< string, shared_ptr<UpnpService> >::iterator it = m_services.find(serviceKey);
 
     if (it != m_services.end())
@@ -333,7 +344,6 @@ std::shared_ptr<UpnpService>  UpnpManager::findService(std::string serviceKey)
 
 shared_ptr<UpnpDevice> UpnpManager::findDevice(string udn)
 {
-
     std::map< string, shared_ptr<UpnpDevice> >::iterator it = m_devices.find(udn);
 
     if (it != m_devices.end())
@@ -373,17 +383,30 @@ std::shared_ptr<UpnpService> UpnpManager::findService (GUPnPServiceInfo *info)
     return nullptr;
 }
 
+string getStringField(function< char *(GUPnPServiceInfo *serviceInfo)> f,
+                                   GUPnPServiceInfo *serviceInfo)
+{
+    char *c_field = f(serviceInfo);
+    if (c_field != NULL)
+    {
+        string s_field = string(c_field);
+        g_free(c_field);
+        return s_field;
+    }
+    return "";
+}
+
 std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *serviceInfo,
         UpnpRequestState *requestState)
 {
     // Service type
     string serviceType = gupnp_service_info_get_service_type(serviceInfo);
     string resourceType = findResourceType(serviceType);
-    if (false) { }
-//    if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
-//    {
-//        return (std::make_shared < UpnpPowerSwitch > (serviceInfo, requestState));
-//    }
+
+    if (resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
+    {
+        return (std::make_shared < UpnpPowerSwitch > (serviceInfo, requestState));
+    }
 //    else if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
 //    {
 //        return (std::make_shared < UpnpDimming > (serviceInfo, requestState));

@@ -18,48 +18,26 @@
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#ifndef UPNP_RESOURCE_H_
-#define UPNP_RESOURCE_H_
+#ifndef UPNP_HELPER_H_
+#define UPNP_HELPER_H_
 
-#include <Configuration.h>
-#include <OCPlatform.h>
-#include <gupnp.h>
+#include <boost/regex.hpp>
 
+#include <UpnpConstants.h>
 #include "UpnpInternal.h"
 
-using namespace std;
-
-class UpnpResource
+static std::string findResourceType(std::string type)
 {
-    public:
+    for (auto it : UpnpSearchPatternMap)
+    {
+        if (boost::regex_match(type, boost::regex(it.second)))
+        {
+            return it.first;
+        }
+    }
 
-        typedef std::shared_ptr< UpnpResource > Ptr;
-
-        UpnpResource();
-        virtual ~UpnpResource();
-
-        virtual void addLink(UpnpResource::Ptr resource);
-        virtual void setLinkAttribute();
-
-        string getResourceType();
-        string getUdn();
-
-        bool isRegistered();
-        void setRegistered(bool registered);
-
-        void setReady(bool isReady);
-        bool isReady();
-
-    //protected:
-        std::string m_name;
-        std::string m_uri;
-        std::string m_resourceType;
-        std::string m_interface;
-        std::string m_address;
-//        CompositeAttribute m_links;
-        string m_udn;
-        bool m_ready;
-        bool m_registered;
-};
+    //TODO: change to something more intelligent here, e.g. exeption and/or error code, etc.
+    return "";
+}
 
 #endif
