@@ -42,7 +42,6 @@ class UpnpPowerSwitch: public UpnpService
             UpnpService(serviceInfo, UPNP_OIC_TYPE_POWER_SWITCH, requestState, &Attributes)
         {
         }
-
     private:
         static vector <UpnpAttributeInfo> Attributes;
 };

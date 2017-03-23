@@ -35,8 +35,15 @@
 #include "UpnpInternal.h"
 #include "UpnpRequest.h"
 
+#include <octypes.h>
+#include <ocstack.h>
+#include <oic_malloc.h>
+#include <mpmErrorCode.h>
+#include <ConcurrentIotivityUtils.h>
+
 using namespace std;
 using namespace boost;
+using namespace OC::Bridging;
 
 static const string MODULE = "UpnpConnector";
 
@@ -52,6 +59,9 @@ static UpnpRequestState s_requestState;
 static map <gulong, GUPnPControlPoint *> s_signalMap;
 
 static bool isRootDiscovery[] = {false, true};
+
+const uint BINARY_SWITCH_CALLBACK = 0;
+const uint BRIGHTNESS_CALLBACK = 1;
 
 UpnpConnector::UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback lostCallback)
 {
@@ -279,6 +289,7 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
 //        g_free(devModel);
 //    }
 //
+    void onAdd(std::string uri);
 //    char *devName = gupnp_device_info_get_friendly_name(deviceInfo);
 //    if (devName != NULL)
 //    {
@@ -500,5 +511,154 @@ void UpnpConnector::onScan()
     DEBUG_PRINT("");
     if (s_manager) {
         s_manager->onScan();
+    }
+}
+
+/*******************************************
+ * callbacks for handling the pluginAdd
+ *******************************************/
+bool isSecureEnvironmentSet()
+{
+    char *non_secure_env = getenv("NONSECURE");
+
+    if (non_secure_env != NULL && (strcmp(non_secure_env, "true") == 0))
+    {
+        DEBUG_PRINT("Creating NON SECURE resources");
+        return false;
+    }
+    DEBUG_PRINT("Creating SECURE resources");
+    return true;
+}
+
+OCRepPayload* OCRepPayloadCreate()
+{
+    OCRepPayload* payload = (OCRepPayload*)OICCalloc(1, sizeof(OCRepPayload));
+
+    if (!payload)
+    {
+        return NULL;
+    }
+
+    payload->base.type = PAYLOAD_TYPE_REPRESENTATION;
+
+    return payload;
+}
+
+OCEntityHandlerResult processGetRequest(OCRepPayload *payload)
+{
+    //TODO read actual value from UPnP light
+    bool powerSwitchState = true; //on
+
+    if (payload == NULL)
+    {
+        throw "payload is null";
+    }
+
+    if (!OCRepPayloadSetPropBool(payload, "value", powerSwitchState))
+    {
+        throw "Failed to set 'value' (power) in payload";
+    }
+    DEBUG_PRINT("Light State: %s" << (powerSwitchState ? "true" : "false"));
+    return OC_EH_OK;
+}
+
+OCEntityHandlerResult handleEntityHandlerRequests( OCEntityHandlerRequest *entityHandlerRequest,
+                                                   std::string resourceType)
+{
+    OCEntityHandlerResult ehResult = OC_EH_ERROR;
+    OCRepPayload *responsePayload = NULL;
+    OCRepPayload *payload = OCRepPayloadCreate();
+
+    try
+    {
+        if ((entityHandlerRequest == NULL))
+        {
+            throw "Entity handler received a null entity request context" ;
+        }
+
+        std::string uri = OCGetResourceUri(entityHandlerRequest->resource);
+        DEBUG_PRINT("URI from resource " << uri);
+        for (const auto& service : s_manager->m_services) {
+            if (service.second->m_uri == uri) {
+                switch (entityHandlerRequest->method)
+                {
+                    case OC_REST_GET:
+                        DEBUG_PRINT(" GET Request for: " << uri);
+                        // TODO Add processGetRequest for service
+                        // ehResult = service->processGetRequest(payload);
+                        break;
+
+                    case OC_REST_PUT:
+                    case OC_REST_POST:
+
+                        DEBUG_PRINT("PUT / POST Request on " << uri);
+                        // ehResult = service->PostRequest(payload);
+                        break;
+
+                    default:
+                        DEBUG_PRINT("UnSupported Method [" << entityHandlerRequest->method << "] Received");
+                        ConcurrentIotivityUtils::respondToRequestWithError(entityHandlerRequest, " Unsupported Method", OC_EH_METHOD_NOT_ALLOWED);
+                        return OC_EH_OK;
+                }
+            }
+        }
+
+
+        // TODO complete common payload
+        //responsePayload = getCommonPayload(uri.c_str(),interfaceQuery, resourceType, payload);
+        //ConcurrentIotivityUtils::respondToRequest(entityHandlerRequest, responsePayload, ehResult);
+        // TODO replace with completed responce payload
+        ConcurrentIotivityUtils::respondToRequest(entityHandlerRequest, payload, ehResult);
+        //OICFree(dupQuery);
+    }
+    catch (const char *errorMessage)
+    {
+        DEBUG_PRINT("Error - " << errorMessage);
+        ConcurrentIotivityUtils::respondToRequestWithError(entityHandlerRequest, errorMessage, OC_EH_ERROR);
+        ehResult = OC_EH_OK;
+    }
+
+   // OCRepPayloadDestroy(responsePayload);
+    return ehResult;
+}
+
+OCEntityHandlerResult resourceEntityHandler(OCEntityHandlerFlag ,
+        OCEntityHandlerRequest *entityHandlerRequest,
+        void *callback)
+{
+    DEBUG_PRINT("");
+    uintptr_t callbackParamResourceType = (uintptr_t)callback;
+    std::string resourceType;
+
+    if (callbackParamResourceType == BINARY_SWITCH_CALLBACK)
+    {
+        return handleEntityHandlerRequests(entityHandlerRequest, UPNP_OIC_TYPE_POWER_SWITCH);
+    }
+    else if (callbackParamResourceType == BRIGHTNESS_CALLBACK)
+    {
+        return handleEntityHandlerRequests(entityHandlerRequest, UPNP_OIC_TYPE_BRIGHTNESS);
+    }
+
+    return OC_EH_ERROR;
+}
+
+void UpnpConnector::onAdd(std::string uri)
+{
+    DEBUG_PRINT("Adding " << uri);
+    uint8_t resourceProperties = (OC_OBSERVABLE | OC_DISCOVERABLE);
+    if (isSecureEnvironmentSet())
+    {
+        resourceProperties |= OC_SECURE;
+    }
+
+    for (const auto& service : s_manager->m_services) {
+        if (service.second->m_uri == uri) {
+            if (service.second->m_resourceType == UPNP_OIC_TYPE_POWER_SWITCH) {
+                DEBUG_PRINT("Adding binary switch resource" );
+                ConcurrentIotivityUtils::queueCreateResource(uri, UPNP_OIC_TYPE_POWER_SWITCH, OC_RSRVD_INTERFACE_ACTUATOR,
+                        resourceEntityHandler,
+                        (void *) BINARY_SWITCH_CALLBACK, resourceProperties);
+            }
+        }
     }
 }
