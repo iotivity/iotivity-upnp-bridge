@@ -144,3 +144,10 @@ string UpnpService::getStringField(function< char *(GUPnPServiceInfo *serviceInf
     }
     return "";
 }
+
+OCEntityHandlerResult UpnpService::processGetRequest(OCRepPayload*)
+{
+    ERROR_PRINT("Service processGetRequest() not implemented!");
+    throw NotImplementedException("Service processGetRequest() not implemented!");
+    return OC_EH_ERROR;
+}
