@@ -42,3 +42,21 @@ vector <UpnpAttributeInfo> UpnpPowerSwitch::Attributes =
         {}
     }
 };
+
+static const char* powerSwitchStateName = "value";
+
+OCEntityHandlerResult UpnpPowerSwitch::processGetRequest(OCRepPayload *payload)
+{
+    if (payload == NULL)
+    {
+        throw "payload is null";
+    }
+
+    if (!OCRepPayloadSetPropBool(payload, powerSwitchStateName, powerSwitchStateValue))
+    {
+        throw "Failed to set power switch value in payload";
+    }
+    DEBUG_PRINT(powerSwitchStateName << ": " << (powerSwitchStateValue ? "true" : "false"));
+
+    return OC_EH_OK;
+}

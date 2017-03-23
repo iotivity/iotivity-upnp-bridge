@@ -48,6 +48,7 @@ class UpnpConnector
         void connect();
         void disconnect();
         void onScan();
+        void onAdd(std::string uri);
 
     private:
         DiscoveryCallback m_discoveryCallback;
