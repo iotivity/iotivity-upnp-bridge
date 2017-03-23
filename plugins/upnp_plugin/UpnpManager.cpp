@@ -315,8 +315,18 @@ void UpnpManager::onScan()
 {
     for (const auto& service : m_services) {
         MPMSendResponse(service.second->m_uri.c_str(), service.second->m_uri.size(), MPM_SCAN);
-
     }
+}
+
+void UpnpManager::onAdd(string uri)
+{
+    DEBUG_PRINT("adding: " << uri);
+    for (const auto& service : m_services) {
+        if (service.second->m_uri == uri) {
+            service.second->onAdd();
+        }
+    }
+
 }
 
 UpnpResource::Ptr UpnpManager::findResource(GUPnPServiceInfo *info)

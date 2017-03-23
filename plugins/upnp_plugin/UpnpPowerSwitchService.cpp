@@ -19,6 +19,11 @@
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #include "UpnpPowerSwitchService.h"
+#include <octypes.h>
+#include <mpmErrorCode.h>
+#include <ConcurrentIotivityUtils.h>
+
+using namespace OC::Bridging;
 
 static const string MODULE = "UpnpPowerSwitchService";
 
@@ -42,3 +47,76 @@ vector <UpnpAttributeInfo> UpnpPowerSwitch::Attributes =
         {}
     }
 };
+
+// TODO move to location where more services have access to helper function
+bool isSecureEnvironmentSet()
+{
+    char *non_secure_env = getenv("NONSECURE");
+
+    if (non_secure_env != NULL && (strcmp(non_secure_env, "true") == 0))
+    {
+        DEBUG_PRINT("Creating NON SECURE resources");
+        return false;
+    }
+    DEBUG_PRINT("Creating SECURE resources");
+    return true;
+}
+
+OCEntityHandlerResult resourceEntityHandler(OCEntityHandlerFlag ,
+        OCEntityHandlerRequest *request,
+        void *cb)
+{
+    DEBUG_PRINT("");
+    uintptr_t callBackParamResourceType = (uintptr_t) cb;
+    OCEntityHandlerResult result = OC_EH_OK;
+    MPMResult res = MPM_RESULT_OK;
+
+    try
+    {
+        switch (request->method)
+        {
+            case OC_REST_GET:
+                DEBUG_PRINT("OC_REST_GET");
+//                OCRepPayload *responsePayload = processGetRequest(targetLight, callBackParamResourceType);
+//                ConcurrentIotivityUtils::respondToRequest(request, responsePayload, result);
+//                OCRepPayloadDestroy(responsePayload);
+                break;
+
+            case OC_REST_PUT:
+            case OC_REST_POST:
+                DEBUG_PRINT("OC_REST_POST/OIC_REST_POST");
+//                res = (MPMResult)processPutRequest((OCRepPayload *) request->payload, targetLight,
+//                                                   callBackParamResourceType);
+                if (res != MPM_RESULT_OK)
+                    result = OC_EH_ERROR;
+                break;
+
+            default:
+                DEBUG_PRINT("default");
+                DEBUG_PRINT("Unsupported method (" << request->method << ") recieved");
+                ConcurrentIotivityUtils::respondToRequestWithError(request, "Unsupported method received",
+                        OC_EH_METHOD_NOT_ALLOWED);
+                return OC_EH_OK;
+        }
+    }
+    catch (const std::exception &exp)
+    {
+        ConcurrentIotivityUtils::respondToRequestWithError(request, exp.what(), OC_EH_ERROR);
+        return OC_EH_OK;
+    }
+
+    return OC_EH_OK;
+}
+
+void UpnpPowerSwitch::onAdd() {
+    uint8_t resourceProperties = (OC_OBSERVABLE | OC_DISCOVERABLE);
+    if (isSecureEnvironmentSet())
+    {
+        resourceProperties |= OC_SECURE;
+    }
+
+    ConcurrentIotivityUtils::queueCreateResource(m_uri, UPNP_OIC_TYPE_POWER_SWITCH, OC_RSRVD_INTERFACE_ACTUATOR,
+            resourceEntityHandler,
+            (void *) 0, resourceProperties);
+
+}

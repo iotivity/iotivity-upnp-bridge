@@ -502,3 +502,11 @@ void UpnpConnector::onScan()
         s_manager->onScan();
     }
 }
+
+void UpnpConnector::onAdd(std::string uri)
+{
+    DEBUG_PRINT("");
+    if (s_manager) {
+        s_manager->onAdd(uri);
+    }
+}

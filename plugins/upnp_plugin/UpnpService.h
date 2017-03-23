@@ -43,6 +43,9 @@ public:
     void setProxy(GUPnPServiceProxy *proxy);
     GUPnPServiceProxy *getProxy();
 
+    // TODO determine if this whoul be a pure virtual
+    virtual void onAdd() = 0;
+
     string getId();
     void stop();
 protected:

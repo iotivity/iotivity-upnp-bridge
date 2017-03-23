@@ -30,7 +30,10 @@ class UpnpManager
         void removeDevice(string udn);
         void stop();
 
+
         void onScan();
+
+        void onAdd(std::string uri);
 
         UpnpResource::Ptr findResource(GUPnPServiceInfo *info);
         UpnpResource::Ptr findResource(GUPnPDeviceInfo *info);
