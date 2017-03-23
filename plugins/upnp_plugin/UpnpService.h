@@ -23,6 +23,12 @@
 
 #include <gupnp.h>
 
+#include <octypes.h>
+#include <ocstack.h>
+#include <oic_malloc.h>
+#include <mpmErrorCode.h>
+#include <ConcurrentIotivityUtils.h>
+
 #include "UpnpAttribute.h"
 #include "UpnpInternal.h"
 #include "UpnpRequest.h"
@@ -45,6 +51,12 @@ public:
 
     string getId();
     void stop();
+
+    virtual OCEntityHandlerResult processGetRequest(OCRepPayload *payload);
+    virtual OCEntityHandlerResult processPutRequest(OCEntityHandlerRequest *ehRequest,
+            string uri, string resourceType, OCRepPayload *payload);
+
+
 protected:
        // Map of associated attributes (OIC)
        // "OCF Attribute name" -> (attribute info, supported operations)
