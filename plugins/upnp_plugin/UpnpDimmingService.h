@@ -1,6 +1,6 @@
 //******************************************************************
 //
-// Copyright 2016 Intel Corporation All Rights Reserved.
+// Copyright 2017 Intel Corporation All Rights Reserved.
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
@@ -18,8 +18,8 @@
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#ifndef UPNP_POWER_SWITCH_SERVICE_H_
-#define UPNP_POWER_SWITCH_SERVICE_H_
+#ifndef UPNP_DIMMING_SERVICE_H_
+#define UPNP_DIMMING_SERVICE_H_
 
 #include <string>
 #include <map>
@@ -32,14 +32,14 @@
 
 using namespace std;
 
-class UpnpPowerSwitch: public UpnpService
+class UpnpDimming: public UpnpService
 {
         friend class UpnpService;
 
     public:
-        UpnpPowerSwitch(GUPnPServiceInfo *serviceInfo,
-                        UpnpRequestState *requestState):
-            UpnpService(serviceInfo, UPNP_OIC_TYPE_POWER_SWITCH, requestState, &Attributes)
+        UpnpDimming(GUPnPServiceInfo *serviceInfo,
+                    UpnpRequestState *requestState):
+            UpnpService(serviceInfo, UPNP_OIC_TYPE_BRIGHTNESS, requestState, &Attributes)
         {
         }
 

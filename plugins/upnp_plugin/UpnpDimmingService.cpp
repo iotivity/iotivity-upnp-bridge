@@ -1,6 +1,6 @@
 //******************************************************************
 //
-// Copyright 2016 Intel Corporation All Rights Reserved.
+// Copyright 2017 Intel Corporation All Rights Reserved.
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
@@ -18,11 +18,32 @@
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#include "UpnpPowerSwitchService.h"
+#include "UpnpDimmingService.h"
 
-static const string MODULE = "UpnpPowerSwitchService";
+static const string MODULE = "UpnpDimmingService";
 
-// Power switch service
+// Service specific attribute initialization
+
+// Brightness service
+// TODO the following actions are not yet mapped: (note all unmapped actions are optional)
+//      SetOnEffectLevel
+//      SetOnEffect
+//      GetOnEffectParameters
+//      StepUp
+//      StepDown
+//      StartRampUp
+//      StartRampDown
+//      StopRamp
+//      StartRampToLevel
+//      SetStepDelta
+//      GetStepDelta
+//      SetRampRate
+//      GetRampRate
+//      PauseRamp
+//      ResumeRamp
+//      GetRampPaused
+//      GetRampTime
+//      GetIsRamping
 
 // Organization:
 // Attribute Name,
@@ -31,21 +52,21 @@ static const string MODULE = "UpnpPowerSwitchService";
 //    0: "GET" action name, action type, optional out parameters: var_name,var_type
 //    1: "SET" action name, action type, optional in parameters: var_name,var_type
 // Vector of embedded attributes (if present)
-vector <UpnpAttributeInfo> UpnpPowerSwitch::Attributes =
+vector <UpnpAttributeInfo> UpnpDimming::Attributes =
 {
     {
-        "value",
-        "Status", G_TYPE_BOOLEAN, true,
-        {   {"GetTarget", UPNP_ACTION_GET, "RetTargetValue", G_TYPE_BOOLEAN},
-            {"SetTarget", UPNP_ACTION_POST, "newTargetValue", G_TYPE_BOOLEAN}
+        "brightness",
+        "LoadLevelStatus", G_TYPE_UINT, true,
+        {   {"GetLoadLevelStatus", UPNP_ACTION_GET, "retLoadlevelStatus", G_TYPE_UINT},
+            {"SetLoadLevelTarget", UPNP_ACTION_POST, "newLoadlevelTarget", G_TYPE_UINT}
         },
         {}
     }
 };
 
-static const char* powerSwitchStateName = "value";
+static const char* brightnessLevelName = "brightness";
 
-OCEntityHandlerResult UpnpPowerSwitch::processGetRequest(OCRepPayload *payload)
+OCEntityHandlerResult UpnpDimming::processGetRequest(OCRepPayload *payload)
 {
     if (payload == NULL)
     {
@@ -53,16 +74,16 @@ OCEntityHandlerResult UpnpPowerSwitch::processGetRequest(OCRepPayload *payload)
     }
 
     //TODO use async version with callback
-    bool powerSwitchStateValue = false;
+    int64_t brightnessLevelValue = 0;
     GError *error = NULL;
-    if (! gupnp_service_proxy_send_action(m_proxy, "GetTarget", &error,
+    if (! gupnp_service_proxy_send_action(m_proxy, "GetLoadLevelStatus", &error,
             // IN args (none)
             NULL,
             // OUT args
-            "RetTargetValue", G_TYPE_BOOLEAN, &powerSwitchStateValue,
+            "retLoadlevelStatus", G_TYPE_UINT, &brightnessLevelValue,
             NULL))
     {
-        ERROR_PRINT("GetTarget action failed");
+        ERROR_PRINT("GetLoadLevelStatus action failed");
         if (error)
         {
             DEBUG_PRINT("Error message: " << error->message);
@@ -71,16 +92,16 @@ OCEntityHandlerResult UpnpPowerSwitch::processGetRequest(OCRepPayload *payload)
         return OC_EH_ERROR;
     }
 
-    if (!OCRepPayloadSetPropBool(payload, powerSwitchStateName, powerSwitchStateValue))
+    if (!OCRepPayloadSetPropInt(payload, brightnessLevelName, brightnessLevelValue))
     {
-        throw "Failed to set power switch value in payload";
+        throw "Failed to set brightness value in payload";
     }
-    DEBUG_PRINT(powerSwitchStateName << ": " << (powerSwitchStateValue ? "true" : "false"));
+    DEBUG_PRINT(brightnessLevelName << ": " << brightnessLevelValue);
 
     return OC_EH_OK;
 }
 
-OCEntityHandlerResult UpnpPowerSwitch::processPutRequest(OCEntityHandlerRequest *ehRequest,
+OCEntityHandlerResult UpnpDimming::processPutRequest(OCEntityHandlerRequest *ehRequest,
         string uri, string resourceType, OCRepPayload *payload)
 {
     if (!ehRequest || !ehRequest->payload ||
@@ -95,25 +116,25 @@ OCEntityHandlerResult UpnpPowerSwitch::processPutRequest(OCEntityHandlerRequest 
         throw "PUT payload is null";
     }
 
-    if (UPNP_OIC_TYPE_POWER_SWITCH == resourceType)
+    if (UPNP_OIC_TYPE_BRIGHTNESS == resourceType)
     {
-        bool powerSwitchStateValue = false;
-        if (!OCRepPayloadGetPropBool(input, powerSwitchStateName, &powerSwitchStateValue))
+    	int64_t brightnessLevelValue = 0;
+        if (!OCRepPayloadGetPropInt(input, brightnessLevelName, &brightnessLevelValue))
         {
-            throw "No power switch value in request payload";
+            throw "No brightness value in request payload";
         }
-        DEBUG_PRINT("New " << powerSwitchStateName << ": " << (powerSwitchStateValue ? "true" : "false"));
+        DEBUG_PRINT("New " << brightnessLevelName << ": " << brightnessLevelValue);
 
         //TODO use async version with callback
         GError *error = NULL;
-        if (! gupnp_service_proxy_send_action(m_proxy, "SetTarget", &error,
+        if (! gupnp_service_proxy_send_action(m_proxy, "SetLoadLevelTarget", &error,
                 // IN args
-                "newTargetValue", G_TYPE_BOOLEAN, powerSwitchStateValue,
+                "newLoadlevelTarget", G_TYPE_UINT, brightnessLevelValue,
                 NULL,
                 // OUT args (none)
                 NULL))
         {
-            ERROR_PRINT("SetTarget action failed");
+            ERROR_PRINT("SetLoadLevelTarget action failed");
             if (error)
             {
                 DEBUG_PRINT("Error message: " << error->message);
@@ -122,11 +143,11 @@ OCEntityHandlerResult UpnpPowerSwitch::processPutRequest(OCEntityHandlerRequest 
             return OC_EH_ERROR;
         }
 
-        if (!OCRepPayloadSetPropBool(payload, powerSwitchStateName, powerSwitchStateValue))
+        if (!OCRepPayloadSetPropInt(payload, brightnessLevelName, brightnessLevelValue))
         {
-            throw "Failed to set power switch value in payload";
+            throw "Failed to set brightness value in payload";
         }
-        DEBUG_PRINT(powerSwitchStateName << ": " << (powerSwitchStateValue ? "true" : "false"));
+        DEBUG_PRINT(brightnessLevelName << ": " << brightnessLevelValue);
     }
     else
     {
