@@ -42,3 +42,94 @@ vector <UpnpAttributeInfo> UpnpPowerSwitch::Attributes =
         {}
     }
 };
+
+static const char* powerSwitchStateName = "value";
+
+OCEntityHandlerResult UpnpPowerSwitch::processGetRequest(OCRepPayload *payload)
+{
+    if (payload == NULL)
+    {
+        throw "payload is null";
+    }
+
+    //TODO use async version with callback
+    GError *error = NULL;
+    if (! gupnp_service_proxy_send_action(m_proxy, "GetTarget", &error,
+            // IN args (none)
+            NULL,
+            // OUT args
+            "RetTargetValue", G_TYPE_BOOLEAN, &powerSwitchStateValue,
+            NULL))
+    {
+        ERROR_PRINT("GetTarget action failed");
+        if (error)
+        {
+            DEBUG_PRINT("Error message: " << error->message);
+            g_error_free(error);
+        }
+        return OC_EH_ERROR;
+    }
+
+    if (!OCRepPayloadSetPropBool(payload, powerSwitchStateName, powerSwitchStateValue))
+    {
+        throw "Failed to set power switch value in payload";
+    }
+    DEBUG_PRINT(powerSwitchStateName << ": " << (powerSwitchStateValue ? "true" : "false"));
+
+    return OC_EH_OK;
+}
+
+OCEntityHandlerResult UpnpPowerSwitch::processPutRequest(OCEntityHandlerRequest *ehRequest,
+        string uri, string resourceType, OCRepPayload *payload)
+{
+    if (!ehRequest || !ehRequest->payload ||
+            ehRequest->payload->type != PAYLOAD_TYPE_REPRESENTATION)
+    {
+        throw "Incoming payload is NULL or not a representation";
+    }
+
+    OCRepPayload *input = reinterpret_cast<OCRepPayload *>(ehRequest->payload);
+    if (!input)
+    {
+        throw "PUT payload is null";
+    }
+
+    if (UPNP_OIC_TYPE_POWER_SWITCH == resourceType)
+    {
+        if (!OCRepPayloadGetPropBool(input, powerSwitchStateName, &powerSwitchStateValue))
+        {
+            throw "No power switch value in request payload";
+        }
+        DEBUG_PRINT("New " << powerSwitchStateName << ": " << (powerSwitchStateValue ? "true" : "false"));
+
+        //TODO use async version with callback
+        GError *error = NULL;
+        if (! gupnp_service_proxy_send_action(m_proxy, "SetTarget", &error,
+                // IN args
+                "newTargetValue", G_TYPE_BOOLEAN, powerSwitchStateValue,
+                NULL,
+                // OUT args (none)
+                NULL))
+        {
+            ERROR_PRINT("SetTarget action failed");
+            if (error)
+            {
+                DEBUG_PRINT("Error message: " << error->message);
+                g_error_free(error);
+            }
+            return OC_EH_ERROR;
+        }
+
+        if (!OCRepPayloadSetPropBool(payload, powerSwitchStateName, powerSwitchStateValue))
+        {
+            throw "Failed to set power switch value in payload";
+        }
+        DEBUG_PRINT(powerSwitchStateName << ": " << (powerSwitchStateValue ? "true" : "false"));
+    }
+    else
+    {
+        throw "Failed due to unknown resource type";
+    }
+
+    return OC_EH_OK;
+}

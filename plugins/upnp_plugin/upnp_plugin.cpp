@@ -121,6 +121,17 @@ extern "C" DLL_PUBLIC MPMResult pluginAdd(MPMPluginCtx *, MPMPipeMessage *messag
     printf("UPNP pluginAdd\n");
     printf("***********************************************\n");
     OIC_LOG(INFO, TAG, "Add called! Create Iotivity resources here based on what the client says");
+
+    if (message->payloadSize <= 0 && message->payload == NULL)
+    {
+        OIC_LOG(ERROR, TAG, "No payload received, failed to add device");
+        return MPM_RESULT_INTERNAL_ERROR;
+    }
+
+    std::string uri = reinterpret_cast<const char *>(message->payload);
+
+    s_upnpConnector->onAdd(uri);
+
     echoResponse(message, "ADD");
     return MPM_RESULT_OK;
 }

@@ -315,7 +315,6 @@ void UpnpManager::onScan()
 {
     for (const auto& service : m_services) {
         MPMSendResponse(service.second->m_uri.c_str(), service.second->m_uri.size(), MPM_SCAN);
-
     }
 }
 

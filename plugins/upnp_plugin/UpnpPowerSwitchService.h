@@ -43,8 +43,14 @@ class UpnpPowerSwitch: public UpnpService
         {
         }
 
+        OCEntityHandlerResult processGetRequest(OCRepPayload *payload);
+        OCEntityHandlerResult processPutRequest(OCEntityHandlerRequest *ehRequest,
+                    string uri, string resourceType, OCRepPayload *payload);
+
     private:
         static vector <UpnpAttributeInfo> Attributes;
+
+        bool powerSwitchStateValue = false;
 };
 
 #endif
