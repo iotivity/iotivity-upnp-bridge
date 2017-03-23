@@ -28,7 +28,7 @@
 //#include "UpnpAVTransportService.h"
 //#include "UpnpConnectionManagerService.h"
 //#include "UpnpContentDirectoryService.h"
-//#include "UpnpDimmingService.h"
+#include "UpnpDimmingService.h"
 //#include "UpnpLanHostConfigManagementService.h"
 //#include "UpnpLayer3ForwardingService.h"
 //#include "UpnpDeviceProtectionService.h"
@@ -315,7 +315,6 @@ void UpnpManager::onScan()
 {
     for (const auto& service : m_services) {
         MPMSendResponse(service.second->m_uri.c_str(), service.second->m_uri.size(), MPM_SCAN);
-
     }
 }
 
@@ -407,10 +406,10 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     {
         return (std::make_shared < UpnpPowerSwitch > (serviceInfo, requestState));
     }
-//    else if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
-//    {
-//        return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
-//    }
+    else if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
+    {
+        return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
+    }
 //    else if (resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY)
 //    {
 //        return (std::make_shared < UpnpContentDirectory > (serviceInfo, requestState));
