@@ -34,7 +34,7 @@ import org.iotivity.base.OcRepresentation;
 public class Brightness extends Service {
 
     public static final String UPNP_OIC_TYPE_BRIGHTNESS = "oic.r.light.brightness";
-    public static final String UPNP_OIC_URI_PREFIX_BRIGHTNESS = "/oic/upnp/brightness/";
+    public static final String UPNP_OIC_URI_PREFIX_BRIGHTNESS = "/upnp/oic/brightness/";
 
     public static final String BRIGHTNESS_KEY = "brightness";
     public static final int DEFAULT_BRIGHTNESS = 100;

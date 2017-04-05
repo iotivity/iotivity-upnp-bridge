@@ -34,7 +34,7 @@ import org.iotivity.base.OcRepresentation;
 public class MediaServer extends Device {
 
     public static final String UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER = "oic.d.media.server";
-    public static final String UPNP_OIC_URI_PREFIX_MEDIA_SERVER = "/oic/upnp/media/server/";
+    public static final String UPNP_OIC_URI_PREFIX_MEDIA_SERVER = "/upnp/oic/media/server/";
 
     private ContentDirectory mContentDirectory;
     private ConnectionManager mConnectionManager;

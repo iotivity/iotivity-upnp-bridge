@@ -34,7 +34,7 @@ import org.iotivity.base.OcRepresentation;
 public class BinarySwitch extends Service {
 
     public static final String UPNP_OIC_TYPE_BINARY_SWITCH = "oic.r.switch.binary";
-    public static final String UPNP_OIC_URI_PREFIX_BINARY_SWITCH = "/oic/upnp/switch/";
+    public static final String UPNP_OIC_URI_PREFIX_BINARY_SWITCH = "/upnp/oic/switch/";
 
     public static final String VALUE_KEY = "value";
     public static final boolean DEFAULT_VALUE = false;

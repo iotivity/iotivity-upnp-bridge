@@ -37,7 +37,7 @@ import org.iotivity.base.OcRepresentation;
 public class RenderingControl extends Service implements Parcelable {
 
     public static final String UPNP_OIC_TYPE_RENDERING_CONTROL = "oic.r.rendering.control";
-    public static final String UPNP_OIC_URI_PREFIX_RENDERING_CONTROL = "/oic/upnp/rendering-control/";
+    public static final String UPNP_OIC_URI_PREFIX_RENDERING_CONTROL = "/upnp/oic/rendering-control/";
 
     public static final String VOLUME_KEY = "volume";
     public static final String MUTE_KEY = "mute";

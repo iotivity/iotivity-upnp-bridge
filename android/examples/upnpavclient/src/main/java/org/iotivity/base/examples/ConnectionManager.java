@@ -38,7 +38,7 @@ import java.util.Map;
 public class ConnectionManager extends Service {
 
     public static final String UPNP_OIC_TYPE_CONNECTION_MANAGER = "oic.r.connection.manager";
-    public static final String UPNP_OIC_URI_PREFIX_CONNECTION_MANAGER = "/oic/upnp/connection-manager/";
+    public static final String UPNP_OIC_URI_PREFIX_CONNECTION_MANAGER = "/upnp/oic/connection-manager/";
 
     public static final String PROTOCOL_INFO_KEY = "protocolInfo";
     public static final String PROTOCOL_INFO_SOURCE_KEY = "source";

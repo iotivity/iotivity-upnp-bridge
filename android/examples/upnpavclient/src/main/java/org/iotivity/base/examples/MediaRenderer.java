@@ -34,7 +34,7 @@ import org.iotivity.base.OcRepresentation;
 public class MediaRenderer extends Device {
 
     public static final String UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER = "oic.d.media.renderer";
-    public static final String UPNP_OIC_URI_PREFIX_MEDIA_RENDERER = "/oic/upnp/media/renderer/";
+    public static final String UPNP_OIC_URI_PREFIX_MEDIA_RENDERER = "/upnp/oic/media/renderer/";
 
     private RenderingControl mRenderingControl;
     private ConnectionManager mConnectionManager;
