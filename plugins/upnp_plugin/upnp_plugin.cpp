@@ -45,16 +45,17 @@ FILE *sec_file(const char *, const char *mode)
 }
 
 static UpnpConnector *s_upnpConnector;
+std::vector< UpnpResource::Ptr > m_vecResources;
 
 int connectorDiscoveryCb(UpnpResource::Ptr pUpnpResource)
 {
-    int result = 1;
+    int result = 0;
 
     DEBUG_PRINT("UpnpResource URI " << pUpnpResource->m_uri);
     //result = m_pResourceContainer->registerResource(pUpnpResource);
     if (result == 0)
     {
-        //m_vecResources.push_back(pUpnpResource);
+        m_vecResources.push_back(pUpnpResource);
     } else {
         ERROR_PRINT(result << " Failed to register resource: " << pUpnpResource->m_uri);
     }

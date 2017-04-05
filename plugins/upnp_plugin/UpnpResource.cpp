@@ -62,6 +62,14 @@ void UpnpResource::addLink(UpnpResource::Ptr pResource)
 //    singleLink["rt"] = pResource->getResourceType();
 //
 //    m_links.push_back(singleLink);
+
+    _link singleLink;
+
+    singleLink.href = pResource->m_uri;
+    singleLink.rel = "contains";
+    singleLink.rt = pResource->getResourceType();
+
+    m_links.push_back(singleLink);
 }
 
 void UpnpResource::setLinkAttribute()

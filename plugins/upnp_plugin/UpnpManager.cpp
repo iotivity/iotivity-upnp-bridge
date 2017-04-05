@@ -316,6 +316,10 @@ void UpnpManager::onScan()
     for (const auto& service : m_services) {
         MPMSendResponse(service.second->m_uri.c_str(), service.second->m_uri.size(), MPM_SCAN);
     }
+
+    for (const auto& device : m_devices) {
+        MPMSendResponse(device.second->m_uri.c_str(), device.second->m_uri.size(), MPM_SCAN);
+    }
 }
 
 UpnpResource::Ptr UpnpManager::findResource(GUPnPServiceInfo *info)
@@ -330,7 +334,7 @@ UpnpResource::Ptr UpnpManager::findResource(GUPnPDeviceInfo *info)
 
 std::shared_ptr<UpnpService>  UpnpManager::findService(std::string serviceKey)
 {
-    DEBUG_PRINT("");
+    DEBUG_PRINT("serviceKey = " << serviceKey);
     std::map< string, shared_ptr<UpnpService> >::iterator it = m_services.find(serviceKey);
 
     if (it != m_services.end())
@@ -343,6 +347,7 @@ std::shared_ptr<UpnpService>  UpnpManager::findService(std::string serviceKey)
 
 shared_ptr<UpnpDevice> UpnpManager::findDevice(string udn)
 {
+    DEBUG_PRINT("udn = " << udn);
     std::map< string, shared_ptr<UpnpDevice> >::iterator it = m_devices.find(udn);
 
     if (it != m_devices.end())

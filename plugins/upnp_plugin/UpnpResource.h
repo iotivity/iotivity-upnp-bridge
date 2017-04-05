@@ -29,6 +29,12 @@
 
 using namespace std;
 
+struct _link {
+	string href;
+	string rel;
+	string rt;
+};
+
 class UpnpResource
 {
     public:
@@ -57,6 +63,7 @@ class UpnpResource
         std::string m_interface;
         std::string m_address;
 //        CompositeAttribute m_links;
+        vector<_link> m_links;
         string m_udn;
         bool m_ready;
         bool m_registered;

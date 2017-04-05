@@ -62,8 +62,9 @@ static map <gulong, GUPnPControlPoint *> s_signalMap;
 
 static bool isRootDiscovery[] = {false, true};
 
-const uint BINARY_SWITCH_CALLBACK = 0;
-const uint BRIGHTNESS_CALLBACK = 1;
+const uint LIGHT_CALLBACK = 0;
+const uint BINARY_SWITCH_CALLBACK = 1;
+const uint BRIGHTNESS_CALLBACK = 2;
 
 UpnpConnector::UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback lostCallback)
 {
@@ -277,90 +278,98 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
                                            GUPnPDeviceProxy *proxy,
                                            gpointer userData)
 {
-//    GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(proxy);
-//    UpnpResource::Ptr pUpnpResource;
-//    const string udn = gupnp_device_info_get_udn(deviceInfo);
-//    bool isRoot = *(static_cast <bool *> (userData));
-//
-//    DEBUG_PRINT("Device type: " << gupnp_device_info_get_device_type(deviceInfo));
-//#ifndef NDEBUG
-//    char *devModel = gupnp_device_info_get_model_name(deviceInfo);
-//    if (devModel != NULL)
-//    {
-//        DEBUG_PRINT("\tDevice model: " << devModel);
-//        g_free(devModel);
-//    }
-//
-//    char *devName = gupnp_device_info_get_friendly_name(deviceInfo);
-//    if (devName != NULL)
-//    {
-//        DEBUG_PRINT("\tFriendly name: " << devName);
-//        g_free(devName);
-//    }
-//#endif
-//    DEBUG_PRINT("\tUdn: " << udn);
-//
-//    if (isRoot)
-//    {
-//        // Root device
-//        pUpnpResource = s_manager->processDevice(proxy, deviceInfo, true, &s_requestState);
-//    }
-//    else
-//    {
-//        pUpnpResource = s_manager->processDevice(proxy, deviceInfo, false, &s_requestState);
-//    }
-//
-//    if (pUpnpResource != nullptr && !pUpnpResource->isRegistered())
-//    {
-//        DEBUG_PRINT("Register device resource: " << pUpnpResource->m_uri);
-//        if (s_discoveryCallback(pUpnpResource) == 0)
-//        {
-//            pUpnpResource->setRegistered(true);
-//        }
-//        else
-//        {
-//            pUpnpResource->setRegistered(false);
-//            unregisterDeviceResource(udn);
-//            return;
-//        }
-//
-//        // Traverse the service list and register all the services where isReady() returns true.
-//        // This is done in order to catch all the services that have been seen
-//        // prior to discovering the hosting device.
-//        GList *childService = gupnp_device_info_list_services (deviceInfo);
-//
-//        while (childService)
-//        {
-//            GUPnPServiceInfo *serviceInfo = GUPNP_SERVICE_INFO (childService->data);
-//            std::shared_ptr<UpnpResource> pUpnpResourceService = s_manager->findResource(serviceInfo);
-//            if (pUpnpResourceService == nullptr)
-//            {
-//                DEBUG_PRINT("Registering device: Service link is empty!");
-//                // This could happen if support for the service is not implemented
-//            }
-//            else
-//            {
-//                DEBUG_PRINT(pUpnpResourceService->m_uri << "ready " << pUpnpResourceService->isReady() <<
-//                            " and registered " << pUpnpResourceService->isRegistered());
-//                if (pUpnpResourceService->isReady() && !pUpnpResourceService->isRegistered())
-//                {
-//                    DEBUG_PRINT("Register resource for previously discovered child service: " <<
-//                                pUpnpResourceService->m_uri);
-//                    s_discoveryCallback(pUpnpResourceService);
-//                    pUpnpResourceService->setRegistered(true);
-//
-//                    // Subscribe to notifications
-//                    // Important!!! UpnpService object associated with this info/proxy
-//                    // must stay valid until we unsubscribe from notificatons. This
-//                    // means we have to keep a reference to the object inside the
-//                    // UpnpManager as long as we are subscribed to notifications.
-//                    gupnp_service_proxy_set_subscribed(GUPNP_SERVICE_PROXY(serviceInfo), true);
-//                }
-//            }
-//            g_object_unref (childService->data);
-//            childService = g_list_delete_link (childService, childService);
-//        }
-//    }
+    GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(proxy);
+    UpnpResource::Ptr pUpnpResource;
+    const string udn = gupnp_device_info_get_udn(deviceInfo);
+    bool isRoot = *(static_cast <bool *> (userData));
+
+    DEBUG_PRINT("Device type: " << gupnp_device_info_get_device_type(deviceInfo));
+
+    // For now, lights only
+    if (! boost::regex_match(gupnp_device_info_get_device_type(deviceInfo), boost::regex(".*[Ll]ight.*")))
+    {
+        ERROR_PRINT("Device type " << gupnp_device_info_get_device_type(deviceInfo) << " not implemented");
+        return;
+    }
+
+#ifndef NDEBUG
+    char *devModel = gupnp_device_info_get_model_name(deviceInfo);
+    if (devModel != NULL)
+    {
+        DEBUG_PRINT("\tDevice model: " << devModel);
+        g_free(devModel);
+    }
+
+    char *devName = gupnp_device_info_get_friendly_name(deviceInfo);
+    if (devName != NULL)
+    {
+        DEBUG_PRINT("\tFriendly name: " << devName);
+        g_free(devName);
+    }
+#endif
+    DEBUG_PRINT("\tUdn: " << udn);
+
+    if (isRoot)
+    {
+        // Root device
+        pUpnpResource = s_manager->processDevice(proxy, deviceInfo, true, &s_requestState);
+    }
+    else
+    {
+        pUpnpResource = s_manager->processDevice(proxy, deviceInfo, false, &s_requestState);
+    }
+
+    if (pUpnpResource != nullptr && !pUpnpResource->isRegistered())
+    {
+        DEBUG_PRINT("Register device resource: " << pUpnpResource->m_uri);
+        if (s_discoveryCallback(pUpnpResource) == 0)
+        {
+            pUpnpResource->setRegistered(true);
+        }
+        else
+        {
+            pUpnpResource->setRegistered(false);
+            unregisterDeviceResource(udn);
+            return;
+        }
+
+        // Traverse the service list and register all the services where isReady() returns true.
+        // This is done in order to catch all the services that have been seen
+        // prior to discovering the hosting device.
+        GList *childService = gupnp_device_info_list_services (deviceInfo);
+
+        while (childService)
+        {
+            GUPnPServiceInfo *serviceInfo = GUPNP_SERVICE_INFO (childService->data);
+            std::shared_ptr<UpnpResource> pUpnpResourceService = s_manager->findResource(serviceInfo);
+            if (pUpnpResourceService == nullptr)
+            {
+                DEBUG_PRINT("Registering device: Service link is empty!");
+                // This could happen if support for the service is not implemented
+            }
+            else
+            {
+                DEBUG_PRINT(pUpnpResourceService->m_uri << "ready " << pUpnpResourceService->isReady() <<
+                            " and registered " << pUpnpResourceService->isRegistered());
+                if (pUpnpResourceService->isReady() && !pUpnpResourceService->isRegistered())
+                {
+                    DEBUG_PRINT("Register resource for previously discovered child service: " <<
+                                pUpnpResourceService->m_uri);
+                    s_discoveryCallback(pUpnpResourceService);
+                    pUpnpResourceService->setRegistered(true);
+
+                    // Subscribe to notifications
+                    // Important!!! UpnpService object associated with this info/proxy
+                    // must stay valid until we unsubscribe from notificatons. This
+                    // means we have to keep a reference to the object inside the
+                    // UpnpManager as long as we are subscribed to notifications.
+                    gupnp_service_proxy_set_subscribed(GUPNP_SERVICE_PROXY(serviceInfo), true);
+                }
+            }
+            g_object_unref (childService->data);
+            childService = g_list_delete_link (childService, childService);
+        }
+    }
 }
 
 void UpnpConnector::onServiceProxyAvailable(GUPnPControlPoint *controlPoint,
@@ -626,6 +635,28 @@ OCEntityHandlerResult handleEntityHandlerRequests( OCEntityHandlerRequest *entit
             }
         }
 
+        for (const auto& device : s_manager->m_devices) {
+            if (device.second->m_uri == uri) {
+                switch (entityHandlerRequest->method)
+                {
+                    case OC_REST_GET:
+                        DEBUG_PRINT(" GET Request for: " << uri);
+                        ehResult = device.second->processGetRequest(payload);
+                        break;
+
+                    case OC_REST_PUT:
+                    case OC_REST_POST:
+                        DEBUG_PRINT("PUT / POST Request on " << uri << " are not supported");
+                        // fall thru intentionally
+
+                    default:
+                        DEBUG_PRINT("UnSupported Method [" << entityHandlerRequest->method << "] Received");
+                        ConcurrentIotivityUtils::respondToRequestWithError(entityHandlerRequest, " Unsupported Method", OC_EH_METHOD_NOT_ALLOWED);
+                        return OC_EH_ERROR;
+                }
+            }
+        }
+
         responsePayload = getCommonPayload(uri.c_str(), interfaceQuery, resourceType, payload);
         ConcurrentIotivityUtils::respondToRequest(entityHandlerRequest, responsePayload, ehResult);
         OICFree(dupQuery);
@@ -654,7 +685,11 @@ OCEntityHandlerResult resourceEntityHandler(OCEntityHandlerFlag,
     uintptr_t callbackParamResourceType = (uintptr_t)callback;
     std::string resourceType;
 
-    if (callbackParamResourceType == BINARY_SWITCH_CALLBACK)
+    if (callbackParamResourceType == LIGHT_CALLBACK)
+    {
+        return handleEntityHandlerRequests(entityHandlerRequest, UPNP_OIC_TYPE_DEVICE_LIGHT);
+    }
+    else if (callbackParamResourceType == BINARY_SWITCH_CALLBACK)
     {
         return handleEntityHandlerRequests(entityHandlerRequest, UPNP_OIC_TYPE_POWER_SWITCH);
     }
@@ -692,6 +727,21 @@ void UpnpConnector::onAdd(std::string uri)
             else
             {
                 DEBUG_PRINT("No resource added for " << service.second->m_resourceType);
+            }
+        }
+    }
+
+    for (const auto& device : s_manager->m_devices) {
+        if (device.second->m_uri == uri) {
+            if (device.second->m_resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT) {
+                DEBUG_PRINT("Adding light device");
+                ConcurrentIotivityUtils::queueCreateResource(uri, UPNP_OIC_TYPE_DEVICE_LIGHT, OC_RSRVD_INTERFACE_ACTUATOR,
+                        resourceEntityHandler,
+                        (void *) LIGHT_CALLBACK, resourceProperties);
+            }
+            else
+            {
+                DEBUG_PRINT("No device added for " << device.second->m_resourceType);
             }
         }
     }
