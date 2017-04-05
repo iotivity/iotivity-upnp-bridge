@@ -51,6 +51,8 @@ class UpnpDevice: public UpnpResource
         std::vector<string> &getDeviceList();
         std::vector<string> &getServiceList();
 
+        OCEntityHandlerResult processGetRequest(OCRepPayload *payload);
+
     private:
 
         GUPnPDeviceProxy *m_proxy;

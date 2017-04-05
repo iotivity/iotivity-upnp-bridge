@@ -40,13 +40,12 @@ class UpnpManager
         std::shared_ptr<UpnpService> findService(std::string serviceKey);
 
         // TODO make this private access it through accessors.
+        // Device map, keyed off device UDN
+        std::map<std::string, std::shared_ptr<UpnpDevice> > m_devices;
         // Service map, keyed off service ID
         std::map<std::string, std::shared_ptr<UpnpService> > m_services;
 
     private:
-        // Device map, keyed off device UDN
-        std::map<std::string, std::shared_ptr<UpnpDevice> > m_devices;
-
 
         std::shared_ptr<UpnpDevice> addDevice(GUPnPDeviceInfo *info,
                                               const string parent,

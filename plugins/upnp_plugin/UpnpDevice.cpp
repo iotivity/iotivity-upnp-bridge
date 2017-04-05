@@ -168,3 +168,78 @@ string UpnpDevice::getStringField(function< char *(GUPnPDeviceInfo *deviceInfo)>
     }
     return "";
 }
+
+OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload)
+{
+    if (payload == NULL)
+    {
+        throw "payload is null";
+    }
+
+    GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(m_proxy);
+
+    if (!OCRepPayloadSetPropString(payload, "device_type", m_deviceType.c_str()))
+    {
+        throw "Failed to set device_type value in payload";
+    }
+    DEBUG_PRINT("device_type: " << m_deviceType);
+
+    for (auto const &kv : s_deviceInfo2AttributesMap)
+    {
+        char *c_field = kv.second(deviceInfo);
+        if (c_field != NULL)
+        {
+            string s_field = string(c_field);
+            if (!OCRepPayloadSetPropString(payload, kv.first.c_str(), s_field.c_str()))
+            {
+                throw "Failed to set property value in payload";
+            }
+            DEBUG_PRINT(kv.first << ": " << s_field);
+            g_free(c_field);
+        }
+    }
+
+    char *iconUrl = gupnp_device_info_get_icon_url(deviceInfo, NULL, -1, -1, -1, false, NULL, NULL, NULL, NULL);
+    if (iconUrl != NULL)
+    {
+        if (!OCRepPayloadSetPropString(payload, "icon_url", iconUrl))
+        {
+            throw "Failed to set icon_url value in payload";
+        }
+        DEBUG_PRINT("icon_url: " << iconUrl);
+        g_free(iconUrl);
+    }
+
+    if (!OCRepPayloadSetPropString(payload, "name", m_name.c_str()))
+    {
+        throw "Failed to set name in payload";
+    }
+    DEBUG_PRINT("name: " << m_name);
+
+    if (!OCRepPayloadSetPropString(payload, "uri", m_uri.c_str()))
+    {
+        throw "Failed to set uri in payload";
+    }
+    DEBUG_PRINT("uri: " << m_uri);
+
+    if (!m_links.empty())
+    {
+        DEBUG_PRINT("Setting links");
+        const OCRepPayload *links[m_links.size()];
+        size_t dimensions[MAX_REP_ARRAY_DEPTH] = {m_links.size(), 0, 0};
+        for (unsigned int i = 0; i < m_links.size(); ++i) {
+            DEBUG_PRINT("link[" << i << "]");
+            DEBUG_PRINT("\thref=" << m_links[i].href);
+            DEBUG_PRINT("\trel=" << m_links[i].rel);
+            DEBUG_PRINT("\trt=" << m_links[i].rt);
+            OCRepPayload *linkPayload = OCRepPayloadCreate();
+            OCRepPayloadSetPropString(linkPayload, "href", m_links[i].href.c_str());
+            OCRepPayloadSetPropString(linkPayload, "rel", m_links[i].rel.c_str());
+            OCRepPayloadSetPropString(linkPayload, "rt", m_links[i].rt.c_str());
+            links[i] = linkPayload;
+        }
+        OCRepPayloadSetPropObjectArray(payload, "links", links, dimensions);
+    }
+
+    return OC_EH_OK;
+}
