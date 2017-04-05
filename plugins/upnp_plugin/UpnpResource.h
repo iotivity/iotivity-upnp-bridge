@@ -30,9 +30,9 @@
 using namespace std;
 
 struct _link {
-	string href;
-	string rel;
-	string rt;
+    string href;
+    string rel;
+    string rt;
 };
 
 class UpnpResource

@@ -37,7 +37,7 @@ import org.iotivity.base.OcRepresentation;
 public class AvTransport extends Service implements Parcelable {
 
     public static final String UPNP_OIC_TYPE_AV_TRANSPORT = "oic.r.av.transport";
-    public static final String UPNP_OIC_URI_PREFIX_AV_TRANSPORT = "/oic/upnp/av-transport/";
+    public static final String UPNP_OIC_URI_PREFIX_AV_TRANSPORT = "/upnp/av-transport/";
 
     public static final String AV_TRANSPORT_URI_KEY = "avTransportUri";
     public static final String DESIRED_URI_KEY = "currentUri";
