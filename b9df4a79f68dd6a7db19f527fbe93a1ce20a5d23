@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_da0e7d34",
+        "filename": "plugins/upnp_plugin/UpnpResource.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2017-04-05T19:13:59Z",
+      "side": 1,
+      "message": "tabs should be changed to spaces.",
+      "revId": "b9df4a79f68dd6a7db19f527fbe93a1ce20a5d23",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
