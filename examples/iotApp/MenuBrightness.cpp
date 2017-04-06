@@ -111,14 +111,17 @@ void MenuBrightness::run(const std::vector<std::string> &cmd,
                         if (eCode == OC_STACK_OK)
                         {
                             int brightness;
-                            std::string uri;
-                            rep.getValue("uri", uri);
-                            if (uri == b.getResource()->uri())
+                            std::cout << rep.getUri() << std::endl;
+                            if (rep.getUri() == b.getResource()->uri())
                             {
                                 rep.getValue("brightness", brightness);
+                                std::cout << "\t" << brightness << "%" << std::endl;
                             }
-                            std::cout << uri << std::endl;
-                            std::cout << "\t" << brightness << "%" << std::endl;
+                            else
+                            {
+                                std::cout << "\tUNKNOWN" << std::endl;
+                            }
+
                         }
                     });
 
@@ -136,14 +139,16 @@ void MenuBrightness::run(const std::vector<std::string> &cmd,
                                 if (eCode == OC_STACK_OK)
                                 {
                                     int brightness;
-                                    std::string uri;
-                                    rep.getValue("uri", uri);
-                                    if (uri == b.getResource()->uri())
+                                    std::cout << rep.getUri() << std::endl;
+                                    if (rep.getUri() == b.getResource()->uri())
                                     {
                                         rep.getValue("brightness", brightness);
+                                        std::cout << "\t" << brightness << "%" << std::endl;
                                     }
-                                    std::cout << uri << std::endl;
-                                    std::cout << "\t" << brightness << "%" << std::endl;
+                                    else
+                                    {
+                                        std::cout << "\tUNKNOWN" << std::endl;
+                                    }
                                 }
                             });
                         }
