@@ -77,7 +77,7 @@ OCEntityHandlerResult UpnpPowerSwitch::processGetRequest(OCRepPayload *payload)
     }
     DEBUG_PRINT(powerSwitchStateName << ": " << (powerSwitchStateValue ? "true" : "false"));
 
-    return OC_EH_OK;
+    return UpnpService::processGetRequest(payload);
 }
 
 OCEntityHandlerResult UpnpPowerSwitch::processPutRequest(OCEntityHandlerRequest *ehRequest,
