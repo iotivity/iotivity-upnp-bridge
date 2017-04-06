@@ -98,7 +98,7 @@ OCEntityHandlerResult UpnpDimming::processGetRequest(OCRepPayload *payload)
     }
     DEBUG_PRINT(brightnessLevelName << ": " << brightnessLevelValue);
 
-    return OC_EH_OK;
+    return UpnpService::processGetRequest(payload);
 }
 
 OCEntityHandlerResult UpnpDimming::processPutRequest(OCEntityHandlerRequest *ehRequest,
