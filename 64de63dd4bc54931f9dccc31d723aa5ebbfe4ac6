@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1acb0d3e_6b2b2183",
+        "filename": "plugins/upnp_plugin/UpnpService.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2017-04-07T17:15:40Z",
+      "side": 1,
+      "message": "Should these be moved to the UpnpConstants.h header?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 40
+      },
+      "revId": "64de63dd4bc54931f9dccc31d723aa5ebbfe4ac6",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
