@@ -112,15 +112,16 @@ void MenuBinarySwitch::run(const std::vector<std::string> &cmd,
                         if (eCode == OC_STACK_OK)
                         {
                             bool powerState;
-                            std::string uri;
-                            rep.getValue("uri", uri);
-                            if (uri == bswitch.getResource()->uri())
+                            std::cout << rep.getUri() << std::endl;
+                            if (rep.getUri() == bswitch.getResource()->uri())
                             {
                                 rep.getValue("value", powerState);
+                                std::cout << "\t" << ((powerState) ? "is ON" : "is OFF") << std::endl;
                             }
-                            std::cout << uri << std::endl;
-                            std::cout << "\t" << ((powerState) ? "is ON" : "is OFF") << std::endl;
-                            //bswitch.turnOnAsync(!powerState, [](const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode){});
+                            else
+                            {
+                                std::cout << "\t" << "is UNKNOWN" << std::endl;
+                            }
                         }
                     });
 
@@ -138,15 +139,16 @@ void MenuBinarySwitch::run(const std::vector<std::string> &cmd,
                                 if (eCode == OC_STACK_OK)
                                 {
                                     bool powerState;
-                                    std::string uri;
-                                    rep.getValue("uri", uri);
-                                    if (uri == b.getResource()->uri())
+                                    std::cout << rep.getUri() << std::endl;
+                                    if (rep.getUri() == b.getResource()->uri())
                                     {
                                         rep.getValue("value", powerState);
+                                        std::cout << "\t" << ((powerState) ? "is ON" : "is OFF") << std::endl;
                                     }
-                                    std::cout << uri << std::endl;
-                                    std::cout << "\t" << ((powerState) ? "is ON" : "is OFF") << std::endl;
-                                    //bswitch.turnOnAsync(!powerState, [](const OC::HeaderOptions &headerOptions, const OC::OCRepresentation &rep, const int eCode){});
+                                    else
+                                    {
+                                        std::cout << "\t" << "is UNKNOWN" << std::endl;
+                                    }
                                 }
                             });
                         }
@@ -245,9 +247,7 @@ void MenuBinarySwitch::run(const std::vector<std::string> &cmd,
                         if (eCode == OC_STACK_OK)
                         {
                             bool powerState;
-                            std::string uri;
-                            rep.getValue("uri", uri);
-                            if (uri == bswitch.getResource()->uri())
+                            if (rep.getUri() == bswitch.getResource()->uri())
                             {
                                 rep.getValue("value", powerState);
                             }
@@ -272,9 +272,7 @@ void MenuBinarySwitch::run(const std::vector<std::string> &cmd,
                                 if (eCode == OC_STACK_OK)
                                 {
                                     bool powerState;
-                                    std::string uri;
-                                    rep.getValue("uri", uri);
-                                    if (uri == b.getResource()->uri())
+                                    if (rep.getUri() == b.getResource()->uri())
                                     {
                                         rep.getValue("value", powerState);
                                     }

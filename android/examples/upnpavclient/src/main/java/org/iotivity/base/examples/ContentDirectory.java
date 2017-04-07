@@ -37,7 +37,7 @@ import org.iotivity.base.OcRepresentation;
 public class ContentDirectory extends Service implements Parcelable {
 
     public static final String UPNP_OIC_TYPE_CONTENT_DIRECTORY = "oic.r.content.directory";
-    public static final String UPNP_OIC_URI_PREFIX_CONTENT_DIRECTORY = "/oic/upnp/content-directory/";
+    public static final String UPNP_OIC_URI_PREFIX_CONTENT_DIRECTORY = "/upnp/content-directory/";
 
     public static final String SYSTEM_UPDATE_ID_KEY = "systemUpdateId";
     public static final String SEARCH_CAPS_KEY = "searchCaps";
