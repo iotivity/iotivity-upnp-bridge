@@ -107,7 +107,7 @@ static std::map<std::string, std::string > UpnpInterfaceMap =
 static std::map<std::string, std::string > UpnpUriPrefixMap =
 {
     {UPNP_OIC_TYPE_DEVICE_LIGHT,            UPNP_OIC_URI_PREFIX_LIGHT},
-    {UPNP_OIC_TYPE_BRIGHTNESS,              UPNP_OIC_IRI_PREFIX_BRIGHTNESS},
+    {UPNP_OIC_TYPE_BRIGHTNESS,              UPNP_OIC_URI_PREFIX_BRIGHTNESS},
     {UPNP_OIC_TYPE_POWER_SWITCH,            UPNP_OIC_URI_PREFIX_POWER_SWITCH},
     {UPNP_OIC_TYPE_DEVICE_INET_GATEWAY,     UPNP_OIC_URI_PREFIX_INET_GATEWAY},
     {UPNP_OIC_TYPE_DEVICE_WAN,              UPNP_OIC_URI_PREFIX_WAN},
