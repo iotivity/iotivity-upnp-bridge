@@ -34,7 +34,7 @@ import org.iotivity.base.OcRepresentation;
 public class Light extends Device {
 
     public static final String UPNP_OIC_TYPE_DEVICE_LIGHT = "oic.d.light";
-    public static final String UPNP_OIC_URI_PREFIX_LIGHT = "/oic/upnp/light/";
+    public static final String UPNP_OIC_URI_PREFIX_LIGHT = "/upnp/light/";
 
     private BinarySwitch mBinarySwitch;
     private Brightness mBrightness;
