@@ -1,0 +1,9 @@
+Code-Review+1: Larry Sachs <larry.j.sachs@intel.com>
+Verified+1: jenkins-iotivity <jenkins@iotivity.org>
+Code-Review+1: George Nash <george.nash@intel.com>
+Code-Review+2: Rick Bell <richard.s.bell@intel.com>
+Submitted-by: Rick Bell <richard.s.bell@intel.com>
+Submitted-at: Fri, 07 Apr 2017 18:01:16 +0000
+Reviewed-on: https://gerrit.iotivity.org/gerrit/18583
+Project: iotivity-upnp-bridge
+Branch: refs/heads/mpm_plugin
