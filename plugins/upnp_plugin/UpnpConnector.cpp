@@ -109,7 +109,7 @@ void UpnpConnector::disconnect()
             gupnpStop();
             return true;
         };
-        request.finish = [&] (bool status) { promise.set_value(true); };
+        request.finish = [&] (bool status) {(void) status; promise.set_value(true); };
         s_requestState.requestQueue.push(&request);
 
         if (s_requestState.sourceId == 0)
@@ -201,6 +201,7 @@ void UpnpConnector::gupnpStart()
 
 int UpnpConnector::checkRequestQueue(gpointer data)
 {
+    (void) data;
     // Check request queue
     std::lock_guard< std::mutex > lock(s_requestState.queueLock);
     DEBUG_PRINT("(" << s_requestState.requestQueue.size() << ")");
@@ -278,6 +279,7 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
                                            GUPnPDeviceProxy *proxy,
                                            gpointer userData)
 {
+    (void) controlPoint;
     GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(proxy);
     UpnpResource::Ptr pUpnpResource;
     const string udn = gupnp_device_info_get_udn(deviceInfo);
@@ -375,6 +377,7 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
 void UpnpConnector::onServiceProxyAvailable(GUPnPControlPoint *controlPoint,
         GUPnPServiceProxy *proxy)
 {
+    (void) controlPoint;
     GUPnPServiceInfo *info = GUPNP_SERVICE_INFO(proxy);
 
     DEBUG_PRINT("Service type: " << gupnp_service_info_get_service_type(info));
@@ -393,6 +396,7 @@ void UpnpConnector::onIntrospectionAvailable(GUPnPServiceInfo          *info,
         const GError              *error,
         gpointer                  context)
 {
+    (void) context;
     DEBUG_PRINT(gupnp_service_info_get_service_type(info) << ", udn: " << gupnp_service_info_get_udn(
                     info));
 
@@ -485,6 +489,7 @@ void UpnpConnector::unregisterDeviceResource(string udn)
 void UpnpConnector::onDeviceProxyUnavailable(GUPnPControlPoint *controlPoint,
         GUPnPDeviceProxy *proxy)
 {
+    (void) controlPoint;
     GUPnPDeviceInfo *info = GUPNP_DEVICE_INFO(proxy);
     const string udn = gupnp_device_info_get_udn(info);
 
@@ -497,6 +502,7 @@ void UpnpConnector::onDeviceProxyUnavailable(GUPnPControlPoint *controlPoint,
 void UpnpConnector::onServiceProxyUnavailable(GUPnPControlPoint *controlPoint,
         GUPnPServiceProxy *proxy)
 {
+    (void) controlPoint;
     GUPnPServiceInfo *info = GUPNP_SERVICE_INFO(proxy);
 
     DEBUG_PRINT("Service type: " << gupnp_service_info_get_service_type(info));
