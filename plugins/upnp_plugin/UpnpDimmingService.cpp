@@ -104,6 +104,7 @@ OCEntityHandlerResult UpnpDimming::processGetRequest(OCRepPayload *payload)
 OCEntityHandlerResult UpnpDimming::processPutRequest(OCEntityHandlerRequest *ehRequest,
         string uri, string resourceType, OCRepPayload *payload)
 {
+    (void) uri;
     if (!ehRequest || !ehRequest->payload ||
             ehRequest->payload->type != PAYLOAD_TYPE_REPRESENTATION)
     {

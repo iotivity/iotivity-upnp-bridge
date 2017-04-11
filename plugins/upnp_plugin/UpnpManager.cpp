@@ -233,6 +233,7 @@ UpnpResource::Ptr UpnpManager::processService(GUPnPServiceProxy *proxy,
         GUPnPServiceIntrospection *introspection,
         UpnpRequestState *requestState)
 {
+    (void) introspection;
     const string udn = gupnp_service_info_get_udn(serviceInfo);
     DEBUG_PRINT("type: " << gupnp_service_info_get_service_type(serviceInfo) << ", Udn: " << udn);
 

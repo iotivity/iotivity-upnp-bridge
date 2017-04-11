@@ -103,6 +103,7 @@ extern "C" DLL_PUBLIC MPMResult pluginScan(MPMPluginCtx *, MPMPipeMessage *messa
     printf("***********************************************\n");
     printf("UPNP pluginScan\n");
     printf("***********************************************\n");
+    (void) message;
     OIC_LOG(INFO, TAG, "Scan called!");
     // Send back scan response to the client.
     s_upnpConnector->onScan();
@@ -134,6 +135,7 @@ extern "C" DLL_PUBLIC MPMResult pluginRemove(MPMPluginCtx *, MPMPipeMessage *mes
     printf("***********************************************\n");
     printf("UPNP pluginRemove\n");
     printf("***********************************************\n");
+    (void) message;
     OIC_LOG(INFO, TAG, "Remove called! Remove iotivity resources here based on what the client says");
     // Currently nothing needs to be done beyond what's already done in pluginStop
     return MPM_RESULT_OK;
@@ -144,6 +146,7 @@ extern "C" DLL_PUBLIC MPMResult pluginReconnect(MPMPluginCtx *, MPMPipeMessage *
     printf("***********************************************\n");
     printf("UPNP pluginReconnect\n");
     printf("***********************************************\n");
+    (void) message;
     OIC_LOG(INFO, TAG, "Reconnect called! Reconnect to devices, create "
                        "resources from the message/cloud/db/file.");
     // TODO implement the pluginReconnect function
