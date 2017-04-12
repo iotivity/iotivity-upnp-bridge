@@ -96,6 +96,7 @@ upnp_env.PrependUnique(LIBS = ['m',
 ######################################################################
 upnp_src = [
          'upnp_plugin.cpp',
+         'UpnpBridgeDevice.cpp',
          'UpnpConnector.cpp',
          'UpnpDevice.cpp',
          'UpnpDimmingService.cpp',
