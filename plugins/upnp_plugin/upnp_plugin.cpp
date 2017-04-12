@@ -30,6 +30,7 @@
 #include "logger.h"
 #include "UpnpConnector.h"
 #include "UpnpResource.h"
+#include "UpnpBridgeDevice.h"
 
 #define TAG "UPNP_PLUGIN"
 static std::string MODULE = "UPNP_PLUGIN MODULE";
@@ -45,21 +46,22 @@ FILE *sec_file(const char *, const char *mode)
 }
 
 static UpnpConnector *s_upnpConnector;
+static UpnpBridgeDevice *s_bridge;
 std::vector< UpnpResource::Ptr > m_vecResources;
 
 int connectorDiscoveryCb(UpnpResource::Ptr pUpnpResource)
 {
-    int result = 0;
-
     DEBUG_PRINT("UpnpResource URI " << pUpnpResource->m_uri);
-    //result = m_pResourceContainer->registerResource(pUpnpResource);
-    if (result == 0)
+    m_vecResources.push_back(pUpnpResource);
+    if (s_bridge != nullptr)
     {
-        m_vecResources.push_back(pUpnpResource);
-    } else {
-        ERROR_PRINT(result << " Failed to register resource: " << pUpnpResource->m_uri);
+        s_bridge->addResource(pUpnpResource);
     }
-    return result;
+    else {
+        ERROR_PRINT("Failed to add resource: " << pUpnpResource->m_uri);
+    }
+
+    return 0;
 }
 
 extern "C" DLL_PUBLIC MPMResult pluginCreate(MPMPluginCtx **plugin_specific_ctx)
@@ -88,6 +90,8 @@ extern "C" DLL_PUBLIC MPMResult pluginStart(MPMPluginCtx *ctx)
     printf("***********************************************\n");
     ctx->stay_in_process_loop = true;
     OIC_LOG(INFO, TAG, "Plugin start called!");
+
+    s_bridge = new UpnpBridgeDevice();
 
     UpnpConnector::DiscoveryCallback discoveryCb = std::bind(&connectorDiscoveryCb, std::placeholders::_1);
     //UpnpConnector::LostCallback lostCb = std::bind(&UpnpBundleActivator::connectorLostCb, this, std::placeholders::_1);
@@ -165,6 +169,8 @@ extern "C" DLL_PUBLIC MPMResult pluginStop(MPMPluginCtx *)
         s_upnpConnector->disconnect();
     }
     delete s_upnpConnector;
+
+    delete s_bridge;
 
     return MPM_RESULT_OK;
 }
