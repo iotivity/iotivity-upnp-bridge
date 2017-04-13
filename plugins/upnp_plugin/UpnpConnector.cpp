@@ -720,15 +720,13 @@ void UpnpConnector::onAdd(std::string uri)
         if (service.second->m_uri == uri) {
             if (service.second->m_resourceType == UPNP_OIC_TYPE_POWER_SWITCH) {
                 DEBUG_PRINT("Adding binary switch resource");
-                ConcurrentIotivityUtils::queueCreateResource(uri, UPNP_OIC_TYPE_POWER_SWITCH, OC_RSRVD_INTERFACE_ACTUATOR,
-                        resourceEntityHandler,
-                        (void *) BINARY_SWITCH_CALLBACK, resourceProperties);
+                createResource(uri, UPNP_OIC_TYPE_POWER_SWITCH, OC_RSRVD_INTERFACE_ACTUATOR,
+                        resourceEntityHandler, (void *) BINARY_SWITCH_CALLBACK, resourceProperties);
             }
             else if (service.second->m_resourceType == UPNP_OIC_TYPE_BRIGHTNESS) {
                 DEBUG_PRINT("Adding brightness resource");
-                ConcurrentIotivityUtils::queueCreateResource(uri, UPNP_OIC_TYPE_BRIGHTNESS, OC_RSRVD_INTERFACE_ACTUATOR,
-                        resourceEntityHandler,
-                        (void *) BRIGHTNESS_CALLBACK, resourceProperties);
+                createResource(uri, UPNP_OIC_TYPE_BRIGHTNESS, OC_RSRVD_INTERFACE_ACTUATOR,
+                        resourceEntityHandler, (void *) BRIGHTNESS_CALLBACK, resourceProperties);
             }
             else
             {
@@ -741,9 +739,8 @@ void UpnpConnector::onAdd(std::string uri)
         if (device.second->m_uri == uri) {
             if (device.second->m_resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT) {
                 DEBUG_PRINT("Adding light device");
-                ConcurrentIotivityUtils::queueCreateResource(uri, UPNP_OIC_TYPE_DEVICE_LIGHT, OC_RSRVD_INTERFACE_ACTUATOR,
-                        resourceEntityHandler,
-                        (void *) LIGHT_CALLBACK, resourceProperties);
+                createResource(uri, UPNP_OIC_TYPE_DEVICE_LIGHT, OC_RSRVD_INTERFACE_ACTUATOR,
+                        resourceEntityHandler, (void *) LIGHT_CALLBACK, resourceProperties);
             }
             else
             {
@@ -751,4 +748,42 @@ void UpnpConnector::onAdd(std::string uri)
             }
         }
     }
+}
+
+OCStackResult UpnpConnector::createResource(const string uri, const string resourceTypeName,
+        const char *resourceInterfaceName, OCEntityHandler resourceEntityHandler,
+        void* callbackParam, uint8_t resourceProperties)
+{
+    OCStackResult result = OC_STACK_ERROR;
+    OCResourceHandle handle = OCGetResourceHandleAtUri(uri.c_str());
+
+    if (!handle)
+    {
+        result = OCCreateResource(&handle, resourceTypeName.c_str(), resourceInterfaceName,
+                uri.c_str(), resourceEntityHandler, callbackParam, resourceProperties);
+        if (result == OC_STACK_OK)
+        {
+            DEBUG_PRINT("Created resource " << uri);
+            result = OCBindResourceTypeToResource(handle, "oic.d.virtual");
+            if (result == OC_STACK_OK)
+            {
+                DEBUG_PRINT("Bound virtual resource type to " << uri);
+            }
+            else
+            {
+                DEBUG_PRINT("Failed to bind virtual resource type to " << uri);
+            }
+        }
+        else
+        {
+            DEBUG_PRINT("Failed to create resource " << uri);
+        }
+    }
+    else
+    {
+        DEBUG_PRINT("Not creating resource " << uri << " (already exists)");
+        result = OC_STACK_OK;
+    }
+
+    return result;
 }

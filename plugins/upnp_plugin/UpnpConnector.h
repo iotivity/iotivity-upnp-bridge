@@ -71,6 +71,10 @@ class UpnpConnector
                                              gpointer                   userContext);
         static void unregisterDeviceResource(string udn);
         static void initResourceCallbackHandler();
+
+        OCStackResult createResource(const string uri, const string resourceTypeName,
+                const char *resourceInterfaceName, OCEntityHandler resourceEntityHandler,
+                void* callbackParam, uint8_t resourceProperties);
 };
 
 #endif
