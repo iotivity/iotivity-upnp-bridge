@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1acb0d3e_80a0a4f5",
+        "filename": "plugins/upnp_plugin/UpnpBridgeDevice.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2017-04-13T17:27:54Z",
+      "side": 1,
+      "message": "I don\u0027t think it is needed for this commit but we may want to throw an error on failure.  Its the only thing we can do since this is a constructor.\n\nMaybe put a TODO in the code to throw an error.",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 54,
+        "endChar": 67
+      },
+      "revId": "b3534b664f55c365aa5cdb5e1b29c17134dd5f49",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
