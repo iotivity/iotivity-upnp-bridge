@@ -787,3 +787,24 @@ OCStackResult UpnpConnector::createResource(const string uri, const string resou
 
     return result;
 }
+
+void UpnpConnector::onRemove(std::string uri)
+{
+    DEBUG_PRINT("Removing " << uri);
+
+    for (const auto& service : s_manager->m_services) {
+        if (service.second->m_uri == uri) {
+            OCStackResult result = OC::Bridging::ConcurrentIotivityUtils::queueDeleteResource(uri);
+            DEBUG_PRINT("queueDeleteResource() result = " << result);
+            ConcurrentIotivityUtils::queueNotifyObservers(uri);
+        }
+    }
+
+    for (const auto& device : s_manager->m_devices) {
+        if (device.second->m_uri == uri) {
+            OCStackResult result = OC::Bridging::ConcurrentIotivityUtils::queueDeleteResource(uri);
+            DEBUG_PRINT("queueDeleteResource() result = " << result);
+            ConcurrentIotivityUtils::queueNotifyObservers(uri);
+        }
+    }
+}

@@ -84,6 +84,17 @@ void UpnpBridgeDevice::addResource(UpnpResource::Ptr pResource)
     s_links.push_back(singleLink);
 }
 
+void UpnpBridgeDevice::removeResource(string uri)
+{
+    for(vector<_link>::iterator itor = s_links.begin(); itor != s_links.end(); ++itor) {
+        if (itor->href == uri) {
+            DEBUG_PRINT("Removing link for " << uri);
+            s_links.erase(itor);
+            break;
+        }
+    }
+}
+
 // Entity handler
 OCEntityHandlerResult UpnpBridgeDevice::entityHandler(OCEntityHandlerFlag flag,
         OCEntityHandlerRequest *entityHandlerRequest, void *callback)

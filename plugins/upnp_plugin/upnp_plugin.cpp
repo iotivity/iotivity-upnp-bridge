@@ -64,6 +64,24 @@ int connectorDiscoveryCb(UpnpResource::Ptr pUpnpResource)
     return 0;
 }
 
+void connectorLostCb(UpnpResource::Ptr pUpnpResource)
+{
+    DEBUG_PRINT("UpnpResource URI " << pUpnpResource->m_uri);
+    std::vector< UpnpResource::Ptr >::iterator itor;
+    itor = std::find(m_vecResources.begin(), m_vecResources.end(), pUpnpResource);
+    if (itor != m_vecResources.end())
+    {
+        m_vecResources.erase(itor);
+    }
+
+    if (s_bridge != nullptr)
+    {
+        s_bridge->removeResource(pUpnpResource->m_uri);
+    }
+
+    s_upnpConnector->onRemove(pUpnpResource->m_uri);
+}
+
 extern "C" DLL_PUBLIC MPMResult pluginCreate(MPMPluginCtx **plugin_specific_ctx)
 {
     printf("***********************************************\n");
@@ -94,9 +112,9 @@ extern "C" DLL_PUBLIC MPMResult pluginStart(MPMPluginCtx *ctx)
     s_bridge = new UpnpBridgeDevice();
 
     UpnpConnector::DiscoveryCallback discoveryCb = std::bind(&connectorDiscoveryCb, std::placeholders::_1);
-    //UpnpConnector::LostCallback lostCb = std::bind(&UpnpBundleActivator::connectorLostCb, this, std::placeholders::_1);
+    UpnpConnector::LostCallback lostCb = std::bind(&connectorLostCb, std::placeholders::_1);
 
-    s_upnpConnector = new UpnpConnector(discoveryCb, nullptr /*lostCb*/);
+    s_upnpConnector = new UpnpConnector(discoveryCb, lostCb);
     s_upnpConnector->connect();
 
     return MPM_RESULT_OK;
@@ -139,9 +157,19 @@ extern "C" DLL_PUBLIC MPMResult pluginRemove(MPMPluginCtx *, MPMPipeMessage *mes
     printf("***********************************************\n");
     printf("UPNP pluginRemove\n");
     printf("***********************************************\n");
-    (void) message;
     OIC_LOG(INFO, TAG, "Remove called! Remove iotivity resources here based on what the client says");
-    // Currently nothing needs to be done beyond what's already done in pluginStop
+
+    if (message->payloadSize <= 0 && message->payload == NULL)
+    {
+        OIC_LOG(ERROR, TAG, "No payload received, failed to remove device");
+        return MPM_RESULT_INTERNAL_ERROR;
+    }
+
+    std::string uri = reinterpret_cast<const char *>(message->payload);
+
+    s_upnpConnector->onRemove(uri);
+    s_bridge->removeResource(uri);
+
     return MPM_RESULT_OK;
 }
 
