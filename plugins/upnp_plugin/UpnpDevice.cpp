@@ -105,15 +105,12 @@ static const map< string, function< char *(GUPnPDeviceInfo *deviceInfo)>> s_devi
 
 void UpnpDevice::initBasicAttributes(GUPnPDeviceInfo *deviceInfo)
 {
-//    BundleResource::setAttribute("device_type", m_deviceType);
-
     for (auto const &kv : s_deviceInfo2AttributesMap)
     {
         char *c_field = kv.second(deviceInfo);
         if (c_field != NULL)
         {
             string s_field = string(c_field);
-//            BundleResource::setAttribute(kv.first, s_field);
             g_free(c_field);
         }
     }
@@ -121,14 +118,8 @@ void UpnpDevice::initBasicAttributes(GUPnPDeviceInfo *deviceInfo)
     char *iconUrl = gupnp_device_info_get_icon_url(deviceInfo, NULL, -1, -1, -1, false, NULL, NULL, NULL, NULL);
     if (iconUrl != NULL)
     {
-//        BundleResource::setAttribute("icon_url", string(iconUrl));
         g_free(iconUrl);
     }
-
-//    BundleResource::setAttribute("name",
-//                                 m_name); // need to keep name with attributes (OCRepresentation bug)
-//    BundleResource::setAttribute("uri",
-//                                 m_uri);   // need to keep uri with attributes (OCRepresentation bug)
 }
 
 void UpnpDevice::initAttributes()

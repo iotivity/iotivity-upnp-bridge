@@ -62,7 +62,6 @@ class UpnpResource
         std::string m_resourceType;
         std::string m_interface;
         std::string m_address;
-//        CompositeAttribute m_links;
         vector<_link> m_links;
         string m_udn;
         bool m_ready;
