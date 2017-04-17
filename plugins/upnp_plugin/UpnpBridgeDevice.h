@@ -43,6 +43,7 @@ class UpnpBridgeDevice
                 std::string resourceType, OCRepPayload *payload);
 
         void addResource(UpnpResource::Ptr resource);
+        void removeResource(std::string uri);
 };
 
 #endif
