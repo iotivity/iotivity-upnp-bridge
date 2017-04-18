@@ -96,7 +96,7 @@ extern "C" DLL_PUBLIC MPMResult pluginCreate(MPMPluginCtx **plugin_specific_ctx)
     *plugin_specific_ctx = ctx;
     g_plugin_ctx = ctx;
     ctx->device_name = "UPnP plugin";
-    ctx->resource_type = "oic.d.upnp";
+    ctx->resource_type = "x.oic.d.upnp";
     ctx->open = sec_file;
     return MPM_RESULT_OK;
 }
