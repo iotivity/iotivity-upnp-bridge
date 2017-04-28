@@ -31,9 +31,6 @@ using namespace std;
 
 static const string MODULE = "UpnpService";
 
-static const char* nameAttribute = "name";
-static const char* uriAttribute = "uri";
-
 UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
                          string type,
                          UpnpRequestState *requestState,
@@ -149,18 +146,7 @@ string UpnpService::getStringField(function< char *(GUPnPServiceInfo *serviceInf
 
 OCEntityHandlerResult UpnpService::processGetRequest(OCRepPayload *payload)
 {
-    if (!OCRepPayloadSetPropString(payload, nameAttribute, m_name.c_str()))
-    {
-        throw "Failed to set name in payload";
-    }
-    DEBUG_PRINT(nameAttribute << ": " << m_name);
-
-    if (!OCRepPayloadSetPropString(payload, uriAttribute, m_uri.c_str()))
-    {
-        throw "Failed to set uri in payload";
-    }
-    DEBUG_PRINT(uriAttribute << ": " << m_uri);
-
+	(void) payload;
     return OC_EH_OK;
 }
 
