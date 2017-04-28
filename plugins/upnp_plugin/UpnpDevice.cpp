@@ -201,18 +201,6 @@ OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload)
         g_free(iconUrl);
     }
 
-    if (!OCRepPayloadSetPropString(payload, "name", m_name.c_str()))
-    {
-        throw "Failed to set name in payload";
-    }
-    DEBUG_PRINT("name: " << m_name);
-
-    if (!OCRepPayloadSetPropString(payload, "uri", m_uri.c_str()))
-    {
-        throw "Failed to set uri in payload";
-    }
-    DEBUG_PRINT("uri: " << m_uri);
-
     if (!m_links.empty())
     {
         DEBUG_PRINT("Setting links");

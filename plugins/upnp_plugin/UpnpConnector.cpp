@@ -739,7 +739,7 @@ void UpnpConnector::onAdd(std::string uri)
         if (device.second->m_uri == uri) {
             if (device.second->m_resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT) {
                 DEBUG_PRINT("Adding light device");
-                createResource(uri, UPNP_OIC_TYPE_DEVICE_LIGHT, OC_RSRVD_INTERFACE_ACTUATOR,
+                createResource(uri, UPNP_OIC_TYPE_DEVICE_LIGHT, OC_RSRVD_INTERFACE_READ,
                         resourceEntityHandler, (void *) LIGHT_CALLBACK, resourceProperties);
             }
             else
@@ -764,15 +764,15 @@ OCStackResult UpnpConnector::createResource(const string uri, const string resou
         if (result == OC_STACK_OK)
         {
             DEBUG_PRINT("Created resource " << uri);
-            result = OCBindResourceTypeToResource(handle, "oic.d.virtual");
-            if (result == OC_STACK_OK)
-            {
-                DEBUG_PRINT("Bound virtual resource type to " << uri);
-            }
-            else
-            {
-                DEBUG_PRINT("Failed to bind virtual resource type to " << uri);
-            }
+//            result = OCBindResourceTypeToResource(handle, "oic.d.virtual");
+//            if (result == OC_STACK_OK)
+//            {
+//                DEBUG_PRINT("Bound virtual resource type to " << uri);
+//            }
+//            else
+//            {
+//                DEBUG_PRINT("Failed to bind virtual resource type to " << uri);
+//            }
         }
         else
         {
