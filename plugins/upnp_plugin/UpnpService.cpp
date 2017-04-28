@@ -155,11 +155,11 @@ OCEntityHandlerResult UpnpService::processGetRequest(OCRepPayload *payload)
     }
     DEBUG_PRINT(nameAttribute << ": " << m_name);
 
-    if (!OCRepPayloadSetPropString(payload, uriAttribute, m_uri.c_str()))
-    {
-        throw "Failed to set uri in payload";
-    }
-    DEBUG_PRINT(uriAttribute << ": " << m_uri);
+//    if (!OCRepPayloadSetPropString(payload, uriAttribute, m_uri.c_str()))
+//    {
+//        throw "Failed to set uri in payload";
+//    }
+//    DEBUG_PRINT(uriAttribute << ": " << m_uri);
 
     return OC_EH_OK;
 }
