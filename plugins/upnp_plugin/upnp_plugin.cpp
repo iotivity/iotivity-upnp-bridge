@@ -61,6 +61,8 @@ int connectorDiscoveryCb(UpnpResource::Ptr pUpnpResource)
         ERROR_PRINT("Failed to add resource: " << pUpnpResource->m_uri);
     }
 
+    s_upnpConnector->onAdd(pUpnpResource->m_uri); // add now, don't wait for scan
+
     return 0;
 }
 
@@ -96,7 +98,7 @@ extern "C" DLL_PUBLIC MPMResult pluginCreate(MPMPluginCtx **plugin_specific_ctx)
     *plugin_specific_ctx = ctx;
     g_plugin_ctx = ctx;
     ctx->device_name = "UPnP plugin";
-    ctx->resource_type = "oic.d.upnp";
+    ctx->resource_type = "oic.r.upnp.device";
     ctx->open = sec_file;
     return MPM_RESULT_OK;
 }
