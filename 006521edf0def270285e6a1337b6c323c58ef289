@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1acb0d3e_89b67e89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-05-01T21:33:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_29e2ea9f",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "006521edf0def270285e6a1337b6c323c58ef289",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_09fcce3d",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2017-05-01T21:15:19Z",
       "side": 1,
       "message": "nit: lines should not exceed 72 characters in general.  Manually wrap.",
+      "revId": "006521edf0def270285e6a1337b6c323c58ef289",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_a9bb3a71",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-05-01T21:33:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_09fcce3d",
       "revId": "006521edf0def270285e6a1337b6c323c58ef289",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
