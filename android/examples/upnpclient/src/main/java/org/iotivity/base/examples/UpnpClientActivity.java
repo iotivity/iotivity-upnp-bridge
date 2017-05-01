@@ -299,8 +299,8 @@ public class UpnpClientActivity extends Activity implements
 
         try {
             // Read attribute values into local representation of resource
-            if (ocRepresentation.hasAttribute(Device.URI_KEY)) {
-                final String ocRepUri = ocRepresentation.getValue(Device.URI_KEY);
+            final String ocRepUri = ocRepresentation.getUri();
+            if (ocRepUri != null && !ocRepUri.isEmpty()) {
                 Log.i(TAG, "Resource URI: " + ocRepUri);
 
                 Resource resource = mResourceLookup.get(ocRepUri);
@@ -483,8 +483,8 @@ public class UpnpClientActivity extends Activity implements
 
         try {
             // Read attribute values into local representation of resource
-            if (ocRepresentation.hasAttribute(Device.URI_KEY)) {
-                final String ocRepUri = ocRepresentation.getValue(Device.URI_KEY);
+            final String ocRepUri = ocRepresentation.getUri();
+            if (ocRepUri != null && !ocRepUri.isEmpty()) {
                 Log.i(TAG, "Resource URI: " + ocRepUri);
 
                 Resource resource = mResourceLookup.get(ocRepUri);
@@ -566,8 +566,8 @@ public class UpnpClientActivity extends Activity implements
 
         try {
             // Read attribute values into local representation of resource
-            if (ocRepresentation.hasAttribute(Device.URI_KEY)) {
-                final String ocRepUri = ocRepresentation.getValue(Device.URI_KEY);
+            final String ocRepUri = ocRepresentation.getUri();
+            if (ocRepUri != null && !ocRepUri.isEmpty()) {
                 Log.i(TAG, "Resource URI: " + ocRepUri);
 
                 Resource resource = mResourceLookup.get(ocRepUri);
