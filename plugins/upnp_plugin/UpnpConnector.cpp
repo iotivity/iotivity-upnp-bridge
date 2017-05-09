@@ -774,6 +774,27 @@ OCStackResult UpnpConnector::createResource(const string uri, const string resou
 //            {
 //                DEBUG_PRINT("Failed to bind virtual resource type to " << uri);
 //            }
+            if (UPNP_OIC_TYPE_DEVICE_LIGHT == resourceTypeName) {
+                result = OCBindResourceTypeToResource(handle, OC_RSRVD_RESOURCE_TYPE_COLLECTION);
+                if (result == OC_STACK_OK)
+                {
+                    DEBUG_PRINT("Bound collection resource type to " << uri);
+                }
+                else
+                {
+                    DEBUG_PRINT("Failed to bind collection resource type to " << uri);
+                }
+
+                result = OCBindResourceInterfaceToResource(handle, OC_RSRVD_INTERFACE_LL);
+                if (result == OC_STACK_OK)
+                {
+                    DEBUG_PRINT("Bound ll resource interface to " << uri);
+                }
+                else
+                {
+                    DEBUG_PRINT("Failed to bind ll resource interface to " << uri);
+                }
+            }
         }
         else
         {
