@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1acb0d3e_123dce8f",
+        "filename": "plugins/upnp_plugin/UpnpBridgeDevice.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2017-05-09T23:39:52Z",
+      "side": 1,
+      "message": "This is how I was trying to add the oic.if.ll to the resource but for some reason it is not showing up in the simulator.\n\nI do get the oic.if.r and the oic.if.baseline.",
+      "revId": "eedc2853b1de990f713f3d6c8acbc9d8bfeb103c",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_b2415a0d",
+        "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2017-05-09T23:39:52Z",
+      "side": 1,
+      "message": "I have not clue how to create the interface so it contains both oic.wk.col and oic.d.light larry can you help me out here.",
+      "range": {
+        "startLine": 742,
+        "startChar": 0,
+        "endLine": 743,
+        "endChar": 92
+      },
+      "revId": "eedc2853b1de990f713f3d6c8acbc9d8bfeb103c",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
