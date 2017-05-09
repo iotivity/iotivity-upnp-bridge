@@ -739,7 +739,7 @@ void UpnpConnector::onAdd(std::string uri)
         if (device.second->m_uri == uri) {
             if (device.second->m_resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT) {
                 DEBUG_PRINT("Adding light device");
-                createResource(uri, UPNP_OIC_TYPE_DEVICE_LIGHT, OC_RSRVD_INTERFACE_READ,
+                createResource(uri, "oic.wk.col" /*UPNP_OIC_TYPE_DEVICE_LIGHT*/, OC_RSRVD_INTERFACE_READ,
                         resourceEntityHandler, (void *) LIGHT_CALLBACK, resourceProperties);
             }
             else
