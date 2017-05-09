@@ -265,6 +265,11 @@ OCRepPayload* UpnpBridgeDevice::getCommonPayload(const char *uri, char *interfac
         {
             throw "Failed to set baseline interface" ;
         }
+
+        if (!OCRepPayloadAddInterface(payload, OC_RSRVD_INTERFACE_LL))
+        {
+            throw "Failed to set ll interface";
+        }
     }
 
     return payload;
