@@ -81,6 +81,23 @@
       "revId": "eedc2853b1de990f713f3d6c8acbc9d8bfeb103c",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_722532c1",
+        "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-05-10T17:21:13Z",
+      "side": 1,
+      "message": "Something like:\n\n           if (UPNP_OIC_TYPE_DEVICE_LIGHT \u003d\u003d resourceTypeName) {\n               result \u003d OCBindResourceTypeToResource(handle, OC_RSRVD_RESOURCE_TYPE_COLLECTION);\n               if (result \u003d\u003d OC_STACK_OK)\n               {\n                   DEBUG_PRINT(\"Bound collection resource type to \" \u003c\u003c uri);\n               }\n               else\n               {\n                   DEBUG_PRINT(\"Failed to bind collection resource type to \" \u003c\u003c uri);\n               }\n\n               result \u003d OCBindResourceInterfaceToResource(handle, OC_RSRVD_INTERFACE_LL);\n               if (result \u003d\u003d OC_STACK_OK)\n               {\n                   DEBUG_PRINT(\"Bound ll resource interface to \" \u003c\u003c uri);\n               }\n               else\n               {\n                   DEBUG_PRINT(\"Failed to bind ll resource interface to \" \u003c\u003c uri);\n               }\n           }",
+      "revId": "eedc2853b1de990f713f3d6c8acbc9d8bfeb103c",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
