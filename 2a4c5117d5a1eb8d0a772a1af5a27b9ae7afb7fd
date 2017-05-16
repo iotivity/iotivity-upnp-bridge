@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1acb0d3e_98feb86a",
+        "filename": "plugins/upnp_plugin/UpnpBridgeDevice.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2017-05-16T22:13:31Z",
+      "side": 1,
+      "message": "Use BRIDGE_RESOURCE_TYPE...",
+      "range": {
+        "startLine": 101,
+        "startChar": 65,
+        "endLine": 101,
+        "endChar": 77
+      },
+      "revId": "2a4c5117d5a1eb8d0a772a1af5a27b9ae7afb7fd",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_38d8e41c",
         "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
         "patchSetId": 4
