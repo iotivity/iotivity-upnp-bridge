@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1acb0d3e_b82b742f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-05-16T18:27:23Z",
+      "side": 1,
+      "message": "To be precise, it\u0027s the light\u0027s resources that are in the collection (brightness \u0026 switch)",
+      "revId": "5d3c6693e2fe70751cdd53fc8eeda6d9edee0f17",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
