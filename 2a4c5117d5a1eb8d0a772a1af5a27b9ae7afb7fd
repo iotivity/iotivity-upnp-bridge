@@ -93,6 +93,30 @@
       "revId": "2a4c5117d5a1eb8d0a772a1af5a27b9ae7afb7fd",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_58261018",
+        "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2017-05-16T22:51:38Z",
+      "side": 1,
+      "message": "We should added to the header file.",
+      "parentUuid": "1acb0d3e_3846a4c0",
+      "range": {
+        "startLine": 768,
+        "startChar": 60,
+        "endLine": 768,
+        "endChar": 75
+      },
+      "revId": "2a4c5117d5a1eb8d0a772a1af5a27b9ae7afb7fd",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
