@@ -39,9 +39,19 @@ using namespace OC::Bridging;
 static const string MODULE = "UpnpBridgeDevice";
 
 static const string BRIDGE_RESOURCE_TYPE = "oic.d.bridge";
+static const string SECUREMODE_RESOURCE_TYPE = "oic.r.securemode";
 
-static string s_bridgeUri = "/oic/upnp-bridge/0";
+const uint SECUREMODE_CALLBACK = 0;
+const uint COLLECTION_CALLBACK = 1;
+
+static const string SECUREMODE_PROPERTY_KEY = "secureMode";
+static const string SECUREMODE_RESOURCE_URI = "/securemode";
+static const string BRIDGE_RESOURCE_URI_PREFIX = "/upnp-bridge/";
+
+static string s_bridgeUri = BRIDGE_RESOURCE_URI_PREFIX + "0";
 static vector<_link> s_links;
+
+static UpnpManager *s_upnpManager;
 
 OCStackResult createResource(const string uri, const string resourceTypeName,
         const char *resourceInterfaceName, OCEntityHandler resourceEntityHandler,
@@ -96,13 +106,14 @@ UpnpBridgeDevice::UpnpBridgeDevice()
         DEBUG_PRINT("Convert UUID to string for Upnp Bridge Device failed");
     }
 
-    s_bridgeUri = "/oic/upnp-bridge/" + string(uuidString);
+    s_bridgeUri = BRIDGE_RESOURCE_URI_PREFIX + string(uuidString);
 
-    OCStackResult result = OCBindResourceTypeToResource(handle, "oic.d.bridge");
+    OCStackResult result = OCBindResourceTypeToResource(handle, BRIDGE_RESOURCE_TYPE.c_str());
     if (result != OC_STACK_OK)
     {
         DEBUG_PRINT("OCBindResourceTypeToResource() = " << result);
     }
+
     handle = OCGetResourceHandleAtUri(OC_RSRVD_WELL_KNOWN_URI);
     if (!handle)
     {
@@ -113,11 +124,32 @@ UpnpBridgeDevice::UpnpBridgeDevice()
     {
         DEBUG_PRINT("OCSetResourceProperties() = " << result);
     }
-    result = createResource("/securemode", "oic.r.securemode",
-                            OC_RSRVD_INTERFACE_READ,
-                            entityHandler, (void *) 0, resourceProperties);
+
+    result = createResource(SECUREMODE_RESOURCE_URI, SECUREMODE_RESOURCE_TYPE.c_str(),
+            OC_RSRVD_INTERFACE_READ, entityHandler, (void *) SECUREMODE_CALLBACK, resourceProperties);
     if (result != OC_STACK_OK)
     {
+        DEBUG_PRINT("CreateResource() = " << result);
+    }
+
+    result = createResource(s_bridgeUri, BRIDGE_RESOURCE_TYPE.c_str(),
+            OC_RSRVD_INTERFACE_READ, entityHandler, (void *) COLLECTION_CALLBACK, resourceProperties);
+    if (result == OC_STACK_OK)
+    {
+        OCResourceHandle bridgeHandle = OCGetResourceHandleAtUri(s_bridgeUri.c_str());
+        result = OCBindResourceTypeToResource(bridgeHandle, OC_RSRVD_RESOURCE_TYPE_COLLECTION);
+        if (result != OC_STACK_OK)
+        {
+            DEBUG_PRINT("Failed to bind collection resource type to " << bridgeHandle << " " << result);
+        }
+
+        result = OCBindResourceInterfaceToResource(bridgeHandle, OC_RSRVD_INTERFACE_LL);
+        if (result != OC_STACK_OK)
+        {
+            DEBUG_PRINT("Failed to bind ll resource interface to " << bridgeHandle << " " << result);
+        }
+    }
+    else {
         DEBUG_PRINT("CreateResource() = " << result);
     }
 
@@ -130,12 +162,17 @@ UpnpBridgeDevice::~UpnpBridgeDevice()
     DEBUG_PRINT("Plugin stop queueDeleteResource() result = " << result);
 }
 
+void UpnpBridgeDevice::setUpnpManager(UpnpManager *upnpManager)
+{
+    s_upnpManager = upnpManager;
+}
+
 void UpnpBridgeDevice::addResource(UpnpResource::Ptr pResource)
 {
     _link singleLink;
 
     singleLink.href = pResource->m_uri;
-    singleLink.rel = "contains";
+    singleLink.rel = LINK_REL_CONTAINS;
     singleLink.rt = pResource->getResourceType();
 
     s_links.push_back(singleLink);
@@ -156,9 +193,27 @@ void UpnpBridgeDevice::removeResource(string uri)
 OCEntityHandlerResult UpnpBridgeDevice::entityHandler(OCEntityHandlerFlag flag,
         OCEntityHandlerRequest *entityHandlerRequest, void *callback)
 {
+    DEBUG_PRINT("");
     uintptr_t callbackParamResourceType = (uintptr_t)callback;
-    (void)callbackParamResourceType;
-    return handleEntityHandlerRequests(flag, entityHandlerRequest, "oic.r.securemode");
+    string resourceType;
+
+    if (callbackParamResourceType == SECUREMODE_CALLBACK)
+    {
+        resourceType = SECUREMODE_RESOURCE_TYPE;
+    }
+    else if (callbackParamResourceType == COLLECTION_CALLBACK)
+    {
+        resourceType = OC_RSRVD_RESOURCE_TYPE_COLLECTION;
+    }
+
+    if (! resourceType.empty()) {
+        return handleEntityHandlerRequests(flag, entityHandlerRequest, resourceType);
+    }
+    else {
+        ERROR_PRINT("Unknown callback type " << callbackParamResourceType);
+    }
+
+    return OC_EH_ERROR;
 }
 
 OCEntityHandlerResult UpnpBridgeDevice::handleEntityHandlerRequests(OCEntityHandlerFlag,
@@ -221,14 +276,34 @@ OCEntityHandlerResult UpnpBridgeDevice::processGetRequest(string uri, string res
         throw "payload is null";
     }
 
-    if ("oic.r.securemode" == resType)
+    if (SECUREMODE_RESOURCE_TYPE == resType)
     {
         bool secureMode = false;
-        if (!OCRepPayloadSetPropBool(payload, "secureMode", secureMode))
+        if (!OCRepPayloadSetPropBool(payload, SECUREMODE_PROPERTY_KEY.c_str(), secureMode))
         {
-            throw "Failed to set 'secureMode' in payload";
+            string message = "Failed to set '" + SECUREMODE_PROPERTY_KEY + "' in payload";
+            throw message;
         }
-        DEBUG_PRINT(uri << " -- secureMode: " << (secureMode ? "true" : "false"));
+        DEBUG_PRINT(uri << " -- " << SECUREMODE_PROPERTY_KEY << ": " << (secureMode ? "true" : "false"));
+    }
+    else if (OC_RSRVD_RESOURCE_TYPE_COLLECTION == resType)
+    {
+        DEBUG_PRINT("Setting bridge device links");
+        const OCRepPayload *links[s_upnpManager->m_devices.size()];
+        size_t dimensions[MAX_REP_ARRAY_DEPTH] = {s_upnpManager->m_devices.size(), 0, 0};
+        int linksIndex = 0;
+        for (const auto& device : s_upnpManager->m_devices) {
+            DEBUG_PRINT(OC_RSRVD_LINKS << "[" << linksIndex << "]");
+            DEBUG_PRINT("\t" << OC_RSRVD_HREF << "=" << device.second->m_uri);
+            DEBUG_PRINT("\t" << OC_RSRVD_RESOURCE_TYPE << "=" << device.second->m_resourceType);
+            OCRepPayload *linkPayload = OCRepPayloadCreate();
+            OCRepPayloadSetPropString(linkPayload, OC_RSRVD_HREF, device.second->m_uri.c_str());
+            OCRepPayloadSetPropString(linkPayload, OC_RSRVD_REL, LINK_REL_HOSTS.c_str());
+            OCRepPayloadSetPropString(linkPayload, OC_RSRVD_RESOURCE_TYPE, device.second->m_resourceType.c_str());
+            links[linksIndex] = linkPayload;
+            ++linksIndex;
+        }
+        OCRepPayloadSetPropObjectArray(payload, OC_RSRVD_LINKS, links, dimensions);
     }
     else
     {
