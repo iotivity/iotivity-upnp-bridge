@@ -22,6 +22,7 @@
 #define UPNP_BRIDGE_DEVICE_H_
 
 #include "UpnpResource.h"
+#include "UpnpManager.h"
 
 class UpnpBridgeDevice
 {
@@ -44,6 +45,8 @@ class UpnpBridgeDevice
 
         void addResource(UpnpResource::Ptr resource);
         void removeResource(std::string uri);
+
+        void setUpnpManager(UpnpManager *upnpManager);
 };
 
 #endif

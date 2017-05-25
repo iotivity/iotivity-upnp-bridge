@@ -119,6 +119,8 @@ extern "C" DLL_PUBLIC MPMResult pluginStart(MPMPluginCtx *ctx)
     s_upnpConnector = new UpnpConnector(discoveryCb, lostCb);
     s_upnpConnector->connect();
 
+    s_bridge->setUpnpManager(s_upnpConnector->getUpnpManager());
+
     return MPM_RESULT_OK;
 }
 
