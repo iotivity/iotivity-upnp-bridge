@@ -43,6 +43,8 @@ class UpnpConnector
         UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback lostCallback);
         virtual ~UpnpConnector();
 
+        UpnpManager* getUpnpManager();
+
         void connect();
         void disconnect();
         void onScan();

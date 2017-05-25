@@ -87,6 +87,11 @@ UpnpConnector::~UpnpConnector()
     s_manager = NULL;
 }
 
+UpnpManager* UpnpConnector::getUpnpManager()
+{
+    return s_manager;
+}
+
 void UpnpConnector::disconnect()
 {
     DEBUG_PRINT("");
