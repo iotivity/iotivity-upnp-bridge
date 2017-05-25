@@ -30,7 +30,9 @@
 
 #include <UpnpConstants.h>
 
-
+//IoTivity Link Relationships
+static const std::string LINK_REL_CONTAINS = "contains";
+static const std::string LINK_REL_HOSTS = "hosts";
 
 //From UPNP spec
 static const std::string UPNP_PREFIX_DEVICE = "urn:schemas-upnp-org:device";
