@@ -87,6 +87,11 @@ UpnpConnector::~UpnpConnector()
     s_manager = NULL;
 }
 
+UpnpManager* UpnpConnector::getUpnpManager()
+{
+    return s_manager;
+}
+
 void UpnpConnector::disconnect()
 {
     DEBUG_PRINT("");
@@ -720,15 +725,13 @@ void UpnpConnector::onAdd(std::string uri)
         if (service.second->m_uri == uri) {
             if (service.second->m_resourceType == UPNP_OIC_TYPE_POWER_SWITCH) {
                 DEBUG_PRINT("Adding binary switch resource");
-                ConcurrentIotivityUtils::queueCreateResource(uri, UPNP_OIC_TYPE_POWER_SWITCH, OC_RSRVD_INTERFACE_ACTUATOR,
-                        resourceEntityHandler,
-                        (void *) BINARY_SWITCH_CALLBACK, resourceProperties);
+                createResource(uri, UPNP_OIC_TYPE_POWER_SWITCH, OC_RSRVD_INTERFACE_ACTUATOR,
+                        resourceEntityHandler, (void *) BINARY_SWITCH_CALLBACK, resourceProperties);
             }
             else if (service.second->m_resourceType == UPNP_OIC_TYPE_BRIGHTNESS) {
                 DEBUG_PRINT("Adding brightness resource");
-                ConcurrentIotivityUtils::queueCreateResource(uri, UPNP_OIC_TYPE_BRIGHTNESS, OC_RSRVD_INTERFACE_ACTUATOR,
-                        resourceEntityHandler,
-                        (void *) BRIGHTNESS_CALLBACK, resourceProperties);
+                createResource(uri, UPNP_OIC_TYPE_BRIGHTNESS, OC_RSRVD_INTERFACE_ACTUATOR,
+                        resourceEntityHandler, (void *) BRIGHTNESS_CALLBACK, resourceProperties);
             }
             else
             {
@@ -741,14 +744,94 @@ void UpnpConnector::onAdd(std::string uri)
         if (device.second->m_uri == uri) {
             if (device.second->m_resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT) {
                 DEBUG_PRINT("Adding light device");
-                ConcurrentIotivityUtils::queueCreateResource(uri, UPNP_OIC_TYPE_DEVICE_LIGHT, OC_RSRVD_INTERFACE_ACTUATOR,
-                        resourceEntityHandler,
-                        (void *) LIGHT_CALLBACK, resourceProperties);
+                createResource(uri, UPNP_OIC_TYPE_DEVICE_LIGHT, OC_RSRVD_INTERFACE_READ,
+                        resourceEntityHandler, (void *) LIGHT_CALLBACK, resourceProperties);
             }
             else
             {
                 DEBUG_PRINT("No device added for " << device.second->m_resourceType);
             }
+        }
+    }
+}
+
+OCStackResult UpnpConnector::createResource(const string uri, const string resourceTypeName,
+        const char *resourceInterfaceName, OCEntityHandler resourceEntityHandler,
+        void* callbackParam, uint8_t resourceProperties)
+{
+    OCStackResult result = OC_STACK_ERROR;
+    OCResourceHandle handle = OCGetResourceHandleAtUri(uri.c_str());
+
+    if (!handle)
+    {
+        result = OCCreateResource(&handle, resourceTypeName.c_str(), resourceInterfaceName,
+                uri.c_str(), resourceEntityHandler, callbackParam, resourceProperties);
+        if (result == OC_STACK_OK)
+        {
+            DEBUG_PRINT("Created resource " << uri);
+            // Commented-out for now... causes CTT failure
+//            result = OCBindResourceTypeToResource(handle, "oic.d.virtual");
+//            if (result == OC_STACK_OK)
+//            {
+//                DEBUG_PRINT("Bound virtual resource type to " << uri);
+//            }
+//            else
+//            {
+//                DEBUG_PRINT("Failed to bind virtual resource type to " << uri);
+//            }
+            if (UPNP_OIC_TYPE_DEVICE_LIGHT == resourceTypeName) {
+                result = OCBindResourceTypeToResource(handle, OC_RSRVD_RESOURCE_TYPE_COLLECTION);
+                if (result == OC_STACK_OK)
+                {
+                    DEBUG_PRINT("Bound collection resource type to " << uri);
+                }
+                else
+                {
+                    DEBUG_PRINT("Failed to bind collection resource type to " << uri);
+                }
+
+                result = OCBindResourceInterfaceToResource(handle, OC_RSRVD_INTERFACE_LL);
+                if (result == OC_STACK_OK)
+                {
+                    DEBUG_PRINT("Bound ll resource interface to " << uri);
+                }
+                else
+                {
+                    DEBUG_PRINT("Failed to bind ll resource interface to " << uri);
+                }
+            }
+        }
+        else
+        {
+            DEBUG_PRINT("Failed to create resource " << uri);
+        }
+    }
+    else
+    {
+        DEBUG_PRINT("Not creating resource " << uri << " (already exists)");
+        result = OC_STACK_OK;
+    }
+
+    return result;
+}
+
+void UpnpConnector::onRemove(std::string uri)
+{
+    DEBUG_PRINT("Removing " << uri);
+
+    for (const auto& service : s_manager->m_services) {
+        if (service.second->m_uri == uri) {
+            OCStackResult result = OC::Bridging::ConcurrentIotivityUtils::queueDeleteResource(uri);
+            DEBUG_PRINT("queueDeleteResource() result = " << result);
+            ConcurrentIotivityUtils::queueNotifyObservers(uri);
+        }
+    }
+
+    for (const auto& device : s_manager->m_devices) {
+        if (device.second->m_uri == uri) {
+            OCStackResult result = OC::Bridging::ConcurrentIotivityUtils::queueDeleteResource(uri);
+            DEBUG_PRINT("queueDeleteResource() result = " << result);
+            ConcurrentIotivityUtils::queueNotifyObservers(uri);
         }
     }
 }

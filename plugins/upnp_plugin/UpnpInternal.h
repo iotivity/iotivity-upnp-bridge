@@ -30,7 +30,9 @@
 
 #include <UpnpConstants.h>
 
-
+//IoTivity Link Relationships
+static const std::string LINK_REL_CONTAINS = "contains";
+static const std::string LINK_REL_HOSTS = "hosts";
 
 //From UPNP spec
 static const std::string UPNP_PREFIX_DEVICE = "urn:schemas-upnp-org:device";
@@ -131,8 +133,6 @@ static std::map<std::string, std::string > UpnpUriPrefixMap =
     {UPNP_OIC_TYPE_RENDERING_CONTROL,       UPNP_OIC_URI_PREFIX_RENDERING_CONTROL},
     {UPNP_OIC_TYPE_SCHEDULED_RECORDING,     UPNP_OIC_URI_PREFIX_SCHEDULED_RECORDING}
 };
-
-//typedef std::vector<RCSResourceAttributes> CompositeAttribute;
 
 typedef enum
 {

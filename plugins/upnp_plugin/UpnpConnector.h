@@ -43,10 +43,13 @@ class UpnpConnector
         UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback lostCallback);
         virtual ~UpnpConnector();
 
+        UpnpManager* getUpnpManager();
+
         void connect();
         void disconnect();
         void onScan();
         void onAdd(std::string uri);
+        void onRemove(std::string uri);
 
     private:
         DiscoveryCallback m_discoveryCallback;
@@ -71,6 +74,10 @@ class UpnpConnector
                                              gpointer                   userContext);
         static void unregisterDeviceResource(string udn);
         static void initResourceCallbackHandler();
+
+        OCStackResult createResource(const string uri, const string resourceTypeName,
+                const char *resourceInterfaceName, OCEntityHandler resourceEntityHandler,
+                void* callbackParam, uint8_t resourceProperties);
 };
 
 #endif

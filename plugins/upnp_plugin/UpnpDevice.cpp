@@ -105,15 +105,12 @@ static const map< string, function< char *(GUPnPDeviceInfo *deviceInfo)>> s_devi
 
 void UpnpDevice::initBasicAttributes(GUPnPDeviceInfo *deviceInfo)
 {
-//    BundleResource::setAttribute("device_type", m_deviceType);
-
     for (auto const &kv : s_deviceInfo2AttributesMap)
     {
         char *c_field = kv.second(deviceInfo);
         if (c_field != NULL)
         {
             string s_field = string(c_field);
-//            BundleResource::setAttribute(kv.first, s_field);
             g_free(c_field);
         }
     }
@@ -121,14 +118,8 @@ void UpnpDevice::initBasicAttributes(GUPnPDeviceInfo *deviceInfo)
     char *iconUrl = gupnp_device_info_get_icon_url(deviceInfo, NULL, -1, -1, -1, false, NULL, NULL, NULL, NULL);
     if (iconUrl != NULL)
     {
-//        BundleResource::setAttribute("icon_url", string(iconUrl));
         g_free(iconUrl);
     }
-
-//    BundleResource::setAttribute("name",
-//                                 m_name); // need to keep name with attributes (OCRepresentation bug)
-//    BundleResource::setAttribute("uri",
-//                                 m_uri);   // need to keep uri with attributes (OCRepresentation bug)
 }
 
 void UpnpDevice::initAttributes()
@@ -209,18 +200,6 @@ OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload)
         DEBUG_PRINT("icon_url: " << iconUrl);
         g_free(iconUrl);
     }
-
-    if (!OCRepPayloadSetPropString(payload, "name", m_name.c_str()))
-    {
-        throw "Failed to set name in payload";
-    }
-    DEBUG_PRINT("name: " << m_name);
-
-    if (!OCRepPayloadSetPropString(payload, "uri", m_uri.c_str()))
-    {
-        throw "Failed to set uri in payload";
-    }
-    DEBUG_PRINT("uri: " << m_uri);
 
     if (!m_links.empty())
     {

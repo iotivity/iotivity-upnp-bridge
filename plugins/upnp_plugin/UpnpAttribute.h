@@ -24,14 +24,6 @@
 class UpnpAttribute
 {
     public:
-
-//        static UpnpAttributeInfo *getAttributeInfo(std::vector <UpnpAttributeInfo> *serviceAttributes,
-//                std::string attrName);
-//
-//        static bool isValidRequest(std::map <std::string, std::pair <UpnpAttributeInfo *, int>> *attrMap,
-//                                   std::string,
-//                                   UpnpActionType actionType);
-
         static void getCb(GUPnPServiceProxy *proxy,
                           GUPnPServiceProxyAction *action,
                           gpointer userData);
@@ -43,12 +35,6 @@ class UpnpAttribute
         static void setCb(GUPnPServiceProxy *proxy,
                           GUPnPServiceProxyAction *action,
                           gpointer userData);
-
-//        static bool set(GUPnPServiceProxy *serviceProxy,
-//                        UpnpRequest *request,
-//                        UpnpAttributeInfo *attrInfo,
-//                        RCSResourceAttributes::Value *attrValue);
-
 };
 
 #endif

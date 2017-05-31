@@ -28,9 +28,7 @@ using namespace OC;
 class Light
 {
     public:
-        std::string m_uri; // need to keep uri here, due to OCRepresentation bug
-        Light() :
-            m_uri("")
+        Light()
         {
         }
 };
@@ -38,10 +36,9 @@ class Light
 class PowerSwitch
 {
     public:
-        std::string m_uri; // need to keep uri here, due to OCRepresentation bug
         bool m_state;
         PowerSwitch() :
-            m_uri(""), m_state(false)
+            m_state(false)
         {
         }
 };
@@ -49,10 +46,9 @@ class PowerSwitch
 class Brightness
 {
     public:
-        std::string m_uri; // need to keep uri here, due to OCRepresentation bug
         int m_loadlevel;
         Brightness() :
-            m_uri(""), m_loadlevel(100)
+            m_loadlevel(100)
         {
         }
 };
@@ -94,20 +90,17 @@ void OnPostBrightness(const HeaderOptions &headerOptions, const OCRepresentation
                       const int eCode)
 {
     (void) headerOptions;
-    (void) rep;
     try
     {
         if (eCode == OC_STACK_OK)
         {
             std::cout << "POST Brightness request successful" << std::endl;
-            std::string repUri;
-            rep.getValue("uri", repUri);
+            std::string repUri = rep.getUri();
 
             Brightness brightness = s_brightnessLookup[repUri];
 
-            rep.getValue("uri", brightness.m_uri);
             rep.getValue("brightness", brightness.m_loadlevel);
-            std::cout << "\turi: " << brightness.m_uri << std::endl;
+            std::cout << "\turi: " << repUri << std::endl;
             std::cout << "\tbrightness: " << brightness.m_loadlevel << std::endl;
             s_brightnessLookup[repUri] = brightness; // save new copy
         }
@@ -116,26 +109,21 @@ void OnPostBrightness(const HeaderOptions &headerOptions, const OCRepresentation
     {
         std::cout << "Caught exception: " << e.what() << " in onPostBrightness" << std::endl;
     }
-
 }
-
 
 void OnPostLight(const HeaderOptions &headerOptions, const OCRepresentation &rep, const int eCode)
 {
     (void) headerOptions;
-    (void) rep;
     try
     {
         if (eCode == OC_STACK_OK)
         {
             std::cout << "POST request successful" << std::endl;
-            std::string repUri;
-            rep.getValue("uri", repUri);
+            std::string repUri = rep.getUri();
 
             Light light = s_lightLookup[repUri];
 
-            rep.getValue("uri", light.m_uri);
-            std::cout << "\turi: " << light.m_uri << std::endl;
+            std::cout << "\turi: " << repUri << std::endl;
             s_lightLookup[repUri] = light; // save new copy
         }
         else
@@ -157,14 +145,12 @@ void OnGetLight(const HeaderOptions &headerOptions, const OCRepresentation &rep,
         if (eCode == OC_STACK_OK)
         {
             std::cout << "GET response" << std::endl;
-            std::string repUri;
-            rep.getValue("uri", repUri);
+            std::string repUri = rep.getUri();
 
             std::shared_ptr< OCResource > lightResource = s_resourceLookup[repUri];
             Light light = s_lightLookup[repUri];
 
-            rep.getValue("uri", light.m_uri);
-            std::cout << "\turi: " << light.m_uri << std::endl;
+            std::cout << "\turi: " << repUri << std::endl;
             s_lightLookup[repUri] = light; // save new copy
 
             PostLightRepresentation(lightResource);
@@ -189,15 +175,13 @@ void OnGetPowerSwitch(const HeaderOptions &headerOptions, const OCRepresentation
         if (eCode == OC_STACK_OK)
         {
             std::cout << "GET response" << std::endl;
-            std::string repUri;
-            rep.getValue("uri", repUri);
+            std::string repUri = rep.getUri();
 
             std::shared_ptr< OCResource > powerSwitchResource = s_resourceLookup[repUri];
             PowerSwitch powerSwitch = s_powerSwitchLookup[repUri];
 
-            rep.getValue("uri", powerSwitch.m_uri);
             rep.getValue("value", powerSwitch.m_state);
-            std::cout << "\turi: " << powerSwitch.m_uri << std::endl;
+            std::cout << "\turi: " << repUri << std::endl;
             std::cout << "\tstate: " << powerSwitch.m_state << std::endl;
 
             s_powerSwitchLookup[repUri] = powerSwitch; // save new copy
@@ -224,15 +208,13 @@ void OnGetBrightness(const HeaderOptions &headerOptions, const OCRepresentation 
         if (eCode == OC_STACK_OK)
         {
             std::cout << "GET Brightness response" << std::endl;
-            std::string repUri;
-            rep.getValue("uri", repUri);
+            std::string repUri = rep.getUri();
 
             std::shared_ptr< OCResource > brightnessResource = s_resourceLookup[repUri];
             Brightness brightness = s_brightnessLookup[repUri];
 
-            rep.getValue("uri", brightness.m_uri);
             rep.getValue("brightness", brightness.m_loadlevel);
-            std::cout << "\turi: " << brightness.m_uri << std::endl;
+            std::cout << "\turi: " << repUri << std::endl;
             std::cout << "\tbrightness: " << brightness.m_loadlevel << std::endl;
 
             s_brightnessLookup[repUri] = brightness; // save new copy
@@ -255,9 +237,7 @@ void PostLightRepresentation(std::shared_ptr< OCResource > resource)
     OCRepresentation rep;
     std::cout << "Sending POST request to: " << resource->uri() << std::endl;
 
-    Light light = s_lightLookup[resource->uri()];
-
-    rep.setValue("uri", light.m_uri); // must be set to be available in OnLight()
+    rep.setUri(resource->uri()); // must be set to be available in OnLight()
     resource->post(rep, QueryParamsMap(), &OnPostLight);
 }
 
@@ -268,7 +248,7 @@ void PostPowerSwitchRepresentation(std::shared_ptr< OCResource > resource)
 
     PowerSwitch powerSwitch = s_powerSwitchLookup[resource->uri()];
 
-    rep.setValue("uri", powerSwitch.m_uri); // must be set to be available in OnLight()
+    rep.setUri(resource->uri()); // must be set to be available in OnPowerSwitch()
 
     rep.setValue("value", !powerSwitch.m_state);
 
@@ -282,7 +262,7 @@ void PostBrightnessRepresentation(std::shared_ptr< OCResource > resource)
 
     Brightness brightness = s_brightnessLookup[resource->uri()];
 
-    rep.setValue("uri", brightness.m_uri); // must be set to be available in OnLight()
+    rep.setUri(resource->uri()); // must be set to be available in OnBrightness()
 
     std::cout << "Current brightness level " << brightness.m_loadlevel << std::endl;
     int loadlevel = brightness.m_loadlevel - 20;
@@ -343,7 +323,6 @@ void foundResource(std::shared_ptr< OCResource > resource)
                     if (s_lightLookup.find(resourceUri) == s_lightLookup.end())
                     {
                         Light light = Light();
-                        light.m_uri = resourceUri;
                         s_lightLookup[resourceUri] = light;
 
                         std::shared_ptr< OCResource > lightResource = resource;
@@ -362,7 +341,6 @@ void foundResource(std::shared_ptr< OCResource > resource)
                     if (s_powerSwitchLookup.find(resourceUri) == s_powerSwitchLookup.end())
                     {
                         PowerSwitch powerSwitch = PowerSwitch();
-                        powerSwitch.m_uri = resourceUri;
                         s_powerSwitchLookup[resourceUri] = powerSwitch;
 
                         std::shared_ptr< OCResource > powerSwitchResource = resource;
@@ -383,7 +361,6 @@ void foundResource(std::shared_ptr< OCResource > resource)
                     {
                         std::cout << "adding Brightness resouce." << std::endl;
                         Brightness brightness = Brightness();
-                        brightness.m_uri = resourceUri;
                         s_brightnessLookup[resourceUri] = brightness;
 
                         std::shared_ptr< OCResource > brightnessResource = resource;

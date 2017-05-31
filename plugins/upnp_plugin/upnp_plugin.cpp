@@ -30,6 +30,7 @@
 #include "logger.h"
 #include "UpnpConnector.h"
 #include "UpnpResource.h"
+#include "UpnpBridgeDevice.h"
 
 #define TAG "UPNP_PLUGIN"
 static std::string MODULE = "UPNP_PLUGIN MODULE";
@@ -45,21 +46,42 @@ FILE *sec_file(const char *, const char *mode)
 }
 
 static UpnpConnector *s_upnpConnector;
+static UpnpBridgeDevice *s_bridge;
 std::vector< UpnpResource::Ptr > m_vecResources;
 
 int connectorDiscoveryCb(UpnpResource::Ptr pUpnpResource)
 {
-    int result = 0;
-
     DEBUG_PRINT("UpnpResource URI " << pUpnpResource->m_uri);
-    //result = m_pResourceContainer->registerResource(pUpnpResource);
-    if (result == 0)
+    m_vecResources.push_back(pUpnpResource);
+    if (s_bridge != nullptr)
     {
-        m_vecResources.push_back(pUpnpResource);
-    } else {
-        ERROR_PRINT(result << " Failed to register resource: " << pUpnpResource->m_uri);
+        s_bridge->addResource(pUpnpResource);
     }
-    return result;
+    else {
+        ERROR_PRINT("Failed to add resource: " << pUpnpResource->m_uri);
+    }
+
+    s_upnpConnector->onAdd(pUpnpResource->m_uri); // add now, don't wait for scan
+
+    return 0;
+}
+
+void connectorLostCb(UpnpResource::Ptr pUpnpResource)
+{
+    DEBUG_PRINT("UpnpResource URI " << pUpnpResource->m_uri);
+    std::vector< UpnpResource::Ptr >::iterator itor;
+    itor = std::find(m_vecResources.begin(), m_vecResources.end(), pUpnpResource);
+    if (itor != m_vecResources.end())
+    {
+        m_vecResources.erase(itor);
+    }
+
+    if (s_bridge != nullptr)
+    {
+        s_bridge->removeResource(pUpnpResource->m_uri);
+    }
+
+    s_upnpConnector->onRemove(pUpnpResource->m_uri);
 }
 
 extern "C" DLL_PUBLIC MPMResult pluginCreate(MPMPluginCtx **plugin_specific_ctx)
@@ -76,7 +98,7 @@ extern "C" DLL_PUBLIC MPMResult pluginCreate(MPMPluginCtx **plugin_specific_ctx)
     *plugin_specific_ctx = ctx;
     g_plugin_ctx = ctx;
     ctx->device_name = "UPnP plugin";
-    ctx->resource_type = "oic.d.upnp";
+    ctx->resource_type = "oic.r.upnp.device";
     ctx->open = sec_file;
     return MPM_RESULT_OK;
 }
@@ -89,11 +111,15 @@ extern "C" DLL_PUBLIC MPMResult pluginStart(MPMPluginCtx *ctx)
     ctx->stay_in_process_loop = true;
     OIC_LOG(INFO, TAG, "Plugin start called!");
 
-    UpnpConnector::DiscoveryCallback discoveryCb = std::bind(&connectorDiscoveryCb, std::placeholders::_1);
-    //UpnpConnector::LostCallback lostCb = std::bind(&UpnpBundleActivator::connectorLostCb, this, std::placeholders::_1);
+    s_bridge = new UpnpBridgeDevice();
 
-    s_upnpConnector = new UpnpConnector(discoveryCb, nullptr /*lostCb*/);
+    UpnpConnector::DiscoveryCallback discoveryCb = std::bind(&connectorDiscoveryCb, std::placeholders::_1);
+    UpnpConnector::LostCallback lostCb = std::bind(&connectorLostCb, std::placeholders::_1);
+
+    s_upnpConnector = new UpnpConnector(discoveryCb, lostCb);
     s_upnpConnector->connect();
+
+    s_bridge->setUpnpManager(s_upnpConnector->getUpnpManager());
 
     return MPM_RESULT_OK;
 }
@@ -135,9 +161,19 @@ extern "C" DLL_PUBLIC MPMResult pluginRemove(MPMPluginCtx *, MPMPipeMessage *mes
     printf("***********************************************\n");
     printf("UPNP pluginRemove\n");
     printf("***********************************************\n");
-    (void) message;
     OIC_LOG(INFO, TAG, "Remove called! Remove iotivity resources here based on what the client says");
-    // Currently nothing needs to be done beyond what's already done in pluginStop
+
+    if (message->payloadSize <= 0 && message->payload == NULL)
+    {
+        OIC_LOG(ERROR, TAG, "No payload received, failed to remove device");
+        return MPM_RESULT_INTERNAL_ERROR;
+    }
+
+    std::string uri = reinterpret_cast<const char *>(message->payload);
+
+    s_upnpConnector->onRemove(uri);
+    s_bridge->removeResource(uri);
+
     return MPM_RESULT_OK;
 }
 
@@ -165,6 +201,8 @@ extern "C" DLL_PUBLIC MPMResult pluginStop(MPMPluginCtx *)
         s_upnpConnector->disconnect();
     }
     delete s_upnpConnector;
+
+    delete s_bridge;
 
     return MPM_RESULT_OK;
 }
