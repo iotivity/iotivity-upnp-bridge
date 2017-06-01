@@ -52,7 +52,7 @@ public:
     string getId();
     void stop();
 
-    virtual OCEntityHandlerResult processGetRequest(OCRepPayload *payload);
+    virtual OCEntityHandlerResult processGetRequest(OCRepPayload *payload, string resourceType);
     virtual OCEntityHandlerResult processPutRequest(OCEntityHandlerRequest *ehRequest,
             string uri, string resourceType, OCRepPayload *payload);
 
@@ -67,8 +67,6 @@ protected:
        GUPnPServiceProxy *m_proxy;
 
        UpnpRequestState *m_requestState;
-
-//       virtual void initAttributes();
 
 private:
 

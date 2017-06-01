@@ -37,8 +37,6 @@ class UpnpDevice: public UpnpResource
 
         virtual ~UpnpDevice();
 
-        void initAttributes();
-
         void insertDevice(string udn);
         void insertService(string id);
 
@@ -51,7 +49,7 @@ class UpnpDevice: public UpnpResource
         std::vector<string> &getDeviceList();
         std::vector<string> &getServiceList();
 
-        OCEntityHandlerResult processGetRequest(OCRepPayload *payload);
+        OCEntityHandlerResult processGetRequest(OCRepPayload *payload, string resourceType);
 
     private:
 
@@ -67,7 +65,6 @@ class UpnpDevice: public UpnpResource
 
         UpnpRequestState *m_requestState;
 
-        void initBasicAttributes(GUPnPDeviceInfo *deviceInfo);
         string getStringField(function< char *(GUPnPDeviceInfo *deviceInfo)> f,
                               GUPnPDeviceInfo *deviceInfo);
 };

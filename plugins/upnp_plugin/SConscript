@@ -101,6 +101,7 @@ upnp_src = [
          'UpnpDevice.cpp',
          'UpnpDimmingService.cpp',
          'UpnpException.cpp',
+         'UpnpGenericService.cpp',
          'UpnpManager.cpp',
          'UpnpPowerSwitchService.cpp',
          'UpnpResource.cpp',

@@ -43,7 +43,7 @@ class UpnpPowerSwitch: public UpnpService
         {
         }
 
-        OCEntityHandlerResult processGetRequest(OCRepPayload *payload);
+        OCEntityHandlerResult processGetRequest(OCRepPayload *payload, string resourceType);
         OCEntityHandlerResult processPutRequest(OCEntityHandlerRequest *ehRequest,
                     string uri, string resourceType, OCRepPayload *payload);
 

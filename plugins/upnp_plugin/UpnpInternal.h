@@ -82,8 +82,8 @@ static std::map<std::string, std::string > UpnpInterfaceMap =
 {
 // Lighting Control
     {UPNP_OIC_TYPE_DEVICE_LIGHT,             OC_RSRVD_INTERFACE_LL},
-    {UPNP_OIC_TYPE_POWER_SWITCH,             "oic.if.a"},
-    {UPNP_OIC_TYPE_BRIGHTNESS,               "oic.if.a"},
+    {UPNP_OIC_TYPE_POWER_SWITCH,             OC_RSRVD_INTERFACE_ACTUATOR},
+    {UPNP_OIC_TYPE_BRIGHTNESS,               OC_RSRVD_INTERFACE_ACTUATOR},
 // Internet Gateway
     {UPNP_OIC_TYPE_DEVICE_INET_GATEWAY,      OC_RSRVD_INTERFACE_LL},
     {UPNP_OIC_TYPE_DEVICE_WAN,               OC_RSRVD_INTERFACE_LL},

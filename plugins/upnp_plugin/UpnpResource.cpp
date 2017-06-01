@@ -51,8 +51,12 @@ void UpnpResource::addLink(UpnpResource::Ptr pResource)
     _link singleLink;
 
     singleLink.href = pResource->m_uri;
-    singleLink.rel = "contains";
+    singleLink.rel = LINK_REL_CONTAINS;
     singleLink.rt = pResource->getResourceType();
+    // Embedded devices are all generic upnp devices for now
+    if (singleLink.rt.find(UPNP_OIC_TYPE_DEVICE_PREFIX) == 0) {
+        singleLink.rt = UPNP_DEVICE_RESOURCE;
+    }
 
     m_links.push_back(singleLink);
 }
