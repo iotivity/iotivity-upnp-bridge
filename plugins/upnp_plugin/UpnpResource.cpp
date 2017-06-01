@@ -51,8 +51,19 @@ void UpnpResource::addLink(UpnpResource::Ptr pResource)
     _link singleLink;
 
     singleLink.href = pResource->m_uri;
-    singleLink.rel = "contains";
+    singleLink.rel = LINK_REL_CONTAINS;
     singleLink.rt = pResource->getResourceType();
+    // Embedded devices are all generic upnp devices for now
+    if (singleLink.rt.find(UPNP_OIC_TYPE_DEVICE_PREFIX) == 0) {
+        singleLink.rt = UPNP_DEVICE_RESOURCE;
+    }
+    // Non-light services are all generic upnp services for now
+    else if (singleLink.rt.find(UPNP_OIC_TYPE_SERVICE_PREFIX) == 0) {
+        if (!(singleLink.rt == UPNP_OIC_TYPE_BRIGHTNESS || singleLink.rt == UPNP_OIC_TYPE_POWER_SWITCH))
+        {
+            singleLink.rt = UPNP_SERVICE_RESOURCE;
+        }
+    }
 
     m_links.push_back(singleLink);
 }

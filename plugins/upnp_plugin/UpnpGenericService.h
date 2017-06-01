@@ -18,8 +18,8 @@
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#ifndef UPNP_DIMMING_SERVICE_H_
-#define UPNP_DIMMING_SERVICE_H_
+#ifndef UPNP_GENERIC_SERVICE_H_
+#define UPNP_GENERIC_SERVICE_H_
 
 #include <string>
 #include <map>
@@ -32,14 +32,13 @@
 
 using namespace std;
 
-class UpnpDimming: public UpnpService
+class UpnpGenericService: public UpnpService
 {
         friend class UpnpService;
 
     public:
-        UpnpDimming(GUPnPServiceInfo *serviceInfo,
-                    UpnpRequestState *requestState):
-            UpnpService(serviceInfo, UPNP_OIC_TYPE_BRIGHTNESS, requestState, &Attributes)
+        UpnpGenericService(GUPnPServiceInfo *serviceInfo, UpnpRequestState *requestState, string serviceType):
+            UpnpService(serviceInfo, serviceType, requestState, &Attributes)
         {
         }
 

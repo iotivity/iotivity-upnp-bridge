@@ -27,6 +27,7 @@
 // i.e. vetted by OIC and UPNP. Each section needs TBD and expanded.
 
 // Resource type: devices
+static const std::string UPNP_OIC_TYPE_DEVICE_PREFIX              = "oic.d.";
 static const std::string UPNP_OIC_TYPE_DEVICE_LIGHT               = "oic.d.light";
 static const std::string UPNP_OIC_TYPE_DEVICE_INET_GATEWAY        = "oic.d.inet.gateway";
 static const std::string UPNP_OIC_TYPE_DEVICE_WAN                 = "oic.d.wan";
@@ -36,6 +37,7 @@ static const std::string UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER      = "oic.d.media
 static const std::string UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER        = "oic.d.media.server";
 
 // Resource type: services
+static const std::string UPNP_OIC_TYPE_SERVICE_PREFIX             = "oic.r.";
 static const std::string UPNP_OIC_TYPE_BRIGHTNESS                 = "oic.r.light.brightness";
 static const std::string UPNP_OIC_TYPE_POWER_SWITCH               = "oic.r.switch.binary";
 static const std::string UPNP_OIC_TYPE_CONNECTION_MANAGER         = "oic.r.connection.manager";
@@ -63,15 +65,15 @@ static const std::string UPNP_OIC_URI_PREFIX_LAYER3_FORWARDING      = "/upnp/l3f
 static const std::string UPNP_OIC_URI_PREFIX_DEVICE_PROTECTION      = "/upnp/device-protection/";
 static const std::string UPNP_OIC_URI_PREFIX_WAN                    = "/upnp/wan/";
 static const std::string UPNP_OIC_URI_PREFIX_WAN_IF_CONFIG          = "/upnp/wan/ifconfig/";
-static const std::string UPNP_OIC_URI_PREFIX_WAN_CABLE_LINK_CONFIG  = "/upnp/wan/cableconfig";
-static const std::string UPNP_OIC_URI_PREFIX_WAN_DSL_LINK_CONFIG    = "/upnp/wan/dslconfig";
-static const std::string UPNP_OIC_URI_PREFIX_WAN_ETHERNET_CONFIG    = "/upnp/wan/ethernetconfig";
-static const std::string UPNP_OIC_URI_PREFIX_WAN_POTS_LINK_CONFIG   = "/upnp/wan/potsconfig";
-static const std::string UPNP_OIC_URI_PREFIX_WAN_CONNECTION         = "/upnp/wan/connection";
-static const std::string UPNP_OIC_URI_PREFIX_WAN_IP_CONNECTION      = "/upnp/wan/ip";
-static const std::string UPNP_OIC_URI_PREFIX_WAN_PPP_CONNECTION     = "/upnp/wan/ppp";
-static const std::string UPNP_OIC_URI_PREFIX_LAN                    = "/upnp/lan";
-static const std::string UPNP_OIC_URI_PREFIX_LAN_HOST_CONFIG        = "/upnp/lan/hostconfig";
+static const std::string UPNP_OIC_URI_PREFIX_WAN_CABLE_LINK_CONFIG  = "/upnp/wan/cableconfig/";
+static const std::string UPNP_OIC_URI_PREFIX_WAN_DSL_LINK_CONFIG    = "/upnp/wan/dslconfig/";
+static const std::string UPNP_OIC_URI_PREFIX_WAN_ETHERNET_CONFIG    = "/upnp/wan/ethernetconfig/";
+static const std::string UPNP_OIC_URI_PREFIX_WAN_POTS_LINK_CONFIG   = "/upnp/wan/potsconfig/";
+static const std::string UPNP_OIC_URI_PREFIX_WAN_CONNECTION         = "/upnp/wan/connection/";
+static const std::string UPNP_OIC_URI_PREFIX_WAN_IP_CONNECTION      = "/upnp/wan/ip/";
+static const std::string UPNP_OIC_URI_PREFIX_WAN_PPP_CONNECTION     = "/upnp/wan/ppp/";
+static const std::string UPNP_OIC_URI_PREFIX_LAN                    = "/upnp/lan/";
+static const std::string UPNP_OIC_URI_PREFIX_LAN_HOST_CONFIG        = "/upnp/lan/hostconfig/";
 static const std::string UPNP_OIC_URI_PREFIX_MEDIA_RENDERER         = "/upnp/media/renderer/";
 static const std::string UPNP_OIC_URI_PREFIX_MEDIA_SERVER           = "/upnp/media/server/";
 static const std::string UPNP_OIC_URI_PREFIX_CONNECTION_MANAGER     = "/upnp/connection-manager/";
