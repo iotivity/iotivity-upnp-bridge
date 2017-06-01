@@ -29,10 +29,13 @@
 
 using namespace std;
 
+static const string UPNP_DEVICE_RESOURCE = "oic.r.upnp.device";
+static const string UPNP_SERVICE_RESOURCE = "oic.r.upnp.service";
+
 struct _link {
-	string href;
-	string rel;
-	string rt;
+    string href;
+    string rel;
+    string rt;
 };
 
 class UpnpResource

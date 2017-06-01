@@ -42,6 +42,7 @@
 //#include "UpnpWanIpConnectionService.h"
 //#include "UpnpWanPppConnectionService.h"
 //#include "UpnpWanPotsLinkConfigService.h"
+#include "UpnpGenericService.h"
 
 using namespace std;
 
@@ -478,9 +479,18 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
 //    }
     else
     {
-        //throw an exception
-        ERROR_PRINT("Service type " << serviceType << " not implemented!");
-        throw NotImplementedException("UpnpService::ctor: Service " + serviceType + " not implemented!");
-        return nullptr;
+        if (! resourceType.empty())
+        {
+            DEBUG_PRINT("Service type " << serviceType << " not implemented in smart home");
+            DEBUG_PRINT("Service type " << serviceType << " implemented as generic upnp service");
+            return (std::make_shared < UpnpGenericService > (serviceInfo, requestState, resourceType));
+        }
+        else
+        {
+            //throw an exception
+            ERROR_PRINT("Service type " << serviceType << " not implemented!");
+            throw NotImplementedException("UpnpService::ctor: Service " + serviceType + " not implemented!");
+            return nullptr;
+        }
     }
 }

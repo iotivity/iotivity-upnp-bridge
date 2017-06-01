@@ -59,7 +59,6 @@ UpnpDevice::UpnpDevice(GUPnPDeviceInfo *deviceInfo,
     m_registered = false;
     m_deviceList.clear();
     m_serviceList.clear();
-    initBasicAttributes(deviceInfo);
 }
 
 UpnpDevice::~UpnpDevice()
@@ -103,29 +102,6 @@ static const map< string, function< char *(GUPnPDeviceInfo *deviceInfo)>> s_devi
     {"upc",                   gupnp_device_info_get_upc}
 };
 
-void UpnpDevice::initBasicAttributes(GUPnPDeviceInfo *deviceInfo)
-{
-    for (auto const &kv : s_deviceInfo2AttributesMap)
-    {
-        char *c_field = kv.second(deviceInfo);
-        if (c_field != NULL)
-        {
-            string s_field = string(c_field);
-            g_free(c_field);
-        }
-    }
-
-    char *iconUrl = gupnp_device_info_get_icon_url(deviceInfo, NULL, -1, -1, -1, false, NULL, NULL, NULL, NULL);
-    if (iconUrl != NULL)
-    {
-        g_free(iconUrl);
-    }
-}
-
-void UpnpDevice::initAttributes()
-{
-}
-
 void UpnpDevice::setProxy(GUPnPDeviceProxy *proxy)
 {
     m_proxy = proxy;
@@ -160,45 +136,49 @@ string UpnpDevice::getStringField(function< char *(GUPnPDeviceInfo *deviceInfo)>
     return "";
 }
 
-OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload)
+OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload, string resourceType)
 {
     if (payload == NULL)
     {
         throw "payload is null";
     }
 
-    GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(m_proxy);
 
-    if (!OCRepPayloadSetPropString(payload, "device_type", m_deviceType.c_str()))
+    if (UPNP_DEVICE_RESOURCE == resourceType)
     {
-        throw "Failed to set device_type value in payload";
-    }
-    DEBUG_PRINT("device_type: " << m_deviceType);
+        GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(m_proxy);
 
-    for (auto const &kv : s_deviceInfo2AttributesMap)
-    {
-        char *c_field = kv.second(deviceInfo);
-        if (c_field != NULL)
+        if (!OCRepPayloadSetPropString(payload, "device_type", m_deviceType.c_str()))
         {
-            string s_field = string(c_field);
-            if (!OCRepPayloadSetPropString(payload, kv.first.c_str(), s_field.c_str()))
+            throw "Failed to set device_type value in payload";
+        }
+        DEBUG_PRINT("device_type: " << m_deviceType);
+
+        for (auto const &kv : s_deviceInfo2AttributesMap)
+        {
+            char *c_field = kv.second(deviceInfo);
+            if (c_field != NULL)
             {
-                throw "Failed to set property value in payload";
+                string s_field = string(c_field);
+                if (!OCRepPayloadSetPropString(payload, kv.first.c_str(), s_field.c_str()))
+                {
+                    throw "Failed to set property value in payload";
+                }
+                DEBUG_PRINT(kv.first << ": " << s_field);
+                g_free(c_field);
             }
-            DEBUG_PRINT(kv.first << ": " << s_field);
-            g_free(c_field);
         }
-    }
 
-    char *iconUrl = gupnp_device_info_get_icon_url(deviceInfo, NULL, -1, -1, -1, false, NULL, NULL, NULL, NULL);
-    if (iconUrl != NULL)
-    {
-        if (!OCRepPayloadSetPropString(payload, "icon_url", iconUrl))
+        char *iconUrl = gupnp_device_info_get_icon_url(deviceInfo, NULL, -1, -1, -1, false, NULL, NULL, NULL, NULL);
+        if (iconUrl != NULL)
         {
-            throw "Failed to set icon_url value in payload";
+            if (!OCRepPayloadSetPropString(payload, "icon_url", iconUrl))
+            {
+                throw "Failed to set icon_url value in payload";
+            }
+            DEBUG_PRINT("icon_url: " << iconUrl);
+            g_free(iconUrl);
         }
-        DEBUG_PRINT("icon_url: " << iconUrl);
-        g_free(iconUrl);
     }
 
     if (!m_links.empty())
@@ -207,17 +187,17 @@ OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload)
         const OCRepPayload *links[m_links.size()];
         size_t dimensions[MAX_REP_ARRAY_DEPTH] = {m_links.size(), 0, 0};
         for (unsigned int i = 0; i < m_links.size(); ++i) {
-            DEBUG_PRINT("link[" << i << "]");
-            DEBUG_PRINT("\thref=" << m_links[i].href);
-            DEBUG_PRINT("\trel=" << m_links[i].rel);
-            DEBUG_PRINT("\trt=" << m_links[i].rt);
+            DEBUG_PRINT(OC_RSRVD_LINKS << "[" << i << "]");
+            DEBUG_PRINT("\t" << OC_RSRVD_HREF << "=" << m_links[i].href);
+            DEBUG_PRINT("\t" << OC_RSRVD_REL << "=" << m_links[i].rel);
+            DEBUG_PRINT("\t" << OC_RSRVD_RESOURCE_TYPE << "=" << m_links[i].rt);
             OCRepPayload *linkPayload = OCRepPayloadCreate();
-            OCRepPayloadSetPropString(linkPayload, "href", m_links[i].href.c_str());
-            OCRepPayloadSetPropString(linkPayload, "rel", m_links[i].rel.c_str());
-            OCRepPayloadSetPropString(linkPayload, "rt", m_links[i].rt.c_str());
+            OCRepPayloadSetPropString(linkPayload, OC_RSRVD_HREF, m_links[i].href.c_str());
+            OCRepPayloadSetPropString(linkPayload, OC_RSRVD_REL, m_links[i].rel.c_str());
+            OCRepPayloadSetPropString(linkPayload, OC_RSRVD_RESOURCE_TYPE, m_links[i].rt.c_str());
             links[i] = linkPayload;
         }
-        OCRepPayloadSetPropObjectArray(payload, "links", links, dimensions);
+        OCRepPayloadSetPropObjectArray(payload, OC_RSRVD_LINKS, links, dimensions);
     }
 
     return OC_EH_OK;
