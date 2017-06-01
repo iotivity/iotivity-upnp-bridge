@@ -66,12 +66,13 @@ vector <UpnpAttributeInfo> UpnpDimming::Attributes =
 
 static const char* brightnessLevelName = "brightness";
 
-OCEntityHandlerResult UpnpDimming::processGetRequest(OCRepPayload *payload)
+OCEntityHandlerResult UpnpDimming::processGetRequest(OCRepPayload *payload, string resourceType)
 {
     if (payload == NULL)
     {
         throw "payload is null";
     }
+    (void) resourceType;
 
     //TODO use async version with callback
     int64_t brightnessLevelValue = 0;
@@ -98,7 +99,7 @@ OCEntityHandlerResult UpnpDimming::processGetRequest(OCRepPayload *payload)
     }
     DEBUG_PRINT(brightnessLevelName << ": " << brightnessLevelValue);
 
-    return UpnpService::processGetRequest(payload);
+    return UpnpService::processGetRequest(payload, resourceType);
 }
 
 OCEntityHandlerResult UpnpDimming::processPutRequest(OCEntityHandlerRequest *ehRequest,

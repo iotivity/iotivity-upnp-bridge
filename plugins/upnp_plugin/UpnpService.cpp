@@ -144,9 +144,10 @@ string UpnpService::getStringField(function< char *(GUPnPServiceInfo *serviceInf
     return "";
 }
 
-OCEntityHandlerResult UpnpService::processGetRequest(OCRepPayload *payload)
+OCEntityHandlerResult UpnpService::processGetRequest(OCRepPayload *payload, string resourceType)
 {
-	(void) payload;
+    (void) payload;
+    (void) resourceType;
     return OC_EH_OK;
 }
 

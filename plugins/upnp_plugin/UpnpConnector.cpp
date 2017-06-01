@@ -66,6 +66,9 @@ const uint LIGHT_CALLBACK = 0;
 const uint BINARY_SWITCH_CALLBACK = 1;
 const uint BRIGHTNESS_CALLBACK = 2;
 
+const uint GENERIC_DEVICE_CALLBACK = 1000;
+const uint GENERIC_SERVICE_CALLBACK = 1001;
+
 UpnpConnector::UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback lostCallback)
 {
     DEBUG_PRINT("");
@@ -292,11 +295,10 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
 
     DEBUG_PRINT("Device type: " << gupnp_device_info_get_device_type(deviceInfo));
 
-    // For now, lights only
+    // If not a light then use Generic UPnP Data Model
     if (! boost::regex_match(gupnp_device_info_get_device_type(deviceInfo), boost::regex(".*[Ll]ight.*")))
     {
-        ERROR_PRINT("Device type " << gupnp_device_info_get_device_type(deviceInfo) << " not implemented");
-        return;
+        DEBUG_PRINT("Device type " << gupnp_device_info_get_device_type(deviceInfo) << " implemented as generic upnp device");
     }
 
 #ifndef NDEBUG
@@ -628,7 +630,7 @@ OCEntityHandlerResult handleEntityHandlerRequests( OCEntityHandlerRequest *entit
                 {
                     case OC_REST_GET:
                         DEBUG_PRINT(" GET Request for: " << uri);
-                        ehResult = service.second->processGetRequest(payload);
+                        ehResult = service.second->processGetRequest(payload, resourceType);
                         break;
 
                     case OC_REST_PUT:
@@ -652,7 +654,7 @@ OCEntityHandlerResult handleEntityHandlerRequests( OCEntityHandlerRequest *entit
                 {
                     case OC_REST_GET:
                         DEBUG_PRINT(" GET Request for: " << uri);
-                        ehResult = device.second->processGetRequest(payload);
+                        ehResult = device.second->processGetRequest(payload, resourceType);
                         break;
 
                     case OC_REST_PUT:
@@ -708,6 +710,18 @@ OCEntityHandlerResult resourceEntityHandler(OCEntityHandlerFlag,
     {
         return handleEntityHandlerRequests(entityHandlerRequest, UPNP_OIC_TYPE_BRIGHTNESS);
     }
+    else if (callbackParamResourceType == GENERIC_DEVICE_CALLBACK)
+    {
+        return handleEntityHandlerRequests(entityHandlerRequest, UPNP_DEVICE_RESOURCE);
+    }
+    else if (callbackParamResourceType == GENERIC_SERVICE_CALLBACK)
+    {
+        return handleEntityHandlerRequests(entityHandlerRequest, UPNP_SERVICE_RESOURCE);
+    }
+    else
+    {
+        DEBUG_PRINT("TODO: Handle callback for " << callbackParamResourceType);
+    }
 
     return OC_EH_ERROR;
 }
@@ -735,7 +749,9 @@ void UpnpConnector::onAdd(std::string uri)
             }
             else
             {
-                DEBUG_PRINT("No resource added for " << service.second->m_resourceType);
+                DEBUG_PRINT("Adding generic upnp service");
+                createResource(uri, UPNP_SERVICE_RESOURCE, OC_RSRVD_INTERFACE_ACTUATOR,
+                        resourceEntityHandler, (void *) GENERIC_SERVICE_CALLBACK, resourceProperties);
             }
         }
     }
@@ -749,7 +765,9 @@ void UpnpConnector::onAdd(std::string uri)
             }
             else
             {
-                DEBUG_PRINT("No device added for " << device.second->m_resourceType);
+                DEBUG_PRINT("Adding generic upnp device");
+                createResource(uri, UPNP_DEVICE_RESOURCE, OC_RSRVD_INTERFACE_READ,
+                        resourceEntityHandler, (void *) GENERIC_DEVICE_CALLBACK, resourceProperties);
             }
         }
     }
@@ -779,7 +797,7 @@ OCStackResult UpnpConnector::createResource(const string uri, const string resou
 //            {
 //                DEBUG_PRINT("Failed to bind virtual resource type to " << uri);
 //            }
-            if (UPNP_OIC_TYPE_DEVICE_LIGHT == resourceTypeName) {
+            if (UPNP_OIC_TYPE_DEVICE_LIGHT == resourceTypeName || UPNP_DEVICE_RESOURCE == resourceTypeName) {
                 result = OCBindResourceTypeToResource(handle, OC_RSRVD_RESOURCE_TYPE_COLLECTION);
                 if (result == OC_STACK_OK)
                 {
@@ -803,7 +821,7 @@ OCStackResult UpnpConnector::createResource(const string uri, const string resou
         }
         else
         {
-            DEBUG_PRINT("Failed to create resource " << uri);
+            DEBUG_PRINT("Failed to create resource " << uri << " result = " << result);
         }
     }
     else

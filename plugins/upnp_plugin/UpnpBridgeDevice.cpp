@@ -299,7 +299,13 @@ OCEntityHandlerResult UpnpBridgeDevice::processGetRequest(string uri, string res
             OCRepPayload *linkPayload = OCRepPayloadCreate();
             OCRepPayloadSetPropString(linkPayload, OC_RSRVD_HREF, device.second->m_uri.c_str());
             OCRepPayloadSetPropString(linkPayload, OC_RSRVD_REL, LINK_REL_HOSTS.c_str());
-            OCRepPayloadSetPropString(linkPayload, OC_RSRVD_RESOURCE_TYPE, device.second->m_resourceType.c_str());
+            if (device.second->m_resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT)
+            {
+                OCRepPayloadSetPropString(linkPayload, OC_RSRVD_RESOURCE_TYPE, device.second->m_resourceType.c_str());
+            }
+            else {
+                OCRepPayloadSetPropString(linkPayload, OC_RSRVD_RESOURCE_TYPE, UPNP_DEVICE_RESOURCE.c_str());
+            }
             links[linksIndex] = linkPayload;
             ++linksIndex;
         }
