@@ -31,6 +31,11 @@
 #include "UpnpConnector.h"
 #include "UpnpResource.h"
 #include "UpnpBridgeDevice.h"
+#include "OCProvisioningManager.hpp"
+#include "octypes.h"
+#include "oic_string.h"
+
+using namespace OC;
 
 #define TAG "UPNP_PLUGIN"
 static std::string MODULE = "UPNP_PLUGIN MODULE";
@@ -48,6 +53,62 @@ FILE *sec_file(const char *, const char *mode)
 static UpnpConnector *s_upnpConnector;
 static UpnpBridgeDevice *s_bridge;
 std::vector< UpnpResource::Ptr > m_vecResources;
+
+//provisioning
+OC::InputPinCallbackHandle inputPinCallbackHandle = nullptr;
+
+void OnInputPinCB(OicUuid_t deviceId, char* pinBuf, size_t bufSize)
+{
+    OC_UNUSED(deviceId);
+    if(pinBuf)
+    {
+        std::cout <<"INPUT PIN : ";
+        std::string ptr;
+        std::cin >> ptr;
+        OICStrcpy(pinBuf, bufSize, ptr.c_str());
+        return;
+    }
+}
+
+OCStackResult displayMutualVerifNumCB(uint8_t mutualVerifNum[MUTUAL_VERIF_NUM_LEN])
+{
+    OC_UNUSED(mutualVerifNum);
+    DEBUG_PRINT("IN displayMutualVerifNumCB");
+    DEBUG_PRINT("############ mutualVerifNum ############");
+    DEBUG_PRINT( mutualVerifNum);
+    DEBUG_PRINT(MUTUAL_VERIF_NUM_LEN);
+    DEBUG_PRINT("############ mutualVerifNum ############");
+    DEBUG_PRINT("OUT displayMutualVerifNumCB");
+    return OC_STACK_OK;
+}
+
+OCStackResult confirmMutualVerifNumCB(void)
+{
+    for (;;)
+    {
+        int userConfirm;
+
+        printf("   > Press 1 if the mutual verification numbers are the same\n");
+        printf("   > Press 0 if the mutual verification numbers are not the same\n");
+
+        for (int ret=0; 1!=ret; )
+        {
+            ret = scanf("%d", &userConfirm);
+            for (; 0x20<=getchar(); );  // for removing overflow garbage
+                                        // '0x20<=code' is character region
+        }
+        if (1 == userConfirm)
+        {
+            break;
+        }
+        else if (0 == userConfirm)
+        {
+            return OC_STACK_USER_DENIED_REQ;
+        }
+        printf("   Entered Wrong Number. Please Enter Again\n");
+    }
+    return OC_STACK_OK;
+}
 
 int connectorDiscoveryCb(UpnpResource::Ptr pUpnpResource)
 {
@@ -120,6 +181,41 @@ extern "C" DLL_PUBLIC MPMResult pluginStart(MPMPluginCtx *ctx)
     s_upnpConnector->connect();
 
     s_bridge->setUpnpManager(s_upnpConnector->getUpnpManager());
+
+    try
+    {
+        OCStackResult result;
+        int choice;
+        OicSecAcl_t *acl1 = nullptr, *acl2 = nullptr;
+        if (OC::OCSecure::provisionInit("saturday_is_a_great_day.dat") != OC_STACK_OK)
+        {
+            std::cout <<"PM Init failed"<< std::endl;
+            return MPM_RESULT_INTERNAL_ERROR;
+        }
+
+        result = OC::OCSecure::registerInputPinCallback(OnInputPinCB, &inputPinCallbackHandle);
+        if (result != OC_STACK_OK)
+        {
+            std::cout << "!!Error - registerInputPinCallback failed." << std::endl;
+        }
+
+        result = OC::OCSecure::registerDisplayNumCallback(displayMutualVerifNumCB);
+        if (result != OC_STACK_OK)
+        {
+            std::cout<< "!!Error - setDisplayVerifNumCB failed."<<std::endl;
+        }
+
+        result = OC::OCSecure::registerUserConfirmCallback(confirmMutualVerifNumCB);
+        if (result != OC_STACK_OK)
+        {
+            std::cout<< "!!Error - setConfirmVerifNumCB failed."<<std::endl;
+        }
+
+    }
+    catch(OC::OCException& e)
+    {
+        std::cout << "Exception in main: "<<e.what();
+    }
 
     return MPM_RESULT_OK;
 }
@@ -203,6 +299,9 @@ extern "C" DLL_PUBLIC MPMResult pluginStop(MPMPluginCtx *)
     delete s_upnpConnector;
 
     delete s_bridge;
+
+    // Unregister the input pin callback
+    OCSecure::deregisterInputPinCallback(inputPinCallbackHandle);
 
     return MPM_RESULT_OK;
 }
