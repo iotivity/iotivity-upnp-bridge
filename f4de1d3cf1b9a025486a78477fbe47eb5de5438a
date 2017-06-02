@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1acb0d3e_c03759e2",
+        "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-02T17:24:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_cd3c7232",
+      "range": {
+        "startLine": 298,
+        "startChar": 7,
+        "endLine": 298,
+        "endChar": 53
+      },
+      "revId": "f4de1d3cf1b9a025486a78477fbe47eb5de5438a",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_ad3fa624",
         "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-06-01T23:09:48Z",
       "side": 1,
       "message": "We don\u0027t need both messages. We only need second one.",
+      "range": {
+        "startLine": 301,
+        "startChar": 1,
+        "endLine": 301,
+        "endChar": 121
+      },
+      "revId": "f4de1d3cf1b9a025486a78477fbe47eb5de5438a",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_603465de",
+        "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-02T17:24:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_ad3fa624",
       "range": {
         "startLine": 301,
         "startChar": 1,
