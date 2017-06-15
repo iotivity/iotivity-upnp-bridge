@@ -29,6 +29,26 @@
 
 using namespace std;
 
+static const string DEVICE_TYPE = "deviceType";
+static const string UDN = "udn";
+
+// for icons
+static const string OIC_TYPE_ICON = "oic.r.icon";
+static const string MIMETYPE = "mimetype";
+static const string MEDIA = "media";
+static const string ICON_WIDTH = "width";
+static const string ICON_HEIGHT = "height";
+
+struct _iconLink {
+    string href;
+    string rel;
+    string rt;
+    string mimetype;
+    string media;
+    int width;
+    int height;
+};
+
 class UpnpDevice: public UpnpResource
 {
     public:

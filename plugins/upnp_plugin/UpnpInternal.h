@@ -33,11 +33,13 @@
 //IoTivity Link Relationships
 static const std::string LINK_REL_CONTAINS = "contains";
 static const std::string LINK_REL_HOSTS = "hosts";
+static const std::string LINK_REL_ICON = "icon";
 
 //From UPNP spec
 static const std::string UPNP_PREFIX_DEVICE = "urn:schemas-upnp-org:device";
 static const std::string UPNP_PREFIX_SERVICE = "urn:schemas-upnp-org:service";
 static const std::string UPNP_PREFIX_SERVICE_ID = "urn:upnp-org:serviceId:";
+static const std::string UPNP_PREFIX_UDN = "uuid:";
 
 // Root device
 static const std::string UPNP_ROOT_DEVICE = "upnp:rootdevice";

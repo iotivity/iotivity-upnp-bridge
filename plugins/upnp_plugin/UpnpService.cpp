@@ -31,6 +31,14 @@ using namespace std;
 
 static const string MODULE = "UpnpService";
 
+static const map< string, function< char *(GUPnPServiceInfo *serviceInfo)>> s_serviceInfo2AttributesMap =
+{
+    {"serviceId",     gupnp_service_info_get_id},
+    {"scpdUrl",       gupnp_service_info_get_scpd_url},
+    {"controlUrl",    gupnp_service_info_get_control_url},
+    {"eventSubUrl",   gupnp_service_info_get_event_subscription_url}
+};
+
 UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
                          string type,
                          UpnpRequestState *requestState,
@@ -76,8 +84,17 @@ UpnpService::UpnpService(GUPnPServiceInfo *serviceInfo,
 
     m_name = m_serviceId.substr(UPNP_PREFIX_SERVICE_ID.size());
 
-    //TODO: discuss service URI format. Currently: resource_type/service_id/udn
-    m_uri = UpnpUriPrefixMap[m_resourceType] + m_name + "/" + m_udn;
+    // URI format: resource_type/service_id/udn_without_uuid_prefix
+    string udnWithoutPrefix;
+    if (m_udn.find(UPNP_PREFIX_UDN) == 0)
+    {
+        udnWithoutPrefix = m_udn.substr(UPNP_PREFIX_UDN.size());
+    }
+    else
+    {
+        udnWithoutPrefix = m_udn;
+    }
+    m_uri = UpnpUriPrefixMap[m_resourceType] + m_name + "/" + udnWithoutPrefix;
     DEBUG_PRINT("service URI: " << m_uri);
     if (m_uri.length() > MAX_URI_LENGTH)
     {
@@ -144,10 +161,64 @@ string UpnpService::getStringField(function< char *(GUPnPServiceInfo *serviceInf
     return "";
 }
 
-OCEntityHandlerResult UpnpService::processGetRequest(OCRepPayload *payload, string resourceType)
+OCEntityHandlerResult UpnpService::processGetRequest(string uri, OCRepPayload *payload, string resourceType)
 {
-    (void) payload;
-    (void) resourceType;
+    if (payload == NULL)
+    {
+        throw "payload is null";
+    }
+
+    if (UPNP_SERVICE_RESOURCE == resourceType)
+    {
+        GUPnPServiceInfo *serviceInfo = GUPNP_SERVICE_INFO(m_proxy);
+
+        const char *serviceType = gupnp_service_info_get_service_type(serviceInfo);
+        if (OCRepPayloadSetPropString(payload, SERVICE_TYPE.c_str(), serviceType))
+        {
+            DEBUG_PRINT(SERVICE_TYPE << ": " << serviceType);
+        }
+        else
+        {
+            ERROR_PRINT("Failed to set " + SERVICE_TYPE << " value in payload");
+        }
+
+        for (auto const &kv : s_serviceInfo2AttributesMap)
+        {
+            char *c_field = kv.second(serviceInfo);
+            if (c_field != NULL)
+            {
+                if (OCRepPayloadSetPropString(payload, kv.first.c_str(), c_field))
+                {
+                    DEBUG_PRINT(kv.first << ": " << c_field);
+                    g_free(c_field);
+                }
+                else
+                {
+                    ERROR_PRINT("Failed to set " << kv.first << " value in payload");
+                }
+            }
+        }
+
+        if (!m_links.empty())
+        {
+            DEBUG_PRINT("Setting links for " << uri);
+            const OCRepPayload *links[m_links.size()];
+            size_t dimensions[MAX_REP_ARRAY_DEPTH] = {m_links.size(), 0, 0};
+            for (unsigned int i = 0; i < m_links.size(); ++i) {
+                DEBUG_PRINT(OC_RSRVD_LINKS << "[" << i << "]");
+                DEBUG_PRINT("\t" << OC_RSRVD_HREF << "=" << m_links[i].href);
+                DEBUG_PRINT("\t" << OC_RSRVD_REL << "=" << m_links[i].rel);
+                DEBUG_PRINT("\t" << OC_RSRVD_RESOURCE_TYPE << "=" << m_links[i].rt);
+                OCRepPayload *linkPayload = OCRepPayloadCreate();
+                OCRepPayloadSetPropString(linkPayload, OC_RSRVD_HREF, m_links[i].href.c_str());
+                OCRepPayloadSetPropString(linkPayload, OC_RSRVD_REL, m_links[i].rel.c_str());
+                OCRepPayloadSetPropString(linkPayload, OC_RSRVD_RESOURCE_TYPE, m_links[i].rt.c_str());
+                links[i] = linkPayload;
+            }
+            OCRepPayloadSetPropObjectArray(payload, OC_RSRVD_LINKS, links, dimensions);
+        }
+    }
+
     return OC_EH_OK;
 }
 

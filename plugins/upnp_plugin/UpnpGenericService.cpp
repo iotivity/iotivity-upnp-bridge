@@ -26,25 +26,26 @@ vector <UpnpAttributeInfo> UpnpGenericService::Attributes =
 {
 };
 
-OCEntityHandlerResult UpnpGenericService::processGetRequest(OCRepPayload *payload, string resourceType)
+OCEntityHandlerResult UpnpGenericService::processGetRequest(string uri, OCRepPayload *payload, string resourceType)
 {
     if (payload == NULL)
     {
         throw "payload is null";
     }
-    (void) resourceType;
 
     //TODO use async version with callback
-    DEBUG_PRINT("TODO:");
+    DEBUG_PRINT("TODO: process get request for " << uri << " resource type " << resourceType);
+    // TODO use introspection to get actions and state variables
+    // TODO create action resource if it doesn't exist
+    // TODO create state variable resource if it doesn't exist
+    // TODO add action and state variable links to payload
 
-    return UpnpService::processGetRequest(payload, resourceType);
+    return UpnpService::processGetRequest(uri, payload, resourceType);
 }
 
 OCEntityHandlerResult UpnpGenericService::processPutRequest(OCEntityHandlerRequest *ehRequest,
         string uri, string resourceType, OCRepPayload *payload)
 {
-    (void) uri;
-    (void) resourceType;
     (void) payload;
     if (!ehRequest || !ehRequest->payload ||
             ehRequest->payload->type != PAYLOAD_TYPE_REPRESENTATION)
@@ -59,7 +60,7 @@ OCEntityHandlerResult UpnpGenericService::processPutRequest(OCEntityHandlerReque
     }
 
     //TODO use async version with callback
-    DEBUG_PRINT("TODO:");
+    DEBUG_PRINT("TODO: process put request for " << uri << " resource type " << resourceType);
 
     return OC_EH_OK;
 }

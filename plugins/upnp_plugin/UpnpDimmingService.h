@@ -43,7 +43,7 @@ class UpnpDimming: public UpnpService
         {
         }
 
-        OCEntityHandlerResult processGetRequest(OCRepPayload *payload, string resourceType);
+        OCEntityHandlerResult processGetRequest(string uri, OCRepPayload *payload, string resourceType);
         OCEntityHandlerResult processPutRequest(OCEntityHandlerRequest *ehRequest,
                     string uri, string resourceType, OCRepPayload *payload);
 
