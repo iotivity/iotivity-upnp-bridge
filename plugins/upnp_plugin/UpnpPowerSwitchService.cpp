@@ -45,7 +45,7 @@ vector <UpnpAttributeInfo> UpnpPowerSwitch::Attributes =
 
 static const char* powerSwitchStateName = "value";
 
-OCEntityHandlerResult UpnpPowerSwitch::processGetRequest(OCRepPayload *payload, string resourceType)
+OCEntityHandlerResult UpnpPowerSwitch::processGetRequest(string uri, OCRepPayload *payload, string resourceType)
 {
     if (payload == NULL)
     {
@@ -78,7 +78,7 @@ OCEntityHandlerResult UpnpPowerSwitch::processGetRequest(OCRepPayload *payload, 
     }
     DEBUG_PRINT(powerSwitchStateName << ": " << (powerSwitchStateValue ? "true" : "false"));
 
-    return UpnpService::processGetRequest(payload, resourceType);
+    return UpnpService::processGetRequest(uri, payload, resourceType);
 }
 
 OCEntityHandlerResult UpnpPowerSwitch::processPutRequest(OCEntityHandlerRequest *ehRequest,

@@ -53,8 +53,13 @@ void UpnpResource::addLink(UpnpResource::Ptr pResource)
     singleLink.href = pResource->m_uri;
     singleLink.rel = LINK_REL_CONTAINS;
     singleLink.rt = pResource->getResourceType();
+    // Ignore action and state variable resources
+    if (singleLink.rt == UPNP_ACTION_RESOURCE || singleLink.rt == UPNP_STATE_VAR_RESOURCE)
+    {
+        // leave link rt unchanged
+    }
     // Embedded devices are all generic upnp devices for now
-    if (singleLink.rt.find(UPNP_OIC_TYPE_DEVICE_PREFIX) == 0) {
+    else if (singleLink.rt.find(UPNP_OIC_TYPE_DEVICE_PREFIX) == 0) {
         singleLink.rt = UPNP_DEVICE_RESOURCE;
     }
     // Non-light services are all generic upnp services for now

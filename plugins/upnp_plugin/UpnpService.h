@@ -52,7 +52,7 @@ public:
     string getId();
     void stop();
 
-    virtual OCEntityHandlerResult processGetRequest(OCRepPayload *payload, string resourceType);
+    virtual OCEntityHandlerResult processGetRequest(string uri, OCRepPayload *payload, string resourceType);
     virtual OCEntityHandlerResult processPutRequest(OCEntityHandlerRequest *ehRequest,
             string uri, string resourceType, OCRepPayload *payload);
 

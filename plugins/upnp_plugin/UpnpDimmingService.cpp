@@ -66,7 +66,7 @@ vector <UpnpAttributeInfo> UpnpDimming::Attributes =
 
 static const char* brightnessLevelName = "brightness";
 
-OCEntityHandlerResult UpnpDimming::processGetRequest(OCRepPayload *payload, string resourceType)
+OCEntityHandlerResult UpnpDimming::processGetRequest(string uri, OCRepPayload *payload, string resourceType)
 {
     if (payload == NULL)
     {
@@ -99,7 +99,7 @@ OCEntityHandlerResult UpnpDimming::processGetRequest(OCRepPayload *payload, stri
     }
     DEBUG_PRINT(brightnessLevelName << ": " << brightnessLevelValue);
 
-    return UpnpService::processGetRequest(payload, resourceType);
+    return UpnpService::processGetRequest(uri, payload, resourceType);
 }
 
 OCEntityHandlerResult UpnpDimming::processPutRequest(OCEntityHandlerRequest *ehRequest,
