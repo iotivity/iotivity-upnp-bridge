@@ -90,15 +90,15 @@ std::vector<string> &UpnpDevice::getServiceList()
 static const map< string, function< char *(GUPnPDeviceInfo *deviceInfo)>> s_deviceInfo2AttributesMap
         =
 {
-    {"n",                     gupnp_device_info_get_friendly_name},
+    {"friendlyName",          gupnp_device_info_get_friendly_name},
     {"manufacturer",          gupnp_device_info_get_manufacturer},
-    {"manufacturer_url",      gupnp_device_info_get_manufacturer_url},
-    {"model_number",          gupnp_device_info_get_model_number},
-    {"model_name",            gupnp_device_info_get_model_name},
-    {"model_description",     gupnp_device_info_get_model_description},
-    {"model_url",             gupnp_device_info_get_model_url},
-    {"serial_number",         gupnp_device_info_get_serial_number},
-    {"presentation_url",      gupnp_device_info_get_presentation_url},
+    {"manufacturerUrl",       gupnp_device_info_get_manufacturer_url},
+    {"modelNumber",           gupnp_device_info_get_model_number},
+    {"modelName",             gupnp_device_info_get_model_name},
+    {"modelDescription",      gupnp_device_info_get_model_description},
+    {"modelUrl",              gupnp_device_info_get_model_url},
+    {"serialNumber",          gupnp_device_info_get_serial_number},
+    {"presentationUrl",       gupnp_device_info_get_presentation_url},
     {"upc",                   gupnp_device_info_get_upc}
 };
 
@@ -143,16 +143,21 @@ OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload, strin
         throw "payload is null";
     }
 
-
     if (UPNP_DEVICE_RESOURCE == resourceType)
     {
         GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(m_proxy);
 
-        if (!OCRepPayloadSetPropString(payload, "device_type", m_deviceType.c_str()))
+        if (!OCRepPayloadSetPropString(payload, "deviceType", m_deviceType.c_str()))
         {
-            throw "Failed to set device_type value in payload";
+            throw "Failed to set deviceType value in payload";
         }
-        DEBUG_PRINT("device_type: " << m_deviceType);
+        DEBUG_PRINT("deviceType: " << m_deviceType);
+
+        if (!OCRepPayloadSetPropString(payload, "udn", m_udn.c_str()))
+        {
+            throw "Failed to set udn value in payload";
+        }
+        DEBUG_PRINT("udn: " << m_udn);
 
         for (auto const &kv : s_deviceInfo2AttributesMap)
         {
@@ -172,7 +177,7 @@ OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload, strin
         char *iconUrl = gupnp_device_info_get_icon_url(deviceInfo, NULL, -1, -1, -1, false, NULL, NULL, NULL, NULL);
         if (iconUrl != NULL)
         {
-            if (!OCRepPayloadSetPropString(payload, "icon_url", iconUrl))
+            if (!OCRepPayloadSetPropString(payload, "iconUrl", iconUrl))
             {
                 throw "Failed to set icon_url value in payload";
             }

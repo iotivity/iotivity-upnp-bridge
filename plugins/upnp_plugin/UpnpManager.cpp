@@ -482,7 +482,44 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
         if (! resourceType.empty())
         {
             DEBUG_PRINT("Service type " << serviceType << " implemented as generic upnp service");
-            return (std::make_shared < UpnpGenericService > (serviceInfo, requestState, resourceType));
+            std::shared_ptr<UpnpService> genericService = std::make_shared < UpnpGenericService > (serviceInfo, requestState, resourceType);
+            GUPnPServiceIntrospection *introspection = gupnp_service_info_get_introspection(serviceInfo, NULL);
+            if (introspection != NULL)
+            {
+                const GList *actionNameList = gupnp_service_introspection_list_action_names(introspection);
+                if (actionNameList != NULL)
+                {
+                    const GList *l;
+                    for (l = actionNameList; l != NULL; l = l->next)
+                    {
+                        const string actionName = string ((char *) l->data);
+                        DEBUG_PRINT(genericService->m_uri << " has action " << actionName);
+                        // TODO: need an action resource (use base resource for now)
+                        std::shared_ptr<UpnpResource> upnpActionResource = std::make_shared < UpnpResource > ();
+                        upnpActionResource->m_uri = genericService->m_uri + "/" + actionName;
+                        upnpActionResource->m_resourceType = UPNP_ACTION_RESOURCE;
+                        genericService->addLink(upnpActionResource);
+                    }
+                }
+
+                const GList *stateVarNameList = gupnp_service_introspection_list_state_variable_names(introspection);
+                if (stateVarNameList != NULL)
+                {
+                    const GList *l;
+                    for (l = stateVarNameList; l != NULL; l = l->next)
+                    {
+                        const string varName = string ((char *) l->data);
+                        DEBUG_PRINT(genericService->m_uri << " has state variable " << varName);
+                        // TODO: need a state variable resource (use base resource for now)
+                        std::shared_ptr<UpnpResource> upnpStateVarResource = std::make_shared < UpnpResource > ();
+                        upnpStateVarResource->m_uri = genericService->m_uri + "/" + varName;
+                        upnpStateVarResource->m_resourceType = UPNP_STATE_VAR_RESOURCE;
+                        genericService->addLink(upnpStateVarResource);
+                    }
+                }
+                g_object_unref(introspection);
+            }
+            return genericService;
         }
         else
         {

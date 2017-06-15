@@ -36,6 +36,10 @@ OCEntityHandlerResult UpnpGenericService::processGetRequest(OCRepPayload *payloa
 
     //TODO use async version with callback
     DEBUG_PRINT("TODO:");
+    // TODO use introspection to get actions and state variables
+    // TODO create action resource if it doesn't exist
+    // TODO create state valiable resource if it doesn't exist
+    // TODO add action and state variable links to payload
 
     return UpnpService::processGetRequest(payload, resourceType);
 }

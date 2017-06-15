@@ -752,6 +752,7 @@ void UpnpConnector::onAdd(std::string uri)
                 DEBUG_PRINT("Adding generic upnp service");
                 createResource(uri, UPNP_SERVICE_RESOURCE, OC_RSRVD_INTERFACE_ACTUATOR,
                         resourceEntityHandler, (void *) GENERIC_SERVICE_CALLBACK, resourceProperties);
+                // TODO: create resources for links
             }
         }
     }
@@ -797,7 +798,8 @@ OCStackResult UpnpConnector::createResource(const string uri, const string resou
 //            {
 //                DEBUG_PRINT("Failed to bind virtual resource type to " << uri);
 //            }
-            if (UPNP_OIC_TYPE_DEVICE_LIGHT == resourceTypeName || UPNP_DEVICE_RESOURCE == resourceTypeName) {
+            if (UPNP_OIC_TYPE_DEVICE_LIGHT == resourceTypeName ||
+                UPNP_DEVICE_RESOURCE == resourceTypeName || UPNP_SERVICE_RESOURCE == resourceTypeName) {
                 result = OCBindResourceTypeToResource(handle, OC_RSRVD_RESOURCE_TYPE_COLLECTION);
                 if (result == OC_STACK_OK)
                 {
