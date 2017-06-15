@@ -68,6 +68,8 @@ const uint BRIGHTNESS_CALLBACK = 2;
 
 const uint GENERIC_DEVICE_CALLBACK = 1000;
 const uint GENERIC_SERVICE_CALLBACK = 1001;
+const uint GENERIC_ACTION_CALLBACK = 1002;
+const uint GENERIC_STATE_VAR_CALLBACK = 1003;
 
 UpnpConnector::UpnpConnector(DiscoveryCallback discoveryCallback, LostCallback lostCallback)
 {
@@ -624,13 +626,17 @@ OCEntityHandlerResult handleEntityHandlerRequests( OCEntityHandlerRequest *entit
             MPMExtractFiltersFromQuery(dupQuery, &interfaceQuery, &resourceTypeQuery);
         }
 
-        for (const auto& service : s_manager->m_services) {
-            if (service.second->m_uri == uri) {
+        for (const auto& service : s_manager->m_services)
+        {
+            // service entity handler does all service related resources
+            // (ie uri starts with service uri)
+            if (uri.find(service.second->m_uri) == 0)
+            {
                 switch (entityHandlerRequest->method)
                 {
                     case OC_REST_GET:
                         DEBUG_PRINT(" GET Request for: " << uri);
-                        ehResult = service.second->processGetRequest(payload, resourceType);
+                        ehResult = service.second->processGetRequest(uri, payload, resourceType);
                         break;
 
                     case OC_REST_PUT:
@@ -649,7 +655,8 @@ OCEntityHandlerResult handleEntityHandlerRequests( OCEntityHandlerRequest *entit
         }
 
         for (const auto& device : s_manager->m_devices) {
-            if (device.second->m_uri == uri) {
+            if (device.second->m_uri == uri)
+            {
                 switch (entityHandlerRequest->method)
                 {
                     case OC_REST_GET:
@@ -718,6 +725,14 @@ OCEntityHandlerResult resourceEntityHandler(OCEntityHandlerFlag,
     {
         return handleEntityHandlerRequests(entityHandlerRequest, UPNP_SERVICE_RESOURCE);
     }
+    else if (callbackParamResourceType == GENERIC_ACTION_CALLBACK)
+    {
+        return handleEntityHandlerRequests(entityHandlerRequest, UPNP_ACTION_RESOURCE);
+    }
+    else if (callbackParamResourceType == GENERIC_STATE_VAR_CALLBACK)
+    {
+        return handleEntityHandlerRequests(entityHandlerRequest, UPNP_STATE_VAR_RESOURCE);
+    }
     else
     {
         DEBUG_PRINT("TODO: Handle callback for " << callbackParamResourceType);
@@ -737,12 +752,14 @@ void UpnpConnector::onAdd(std::string uri)
 
     for (const auto& service : s_manager->m_services) {
         if (service.second->m_uri == uri) {
-            if (service.second->m_resourceType == UPNP_OIC_TYPE_POWER_SWITCH) {
+            if (service.second->m_resourceType == UPNP_OIC_TYPE_POWER_SWITCH)
+            {
                 DEBUG_PRINT("Adding binary switch resource");
                 createResource(uri, UPNP_OIC_TYPE_POWER_SWITCH, OC_RSRVD_INTERFACE_ACTUATOR,
                         resourceEntityHandler, (void *) BINARY_SWITCH_CALLBACK, resourceProperties);
             }
-            else if (service.second->m_resourceType == UPNP_OIC_TYPE_BRIGHTNESS) {
+            else if (service.second->m_resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
+            {
                 DEBUG_PRINT("Adding brightness resource");
                 createResource(uri, UPNP_OIC_TYPE_BRIGHTNESS, OC_RSRVD_INTERFACE_ACTUATOR,
                         resourceEntityHandler, (void *) BRIGHTNESS_CALLBACK, resourceProperties);
@@ -752,13 +769,37 @@ void UpnpConnector::onAdd(std::string uri)
                 DEBUG_PRINT("Adding generic upnp service");
                 createResource(uri, UPNP_SERVICE_RESOURCE, OC_RSRVD_INTERFACE_ACTUATOR,
                         resourceEntityHandler, (void *) GENERIC_SERVICE_CALLBACK, resourceProperties);
+                // create resources for links
+                if (!service.second->m_links.empty())
+                {
+                    DEBUG_PRINT("Creating resources for links");
+                    for (unsigned int i = 0; i < service.second->m_links.size(); ++i) {
+                        string linkUri = service.second->m_links[i].href;
+                        string linkRt = service.second->m_links[i].rt;
+                        if (UPNP_ACTION_RESOURCE == linkRt)
+                        {
+                            createResource(linkUri, linkRt, OC_RSRVD_INTERFACE_ACTUATOR,
+                                resourceEntityHandler, (void *) GENERIC_ACTION_CALLBACK, resourceProperties);
+                        }
+                        else if (UPNP_STATE_VAR_RESOURCE == linkRt)
+                        {
+                            createResource(linkUri, linkRt, OC_RSRVD_INTERFACE_SENSOR,
+                                resourceEntityHandler, (void *) GENERIC_STATE_VAR_CALLBACK, resourceProperties);
+                        }
+                        else
+                        {
+                            ERROR_PRINT("Failed to create resource for unknown type " << linkRt);
+                        }
+                    }
+                }
             }
         }
     }
 
     for (const auto& device : s_manager->m_devices) {
         if (device.second->m_uri == uri) {
-            if (device.second->m_resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT) {
+            if (device.second->m_resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT)
+            {
                 DEBUG_PRINT("Adding light device");
                 createResource(uri, UPNP_OIC_TYPE_DEVICE_LIGHT, OC_RSRVD_INTERFACE_READ,
                         resourceEntityHandler, (void *) LIGHT_CALLBACK, resourceProperties);
@@ -797,7 +838,8 @@ OCStackResult UpnpConnector::createResource(const string uri, const string resou
 //            {
 //                DEBUG_PRINT("Failed to bind virtual resource type to " << uri);
 //            }
-            if (UPNP_OIC_TYPE_DEVICE_LIGHT == resourceTypeName || UPNP_DEVICE_RESOURCE == resourceTypeName) {
+            if (UPNP_OIC_TYPE_DEVICE_LIGHT == resourceTypeName ||
+                UPNP_DEVICE_RESOURCE == resourceTypeName || UPNP_SERVICE_RESOURCE == resourceTypeName) {
                 result = OCBindResourceTypeToResource(handle, OC_RSRVD_RESOURCE_TYPE_COLLECTION);
                 if (result == OC_STACK_OK)
                 {

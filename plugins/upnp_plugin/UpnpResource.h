@@ -31,6 +31,8 @@ using namespace std;
 
 static const string UPNP_DEVICE_RESOURCE = "oic.r.upnp.device";
 static const string UPNP_SERVICE_RESOURCE = "oic.r.upnp.service";
+static const string UPNP_ACTION_RESOURCE = "oic.r.upnp.action";
+static const string UPNP_STATE_VAR_RESOURCE = "oic.r.upnp.stateVariable";
 
 struct _link {
     string href;
