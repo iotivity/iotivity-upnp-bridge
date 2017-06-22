@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_e9ab95d4",
+        "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2017-06-22T22:36:17Z",
+      "side": 1,
+      "message": "I will add it as a property in the UPnP Device",
+      "parentUuid": "1acb0d3e_6510e501",
+      "range": {
+        "startLine": 112,
+        "startChar": 6,
+        "endLine": 112,
+        "endChar": 21
+      },
+      "revId": "81d3df07cc6b78860c97667f20b363c9518b07f7",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_e2812b90",
         "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
         "patchSetId": 2
