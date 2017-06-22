@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_e93dd5bc",
+        "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-22T21:32:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_a2648322",
+      "range": {
+        "startLine": 45,
+        "startChar": 34,
+        "endLine": 45,
+        "endChar": 45
+      },
+      "revId": "81d3df07cc6b78860c97667f20b363c9518b07f7",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_82baa76c",
         "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
         "patchSetId": 2
@@ -95,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_894a1954",
+        "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-22T21:32:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_e2812b90",
+      "range": {
+        "startLine": 191,
+        "startChar": 53,
+        "endLine": 191,
+        "endChar": 60
+      },
+      "revId": "81d3df07cc6b78860c97667f20b363c9518b07f7",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_c2674f24",
         "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
         "patchSetId": 2
@@ -118,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_a947dd4a",
+        "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-22T21:32:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_c2674f24",
+      "range": {
+        "startLine": 193,
+        "startChar": 37,
+        "endLine": 193,
+        "endChar": 45
+      },
+      "revId": "81d3df07cc6b78860c97667f20b363c9518b07f7",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_626e9b03",
         "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
         "patchSetId": 2
@@ -129,6 +201,30 @@
       "writtenOn": "2017-06-21T23:24:39Z",
       "side": 1,
       "message": "\"media\" Maybe define string since use in couple places.",
+      "range": {
+        "startLine": 195,
+        "startChar": 25,
+        "endLine": 195,
+        "endChar": 33
+      },
+      "revId": "81d3df07cc6b78860c97667f20b363c9518b07f7",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_4974219c",
+        "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-22T21:32:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_626e9b03",
       "range": {
         "startLine": 195,
         "startChar": 25,
@@ -211,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_6979e592",
+        "filename": "plugins/upnp_plugin/UpnpGenericService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-22T21:32:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_62a0db43",
+      "range": {
+        "startLine": 40,
+        "startChar": 25,
+        "endLine": 40,
+        "endChar": 33
+      },
+      "revId": "81d3df07cc6b78860c97667f20b363c9518b07f7",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_027d57b1",
         "filename": "plugins/upnp_plugin/UpnpManager.cpp",
         "patchSetId": 2
@@ -222,6 +342,30 @@
       "writtenOn": "2017-06-21T23:24:39Z",
       "side": 1,
       "message": "serviceType is the property",
+      "range": {
+        "startLine": 484,
+        "startChar": 25,
+        "endLine": 484,
+        "endChar": 37
+      },
+      "revId": "81d3df07cc6b78860c97667f20b363c9518b07f7",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_096e29ca",
+        "filename": "plugins/upnp_plugin/UpnpManager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-22T21:32:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_027d57b1",
       "range": {
         "startLine": 484,
         "startChar": 25,
@@ -268,6 +412,30 @@
       "writtenOn": "2017-06-21T23:24:39Z",
       "side": 1,
       "message": "Define as string since used in multiple places",
+      "range": {
+        "startLine": 176,
+        "startChar": 48,
+        "endLine": 176,
+        "endChar": 59
+      },
+      "revId": "81d3df07cc6b78860c97667f20b363c9518b07f7",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_2973edb2",
+        "filename": "plugins/upnp_plugin/UpnpService.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-22T21:32:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_62453b6f",
       "range": {
         "startLine": 176,
         "startChar": 48,
