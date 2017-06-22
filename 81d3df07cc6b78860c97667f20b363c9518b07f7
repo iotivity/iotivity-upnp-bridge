@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "1acb0d3e_6510e501",
+        "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-22T20:21:35Z",
+      "side": 1,
+      "message": "It\u0027s optional (although recommended) in upnp device architecture 1.1 spec (2008)",
+      "parentUuid": "1acb0d3e_82baa76c",
+      "range": {
+        "startLine": 112,
+        "startChar": 6,
+        "endLine": 112,
+        "endChar": 21
+      },
+      "revId": "81d3df07cc6b78860c97667f20b363c9518b07f7",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_e2812b90",
         "filename": "plugins/upnp_plugin/UpnpDevice.cpp",
         "patchSetId": 2
@@ -128,6 +152,30 @@
       "writtenOn": "2017-06-22T16:27:19Z",
       "side": 1,
       "message": "why did we add the uri to the processGetRequest call?",
+      "range": {
+        "startLine": 46,
+        "startChar": 48,
+        "endLine": 46,
+        "endChar": 59
+      },
+      "revId": "81d3df07cc6b78860c97667f20b363c9518b07f7",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_8933f9f5",
+        "filename": "plugins/upnp_plugin/UpnpDimmingService.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-22T20:21:35Z",
+      "side": 1,
+      "message": "For generic upnp service, my intent is to process the soon to be implemented actions and state variables in the generic upnp service\u0027s processGetRequest() method so the uri will be needed there.  Thinking that it might be useful for future service implementions I made it part of the signature in the base class.  If you believe that I\u0027m planning for something which may not be necessary, I can remove the uri in all but the generic upnp service where i\u0027ll be using it.",
+      "parentUuid": "1acb0d3e_c562f9ac",
       "range": {
         "startLine": 46,
         "startChar": 48,
