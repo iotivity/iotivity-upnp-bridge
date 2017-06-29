@@ -259,11 +259,6 @@ UpnpResource::Ptr UpnpManager::processService(GUPnPServiceProxy *proxy,
         }
     }
 
-//    if (introspection != NULL)
-//    {
-//        pService->processIntrospection(proxy, introspection);
-//    }
-
     pService->setProxy(proxy);
     pService->setReady(true);
 

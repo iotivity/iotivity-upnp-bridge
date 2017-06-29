@@ -587,9 +587,9 @@ OCRepPayload* getCommonPayload(const char *uri, char *interfaceQuery, string res
     // If the interface filter is explicitly oic.if.baseline, include all properties.
     if (interfaceQuery && string(interfaceQuery) == string(OC_RSRVD_INTERFACE_DEFAULT))
     {
-        if (!OCRepPayloadAddInterface(payload, OC_RSRVD_INTERFACE_ACTUATOR))
+        if (!OCRepPayloadAddInterface(payload, OC_RSRVD_INTERFACE_READ))
         {
-            throw "Failed to set actuator interface";
+            throw "Failed to set read interface";
         }
 
         if (!OCRepPayloadAddInterface(payload, OC_RSRVD_INTERFACE_DEFAULT))
@@ -767,7 +767,7 @@ void UpnpConnector::onAdd(std::string uri)
             else
             {
                 DEBUG_PRINT("Adding generic upnp service");
-                createResource(uri, UPNP_SERVICE_RESOURCE, OC_RSRVD_INTERFACE_ACTUATOR,
+                createResource(uri, UPNP_SERVICE_RESOURCE, OC_RSRVD_INTERFACE_READ,
                         resourceEntityHandler, (void *) GENERIC_SERVICE_CALLBACK, resourceProperties);
                 // create resources for links
                 if (!service.second->m_links.empty())
@@ -778,12 +778,12 @@ void UpnpConnector::onAdd(std::string uri)
                         string linkRt = service.second->m_links[i].rt;
                         if (UPNP_ACTION_RESOURCE == linkRt)
                         {
-                            createResource(linkUri, linkRt, OC_RSRVD_INTERFACE_ACTUATOR,
+                            createResource(linkUri, linkRt, OC_RSRVD_INTERFACE_READ_WRITE,
                                 resourceEntityHandler, (void *) GENERIC_ACTION_CALLBACK, resourceProperties);
                         }
                         else if (UPNP_STATE_VAR_RESOURCE == linkRt)
                         {
-                            createResource(linkUri, linkRt, OC_RSRVD_INTERFACE_SENSOR,
+                            createResource(linkUri, linkRt, OC_RSRVD_INTERFACE_READ,
                                 resourceEntityHandler, (void *) GENERIC_STATE_VAR_CALLBACK, resourceProperties);
                         }
                         else

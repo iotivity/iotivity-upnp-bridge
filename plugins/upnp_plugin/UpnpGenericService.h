@@ -32,6 +32,37 @@
 
 using namespace std;
 
+// for state variables
+static const string STATE_VAR_NAME = "name";
+static const string DATA_TYPE = "dataType";
+static const string DEFAULT_VALUE = "defaultValue";
+static const string ALLOWED_VALUE_LIST = "allowedValueList";
+
+// for actions
+static const string ACTION_NAME = "actionName";
+static const string INPUT_ARGS = "inputArgs";
+static const string OUTPUT_ARGS = "outputArgs";
+
+// for generic args
+static const string GEN_NAME = "genName";
+static const string GEN_TYPE = "genType";
+static const string GEN_VALUE = "genValue";
+
+struct _genArg {
+    string name;
+    string type;
+    string value;
+};
+
+// GType to Upnp Type map
+static map<string, string> GTypeToUpnpTypeMap =
+{
+    {"gboolean",  "boolean"},
+    {"gchararray","string"},
+    {"gint",      "int"},
+    {"guint",     "ui4"},
+};
+
 class UpnpGenericService: public UpnpService
 {
         friend class UpnpService;

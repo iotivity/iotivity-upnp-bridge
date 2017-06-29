@@ -212,6 +212,8 @@ OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload, strin
         }
 
         // continue getting larger icons
+        width = -1;
+        height = -1;
         int nextWidth = 0;
         int nextHeight = 0;
         bool gettingIcons = true;
