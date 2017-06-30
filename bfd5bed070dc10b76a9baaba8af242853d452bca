@@ -22,6 +22,64 @@
       "revId": "bfd5bed070dc10b76a9baaba8af242853d452bca",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_6a31d7a1",
+        "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-30T17:19:47Z",
+      "side": 0,
+      "message": "This should have been a read-only from the start since the service definition itself cannot be modified.",
+      "parentUuid": "9ab8dda7_2a143ff4",
+      "range": {
+        "startLine": 770,
+        "startChar": 78,
+        "endLine": 770,
+        "endChar": 87
+      },
+      "revId": "bfd5bed070dc10b76a9baaba8af242853d452bca",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_0a261b69",
+        "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-30T17:19:47Z",
+      "side": 0,
+      "message": "For the generic models, the decision was made to use read_write instead of actuator.",
+      "revId": "bfd5bed070dc10b76a9baaba8af242853d452bca",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_2a2bdf31",
+        "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2017-06-30T17:19:47Z",
+      "side": 0,
+      "message": "For the generic models, the decision was made to use read instead of sensor.",
+      "revId": "bfd5bed070dc10b76a9baaba8af242853d452bca",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
