@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_2a143ff4",
+        "filename": "plugins/upnp_plugin/UpnpConnector.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2017-06-30T17:14:44Z",
+      "side": 0,
+      "message": "not sure I fully understand why the change in the interfaces were made.  lines 770, 781, and 786",
+      "range": {
+        "startLine": 770,
+        "startChar": 78,
+        "endLine": 770,
+        "endChar": 87
+      },
+      "revId": "bfd5bed070dc10b76a9baaba8af242853d452bca",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
