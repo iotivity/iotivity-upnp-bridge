@@ -55,12 +55,17 @@ struct _genArg {
 };
 
 // GType to Upnp Type map
+static const string UPNP_TYPE_BOOLEAN = "boolean";
+static const string UPNP_TYPE_STRING = "string";
+static const string UPNP_TYPE_INT = "int";
+static const string UPNP_TYPE_UI4 = "ui4";
+
 static map<string, string> GTypeToUpnpTypeMap =
 {
-    {"gboolean",  "boolean"},
-    {"gchararray","string"},
-    {"gint",      "int"},
-    {"guint",     "ui4"},
+    {"gboolean",  UPNP_TYPE_BOOLEAN},
+    {"gchararray",UPNP_TYPE_STRING},
+    {"gint",      UPNP_TYPE_INT},
+    {"guint",     UPNP_TYPE_UI4},
 };
 
 class UpnpGenericService: public UpnpService
