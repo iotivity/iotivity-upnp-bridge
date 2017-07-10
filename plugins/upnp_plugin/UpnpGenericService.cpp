@@ -343,12 +343,24 @@ OCEntityHandlerResult UpnpGenericService::processPutRequest(OCEntityHandlerReque
                     else if (UPNP_TYPE_INT == type)
                     {
                         g_value_init(gValue, G_TYPE_INT);
-                        g_value_set_int(gValue, stoi(value));
+                        int intValue = 0;
+                        try {
+                            intValue = stoi(value);
+                        } catch (const invalid_argument& ia) {
+                            ERROR_PRINT("Failed to convert " << value << " to int");
+                        }
+                        g_value_set_int(gValue, intValue);
                     }
                     else if (UPNP_TYPE_UI4 == type)
                     {
                         g_value_init(gValue, G_TYPE_UINT);
-                        g_value_set_uint(gValue, stoi(value));
+                        unsigned int uintValue = 0;
+                        try {
+                            uintValue = stoul(value);
+                        } catch (const invalid_argument& ia) {
+                            ERROR_PRINT("Failed to convert " << value << " to uint");
+                        }
+                        g_value_set_uint(gValue, uintValue);
                     }
                     else {
                         ERROR_PRINT("No GType known for upnp type " << type);
