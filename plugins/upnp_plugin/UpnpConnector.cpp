@@ -881,16 +881,39 @@ void UpnpConnector::onRemove(std::string uri)
 
     for (const auto& service : s_manager->m_services) {
         if (service.second->m_uri == uri) {
+            if (!service.second->m_links.empty())
+            {
+                vector<_link> links = service.second->m_links;
+                for (unsigned int i = 0; i < links.size(); ++i) {
+                    OCStackResult result = OC::Bridging::ConcurrentIotivityUtils::queueDeleteResource(links[i].href);
+                    DEBUG_PRINT("Service link queueDeleteResource(" << links[i].href << ") result = " << result);
+                    ConcurrentIotivityUtils::queueNotifyObservers(links[i].href);
+                }
+            }
+
             OCStackResult result = OC::Bridging::ConcurrentIotivityUtils::queueDeleteResource(uri);
-            DEBUG_PRINT("queueDeleteResource() result = " << result);
+            DEBUG_PRINT("Service queueDeleteResource(" << uri << ") result = " << result);
             ConcurrentIotivityUtils::queueNotifyObservers(uri);
         }
     }
 
     for (const auto& device : s_manager->m_devices) {
         if (device.second->m_uri == uri) {
+            if (!device.second->m_links.empty())
+            {
+                vector<_link> links = device.second->m_links;
+                for (unsigned int i = 0; i < links.size(); ++i) {
+                    if (links[i].rt.find(UPNP_DEVICE_RESOURCE) == 0)
+                    {
+                        OCStackResult result = OC::Bridging::ConcurrentIotivityUtils::queueDeleteResource(links[i].href);
+                        DEBUG_PRINT("Device link queueDeleteResource(" << links[i].href << ") result = " << result);
+                        ConcurrentIotivityUtils::queueNotifyObservers(links[i].href);
+                    }
+                }
+            }
+
             OCStackResult result = OC::Bridging::ConcurrentIotivityUtils::queueDeleteResource(uri);
-            DEBUG_PRINT("queueDeleteResource() result = " << result);
+            DEBUG_PRINT("Device queueDeleteResource(" << uri << ") result = " << result);
             ConcurrentIotivityUtils::queueNotifyObservers(uri);
         }
     }
