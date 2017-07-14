@@ -159,6 +159,11 @@ OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload, strin
     if (UPNP_DEVICE_RESOURCE == resourceType)
     {
         GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(m_proxy);
+        if (! GUPNP_IS_DEVICE_INFO(deviceInfo))
+        {
+            ERROR_PRINT("GUPNP_DEVICE_INFO failed for proxy for " << m_uri);
+            return OC_EH_ERROR;
+        }
 
         if (!OCRepPayloadSetPropString(payload, DEVICE_TYPE.c_str(), m_deviceType.c_str()))
         {
