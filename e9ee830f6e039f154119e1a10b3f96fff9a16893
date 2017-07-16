@@ -1,0 +1,8 @@
+Verified+1: jenkins-iotivity <jenkins@iotivity.org>
+Code-Review+1: George Nash <george.nash@intel.com>
+Code-Review+2: Rick Bell <richard.s.bell@intel.com>
+Submitted-by: Rick Bell <richard.s.bell@intel.com>
+Submitted-at: Sun, 16 Jul 2017 18:27:29 +0000
+Reviewed-on: https://gerrit.iotivity.org/gerrit/21457
+Project: iotivity-upnp-bridge
+Branch: refs/heads/master
