@@ -213,7 +213,27 @@ OCEntityHandlerResult UpnpService::processGetRequest(string uri, OCRepPayload *p
                     OCRepPayload *linkPayload = OCRepPayloadCreate();
                     OCRepPayloadSetPropString(linkPayload, OC_RSRVD_HREF, m_links[i].href.c_str());
                     OCRepPayloadSetPropString(linkPayload, OC_RSRVD_REL, m_links[i].rel.c_str());
-                    OCRepPayloadSetPropString(linkPayload, OC_RSRVD_RESOURCE_TYPE, m_links[i].rt.c_str());
+
+                    // resource type must be an array
+                    const char *rtArray[1];
+                    rtArray[0] = m_links[i].rt.c_str();
+                    size_t rtDimensions[MAX_REP_ARRAY_DEPTH] = {1, 0, 0};
+                    OCRepPayloadSetStringArray(linkPayload, OC_RSRVD_RESOURCE_TYPE, rtArray, rtDimensions);
+
+                    // interface must be an array
+                    const char *ifArray[2];
+                    ifArray[0] = OC_RSRVD_INTERFACE_DEFAULT;
+                    if (m_links[i].rt == UPNP_ACTION_RESOURCE)
+                    {
+                        ifArray[1] = OC_RSRVD_INTERFACE_READ_WRITE;
+                    }
+                    else
+                    {
+                        ifArray[1] = OC_RSRVD_INTERFACE_READ;
+                    }
+                    size_t ifDimensions[MAX_REP_ARRAY_DEPTH] = {2, 0, 0};
+                    OCRepPayloadSetStringArray(linkPayload, OC_RSRVD_INTERFACE, ifArray, ifDimensions);
+
                     links[i] = linkPayload;
                 }
                 OCRepPayloadSetPropObjectArray(payload, OC_RSRVD_LINKS, links, dimensions);

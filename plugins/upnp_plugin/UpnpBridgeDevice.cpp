@@ -126,7 +126,7 @@ UpnpBridgeDevice::UpnpBridgeDevice()
     }
 
     result = createResource(SECUREMODE_RESOURCE_URI, SECUREMODE_RESOURCE_TYPE.c_str(),
-            OC_RSRVD_INTERFACE_READ, entityHandler, (void *) SECUREMODE_CALLBACK, resourceProperties);
+            OC_RSRVD_INTERFACE_READ_WRITE, entityHandler, (void *) SECUREMODE_CALLBACK, resourceProperties);
     if (result != OC_STACK_OK)
     {
         DEBUG_PRINT("CreateResource() = " << result);
@@ -159,7 +159,9 @@ UpnpBridgeDevice::UpnpBridgeDevice()
 UpnpBridgeDevice::~UpnpBridgeDevice()
 {
     OCStackResult result = OC::Bridging::ConcurrentIotivityUtils::queueDeleteResource(s_bridgeUri);
-    DEBUG_PRINT("Plugin stop queueDeleteResource() result = " << result);
+    DEBUG_PRINT("Plugin stop queueDeleteResource(" << s_bridgeUri << ") result = " << result);
+    result = OC::Bridging::ConcurrentIotivityUtils::queueDeleteResource(SECUREMODE_RESOURCE_URI);
+    DEBUG_PRINT("Plugin stop queueDeleteResource(" << SECUREMODE_RESOURCE_URI << ") result = " << result);
 }
 
 void UpnpBridgeDevice::setUpnpManager(UpnpManager *upnpManager)
@@ -251,7 +253,7 @@ OCEntityHandlerResult UpnpBridgeDevice::handleEntityHandlerRequests(OCEntityHand
             default:
                 DEBUG_PRINT("UnSupported Method [" << entityHandlerRequest->method << "] Received");
                 ConcurrentIotivityUtils::respondToRequestWithError(entityHandlerRequest, "Unsupported Method", OC_EH_METHOD_NOT_ALLOWED);
-                 return OC_EH_OK;
+                return OC_EH_OK;
         }
 
         responsePayload = getCommonPayload(uri.c_str(), interfaceQuery, resourceType, payload);
@@ -281,7 +283,7 @@ OCEntityHandlerResult UpnpBridgeDevice::processGetRequest(string uri, string res
         bool secureMode = false;
         if (!OCRepPayloadSetPropBool(payload, SECUREMODE_PROPERTY_KEY.c_str(), secureMode))
         {
-            string message = "Failed to set '" + SECUREMODE_PROPERTY_KEY + "' in payload";
+            string message = "Failed to get '" + SECUREMODE_PROPERTY_KEY + "' in payload";
             throw message;
         }
         DEBUG_PRINT(uri << " -- " << SECUREMODE_PROPERTY_KEY << ": " << (secureMode ? "true" : "false"));
@@ -299,13 +301,27 @@ OCEntityHandlerResult UpnpBridgeDevice::processGetRequest(string uri, string res
             OCRepPayload *linkPayload = OCRepPayloadCreate();
             OCRepPayloadSetPropString(linkPayload, OC_RSRVD_HREF, device.second->m_uri.c_str());
             OCRepPayloadSetPropString(linkPayload, OC_RSRVD_REL, LINK_REL_HOSTS.c_str());
+
+            // resource type must be an array
+            const char *rtArray[1];
             if (device.second->m_resourceType == UPNP_OIC_TYPE_DEVICE_LIGHT)
             {
-                OCRepPayloadSetPropString(linkPayload, OC_RSRVD_RESOURCE_TYPE, device.second->m_resourceType.c_str());
+                rtArray[0] = device.second->m_resourceType.c_str();
             }
             else {
-                OCRepPayloadSetPropString(linkPayload, OC_RSRVD_RESOURCE_TYPE, UPNP_DEVICE_RESOURCE.c_str());
+                rtArray[0] = UPNP_DEVICE_RESOURCE.c_str();
             }
+
+            size_t rtDimensions[MAX_REP_ARRAY_DEPTH] = {1, 0, 0};
+            OCRepPayloadSetStringArray(linkPayload, OC_RSRVD_RESOURCE_TYPE, rtArray, rtDimensions);
+
+            // interface must be an array
+            const char *ifArray[2];
+            ifArray[0] = OC_RSRVD_INTERFACE_DEFAULT;
+            ifArray[1] = OC_RSRVD_INTERFACE_READ;
+            size_t ifDimensions[MAX_REP_ARRAY_DEPTH] = {2, 0, 0};
+            OCRepPayloadSetStringArray(linkPayload, OC_RSRVD_INTERFACE, ifArray, ifDimensions);
+
             links[linksIndex] = linkPayload;
             ++linksIndex;
         }
