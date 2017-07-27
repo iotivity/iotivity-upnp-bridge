@@ -78,8 +78,11 @@ OCEntityHandlerResult UpnpGenericService::processGetRequest(string uri, OCRepPay
                             {
                                 const GType type = stateVarInfo->type;
                                 const string gType = g_type_name(type);
-                                argType = GTypeToUpnpTypeMap[gType];
-                                if ((argType == nullptr) || (argType.empty()))
+                                if (GTypeToUpnpTypeMap.end() != GTypeToUpnpTypeMap.find(gType))
+                                {
+                                    argType = GTypeToUpnpTypeMap[gType];
+                                }
+                                if (argType.empty())
                                 {
                                     ERROR_PRINT("No type found for GType " << gType);
                                 }
@@ -183,8 +186,12 @@ OCEntityHandlerResult UpnpGenericService::processGetRequest(string uri, OCRepPay
 
                     const GType type = stateVarInfo->type;
                     const string gType = g_type_name(type);
-                    const string upnpType = GTypeToUpnpTypeMap[gType];
-                    if ((upnpType != nullptr) && (! upnpType.empty()))
+                    string upnpType;
+                    if (GTypeToUpnpTypeMap.end() != GTypeToUpnpTypeMap.find(gType))
+                    {
+                        upnpType = GTypeToUpnpTypeMap[gType];
+                    }
+                    if (!upnpType.empty())
                     {
                         if (OCRepPayloadSetPropString(payload, DATA_TYPE.c_str(), upnpType.c_str()))
                         {
