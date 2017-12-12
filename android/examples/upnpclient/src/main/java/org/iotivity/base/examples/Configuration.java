@@ -26,34 +26,32 @@ import org.iotivity.base.OcException;
 import org.iotivity.base.OcRepresentation;
 
 /**
- * Brightness
+ * Configuration
  * <p/>
- * This class is used by UpnpClientActivity to create an object representation of a remote brightness service
+ * This class is used by UpnpClientActivity to create an object representation of a remote configuration service
  * and update the values depending on the server response
  */
-public class Brightness extends Service {
+public class Configuration extends Service {
 
-    public static final String OIC_TYPE_BRIGHTNESS = "oic.r.light.brightness";
-    public static final String OCF_OIC_URI_PREFIX_BRIGHTNESS = "/ocf/brightness/";
-    public static final String UPNP_OIC_URI_PREFIX_BRIGHTNESS = "/upnp/brightness/";
+    public static final String OIC_TYPE_CONFIG = "oic.wk.con";
+    public static final String OCF_OIC_URI_PREFIX_CONFIG = "/ocf/light-config/"; // TODO: regex match "/ocf/.*-config/"
 
-    public static final String BRIGHTNESS_KEY = "brightness";
-    public static final int DEFAULT_BRIGHTNESS = 100;
+    public static final String NAME_KEY = "n";
 
-    private int mBrightness;
+    private String mName;
     private boolean mIsInitialized;
 
-    public Brightness() {
+    public Configuration() {
         super();
-        mBrightness = DEFAULT_BRIGHTNESS;
+        mName = "";
     }
 
     public void setOcRepresentation(OcRepresentation rep) throws OcException {
         super.setOcRepresentation(rep);
-        if (rep.hasAttribute(BRIGHTNESS_KEY)) {
-            Object obj = rep.getValue(BRIGHTNESS_KEY);
-            if (obj instanceof Integer) {
-                mBrightness = (Integer) obj;
+        if (rep.hasAttribute(NAME_KEY)) {
+            Object obj = rep.getValue(NAME_KEY);
+            if (obj instanceof String) {
+                mName = (String) obj;
                 mIsInitialized = true;
             }
         }
@@ -61,16 +59,16 @@ public class Brightness extends Service {
 
     public OcRepresentation getOcRepresentation() throws OcException {
         OcRepresentation rep = super.getOcRepresentation();
-        rep.setValue(BRIGHTNESS_KEY, mBrightness);
+        rep.setValue(NAME_KEY, mName);
         return rep;
     }
 
-    public int getBrightness() {
-        return mBrightness;
+    public String getName() {
+        return mName;
     }
 
-    public void setBrightness(int brightness) {
-        mBrightness = brightness;
+    public void setName(String name) {
+        mName = name;
     }
 
     public boolean isInitialized() {
@@ -81,6 +79,6 @@ public class Brightness extends Service {
     public String toString() {
         return "[" + super.toString() +
                 ", " + "initialized: " + mIsInitialized +
-                ", " + BRIGHTNESS_KEY + ": " + mBrightness + "]";
+                ", " + NAME_KEY + ": " + mName + "]";
     }
 }

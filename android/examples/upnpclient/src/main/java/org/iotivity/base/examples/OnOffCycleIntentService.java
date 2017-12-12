@@ -47,6 +47,7 @@ import java.util.Map;
 public class OnOffCycleIntentService extends IntentService implements
         OcPlatform.OnResourceFoundListener,
         OcResource.OnGetListener,
+        OcResource.OnPutListener,
         OcResource.OnPostListener {
 
     private final static String TAG = OnOffCycleIntentService.class.getSimpleName();
@@ -84,8 +85,8 @@ public class OnOffCycleIntentService extends IntentService implements
                 mResourceLookup.clear();
                 mResourceUriToParentDeviceLookup.clear();
 
-                Log.i(TAG, "Finding all resources of type " + Light.UPNP_OIC_TYPE_DEVICE_LIGHT);
-                String requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + Light.UPNP_OIC_TYPE_DEVICE_LIGHT;
+                Log.i(TAG, "Finding all resources of type " + Light.OIC_TYPE_DEVICE_LIGHT);
+                String requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + Light.OIC_TYPE_DEVICE_LIGHT;
                 OcPlatform.findResource("", requestUri, EnumSet.of(OcConnectivityType.CT_DEFAULT), this);
 
             } catch (OcException e) {
@@ -115,7 +116,9 @@ public class OnOffCycleIntentService extends IntentService implements
 
         // We are only interested in light resources
         // For now, we are only interested in light resources
-        if (resourceUri.startsWith(Light.UPNP_OIC_URI_PREFIX_LIGHT)) {
+        if (resourceUri.startsWith(Light.UPNP_OIC_URI_PREFIX_LIGHT)
+                || resourceUri.startsWith(Light.OCF_OIC_URI_PREFIX_LIGHT)
+                || resourceUri.startsWith(Light.OIC_URI_PREFIX_LIGHT)) {
             if (!mResourceLookup.containsKey(resourceUri)) {
                 Log.i(TAG, "URI of the new light resource: " + resourceUri);
 
@@ -174,7 +177,8 @@ public class OnOffCycleIntentService extends IntentService implements
                 if (!mResourceLookup.containsKey(resourceUri)) {
                     Log.i(TAG, "URI of the new linked resource: " + resourceUri);
 
-                    if (resourceUri.startsWith(BinarySwitch.UPNP_OIC_URI_PREFIX_BINARY_SWITCH)) {
+                    if (resourceUri.startsWith(BinarySwitch.UPNP_OIC_URI_PREFIX_BINARY_SWITCH)
+                            || resourceUri.startsWith(BinarySwitch.OCF_OIC_URI_PREFIX_BINARY_SWITCH)) {
                         BinarySwitch binarySwitch = new BinarySwitch();
                         binarySwitch.setUri(resourceUri);
 
@@ -187,7 +191,8 @@ public class OnOffCycleIntentService extends IntentService implements
                             tracked = true;
                         }
 
-                    } else if (resourceUri.startsWith(Brightness.UPNP_OIC_URI_PREFIX_BRIGHTNESS)) {
+                    } else if (resourceUri.startsWith(Brightness.UPNP_OIC_URI_PREFIX_BRIGHTNESS)
+                            || resourceUri.startsWith(Brightness.OCF_OIC_URI_PREFIX_BRIGHTNESS)) {
                         Brightness brightness = new Brightness();
                         brightness.setUri(resourceUri);
 
@@ -273,9 +278,28 @@ public class OnOffCycleIntentService extends IntentService implements
                         Links links = device.getLinks();
                         for (Link link : links.getLinks()) {
                             String href = link.getHref();
-                            String rt = link.getRt();
-                            String requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + rt;
-                            OcPlatform.findResource("", requestUri, EnumSet.of(OcConnectivityType.CT_DEFAULT), new ResourceFoundListener(ocRepUri, href));
+                            // rt could be String or String[]
+                            Object rt = link.getRt();
+                            String rtAsString = null;
+                            if (rt instanceof String) {
+                                rtAsString = (String) rt;
+
+                            } else if (rt instanceof String[]) {
+                                if (((String[]) rt).length > 0) {
+                                    rtAsString = ((String[]) rt)[0];
+                                } else {
+                                    Log.e(TAG, "(String[])rt is empty");
+                                }
+
+                            } else {
+                                Log.e(TAG, "Unknown rt type of " + rt.getClass().getName());
+                            }
+
+                            if ((rtAsString != null) && (!mResourceLookup.containsKey(href))) {
+                                Log.i(TAG, "Finding all resources of type " + rtAsString);
+                                String requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + rtAsString;
+                                OcPlatform.findResource("", requestUri, EnumSet.of(OcConnectivityType.CT_DEFAULT), new ResourceFoundListener(ocRepUri, href));
+                            }
                         }
                     }
 
@@ -289,6 +313,14 @@ public class OnOffCycleIntentService extends IntentService implements
                         } else {
                             Log.i(TAG, "No parent device for uri " + ocRepUri);
                         }
+                    }
+
+                    if (resource instanceof Light && !((Light) resource).hasLinksProperty()) {
+                        // Properties are on the light device
+                        // Call a local method which will internally invoke put API on the light resource
+                        Light light = (Light) resource;
+                        Log.i(TAG, light.getName() + " changing state to " + ((!light.getState()) ? "on" : "off"));
+                        postLightRepresentation(light.getUri(), !light.getState(), light.getLightLevel());
                     }
 
                 } else {
@@ -332,86 +364,176 @@ public class OnOffCycleIntentService extends IntentService implements
         Light light = (Light) mResourceLookup.get(resourceUri); // TODO: check instanceof before cast
         if (light != null) {
             // set new values
+
             light.setState(newState);
             light.setLightLevel(newLightLevel);
 
             Log.i(TAG, "Posting light representation...");
+            if (light.hasLinksProperty()) {
 
-            BinarySwitch binarySwitch = light.getBinarySwitch();
-            if ((binarySwitch != null) && (binarySwitch.isInitialized())) {
-                OcRepresentation binarySwitchRepresentation = null;
-                try {
-                    binarySwitchRepresentation = binarySwitch.getOcRepresentation();
-
-                } catch (OcException e) {
-                    Log.e(TAG, "Failed to get OcRepresentation from a binary switch -- " + e.toString(), e);
-                }
-
-                if (binarySwitchRepresentation != null) {
-                    Map<String, String> queryParams = new HashMap<>();
+                BinarySwitch binarySwitch = light.getBinarySwitch();
+                if ((binarySwitch != null) && (binarySwitch.isInitialized())) {
+                    OcRepresentation binarySwitchRepresentation = null;
                     try {
-                        // Invoke resource's "post" API with a new representation, query parameters and
-                        // OcResource.OnPostListener event listener implementation
-                        OcResource binarySwitchResource = mIotivityResourceLookup.get(binarySwitch.getUri());
-                        if (binarySwitchResource != null) {
-                            binarySwitchResource.post(binarySwitchRepresentation, queryParams, this);
-                        } else {
-                            Log.e(TAG, "No binary switch resource for light uri " + resourceUri);
-                        }
+                        binarySwitchRepresentation = binarySwitch.getOcRepresentation();
 
                     } catch (OcException e) {
-                        Log.e(TAG, "Error occurred while invoking \"post\" API -- " + e.toString(), e);
+                        Log.e(TAG, "Failed to get OcRepresentation from a binary switch -- " + e.toString(), e);
+                    }
+
+                    if (binarySwitchRepresentation != null) {
+                        Map<String, String> queryParams = new HashMap<>();
+                        try {
+                            // Invoke resource's "put" or "post" API with a new representation, query parameters and
+                            // OcResource.OnPostListener event listener implementation
+                            OcResource binarySwitchResource = mIotivityResourceLookup.get(binarySwitch.getUri());
+                            if (binarySwitchResource != null) {
+                                if (binarySwitchResource.getUri().startsWith(BinarySwitch.UPNP_OIC_URI_PREFIX_BINARY_SWITCH)) {
+                                    // upnp bridge requires 'post'
+                                    binarySwitchResource.post(binarySwitchRepresentation, queryParams, this);
+                                } else {
+                                    binarySwitchResource.put(binarySwitchRepresentation, queryParams, this);
+                                }
+
+                            } else {
+                                Log.e(TAG, "No binary switch resource for light uri " + resourceUri);
+                            }
+
+                        } catch (OcException e) {
+                            Log.e(TAG, "Error occurred while invoking \"post\" API -- " + e.toString(), e);
+                        }
+                    }
+
+                } else {
+                    if (binarySwitch == null) {
+                        Log.e(TAG, "No binary switch for light uri " + resourceUri);
+
+                    } else {
+                        Log.e(TAG, "Binary switch not initialized: " + binarySwitch);
+                    }
+                }
+
+                Brightness brightness = light.getBrightness();
+                if ((brightness != null) && (brightness.isInitialized())) {
+                    OcRepresentation brightnessRepresentation = null;
+                    try {
+                        brightnessRepresentation = brightness.getOcRepresentation();
+
+                    } catch (OcException e) {
+                        Log.e(TAG, "Failed to get OcRepresentation from a brightness -- " + e.toString(), e);
+                    }
+
+                    if (brightnessRepresentation != null) {
+                        Map<String, String> queryParams = new HashMap<>();
+                        try {
+                            // Invoke resource's "put" or "post" API with a new representation, query parameters and
+                            // OcResource.OnPostListener event listener implementation
+                            OcResource brightnessResource = mIotivityResourceLookup.get(brightness.getUri());
+                            if (brightnessResource != null) {
+                                if (brightnessResource.getUri().startsWith(Brightness.UPNP_OIC_URI_PREFIX_BRIGHTNESS)) {
+                                    // upnp bridge requires 'post'
+                                    brightnessResource.post(brightnessRepresentation, queryParams, this);
+                                } else {
+                                    brightnessResource.put(brightnessRepresentation, queryParams, this);
+                                }
+
+                            } else {
+                                Log.e(TAG, "No brightness resource for light uri " + resourceUri);
+                            }
+
+                        } catch (OcException e) {
+                            Log.e(TAG, "Error occurred while invoking \"post\" API -- " + e.toString(), e);
+                        }
+                    }
+
+                } else {
+                    if (brightness == null) {
+                        Log.e(TAG, "No brightness for light uri " + resourceUri);
+
+                    } else {
+                        Log.e(TAG, "Brightness not initialized: " + brightness);
                     }
                 }
 
             } else {
-                if (binarySwitch == null) {
-                    Log.e(TAG, "No binary switch for light uri " + resourceUri);
-
-                } else {
-                    Log.e(TAG, "Binary switch not initialized: " + binarySwitch);
-                }
-            }
-
-            Brightness brightness = light.getBrightness();
-            if ((brightness != null) && (brightness.isInitialized())) {
-                OcRepresentation brightnessRepresentation = null;
+                // properties are on the device
+                OcRepresentation lightRepresentation = null;
                 try {
-                    brightnessRepresentation = brightness.getOcRepresentation();
+                    lightRepresentation = light.getOcRepresentation();
 
                 } catch (OcException e) {
-                    Log.e(TAG, "Failed to get OcRepresentation from a brightness -- " + e.toString(), e);
+                    Log.e(TAG, "Failed to get OcRepresentation from light -- " + e.toString());
                 }
 
-                if (brightnessRepresentation != null) {
+                if (lightRepresentation != null) {
                     Map<String, String> queryParams = new HashMap<>();
                     try {
-                        // Invoke resource's "post" API with a new representation, query parameters and
-                        // OcResource.OnPostListener event listener implementation
-                        OcResource brightnessResource = mIotivityResourceLookup.get(brightness.getUri());
-                        if (brightnessResource != null) {
-                            brightnessResource.post(brightnessRepresentation, queryParams, this);
-                        } else {
-                            Log.e(TAG, "No brightness resource for light uri " + resourceUri);
-                        }
+                        // Invoke resource's "put" API with a new representation
+                        OcResource ocResource = mIotivityResourceLookup.get(light.getUri());
+                        ocResource.put(lightRepresentation, queryParams, this);
 
                     } catch (OcException e) {
-                        Log.e(TAG, "Error occurred while invoking \"post\" API -- " + e.toString(), e);
+                        Log.e(TAG, "Error occurred while invoking \"put\" API -- " + e.toString());
                     }
-                }
-
-            } else {
-                if (brightness == null) {
-                    Log.e(TAG, "No brightness for light uri " + resourceUri);
-
-                } else {
-                    Log.e(TAG, "Brightness not initialized: " + brightness);
                 }
             }
 
         } else {
             Log.i(TAG, "No light for uri " + resourceUri);
         }
+    }
+
+    /**
+     * An event handler to be executed whenever a "put" request completes successfully
+     *
+     * @param list             list of the header options
+     * @param ocRepresentation representation of a resource
+     */
+    @Override
+    public synchronized void onPutCompleted(List<OcHeaderOption> list, OcRepresentation ocRepresentation) {
+        Log.i(TAG, "PUT request was successful");
+        Log.i(TAG, "Resource URI (from getUri()): " + ocRepresentation.getUri());
+
+        try {
+            // Read attribute values into local representation of resource
+            final String ocRepUri = ocRepresentation.getUri();
+            if (ocRepUri != null && !ocRepUri.isEmpty()) {
+                Log.i(TAG, "Resource URI: " + ocRepUri);
+
+                Resource resource = mResourceLookup.get(ocRepUri);
+                if (resource != null) {
+                    resource.setOcRepresentation(ocRepresentation);
+                    Log.i(TAG, "Resource attributes: " + resource.toString());
+
+                } else {
+                    Log.w(TAG, "No resource for uri " + ocRepUri);
+                }
+
+            } else {
+                Log.w(TAG, "No Resource URI");
+            }
+
+        } catch (OcException e) {
+            Log.e(TAG, "Failed to create resource representation -- " + e.toString(), e);
+        }
+    }
+
+    /**
+     * An event handler to be executed whenever a "put" request fails
+     *
+     * @param throwable exception
+     */
+    @Override
+    public synchronized void onPutFailed(Throwable throwable) {
+        if (throwable instanceof OcException) {
+            OcException ocEx = (OcException) throwable;
+            Log.e(TAG, ocEx.toString());
+            ErrorCode errCode = ocEx.getErrorCode();
+            // do something based on errorCode
+            Log.e(TAG, "Error code: " + errCode);
+        }
+
+        Log.e(TAG, "Failed to \"put\" a new representation");
     }
 
     /**
