@@ -63,8 +63,8 @@ public class Link {
     public OcRepresentation getOcRepresentation() throws OcException {
         OcRepresentation ocRep = new OcRepresentation();
         ocRep.setValue(HREF_KEY, mHref);
-        ocRep.setValue(REL_KEY, mHref);
-        ocRep.setValue(RT_KEY, mHref);
+        ocRep.setValue(REL_KEY, mRel);
+        ocRep.setValue(RT_KEY, mRt);
         return ocRep;
     }
 

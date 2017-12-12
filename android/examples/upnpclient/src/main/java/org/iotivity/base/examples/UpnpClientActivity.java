@@ -555,10 +555,6 @@ public class UpnpClientActivity extends Activity implements
     public synchronized void onObserveCompleted(List<OcHeaderOption> list, OcRepresentation ocRepresentation, int sequenceNumber) {
         if (OcResource.OnObserveListener.REGISTER == sequenceNumber) {
             Log.i(TAG, "Observe registration action is successful");
-        } else if (OcResource.OnObserveListener.DEREGISTER == sequenceNumber) {
-            Log.i(TAG, "Observe De-registration action is successful");
-        } else if (OcResource.OnObserveListener.NO_OPTION == sequenceNumber) {
-            Log.i(TAG, "Observe registration or de-registration action is failed");
         }
 
         Log.i(TAG, "OBSERVE Result: SequenceNumber: " + sequenceNumber);
