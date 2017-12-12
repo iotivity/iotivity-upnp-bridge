@@ -56,6 +56,7 @@ abstract public class Device extends Resource {
     private String mUpc;
 
     private Links mLinks;
+    private boolean mHasLinksProperty;
 
     public Device() {
         super();
@@ -105,6 +106,7 @@ abstract public class Device extends Resource {
         if (rep.hasAttribute(LINKS_KEY)) {
             OcRepresentation[] links = rep.getValue(LINKS_KEY);
             mLinks.setOcRepresentation(links);
+            mHasLinksProperty = true;
         }
     }
 
@@ -122,7 +124,9 @@ abstract public class Device extends Resource {
         rep.setValue(UPC_KEY, mUpc);
 
         OcRepresentation[] links = mLinks.getOcRepresentation();
-        rep.setValue(LINKS_KEY, links);
+        if ((links != null) && (links.length > 0)) {
+            rep.setValue(LINKS_KEY, links);
+        }
 
         return rep;
     }
@@ -199,6 +203,10 @@ abstract public class Device extends Resource {
         mUpc = upc;
     }
 
+    public boolean hasLinksProperty() {
+        return mHasLinksProperty;
+    }
+
     public Links getLinks() {
         return mLinks;
     }
@@ -219,6 +227,7 @@ abstract public class Device extends Resource {
                 ", " + SERIAL_NUMBER_KEY + ": " + mSerialNumber +
                 ", " + PRESENTATION_URL_KEY + ": " + mPresentationUrl +
                 ", " + UPC_KEY + ": " + mUpc +
+                ", " + "hasLinksProp: " + mHasLinksProperty +
                 ", " + LINKS_KEY + mLinks + "]";
     }
 }
