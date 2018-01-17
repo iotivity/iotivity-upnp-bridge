@@ -165,7 +165,9 @@ public class UpnpClientActivity extends Activity implements
             tracked = true;
 
         } else {
-            Log.i(TAG, "URI of the new (for now, untracked) resource: " + resourceUri);
+            if (!resourceUri.equals("/oic/d")) {
+                Log.i(TAG, "URI of the new (for now, untracked) resource: " + resourceUri);
+            }
         }
 
         if (tracked) {
@@ -343,27 +345,29 @@ public class UpnpClientActivity extends Activity implements
                         Links links = device.getLinks();
                         for (Link link : links.getLinks()) {
                             String href = link.getHref();
-                            // rt could be String or String[]
-                            Object rt = link.getRt();
-                            String rtAsString = null;
-                            if (rt instanceof String) {
-                                rtAsString = (String) rt;
+                            if (!href.equals("/oic/d")) {
+                                // rt could be String or String[]
+                                Object rt = link.getRt();
+                                String rtAsString = null;
+                                if (rt instanceof String) {
+                                    rtAsString = (String) rt;
 
-                            } else if (rt instanceof String[]) {
-                                if (((String[]) rt).length > 0) {
-                                    rtAsString = ((String[]) rt)[0];
+                                } else if (rt instanceof String[]) {
+                                    if (((String[]) rt).length > 0) {
+                                        rtAsString = ((String[]) rt)[0];
+                                    } else {
+                                        Log.e(TAG, "(String[])rt is empty");
+                                    }
+
                                 } else {
-                                    Log.e(TAG, "(String[])rt is empty");
+                                    Log.e(TAG, "Unknown rt type of " + rt.getClass().getName());
                                 }
 
-                            } else {
-                                Log.e(TAG, "Unknown rt type of " + rt.getClass().getName());
-                            }
-
-                            if ((rtAsString != null) && (!mResourceLookup.containsKey(href))) {
-                                Log.i(TAG, "Finding all resources of type " + rtAsString);
-                                String requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + rtAsString;
-                                OcPlatform.findResource("", requestUri, EnumSet.of(OcConnectivityType.CT_DEFAULT), new ResourceFoundListener(ocRepUri, href));
+                                if ((rtAsString != null) && (!mResourceLookup.containsKey(href))) {
+                                    Log.i(TAG, "Finding all resources of type " + rtAsString);
+                                    String requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + rtAsString;
+                                    OcPlatform.findResource("", requestUri, EnumSet.of(OcConnectivityType.CT_DEFAULT), new ResourceFoundListener(ocRepUri, href));
+                                }
                             }
                         }
 
@@ -908,6 +912,7 @@ public class UpnpClientActivity extends Activity implements
                         Log.i(TAG, "Cancelling Observe...");
                         for (OcResource resource : iotivityResources) {
                             try {
+                                Log.i(TAG, "Cancelling Observe for " + resource.getUri());
                                 resource.cancelObserve();
                             } catch (OcException e) {
                                 Log.e(TAG, "Error occurred while invoking \"cancelObserve\" API -- " + e.toString(), e);
