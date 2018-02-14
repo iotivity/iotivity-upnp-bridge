@@ -65,6 +65,8 @@ static bool isRootDiscovery[] = {false, true};
 const uint LIGHT_CALLBACK = 0;
 const uint BINARY_SWITCH_CALLBACK = 1;
 const uint BRIGHTNESS_CALLBACK = 2;
+const uint AUDIO_CALLBACK = 3;
+const uint MEDIA_CONTROL_CALLBACK = 4;
 
 const uint GENERIC_DEVICE_CALLBACK = 1000;
 const uint GENERIC_SERVICE_CALLBACK = 1001;
@@ -717,6 +719,14 @@ OCEntityHandlerResult resourceEntityHandler(OCEntityHandlerFlag,
     {
         return handleEntityHandlerRequests(entityHandlerRequest, UPNP_OIC_TYPE_BRIGHTNESS);
     }
+    else if (callbackParamResourceType == AUDIO_CALLBACK)
+    {
+        return handleEntityHandlerRequests(entityHandlerRequest, UPNP_OIC_TYPE_AUDIO);
+    }
+    else if (callbackParamResourceType == MEDIA_CONTROL_CALLBACK)
+    {
+        return handleEntityHandlerRequests(entityHandlerRequest, UPNP_OIC_TYPE_MEDIA_CONTROL);
+    }
     else if (callbackParamResourceType == GENERIC_DEVICE_CALLBACK)
     {
         return handleEntityHandlerRequests(entityHandlerRequest, UPNP_DEVICE_RESOURCE);
@@ -763,6 +773,18 @@ void UpnpConnector::onAdd(std::string uri)
                 DEBUG_PRINT("Adding brightness resource");
                 createResource(uri, UPNP_OIC_TYPE_BRIGHTNESS, OC_RSRVD_INTERFACE_ACTUATOR,
                         resourceEntityHandler, (void *) BRIGHTNESS_CALLBACK, resourceProperties);
+            }
+            else if (service.second->m_resourceType == UPNP_OIC_TYPE_AUDIO)
+            {
+                DEBUG_PRINT("Adding audio resource");
+                createResource(uri, UPNP_OIC_TYPE_AUDIO, OC_RSRVD_INTERFACE_ACTUATOR,
+                        resourceEntityHandler, (void *) AUDIO_CALLBACK, resourceProperties);
+            }
+            else if (service.second->m_resourceType == UPNP_OIC_TYPE_MEDIA_CONTROL)
+            {
+                DEBUG_PRINT("Adding media control resource");
+                createResource(uri, UPNP_OIC_TYPE_MEDIA_CONTROL, OC_RSRVD_INTERFACE_ACTUATOR,
+                        resourceEntityHandler, (void *) MEDIA_CONTROL_CALLBACK, resourceProperties);
             }
             else
             {
