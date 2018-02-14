@@ -1,6 +1,6 @@
 //******************************************************************
 //
-// Copyright 2016 Intel Corporation All Rights Reserved.
+// Copyright 2016-2018 Intel Corporation All Rights Reserved.
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
@@ -40,6 +40,8 @@ static const std::string UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER        = "oic.d.media
 static const std::string UPNP_OIC_TYPE_SERVICE_PREFIX             = "oic.r.";
 static const std::string UPNP_OIC_TYPE_BRIGHTNESS                 = "oic.r.light.brightness";
 static const std::string UPNP_OIC_TYPE_POWER_SWITCH               = "oic.r.switch.binary";
+static const std::string UPNP_OIC_TYPE_AUDIO                      = "oic.r.audio";
+static const std::string UPNP_OIC_TYPE_MEDIA_CONTROL              = "oic.r.media.control";
 static const std::string UPNP_OIC_TYPE_CONNECTION_MANAGER         = "oic.r.connection.manager";
 static const std::string UPNP_OIC_TYPE_AV_TRANSPORT               = "oic.r.av.transport";
 static const std::string UPNP_OIC_TYPE_CONTENT_DIRECTORY          = "oic.r.content.directory";
@@ -60,6 +62,8 @@ static const std::string UPNP_OIC_TYPE_LAN_HOST_CONFIG            = "oic.r.lan.c
 static const std::string UPNP_OIC_URI_PREFIX_LIGHT                  = "/upnp/light/";
 static const std::string UPNP_OIC_URI_PREFIX_BRIGHTNESS             = "/upnp/brightness/";
 static const std::string UPNP_OIC_URI_PREFIX_POWER_SWITCH           = "/upnp/switch/";
+static const std::string UPNP_OIC_URI_PREFIX_AUDIO                  = "/upnp/audio/";
+static const std::string UPNP_OIC_URI_PREFIX_MEDIA_CONTROL          = "/upnp/mediaControl/";
 static const std::string UPNP_OIC_URI_PREFIX_INET_GATEWAY           = "/upnp/igd/";
 static const std::string UPNP_OIC_URI_PREFIX_LAYER3_FORWARDING      = "/upnp/l3f/";
 static const std::string UPNP_OIC_URI_PREFIX_DEVICE_PROTECTION      = "/upnp/device-protection/";
