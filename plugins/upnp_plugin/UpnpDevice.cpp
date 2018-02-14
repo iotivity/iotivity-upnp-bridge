@@ -1,6 +1,6 @@
 //******************************************************************
 //
-// Copyright 2016 Intel Corporation All Rights Reserved.
+// Copyright 2016-2018 Intel Corporation All Rights Reserved.
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
@@ -156,7 +156,7 @@ OCEntityHandlerResult UpnpDevice::processGetRequest(OCRepPayload *payload, strin
 
     vector<_iconLink> iconLinks;
 
-    if (UPNP_DEVICE_RESOURCE == resourceType)
+    if (UPNP_DEVICE_RESOURCE == resourceType || UPNP_OIC_TYPE_DEVICE_LIGHT == resourceType)
     {
         GUPnPDeviceInfo *deviceInfo = GUPNP_DEVICE_INFO(m_proxy);
         if (! GUPNP_IS_DEVICE_INFO(deviceInfo))
