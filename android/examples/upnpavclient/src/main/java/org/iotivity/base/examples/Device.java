@@ -1,7 +1,7 @@
 /*
  * //******************************************************************
  * //
- * // Copyright 2016 Intel Corporation All Rights Reserved.
+ * // Copyright 2016-2018 Intel Corporation All Rights Reserved.
  * //
  * //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  * //
@@ -60,6 +60,7 @@ abstract public class Device extends Resource {
     private String mUpc;
 
     private Links mLinks;
+    private boolean mHasLinksProperty;
 
     private Bitmap mIconBitmap;
 
@@ -115,6 +116,7 @@ abstract public class Device extends Resource {
         if (rep.hasAttribute(LINKS_KEY)) {
             OcRepresentation[] links = rep.getValue(LINKS_KEY);
             mLinks.setOcRepresentation(links);
+            mHasLinksProperty = true;
         }
     }
 
@@ -133,7 +135,9 @@ abstract public class Device extends Resource {
         rep.setValue(UPC_KEY, mUpc);
 
         OcRepresentation[] links = mLinks.getOcRepresentation();
-        rep.setValue(LINKS_KEY, links);
+        if ((links != null) && (links.length > 0)) {
+            rep.setValue(LINKS_KEY, links);
+        }
 
         return rep;
     }
@@ -218,6 +222,10 @@ abstract public class Device extends Resource {
         mUpc = upc;
     }
 
+    public boolean hasLinksProperty() {
+        return mHasLinksProperty;
+    }
+
     public Links getLinks() {
         return mLinks;
     }
@@ -247,6 +255,7 @@ abstract public class Device extends Resource {
                 ", " + PRESENTATION_URL_KEY + ": " + mPresentationUrl +
                 ", " + ICON_URL_KEY + ": " + mIconUrl +
                 ", " + UPC_KEY + ": " + mUpc +
+                ", " + "hasLinksProp: " + mHasLinksProperty +
                 ", " + LINKS_KEY + mLinks + "]";
     }
 }
