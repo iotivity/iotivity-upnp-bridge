@@ -1,6 +1,6 @@
 //******************************************************************
 //
-// Copyright 2016 Intel Corporation All Rights Reserved.
+// Copyright 2016-2018 Intel Corporation All Rights Reserved.
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
@@ -25,7 +25,7 @@
 
 #include "messageHandler.h"
 
-//#include "UpnpAVTransportService.h"
+#include "UpnpAvTransportService.h"
 //#include "UpnpConnectionManagerService.h"
 //#include "UpnpContentDirectoryService.h"
 #include "UpnpDimmingService.h"
@@ -33,7 +33,7 @@
 //#include "UpnpLayer3ForwardingService.h"
 //#include "UpnpDeviceProtectionService.h"
 #include "UpnpPowerSwitchService.h"
-//#include "UpnpRenderingControlService.h"
+#include "UpnpRenderingControlService.h"
 //#include "UpnpScheduledRecordingService.h"
 //#include "UpnpWanCableLinkConfigService.h"
 //#include "UpnpWanCommonInterfaceConfigService.h"
@@ -412,6 +412,14 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     {
         return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
     }
+    else if (resourceType == UPNP_OIC_TYPE_AUDIO)
+    {
+        return (std::make_shared < UpnpRenderingControl > (serviceInfo, requestState));
+    }
+    else if (resourceType == UPNP_OIC_TYPE_MEDIA_CONTROL)
+    {
+        return (std::make_shared < UpnpAvTransport > (serviceInfo, requestState));
+    }
 //    else if (resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY)
 //    {
 //        return (std::make_shared < UpnpContentDirectory > (serviceInfo, requestState));
@@ -478,40 +486,40 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
         {
             DEBUG_PRINT(SERVICE_TYPE << " " << serviceType << " implemented as generic upnp service");
             std::shared_ptr<UpnpService> genericService = std::make_shared < UpnpGenericService > (serviceInfo, requestState, resourceType);
-            GUPnPServiceIntrospection *introspection = gupnp_service_info_get_introspection(serviceInfo, NULL);
-            if (introspection != NULL)
-            {
-                const GList *actionNameList = gupnp_service_introspection_list_action_names(introspection);
-                if (actionNameList != NULL)
-                {
-                    const GList *l;
-                    for (l = actionNameList; l != NULL; l = l->next)
-                    {
-                        const string actionName = string ((char *) l->data);
-                        DEBUG_PRINT(genericService->m_uri << " has action " << actionName);
-                        std::shared_ptr<UpnpResource> upnpActionResource = std::make_shared < UpnpResource > ();
-                        upnpActionResource->m_uri = genericService->m_uri + "/" + actionName;
-                        upnpActionResource->m_resourceType = UPNP_ACTION_RESOURCE;
-                        genericService->addLink(upnpActionResource);
-                    }
-                }
-
-                const GList *stateVarNameList = gupnp_service_introspection_list_state_variable_names(introspection);
-                if (stateVarNameList != NULL)
-                {
-                    const GList *l;
-                    for (l = stateVarNameList; l != NULL; l = l->next)
-                    {
-                        const string varName = string ((char *) l->data);
-                        DEBUG_PRINT(genericService->m_uri << " has state variable " << varName);
-                        std::shared_ptr<UpnpResource> upnpStateVarResource = std::make_shared < UpnpResource > ();
-                        upnpStateVarResource->m_uri = genericService->m_uri + "/" + varName;
-                        upnpStateVarResource->m_resourceType = UPNP_STATE_VAR_RESOURCE;
-                        genericService->addLink(upnpStateVarResource);
-                    }
-                }
-                g_object_unref(introspection);
-            }
+//            GUPnPServiceIntrospection *introspection = gupnp_service_info_get_introspection(serviceInfo, NULL);
+//            if (introspection != NULL)
+//            {
+//                const GList *actionNameList = gupnp_service_introspection_list_action_names(introspection);
+//                if (actionNameList != NULL)
+//                {
+//                    const GList *l;
+//                    for (l = actionNameList; l != NULL; l = l->next)
+//                    {
+//                        const string actionName = string ((char *) l->data);
+//                        DEBUG_PRINT(genericService->m_uri << " has action " << actionName);
+//                        std::shared_ptr<UpnpResource> upnpActionResource = std::make_shared < UpnpResource > ();
+//                        upnpActionResource->m_uri = genericService->m_uri + "/" + actionName;
+//                        upnpActionResource->m_resourceType = UPNP_ACTION_RESOURCE;
+//                        genericService->addLink(upnpActionResource);
+//                    }
+//                }
+//
+//                const GList *stateVarNameList = gupnp_service_introspection_list_state_variable_names(introspection);
+//                if (stateVarNameList != NULL)
+//                {
+//                    const GList *l;
+//                    for (l = stateVarNameList; l != NULL; l = l->next)
+//                    {
+//                        const string varName = string ((char *) l->data);
+//                        DEBUG_PRINT(genericService->m_uri << " has state variable " << varName);
+//                        std::shared_ptr<UpnpResource> upnpStateVarResource = std::make_shared < UpnpResource > ();
+//                        upnpStateVarResource->m_uri = genericService->m_uri + "/" + varName;
+//                        upnpStateVarResource->m_resourceType = UPNP_STATE_VAR_RESOURCE;
+//                        genericService->addLink(upnpStateVarResource);
+//                    }
+//                }
+//                g_object_unref(introspection);
+//            }
             return genericService;
         }
         else

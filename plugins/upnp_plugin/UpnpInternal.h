@@ -1,6 +1,6 @@
 //******************************************************************
 //
-// Copyright 2016 Intel Corporation All Rights Reserved.
+// Copyright 2016-2018 Intel Corporation All Rights Reserved.
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
@@ -69,10 +69,12 @@ static std::map<std::string, std::string > UpnpSearchPatternMap =
 // Media Control
     {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,   UPNP_PREFIX_DEVICE  + ":.*(?:[Mm]edia[Rr]enderer).*"},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,     UPNP_PREFIX_DEVICE  + ":.*(?:[Mm]edia[Ss]erver).*"},
+    {UPNP_OIC_TYPE_AUDIO,                   UPNP_PREFIX_SERVICE + ":.*(?:[Rr]endering[Cc]ontrol).*"},
+    {UPNP_OIC_TYPE_MEDIA_CONTROL,           UPNP_PREFIX_SERVICE + ":.*(?:[Aa][Vv][Tt]ransport).*"},
     {UPNP_OIC_TYPE_CONNECTION_MANAGER,      UPNP_PREFIX_SERVICE + ":.*(?:[Cc]onnection[Mm]anager).*"},
-    {UPNP_OIC_TYPE_AV_TRANSPORT,            UPNP_PREFIX_SERVICE + ":.*(?:[Aa][Vv][Tt]ransport).*"},
+//    {UPNP_OIC_TYPE_AV_TRANSPORT,            UPNP_PREFIX_SERVICE + ":.*(?:[Aa][Vv][Tt]ransport).*"},
     {UPNP_OIC_TYPE_CONTENT_DIRECTORY,       UPNP_PREFIX_SERVICE + ":.*(?:[Cc]ontent[Dd]irectory).*"},
-    {UPNP_OIC_TYPE_RENDERING_CONTROL,       UPNP_PREFIX_SERVICE + ":.*(?:[Rr]endering[Cc]ontrol).*"},
+//    {UPNP_OIC_TYPE_RENDERING_CONTROL,       UPNP_PREFIX_SERVICE + ":.*(?:[Rr]endering[Cc]ontrol).*"},
     {UPNP_OIC_TYPE_SCHEDULED_RECORDING,     UPNP_PREFIX_SERVICE + ":.*(?:[Ss]cheduled[Rr]ecording).*"}
 };
 
@@ -102,6 +104,8 @@ static std::map<std::string, std::string > UpnpInterfaceMap =
     {UPNP_OIC_TYPE_WAN_PPP_CONNECTION,       OC_RSRVD_INTERFACE_DEFAULT},
     {UPNP_OIC_TYPE_LAN_HOST_CONFIG,          OC_RSRVD_INTERFACE_DEFAULT},
 // Media Control
+    {UPNP_OIC_TYPE_AUDIO,                    OC_RSRVD_INTERFACE_ACTUATOR},
+    {UPNP_OIC_TYPE_MEDIA_CONTROL,            OC_RSRVD_INTERFACE_ACTUATOR},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,    OC_RSRVD_INTERFACE_LL},
     {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,      OC_RSRVD_INTERFACE_LL},
 };
@@ -113,6 +117,8 @@ static std::map<std::string, std::string > UpnpUriPrefixMap =
     {UPNP_OIC_TYPE_DEVICE_LIGHT,            UPNP_OIC_URI_PREFIX_LIGHT},
     {UPNP_OIC_TYPE_BRIGHTNESS,              UPNP_OIC_URI_PREFIX_BRIGHTNESS},
     {UPNP_OIC_TYPE_POWER_SWITCH,            UPNP_OIC_URI_PREFIX_POWER_SWITCH},
+    {UPNP_OIC_TYPE_AUDIO,                   UPNP_OIC_URI_PREFIX_AUDIO},
+    {UPNP_OIC_TYPE_MEDIA_CONTROL,           UPNP_OIC_URI_PREFIX_MEDIA_CONTROL},
     {UPNP_OIC_TYPE_DEVICE_INET_GATEWAY,     UPNP_OIC_URI_PREFIX_INET_GATEWAY},
     {UPNP_OIC_TYPE_DEVICE_WAN,              UPNP_OIC_URI_PREFIX_WAN},
     {UPNP_OIC_TYPE_WAN_IF_CONFIG,           UPNP_OIC_URI_PREFIX_WAN_IF_CONFIG},
