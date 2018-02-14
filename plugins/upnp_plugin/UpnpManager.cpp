@@ -1,6 +1,6 @@
 //******************************************************************
 //
-// Copyright 2016 Intel Corporation All Rights Reserved.
+// Copyright 2016-2018 Intel Corporation All Rights Reserved.
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
@@ -25,7 +25,7 @@
 
 #include "messageHandler.h"
 
-//#include "UpnpAVTransportService.h"
+#include "UpnpAvTransportService.h"
 //#include "UpnpConnectionManagerService.h"
 //#include "UpnpContentDirectoryService.h"
 #include "UpnpDimmingService.h"
@@ -33,7 +33,7 @@
 //#include "UpnpLayer3ForwardingService.h"
 //#include "UpnpDeviceProtectionService.h"
 #include "UpnpPowerSwitchService.h"
-//#include "UpnpRenderingControlService.h"
+#include "UpnpRenderingControlService.h"
 //#include "UpnpScheduledRecordingService.h"
 //#include "UpnpWanCableLinkConfigService.h"
 //#include "UpnpWanCommonInterfaceConfigService.h"
@@ -411,6 +411,14 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     else if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
     {
         return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
+    }
+    else if (resourceType == UPNP_OIC_TYPE_AUDIO)
+    {
+        return (std::make_shared < UpnpRenderingControl > (serviceInfo, requestState));
+    }
+    else if (resourceType == UPNP_OIC_TYPE_MEDIA_CONTROL)
+    {
+        return (std::make_shared < UpnpAvTransport > (serviceInfo, requestState));
     }
 //    else if (resourceType == UPNP_OIC_TYPE_CONTENT_DIRECTORY)
 //    {
