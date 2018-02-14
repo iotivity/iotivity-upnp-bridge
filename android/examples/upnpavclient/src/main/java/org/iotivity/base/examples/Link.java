@@ -1,7 +1,7 @@
 /*
  * //******************************************************************
  * //
- * // Copyright 2016 Intel Corporation All Rights Reserved.
+ * // Copyright 2016-2018 Intel Corporation All Rights Reserved.
  * //
  * //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  * //
@@ -39,12 +39,12 @@ public class Link {
 
     private String mHref;
     private String mRel;
-    private String mRt;
+    private Object mRt; // could be String or String[]
 
     public Link() {
         mHref = "";
         mRel = "";
-        mRt = "";
+        mRt = new Object();
     }
 
     public void setOcRepresentation(OcRepresentation ocRep) throws OcException {
@@ -64,7 +64,13 @@ public class Link {
         OcRepresentation ocRep = new OcRepresentation();
         ocRep.setValue(HREF_KEY, mHref);
         ocRep.setValue(REL_KEY, mRel);
-        ocRep.setValue(RT_KEY, mRt);
+        if (mRt instanceof String) {
+            ocRep.setValue(RT_KEY, (String) mRt);
+        } else if (mRt instanceof String[]) {
+            ocRep.setValue(RT_KEY, (String[]) mRt);
+        } else {
+            // this is gonna fail...
+        }
         return ocRep;
     }
 
@@ -84,18 +90,43 @@ public class Link {
         mRel = rel;
     }
 
-    public String getRt() {
+    public Object getRt() {
         return mRt;
     }
 
-    public void setRt(String rt) {
+    public void setRt(Object rt) {
         mRt = rt;
     }
 
     @Override
     public String toString() {
+        String rtAsString = null;
+        Object rt = getRt();
+        if (rt instanceof String) {
+            rtAsString = (String) rt;
+
+        } else if (rt instanceof String[]) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            boolean first = true;
+            for (String type : (String[]) rt) {
+                if (!first) {
+                    sb.append(", ");
+                }
+                if (type != null) {
+                    sb.append(type.toString());
+                }
+                first = false;
+            }
+            sb.append("]");
+            rtAsString = sb.toString();
+
+        } else {
+            rtAsString = "Unknown rt type of " + rt.getClass().getName();
+        }
+
         return "[" + HREF_KEY + ": " + getHref() +
                 ", " + REL_KEY + ": " + getRel() +
-                ", " + RT_KEY + ": " + getRt() + "]";
+                ", " + RT_KEY + ": " + rtAsString + "]";
     }
 }
