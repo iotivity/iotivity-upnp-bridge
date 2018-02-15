@@ -67,16 +67,22 @@ else:
     env.AppendUnique(CCFLAGS = ['-Os'])
     env.AppendUnique(CPPDEFINES = ['NDEBUG'])
 
+# currently this build script only supports linux build as we add other target OSs
+# target_os will need to be replaced buy actual OSs
+target_os = 'linux'
+
 iotivity_service_inc_paths = ['${IOTIVITY_BASE}/service/resource-container/include',
                   '${IOTIVITY_BASE}/service/resource-container/bundle-api/include',
                   '${IOTIVITY_BASE}/service/resource-container/src',
                   '${IOTIVITY_BASE}/service/resource-encapsulation/include']
-iotivity_resource_inc_paths = ['${IOTIVITY_BASE}/resource/oc_logger/include',
-                              '${IOTIVITY_BASE}/resource/csdk/stack/include',
-                              '${IOTIVITY_BASE}/resource/csdk/include',
-                              '${IOTIVITY_BASE}/resource/c_common',
-                              '${IOTIVITY_BASE}/resource/include',
-                              '${IOTIVITY_BASE}/resource/c_common/ocrandom/include']
+iotivity_resource_inc_paths = ['${IOTIVITY_BASE}/out/' + target_os + '/${TARGET_ARCH}/${IOTIVITY_LIB_TYPE}/resource/c_common',
+                               '${IOTIVITY_BASE}/resource/oc_logger/include',
+                               '${IOTIVITY_BASE}/resource/csdk/stack/include',
+                               '${IOTIVITY_BASE}/resource/csdk/include',
+                               '${IOTIVITY_BASE}/resource/c_common',
+                               '${IOTIVITY_BASE}/resource/include',
+                               '${IOTIVITY_BASE}/resource/c_common/ocrandom/include',
+                              ]
 
 env['CPPPATH'] = ['${IOTIVITY_BASE}/extlibs']
 env.AppendUnique(CPPPATH = iotivity_service_inc_paths)
@@ -94,10 +100,6 @@ env.AppendUnique(CPPPATH = ['/usr/include/glib-2.0',
                             '/usr/include/libxml2'])
 
 env.AppendUnique(CPPPATH = ['#/include/'])
-
-# currently this build script only supports linux build as we add other target OSs
-# target_os will need to be replaced buy actual OSs
-target_os = 'linux'
 
 env.Replace(BUILD_DIR = 'out/' + target_os + '/${TARGET_ARCH}/${BUILD_TYPE}' )
 

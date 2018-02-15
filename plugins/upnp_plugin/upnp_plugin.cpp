@@ -27,7 +27,7 @@
 #include <set>
 #include <assert.h>
 #include <pluginServer.h>
-#include "logger.h"
+#include "experimental/logger.h"
 #include "UpnpConnector.h"
 #include "UpnpResource.h"
 #include "UpnpBridgeDevice.h"
