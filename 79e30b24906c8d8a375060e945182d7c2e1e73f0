@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_a41c0c15",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/Action.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2018-03-01T22:21:46Z",
+      "side": 1,
+      "message": "Should any new files have 2018",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "79e30b24906c8d8a375060e945182d7c2e1e73f0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_041a1817",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/Actions.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2018-03-01T22:21:46Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "79e30b24906c8d8a375060e945182d7c2e1e73f0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_e41614f1",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/Audio.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2018-03-01T22:21:46Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "79e30b24906c8d8a375060e945182d7c2e1e73f0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_84dd8845",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/Device.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2018-03-01T22:21:46Z",
+      "side": 1,
+      "message": "Any older files 2016-2018",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "79e30b24906c8d8a375060e945182d7c2e1e73f0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_24d8fc52",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/Link.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2018-03-01T22:21:46Z",
+      "side": 1,
+      "message": "Any older files 2016-2018",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "79e30b24906c8d8a375060e945182d7c2e1e73f0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_a4e36c04",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/MediaControl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2018-03-01T22:21:46Z",
+      "side": 1,
+      "message": "Should this be media/control or mediaControl instead dash",
+      "range": {
+        "startLine": 37,
+        "startChar": 72,
+        "endLine": 37,
+        "endChar": 85
+      },
+      "revId": "79e30b24906c8d8a375060e945182d7c2e1e73f0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_04f178cd",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/MediaControl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2018-03-01T22:21:46Z",
+      "side": 1,
+      "message": "Should this be media/control or mediaControl instead dash",
+      "range": {
+        "startLine": 38,
+        "startChar": 74,
+        "endLine": 38,
+        "endChar": 87
+      },
+      "revId": "79e30b24906c8d8a375060e945182d7c2e1e73f0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_64e20405",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/UpnpAvClientActivity.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2018-03-01T22:21:46Z",
+      "side": 1,
+      "message": "Any older files 2016-2018",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "79e30b24906c8d8a375060e945182d7c2e1e73f0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_c4e67016",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/UpnpAvClientSelectRendererActivity.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2018-03-01T22:21:46Z",
+      "side": 1,
+      "message": "Any older files 2016-2018",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "79e30b24906c8d8a375060e945182d7c2e1e73f0",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
