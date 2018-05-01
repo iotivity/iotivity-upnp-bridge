@@ -22,6 +22,9 @@
 
 package org.iotivity.base.examples;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.iotivity.base.OcException;
 import org.iotivity.base.OcRepresentation;
 
@@ -31,11 +34,12 @@ import org.iotivity.base.OcRepresentation;
  * This class is used by UpnpAvClientActivity to create an object representation of a remote media control resource
  * and update the values depending on the server response
  */
-public class MediaControl extends Service {
+public class MediaControl extends Service implements Parcelable {
 
     public static final String OIC_TYPE_MEDIA_CONTROL = "oic.r.media.control";
     public static final String OCF_OIC_URI_PREFIX_MEDIA_CONTROL = "/ocf/mediaControl/";
     public static final String UPNP_OIC_URI_PREFIX_MEDIA_CONTROL = "/upnp/mediaControl/";
+    public static final String UPNP_OIC_URI_PREFIX_MEDIA_CONTROL_NM_HREF = "/upnp/mediaControl/AVTransport/";
 
     public static final String STATE_KEY = "playState";
     public static final boolean DEFAULT_STATE = false;
@@ -44,7 +48,7 @@ public class MediaControl extends Service {
     public static final double DEFAULT_SPEED = 1.0;
 
     public static final String LOCATION_KEY = "mediaLocation";
-    public static final String DEFAULT_LOCATION = "0";
+    public static final String DEFAULT_LOCATION = "00:00:00";
 
     public static final String LAST_ACTION_KEY = "lastAction";
     public static final String DEFAULT_LAST_ACTION = "stop";
@@ -124,9 +128,11 @@ public class MediaControl extends Service {
         rep.setValue(LOCATION_KEY, mMediaLocation);
         rep.setValue(LAST_ACTION_KEY, mLastAction);
 
-        OcRepresentation[] actions = mActions.getOcRepresentation();
-        if ((actions != null) && (actions.length > 0)) {
-            rep.setValue(ACTIONS_KEY, actions);
+        if (mActions != null) {
+            OcRepresentation[] actions = mActions.getOcRepresentation();
+            if ((actions != null) && (actions.length > 0)) {
+                rep.setValue(ACTIONS_KEY, actions);
+            }
         }
 
         return rep;
@@ -185,5 +191,44 @@ public class MediaControl extends Service {
                 ", " + LOCATION_KEY + ": " + mMediaLocation +
                 ", " + LAST_ACTION_KEY + ": " + mLastAction +
                 ", " + ACTIONS_KEY + mActions + "]";
+    }
+
+    // Parcelable implementation
+    public MediaControl(Parcel in) {
+        readFromParcel(in);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public MediaControl createFromParcel(Parcel in) {
+            return new MediaControl(in);
+        }
+
+        public MediaControl[] newArray(int size) {
+            return new MediaControl[size];
+        }
+    };
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(getName());
+        dest.writeString(getUri());
+        dest.writeByte((byte) (getPlayState() ? 1 : 0));
+        dest.writeDouble(getMediaSpeed());
+        dest.writeString(getMediaLocation());
+        dest.writeString(getLastAction());
+        dest.writeByte((byte) (isInitialized() ? 1 : 0));
+    }
+
+    private void readFromParcel(Parcel in) {
+        setName(in.readString());
+        setUri(in.readString());
+        setPlayState(in.readByte() != 0);
+        setMediaSpeed(in.readDouble());
+        setMediaLocation(in.readString());
+        setLastAction(in.readString());
+        mIsInitialized = in.readByte() != 0;
+    }
+
+    public int describeContents() {
+        return 0;
     }
 }

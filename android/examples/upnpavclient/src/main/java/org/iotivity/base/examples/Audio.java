@@ -22,6 +22,9 @@
 
 package org.iotivity.base.examples;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.iotivity.base.OcException;
 import org.iotivity.base.OcRepresentation;
 
@@ -31,11 +34,12 @@ import org.iotivity.base.OcRepresentation;
  * This class is used by UpnpAvClientActivity to create an object representation of a remote audio resource
  * and update the values depending on the server response
  */
-public class Audio extends Service {
+public class Audio extends Service implements Parcelable {
 
     public static final String OIC_TYPE_AUDIO = "oic.r.audio";
     public static final String OCF_OIC_URI_PREFIX_AUDIO = "/ocf/audio/";
     public static final String UPNP_OIC_URI_PREFIX_AUDIO = "/upnp/audio/";
+    public static final String UPNP_OIC_URI_PREFIX_AUDIO_NM_HREF = "/upnp/audio/RenderingControl/";
 
     public static final String MUTE_KEY = "mute";
     public static final boolean DEFAULT_MUTE = false;
@@ -84,7 +88,7 @@ public class Audio extends Service {
         return rep;
     }
 
-    public boolean getMute() {
+    public boolean isMute() {
         return mMute;
     }
 
@@ -110,5 +114,40 @@ public class Audio extends Service {
                 ", " + "initialized: " + mIsInitialized +
                 ", " + MUTE_KEY + ": " + mMute +
                 ", " + VOLUME_KEY + ": " + mVolume + "]";
+    }
+
+    // Parcelable implementation
+    public Audio(Parcel in) {
+        readFromParcel(in);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Audio createFromParcel(Parcel in) {
+            return new Audio(in);
+        }
+
+        public Audio[] newArray(int size) {
+            return new Audio[size];
+        }
+    };
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(getName());
+        dest.writeString(getUri());
+        dest.writeInt(getVolume());
+        dest.writeByte((byte) (isMute() ? 1 : 0));
+        dest.writeByte((byte) (isInitialized() ? 1 : 0));
+    }
+
+    private void readFromParcel(Parcel in) {
+        setName(in.readString());
+        setUri(in.readString());
+        setVolume(in.readInt());
+        setMute(in.readByte() != 0);
+        mIsInitialized = in.readByte() != 0;
+    }
+
+    public int describeContents() {
+        return 0;
     }
 }

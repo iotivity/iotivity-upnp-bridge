@@ -217,6 +217,30 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
                             tracked = true;
                         }
 
+                    } else if (resourceUri.startsWith(MediaControl.UPNP_OIC_URI_PREFIX_MEDIA_CONTROL)) {
+                        MediaControl mediaControl = new MediaControl();
+                        mediaControl.setUri(resourceUri);
+
+                        // Update the device
+                        MediaRenderer mediaRenderer = (MediaRenderer) mResourceLookup.get(mParentUri);
+                        if (mediaRenderer != null) {
+                            mediaRenderer.setMediaControl(mediaControl);
+                            mResourceLookup.put(resourceUri, mediaControl);
+                            tracked = true;
+                        }
+
+                    } else if (resourceUri.startsWith(Audio.UPNP_OIC_URI_PREFIX_AUDIO)) {
+                        Audio audio = new Audio();
+                        audio.setUri(resourceUri);
+
+                        // Update the device
+                        MediaRenderer mediaRenderer = (MediaRenderer) mResourceLookup.get(mParentUri);
+                        if (mediaRenderer != null) {
+                            mediaRenderer.setAudio(audio);
+                            mResourceLookup.put(resourceUri, audio);
+                            tracked = true;
+                        }
+
                     } else {
                         // Unexpected resource
                         Log.i(TAG, "URI of an unexpected resource: " + resourceUri);
@@ -303,6 +327,20 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
                                     Log.i(TAG, "Finding all resources of type " + rtAsString);
                                     String requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + rtAsString;
                                     OcPlatform.findResource("", requestUri, EnumSet.of(OcConnectivityType.CT_DEFAULT), new ResourceFoundListener(ocRepUri, href));
+                                    if (rtAsString.equalsIgnoreCase(AvTransport.UPNP_OIC_TYPE_AV_TRANSPORT)) {
+                                        // also find new data model allegory
+                                        String uuid = href.substring(href.lastIndexOf(":") + 1);
+                                        String newModelHref = MediaControl.UPNP_OIC_URI_PREFIX_MEDIA_CONTROL_NM_HREF + uuid;
+                                        requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + MediaControl.OIC_TYPE_MEDIA_CONTROL;
+                                        OcPlatform.findResource("", requestUri, EnumSet.of(OcConnectivityType.CT_DEFAULT), new ResourceFoundListener(ocRepUri, newModelHref));
+                                    }
+                                    if (rtAsString.equalsIgnoreCase(RenderingControl.UPNP_OIC_TYPE_RENDERING_CONTROL)) {
+                                        // also find new data model allegory
+                                        String uuid = href.substring(href.lastIndexOf(":") + 1);
+                                        String newModelHref = Audio.UPNP_OIC_URI_PREFIX_AUDIO_NM_HREF + uuid;
+                                        requestUri = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + Audio.OIC_TYPE_AUDIO;
+                                        OcPlatform.findResource("", requestUri, EnumSet.of(OcConnectivityType.CT_DEFAULT), new ResourceFoundListener(ocRepUri, newModelHref));
+                                    }
                                 }
                             }
                         }
@@ -346,6 +384,125 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
         Log.e(TAG, "Failed to get representation of a found resource");
     }
 
+    private void postMediaControlRepresentation(OcResource ocResource, boolean playState) {
+        final String resourceUri = ocResource.getUri();
+
+        MediaRenderer mediaRenderer = (MediaRenderer) mResourceLookup.get(resourceUri); // TODO: check instanceof before cast
+        if (mediaRenderer != null) {
+            // set new values
+
+            Log.i(TAG, "Posting media control representation...");
+
+            final MediaControl mediaControl = mediaRenderer.getMediaControl();
+            if (mediaControl != null) {
+                mediaControl.setPlayState(playState);
+                OcRepresentation mediaControlRepresentation = null;
+                try {
+                    mediaControlRepresentation = mediaControl.getOcRepresentation();
+
+                } catch (OcException e) {
+                    Log.e(TAG, "Failed to get OcRepresentation from media control -- " + e.toString(), e);
+                }
+
+                if (mediaControlRepresentation != null) {
+                    Map<String, String> queryParams = new HashMap<>();
+                    try {
+                        OcResource mediaControlResource = mIotivityResourceLookup.get(mediaControl.getUri());
+                        if (mediaControlResource != null) {
+                            mediaControlResource.post(mediaControlRepresentation, queryParams, this);
+
+                        } else {
+                            Log.e(TAG, "No media control for media renderer uri " + resourceUri);
+                        }
+
+                    } catch (OcException e) {
+                        Log.e(TAG, "Error occurred while invoking \"post\" API -- " + e.toString(), e);
+                    }
+                }
+
+            } else {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (mediaControl == null) {
+                            Toast.makeText(UpnpAvClientSelectRendererActivity.this, "No media control for media renderer uri " + resourceUri, Toast.LENGTH_LONG).show();
+
+                        } else {
+                            Toast.makeText(UpnpAvClientSelectRendererActivity.this, "No media control (initialized) for media renderer uri " + resourceUri, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+
+        } else {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(UpnpAvClientSelectRendererActivity.this, "No media renderer for uri " + resourceUri, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    private void postAudioRepresentation(OcResource ocResource, boolean isMute, int newVolume) {
+        final String resourceUri = ocResource.getUri();
+
+        MediaRenderer mediaRenderer = (MediaRenderer) mResourceLookup.get(resourceUri); // TODO: check instanceof before cast
+        if (mediaRenderer != null) {
+            // set new values
+            //mediaRenderer.setMute(isMute);
+            //mediaRenderer.setVolume(newVolume);
+
+            Log.i(TAG, "Posting audio representation...");
+
+            final Audio audio = mediaRenderer.getAudio();
+            if (audio != null) {
+                audio.setMute(isMute);
+                audio.setVolume(newVolume);
+                OcRepresentation audioRepresentation = null;
+                try {
+                    audioRepresentation = audio.getOcRepresentation();
+
+                } catch (OcException e) {
+                    Log.e(TAG, "Failed to get OcRepresentation from audio -- " + e.toString(), e);
+                }
+
+                if (audioRepresentation != null) {
+                    Map<String, String> queryParams = new HashMap<>();
+                    try {
+                        OcResource audioResource = mIotivityResourceLookup.get(audio.getUri());
+                        if (audioResource != null) {
+                            audioResource.post(audioRepresentation, queryParams, this);
+
+                        } else {
+                            Log.e(TAG, "No audio for media renderer uri " + resourceUri);
+                        }
+
+                    } catch (OcException e) {
+                        Log.e(TAG, "Error occurred while invoking \"post\" API -- " + e.toString(), e);
+                    }
+                }
+
+            } else {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (audio == null) {
+                            Toast.makeText(UpnpAvClientSelectRendererActivity.this, "No audio for media renderer uri " + resourceUri, Toast.LENGTH_LONG).show();
+
+                        } else {
+                            Toast.makeText(UpnpAvClientSelectRendererActivity.this, "No audio (initialized) for media renderer uri " + resourceUri, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+
+        } else {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(UpnpAvClientSelectRendererActivity.this, "No media renderer for uri " + resourceUri, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
     private void postMediaRendererRepresentation(OcResource ocResource, boolean isMute, int newVolume) {
         final String resourceUri = ocResource.getUri();
 
@@ -366,7 +523,7 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
                     renderingControlRepresentation = renderingControl.getOcRepresentation();
 
                 } catch (OcException e) {
-                    Log.e(TAG, "Failed to get OcRepresentation from a rendering control -- " + e.toString(), e);
+                    Log.e(TAG, "Failed to get OcRepresentation from rendering control -- " + e.toString(), e);
                 }
 
                 if (renderingControlRepresentation != null) {
@@ -416,7 +573,7 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
             //mediaRenderer.setDesiredUri(desiredUri);
             //mediaRenderer.setDesiredUriMetadata(desiredUriMetadata);
 
-            Log.i(TAG, "Posting media renderer representation...");
+            Log.i(TAG, "Posting av transport representation...");
 
             final AvTransport avTransport  = mediaRenderer.getAvTransport();
             if ((avTransport != null) && (avTransport.isInitialized())) {
@@ -427,7 +584,7 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
                     avTransportRepresentation = avTransport.getOcRepresentation();
 
                 } catch (OcException e) {
-                    Log.e(TAG, "Failed to get OcRepresentation from a av transport -- " + e.toString(), e);
+                    Log.e(TAG, "Failed to get OcRepresentation from av transport -- " + e.toString(), e);
                 }
 
                 if (avTransportRepresentation != null) {
@@ -491,9 +648,6 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
                     });
 
                 }
-
-            } else {
-                Log.w(TAG, "No Resource URI");
             }
 
         } catch (OcException e) {
@@ -556,9 +710,6 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
                         }
                     });
                 }
-
-            } else {
-                Log.w(TAG, "No Resource URI");
             }
 
         } catch (OcException e) {
@@ -694,10 +845,26 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
                         if (ocResource != null) {
                             new Thread(new Runnable() {
                                 public void run() {
+                                    MediaControl mediaControl = mediaRenderer.getMediaControl();
+                                    Audio audio = mediaRenderer.getAudio();
+
+                                    if (mediaControl != null) {
+                                        postMediaControlRepresentation(ocResource, true);
+                                    }
+                                    if (audio != null) {
+                                        postAudioRepresentation(ocResource, false, 10);
+                                    }
+
                                     postMediaRendererRepresentation(ocResource, mediaRenderer.isMute(), mediaRenderer.getVolume());
                                     postAvTransportRepresentation(ocResource, mMediaItem.getResource(), mMediaItem.getMetadata());
 
                                     Intent intent = new Intent(UpnpAvClientSelectRendererActivity.this, org.iotivity.base.examples.UpnpAvClientMediaRenderControlActivity.class);
+                                    if (mediaControl != null) {
+                                        intent.putExtra(UpnpAvClientMediaRenderControlActivity.EXTRA_MEDIA_CONTROL_OBJECT, mediaControl);
+                                    }
+                                    if (audio != null) {
+                                        intent.putExtra(UpnpAvClientMediaRenderControlActivity.EXTRA_AUDIO_OBJECT, audio);
+                                    }
                                     intent.putExtra(UpnpAvClientMediaRenderControlActivity.EXTRA_AV_TRANSPORT_OBJECT, mediaRenderer.getAvTransport());
                                     intent.putExtra(UpnpAvClientMediaRenderControlActivity.EXTRA_RENDERING_CONTROL_OBJECT, mediaRenderer.getRenderingControl());
                                     intent.putExtra(EXTRA_MEDIA_ITEM_OBJECT, mMediaItem);

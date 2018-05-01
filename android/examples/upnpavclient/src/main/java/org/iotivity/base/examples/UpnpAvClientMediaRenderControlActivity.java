@@ -53,7 +53,12 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
     static public final String EXTRA_AV_TRANSPORT_OBJECT = "extra.av.transport.object";
     static public final String EXTRA_RENDERING_CONTROL_OBJECT = "extra.rendering.control.object";
 
+    static public final String EXTRA_MEDIA_CONTROL_OBJECT = "extra.media.control.object";
+    static public final String EXTRA_AUDIO_OBJECT = "extra.audio.object";
+
     static private final String TAG = UpnpAvClientMediaRenderControlActivity.class.getSimpleName();
+    private MediaControl mMediaControl;
+    private Audio mAudio;
     private AvTransport mAvTransport;
     private RenderingControl mRenderingControl;
     private MediaItem mMediaItem;
@@ -62,6 +67,10 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
+            mMediaControl = savedInstanceState.getParcelable(EXTRA_MEDIA_CONTROL_OBJECT);
+            Log.d(TAG, "onCreate RestoreInstanceState, mMediaControl="+mMediaControl);
+            mAudio = savedInstanceState.getParcelable(EXTRA_AUDIO_OBJECT);
+            Log.d(TAG, "onCreate RestoreInstanceState, mAudio="+mAudio);
             mAvTransport = savedInstanceState.getParcelable(EXTRA_AV_TRANSPORT_OBJECT);
             Log.d(TAG, "onCreate RestoreInstanceState, mAvTransport="+mAvTransport);
             mRenderingControl = savedInstanceState.getParcelable(EXTRA_RENDERING_CONTROL_OBJECT);
@@ -72,6 +81,12 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
         setContentView(R.layout.activity_upnp_av_client_media_render_control);
 
         Bundle extras = getIntent().getExtras();
+        if (mMediaControl == null) {
+            mMediaControl = extras.getParcelable(EXTRA_MEDIA_CONTROL_OBJECT);
+        }
+        if (mAudio == null) {
+            mAudio = extras.getParcelable(EXTRA_AUDIO_OBJECT);
+        }
         if (mAvTransport == null) {
             mAvTransport = extras.getParcelable(EXTRA_AV_TRANSPORT_OBJECT);
         }
@@ -80,6 +95,10 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
         }
         if (mMediaItem == null) {
             mMediaItem = extras.getParcelable(UpnpAvClientSelectRendererActivity.EXTRA_MEDIA_ITEM_OBJECT);
+        }
+
+        if ((mMediaControl != null) || (mAudio != null)) {
+            Log.i(TAG, "Using new data models");
         }
 
         ((TextView) findViewById(R.id.name_text)).setText(mMediaItem.getDisplayName());
@@ -115,7 +134,11 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
                     public void run() {
                         if (playPauseButton.getText().toString().equalsIgnoreCase("play")) {
                             Log.d(TAG, "Play media");
-                            doActionAvTransportRepresentation("play");
+                            if (mMediaControl != null) {
+                                doActionMediaControlRepresentation("play");
+                            } else {
+                                doActionAvTransportRepresentation("play");
+                            }
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     playPauseButton.setText(R.string.pause);
@@ -124,7 +147,11 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
 
                         } else {
                             Log.d(TAG, "Pause media");
-                            doActionAvTransportRepresentation("pause");
+                            if (mMediaControl != null) {
+                                doActionMediaControlRepresentation("pause");
+                            } else {
+                                doActionAvTransportRepresentation("pause");
+                            }
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     playPauseButton.setText(R.string.play);
@@ -143,7 +170,11 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
                 new Thread(new Runnable() {
                     public void run() {
                         Log.d(TAG, "Stop media");
-                        doActionAvTransportRepresentation("stop");
+                        if (mMediaControl != null) {
+                            doActionMediaControlRepresentation("stop");
+                        } else {
+                            doActionAvTransportRepresentation("stop");
+                        }
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 playPauseButton.setText(R.string.play);
@@ -154,9 +185,11 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
             }
         });
 
-        ((Switch) findViewById(R.id.sound_switch)).setChecked(!mRenderingControl.isMute());
-        ((SeekBar) findViewById(R.id.volume_bar)).setProgress(mRenderingControl.getVolume());
-        ((TextView) findViewById(R.id.volume_text)).setText(String.format(getString(R.string.volume_level), mRenderingControl.getVolume()));
+        boolean isMute = (mAudio != null) ? mAudio.isMute() : mRenderingControl.isMute();
+        int volume = (mAudio != null) ? mAudio.getVolume() : mRenderingControl.getVolume();
+        ((Switch) findViewById(R.id.sound_switch)).setChecked(!isMute);
+        ((SeekBar) findViewById(R.id.volume_bar)).setProgress(volume);
+        ((TextView) findViewById(R.id.volume_text)).setText(String.format(getString(R.string.volume_level), volume));
 
         ((Switch) findViewById(R.id.sound_switch)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -164,7 +197,11 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
                 final int volume = ((SeekBar) findViewById(R.id.volume_bar)).getProgress();
                 new Thread(new Runnable() {
                     public void run() {
-                        postRenderingControlRepresentation(!isChecked, volume);
+                        if (mAudio != null) {
+                            postAudioRepresentation(!isChecked, volume);
+                        } else {
+                            postRenderingControlRepresentation(!isChecked, volume);
+                        }
                     }
                 }).start();
             }
@@ -177,7 +214,11 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
                 final boolean soundOn = ((Switch) findViewById(R.id.sound_switch)).isChecked();
                 new Thread(new Runnable() {
                     public void run() {
-                        postRenderingControlRepresentation(!soundOn, progress);
+                        if (mAudio != null) {
+                            postAudioRepresentation(!soundOn, progress);
+                        } else {
+                            postRenderingControlRepresentation(!soundOn, progress);
+                        }
                     }
                 }).start();
             }
@@ -193,7 +234,11 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
 
         new Thread(new Runnable() {
             public void run() {
-                doActionAvTransportRepresentation("play");
+                if (mMediaControl != null) {
+                    doActionMediaControlRepresentation("play");
+                } else {
+                    doActionAvTransportRepresentation("play");
+                }
                 runOnUiThread(new Runnable() {
                     public void run() {
                         playPauseButton.setText(R.string.pause);
@@ -206,6 +251,10 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelable(EXTRA_MEDIA_CONTROL_OBJECT, mMediaControl);
+        Log.d(TAG, "onSaveInstanceState, mMediaControl="+mMediaControl);
+        outState.putParcelable(EXTRA_AUDIO_OBJECT, mAudio);
+        Log.d(TAG, "onSaveInstanceState, mAudio="+mAudio);
         outState.putParcelable(EXTRA_AV_TRANSPORT_OBJECT, mAvTransport);
         Log.d(TAG, "onSaveInstanceState, mAvTransport="+mAvTransport);
         outState.putParcelable(EXTRA_RENDERING_CONTROL_OBJECT, mRenderingControl);
@@ -217,12 +266,103 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        mMediaControl = savedInstanceState.getParcelable(EXTRA_MEDIA_CONTROL_OBJECT);
+        Log.d(TAG, "onCreate RestoreInstanceState, mMediaControl="+mMediaControl);
+        mAudio = savedInstanceState.getParcelable(EXTRA_AUDIO_OBJECT);
+        Log.d(TAG, "onCreate RestoreInstanceState, mAudio="+mAudio);
         mAvTransport = savedInstanceState.getParcelable(EXTRA_AV_TRANSPORT_OBJECT);
         Log.d(TAG, "onRestoreInstanceState, mAvTransport="+mAvTransport);
         mRenderingControl = savedInstanceState.getParcelable(EXTRA_RENDERING_CONTROL_OBJECT);
         Log.d(TAG, "onRestoreInstanceState, mRenderingControl="+mRenderingControl);
         mMediaItem = savedInstanceState.getParcelable(UpnpAvClientSelectRendererActivity.EXTRA_MEDIA_ITEM_OBJECT);
         Log.d(TAG, "onRestoreInstanceState, mMediaItem="+mMediaItem);
+    }
+
+    private void doActionMediaControlRepresentation(String action) {
+        Log.i(TAG, "Posting media control representation for " + action + " action...");
+
+        if (mMediaControl != null) {
+            mMediaControl.setLastAction(action);
+            OcRepresentation mediaControlRepresentation = null;
+            try {
+                mediaControlRepresentation = mMediaControl.getOcRepresentation();
+
+            } catch (OcException e) {
+                Log.e(TAG, "Failed to get OcRepresentation from media control -- " + e.toString(), e);
+            }
+
+            if (mediaControlRepresentation != null) {
+                Map<String, String> queryParams = new HashMap<>();
+                try {
+                    OcResource mediaControlResource = UpnpAvClientSelectRendererActivity.getOcResourceFromUri(mMediaControl.getUri()); // FIXME:
+                    if (mediaControlResource != null) {
+                        mediaControlResource.post(mediaControlRepresentation, queryParams, this);
+
+                    } else {
+                        Log.e(TAG, "No media control for uri " + mMediaControl.getUri());
+                    }
+
+                } catch (OcException e) {
+                    Log.e(TAG, "Error occurred while invoking \"post\" API -- " + e.toString(), e);
+                }
+            }
+
+        } else {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    if (mMediaControl == null) {
+                        Toast.makeText(UpnpAvClientMediaRenderControlActivity.this, "No media control for uri " + mMediaControl.getUri(), Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(UpnpAvClientMediaRenderControlActivity.this, "No media control (initialized) for uri " + mMediaControl.getUri(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+    }
+
+    private void postAudioRepresentation(boolean isMute, int newVolume) {
+        Log.i(TAG, "Posting audio representation...");
+
+        if (mAudio != null) {
+            mAudio.setMute(isMute);
+            mAudio.setVolume(newVolume);
+            OcRepresentation audioRepresentation = null;
+            try {
+                audioRepresentation = mAudio.getOcRepresentation();
+
+            } catch (OcException e) {
+                Log.e(TAG, "Failed to get OcRepresentation from audio -- " + e.toString(), e);
+            }
+
+            if (audioRepresentation != null) {
+                Map<String, String> queryParams = new HashMap<>();
+                try {
+                    OcResource audioResource = UpnpAvClientSelectRendererActivity.getOcResourceFromUri(mAudio.getUri()); // FIXME:
+                    if (audioResource != null) {
+                        audioResource.post(audioRepresentation, queryParams, this);
+
+                    } else {
+                        Log.e(TAG, "No audio for uri " + mAudio.getUri());
+                    }
+
+                } catch (OcException e) {
+                    Log.e(TAG, "Error occurred while invoking \"post\" API -- " + e.toString(), e);
+                }
+            }
+
+        } else {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    if (mAudio == null) {
+                        Toast.makeText(UpnpAvClientMediaRenderControlActivity.this, "No audio for uri " + mAudio.getUri(), Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(UpnpAvClientMediaRenderControlActivity.this, "No audio (initialized) for uri " + mAudio.getUri(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
     }
 
     private void doActionAvTransportRepresentation(String action) {
@@ -237,7 +377,7 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
                 avTransportRepresentation.setValue(action, embeddedOcRep);
 
             } catch (OcException e) {
-                Log.e(TAG, "Failed to get OcRepresentation from a av transport -- " + e.toString(), e);
+                Log.e(TAG, "Failed to get OcRepresentation from av transport -- " + e.toString(), e);
             }
 
             if (avTransportRepresentation != null) {
@@ -281,7 +421,7 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
                 renderingControlRepresentation = mRenderingControl.getOcRepresentation();
 
             } catch (OcException e) {
-                Log.e(TAG, "Failed to get OcRepresentation from a rendering control -- " + e.toString(), e);
+                Log.e(TAG, "Failed to get OcRepresentation from rendering control -- " + e.toString(), e);
             }
 
             if (renderingControlRepresentation != null) {
@@ -292,7 +432,7 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
                         renderingControlResource.post(renderingControlRepresentation, queryParams, this);
 
                     } else {
-                        Log.e(TAG, "No rendering control for uri " + mAvTransport.getUri());
+                        Log.e(TAG, "No rendering control for uri " + mRenderingControl.getUri());
                     }
 
                 } catch (OcException e) {
@@ -318,19 +458,6 @@ public class UpnpAvClientMediaRenderControlActivity extends Activity implements
     public synchronized void onPostCompleted(List<OcHeaderOption> list, OcRepresentation ocRepresentation) {
         Log.i(TAG, "POST request was successful");
         Log.i(TAG, "Resource URI (from getUri()): " + ocRepresentation.getUri());
-
-        try {
-            if (ocRepresentation.hasAttribute(Device.URI_KEY)) {
-                final String ocRepUri = ocRepresentation.getValue(Device.URI_KEY);
-                Log.i(TAG, "Resource URI: " + ocRepUri);
-
-            } else {
-                Log.w(TAG, "No Resource URI");
-            }
-
-        } catch (OcException e) {
-            Log.e(TAG, "Failed to create resource representation -- " + e.toString(), e);
-        }
     }
 
     @Override

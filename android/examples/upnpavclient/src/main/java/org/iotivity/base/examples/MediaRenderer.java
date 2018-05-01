@@ -40,6 +40,10 @@ public class MediaRenderer extends Device {
     private ConnectionManager mConnectionManager;
     private AvTransport mAvTransport;
 
+    // New data models
+    private MediaControl mMediaControl;
+    private Audio mAudio;
+
     public MediaRenderer() {
         super();
     }
@@ -77,10 +81,29 @@ public class MediaRenderer extends Device {
         mAvTransport = avTransport;
     }
 
+    public MediaControl getMediaControl() {
+        return mMediaControl;
+    }
+
+    public void setMediaControl(MediaControl mediaControl) {
+        mMediaControl = mediaControl;
+    }
+
+    public Audio getAudio() {
+        return mAudio;
+    }
+
+    public void setAudio(Audio audio) {
+        mAudio = audio;
+    }
+
     public int getVolume() {
         int volume = RenderingControl.DEFAULT_VOLUME;
 
-        if (mRenderingControl != null) {
+        if (mAudio != null) {
+            volume = mAudio.getVolume();
+
+        } else if (mRenderingControl != null) {
             volume = mRenderingControl.getVolume();
         }
 
@@ -88,6 +111,10 @@ public class MediaRenderer extends Device {
     }
 
     public void setVolume(int volume) {
+        if (mAudio != null) {
+            mAudio.setVolume(volume);
+        }
+
         if (mRenderingControl != null) {
             mRenderingControl.setVolume(volume);
         }
@@ -96,7 +123,10 @@ public class MediaRenderer extends Device {
     public boolean isMute() {
         boolean isMute = RenderingControl.DEFAULT_MUTE;
 
-        if (mRenderingControl != null) {
+        if (mAudio != null) {
+            isMute = mAudio.isMute();
+
+        } else if (mRenderingControl != null) {
             isMute = mRenderingControl.isMute();
         }
 
@@ -104,6 +134,10 @@ public class MediaRenderer extends Device {
     }
 
     public void setMute(boolean mute) {
+        if (mAudio != null) {
+            mAudio.setMute(mute);
+        }
+
         if (mRenderingControl != null) {
             mRenderingControl.setMute(mute);
         }
@@ -114,7 +148,11 @@ public class MediaRenderer extends Device {
         String renderingControlAsString = mRenderingControl != null ? mRenderingControl.toString() : "rendering control is null";
         String connectionManagerAsString = mConnectionManager != null ? mConnectionManager.toString() : "connection manager is null";
         String avTransportAsString = mAvTransport != null ? mAvTransport.toString() : "av transport is null";
+        String mediaControlAsString = mMediaControl != null ? mMediaControl.toString() : "media control is not defined";
+        String audioAsString = mAudio != null ? mAudio.toString() : "audio is not defined";
         return "[" + super.toString() +
+                ", " + mediaControlAsString +
+                ", " + audioAsString +
                 ", " + connectionManagerAsString +
                 ", " + avTransportAsString +
                 ", " + renderingControlAsString + "]";
