@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_22b0d18a",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/UpnpAvClientMediaRenderControlActivity.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2018-05-17T20:49:54Z",
+      "side": 1,
+      "message": "what is the source these strings?",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 73
+      },
+      "revId": "a9dfb509fe92662969a93c07ba1f922859b0dcc6",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
