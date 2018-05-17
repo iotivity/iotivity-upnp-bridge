@@ -22,6 +22,30 @@
       "revId": "a9dfb509fe92662969a93c07ba1f922859b0dcc6",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_62aad91a",
+        "filename": "android/examples/upnpavclient/src/main/java/org/iotivity/base/examples/UpnpAvClientMediaRenderControlActivity.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2018-05-17T21:04:38Z",
+      "side": 1,
+      "message": "The SelectRendererActivity puts a MediaControl and Audio in the intent it creates for the MediaRendererControlActivity if they are available.  The name of the string itself is arbitrary.  I saw an Android pattern of starting additional Intent keys with \"extra.\" so I followed it.",
+      "parentUuid": "da33351e_22b0d18a",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 73
+      },
+      "revId": "a9dfb509fe92662969a93c07ba1f922859b0dcc6",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
     }
   ]
 }
