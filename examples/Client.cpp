@@ -337,7 +337,7 @@ void descoverResource()
 {
     PlatformConfig cfg =
     {
-        OC::ServiceType::InProc, OC::ModeType::Both, "0.0.0.0", 0, OC::QualityOfService::LowQos,
+        OC::ServiceType::InProc, OC::ModeType::Both, OC_DEFAULT_ADAPTER, OC::QualityOfService::LowQos,
         NULL
     };
     OCPlatform::Configure(cfg);

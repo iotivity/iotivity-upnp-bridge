@@ -85,8 +85,6 @@ public class UpnpAvClientSelectRendererActivity extends Activity implements
                 context,
                 ServiceType.IN_PROC,
                 ModeType.CLIENT,
-                "0.0.0.0", // By setting to "0.0.0.0", it binds to all available interfaces
-                UpnpAvClientActivity.UPDATE_REQUEST_CODE, // Uses randomly available port
                 QualityOfService.LOW
         );
 

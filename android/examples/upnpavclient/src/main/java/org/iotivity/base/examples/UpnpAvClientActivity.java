@@ -75,7 +75,6 @@ public class UpnpAvClientActivity extends Activity implements
         OcResource.OnGetListener,
         OcResource.OnObserveListener {
 
-    public static final int UPDATE_REQUEST_CODE = 1;
     public static final int RESOURCE_DISCOVERY_WAIT = 7; // TODO: move to settings
     static private final Map<String, OcResource> mIotivityResourceLookup = new HashMap<>();
     private final Map<String, Resource> mResourceLookup = new HashMap<>();
@@ -89,8 +88,6 @@ public class UpnpAvClientActivity extends Activity implements
                 context,
                 ServiceType.IN_PROC,
                 ModeType.CLIENT,
-                "0.0.0.0", // By setting to "0.0.0.0", it binds to all available interfaces
-                UPDATE_REQUEST_CODE, // Uses randomly available port
                 QualityOfService.LOW
         );
 

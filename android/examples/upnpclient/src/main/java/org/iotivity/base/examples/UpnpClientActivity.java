@@ -81,7 +81,6 @@ public class UpnpClientActivity extends Activity implements
         OcResource.OnPutListener,
         OcResource.OnObserveListener {
 
-    public static final int UPDATE_REQUEST_CODE = 1;
     private static final int AUTO_DISCOVERY_INTERVAL = 17; // TODO: move to settings
     public static final int AUTO_DISCOVERY_RETRY_LIMIT = 3; // TODO: move to settings
     private static final int RESOURCE_DISCOVERY_WAIT = 7; // TODO: move to settings
@@ -99,8 +98,6 @@ public class UpnpClientActivity extends Activity implements
                 context,
                 ServiceType.IN_PROC,
                 ModeType.CLIENT,
-                "0.0.0.0", // By setting to "0.0.0.0", it binds to all available interfaces
-                UPDATE_REQUEST_CODE, // Uses randomly available port
                 QualityOfService.LOW
         );
 
