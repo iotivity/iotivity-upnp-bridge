@@ -24,10 +24,10 @@ static const string MODULE = "UpnpAvTransportService";
 
 // AV Transport Service
 
-static const char *playStatePropertyName = "playState";
-static const char *mediaSpeedPropertyName = "mediaSpeed";
-static const char *mediaLocationPropertyName = "mediaLocation";
-static const char *lastActionPropertyName = "lastAction";
+static const char *playStatePropertyName = "play_state";
+static const char *mediaSpeedPropertyName = "media_speed";
+static const char *mediaLocationPropertyName = "media_location";
+static const char *lastActionPropertyName = "action";
 static const char *actionsPropertyName = "actions";
 static const char *actionPropertyName = "action";
 
