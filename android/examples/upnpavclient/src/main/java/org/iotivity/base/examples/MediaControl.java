@@ -41,16 +41,16 @@ public class MediaControl extends Service implements Parcelable {
     public static final String UPNP_OIC_URI_PREFIX_MEDIA_CONTROL = "/upnp/mediaControl/";
     public static final String UPNP_OIC_URI_PREFIX_MEDIA_CONTROL_NM_HREF = "/upnp/mediaControl/AVTransport/";
 
-    public static final String STATE_KEY = "playState";
+    public static final String STATE_KEY = "play_state";
     public static final boolean DEFAULT_STATE = false;
 
-    public static final String SPEED_KEY = "mediaSpeed";
+    public static final String SPEED_KEY = "media_speed";
     public static final double DEFAULT_SPEED = 1.0;
 
-    public static final String LOCATION_KEY = "mediaLocation";
+    public static final String LOCATION_KEY = "media_location";
     public static final String DEFAULT_LOCATION = "00:00:00";
 
-    public static final String LAST_ACTION_KEY = "lastAction";
+    public static final String LAST_ACTION_KEY = "action";
     public static final String DEFAULT_LAST_ACTION = "stop";
 
     public static final String ACTIONS_KEY = "actions";
