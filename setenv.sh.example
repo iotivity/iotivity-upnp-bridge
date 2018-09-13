@@ -18,5 +18,5 @@
 #
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-# set the LD_LIBRARY_PATH so it points to the iotivity library
-export LD_LIBRARY_PATH="/home/larrys/iotivity/iotivity/out/linux/x86_64/release"
+# set the LD_LIBRARY_PATH so it points to the iotivity and iotivity-lite library
+export LD_LIBRARY_PATH="/home/larrys/iotivity/iotivity/out/linux/x86_64/release:/home/larrys/work/iotivity-constrained/iotivity-constrained/port/linux"
