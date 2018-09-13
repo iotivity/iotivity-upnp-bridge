@@ -38,5 +38,7 @@ examples_bins.extend(env_samples.Program('Observer.cpp'))
 
 env.SConscript('iotApp/SConscript', exports= ['env', 'iotivity_resource_inc_paths'], duplicate=0)
 
+env.SConscript('iot-lite/SConscript', exports= ['env'], duplicate=0)
+
 env.Install('#/${BUILD_DIR}/bin', examples_bins)
 env.Install('#/${BUILD_DIR}/bin', 'BundleConfig.xml')
