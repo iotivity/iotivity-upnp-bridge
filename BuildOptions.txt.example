@@ -26,7 +26,9 @@ BUILD_TYPE = 'debug'
 
 # Specify the location of the IoTivity project
 # example IOTIVITY_BASE = '/home/john/iotivity'
+# example IOTIVITY_LITE_BASE = '/home/john/iotivity-constrained'
 #IOTIVITY_BASE = '/path/to/IOTIVITY_BASE'
+#IOTIVITY_LITE_BASE = '/path/to/IOTIVITY_LITE_BASE'
 
 # The build variant of the IoTivity library
 # Values 'debug' or 'release' 

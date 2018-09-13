@@ -1,0 +1,66 @@
+#******************************************************************
+#
+# Copyright 2018 Intel Corporation All Rights Reserved.
+#
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Import('env')
+
+iotivity_lite_inc_paths = ['${IOTIVITY_LITE_BASE}',
+                           '${IOTIVITY_LITE_BASE}/include',
+                           '${IOTIVITY_LITE_BASE}/messaging/coap',
+                           '${IOTIVITY_LITE_BASE}/port/linux',
+                          ]
+
+#iot_lite_libs = ['iotivity-constrained-server', 'iotivity-constrained-client', 'iotivity-constrained-client-server']
+iot_lite_libs = ['iotivity-constrained-server']
+
+env_upnp_iot_lite_bridge = env.Clone()
+env_upnp_iot_lite_bridge['CPPPATH'] = iotivity_lite_inc_paths
+env_upnp_iot_lite_bridge.AppendUnique(CPPPATH = [
+                            '/usr/include/glib-2.0',
+                            '/usr/lib/glib-2.0/include',
+                            '/usr/lib64/glib-2.0/include',
+                            '/usr/lib/x86_64-linux-gnu/glib-2.0/include/',
+                            '/usr/include/gssdp-1.0',
+                            '/usr/include/gssdp-1.0/libgssdp',
+                            '/usr/include/gupnp-1.0',
+                            '/usr/include/gupnp-1.0/libgupnp',
+                            '/usr/include/libsoup-2.4',
+                            '/usr/include/libsoup-2.4/libsoup',
+                            '/usr/include/libxml2'])
+
+env_upnp_iot_lite_bridge.AppendUnique(CPPPATH = ['#/include/'])
+
+env_upnp_iot_lite_bridge['LIBS'] = [iot_lite_libs, 'pthread', 'boost_regex', 'glib-2.0', 'gobject-2.0', 'gssdp-1.0', 'gupnp-1.0', 'soup-2.4']
+env_upnp_iot_lite_bridge['LIBPATH'] = ['/usr/local/lib', '${IOTIVITY_LITE_BASE}/port/linux']
+
+upnp_iot_lite_bridge_cpp = ['UpnpBridgeIotLite.cpp',
+                            'UpnpConnector.cpp',
+                            'UpnpManager.cpp',
+                            'UpnpResource.cpp',
+                            'UpnpDevice.cpp',
+                            'UpnpService.cpp',
+                            'UpnpDimmingService.cpp',
+                            'UpnpPowerSwitchService.cpp',
+                            'UpnpException.cpp']
+                            
+upnp_iot_lite_bridge_obj = env_upnp_iot_lite_bridge.Object(upnp_iot_lite_bridge_cpp)
+upnp_iot_lite_bridge_bins = env_upnp_iot_lite_bridge.Program('UpnpBridgeIotLite', upnp_iot_lite_bridge_obj)
+
+env_upnp_iot_lite_bridge.Install('#/${BUILD_DIR}/bin', upnp_iot_lite_bridge_bins)
+
