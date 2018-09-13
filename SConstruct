@@ -20,6 +20,7 @@
 
 vars = Variables('BuildOptions.txt')
 vars.Add(EnumVariable('BUILD_TYPE', 'Specify release or debug build', 'debug', ['debug','release']))
+vars.Add(PathVariable('IOTIVITY_LITE_BASE', 'Location of the iotivity lite project', None, PathVariable.PathAccept))
 vars.Add(PathVariable('IOTIVITY_BASE', 'Location of the iotivity project', None, PathVariable.PathAccept))
 vars.Add(EnumVariable('IOTIVITY_LIB_TYPE', 'Specify release or debug build', 'release', ['debug','release']))
 vars.Add(EnumVariable('TARGET_ARCH', 'Target architecture', 'x86_64', ['x86_64']))
