@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_71c55b3b",
+        "filename": "examples/iot-lite/UpnpDimmingService.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2018-09-17T21:09:11Z",
+      "side": 1,
+      "message": "does this need to be int64_t the rep-\u003evalue.integer is of type \u0027int\u0027\n\nthis is a minor nitpick. the value may need to be int64_t for gupnp.",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 11
+      },
+      "revId": "8678e67ff6b923eec073f57e4712bba5f44dc5d9",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_51c0172a",
+        "filename": "examples/iot-lite/UpnpResource.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2018-09-17T21:09:11Z",
+      "side": 1,
+      "message": "why the commented out lines of code?  Not quite sure what is going on here.",
+      "revId": "8678e67ff6b923eec073f57e4712bba5f44dc5d9",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_11cdef5d",
+        "filename": "examples/iot-lite/UpnpService.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2018-09-17T21:09:11Z",
+      "side": 1,
+      "message": "is this set as TODO because iotivity-lite does not have a way to remove a device once added?",
+      "revId": "8678e67ff6b923eec073f57e4712bba5f44dc5d9",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
