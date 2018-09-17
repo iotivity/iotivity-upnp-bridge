@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_119faf51",
+        "filename": "examples/iot-lite/SConscript",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2018-09-17T21:09:11Z",
+      "side": 1,
+      "message": "nit: it would be nice to clean this white space.",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 28
+      },
+      "revId": "9c2f7c8902e8e49359c8b57e2961e8d6cf7f3f92",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_b1b7e3d7",
+        "filename": "examples/iot-lite/UpnpBridgeIotLite.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2018-09-17T21:09:11Z",
+      "side": 1,
+      "message": "are we using Intel here or OCF?",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 40,
+        "endChar": 38
+      },
+      "revId": "9c2f7c8902e8e49359c8b57e2961e8d6cf7f3f92",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_d1b427d3",
+        "filename": "examples/iot-lite/UpnpConnector.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 4407
+      },
+      "writtenOn": "2018-09-17T21:09:11Z",
+      "side": 1,
+      "message": "why all the empty debug prints. Is it just to see the code flow?",
+      "revId": "9c2f7c8902e8e49359c8b57e2961e8d6cf7f3f92",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    }
+  ]
+}
