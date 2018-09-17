@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_71f39b9e",
+        "filename": "examples/iot-lite/SConscript",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2018-09-17T21:48:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_119faf51",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 28
+      },
+      "revId": "9c2f7c8902e8e49359c8b57e2961e8d6cf7f3f92",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_b1b7e3d7",
         "filename": "examples/iot-lite/UpnpBridgeIotLite.cpp",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_11f4cf85",
+        "filename": "examples/iot-lite/UpnpBridgeIotLite.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2018-09-17T21:48:48Z",
+      "side": 1,
+      "message": "Manufacture\u0027s name",
+      "parentUuid": "da33351e_b1b7e3d7",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 40,
+        "endChar": 38
+      },
+      "revId": "9c2f7c8902e8e49359c8b57e2961e8d6cf7f3f92",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_d1b427d3",
         "filename": "examples/iot-lite/UpnpConnector.cpp",
         "patchSetId": 5
@@ -59,6 +107,24 @@
       "writtenOn": "2018-09-17T21:09:11Z",
       "side": 1,
       "message": "why all the empty debug prints. Is it just to see the code flow?",
+      "revId": "9c2f7c8902e8e49359c8b57e2961e8d6cf7f3f92",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_31f91381",
+        "filename": "examples/iot-lite/UpnpConnector.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2018-09-17T21:48:48Z",
+      "side": 1,
+      "message": "Yes, just for code flow... the DEBUG_PRINT macro will fill in the method name",
+      "parentUuid": "da33351e_d1b427d3",
       "revId": "9c2f7c8902e8e49359c8b57e2961e8d6cf7f3f92",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
