@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_d102676e",
+        "filename": "examples/iot-lite/UpnpDimmingService.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2018-09-17T21:48:48Z",
+      "side": 1,
+      "message": "Yes it is int64_t for the gupnp call.",
+      "parentUuid": "da33351e_71c55b3b",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 11
+      },
+      "revId": "8678e67ff6b923eec073f57e4712bba5f44dc5d9",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_51c0172a",
         "filename": "examples/iot-lite/UpnpResource.cpp",
         "patchSetId": 6
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_f1ffab65",
+        "filename": "examples/iot-lite/UpnpResource.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2018-09-17T21:48:48Z",
+      "side": 1,
+      "message": "More left over code from generic gupnp that can be removed.",
+      "parentUuid": "da33351e_51c0172a",
+      "revId": "8678e67ff6b923eec073f57e4712bba5f44dc5d9",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_11cdef5d",
         "filename": "examples/iot-lite/UpnpService.cpp",
         "patchSetId": 6
@@ -53,6 +95,24 @@
       "writtenOn": "2018-09-17T21:09:11Z",
       "side": 1,
       "message": "is this set as TODO because iotivity-lite does not have a way to remove a device once added?",
+      "revId": "8678e67ff6b923eec073f57e4712bba5f44dc5d9",
+      "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_9108df92",
+        "filename": "examples/iot-lite/UpnpService.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 3653
+      },
+      "writtenOn": "2018-09-17T21:48:48Z",
+      "side": 1,
+      "message": "It is a leftover question from previous upnp bridge code.",
+      "parentUuid": "da33351e_11cdef5d",
       "revId": "8678e67ff6b923eec073f57e4712bba5f44dc5d9",
       "serverId": "c6509b8a-a471-4ec1-8e5f-9aed2654acb5",
       "unresolved": false
