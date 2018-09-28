@@ -29,6 +29,7 @@
 #include <boost/regex.hpp>
 
 #define OC_SERVER
+#define OC_DYNAMIC_ALLOCATION
 #include <oc_core_res.h>
 
 #include <UpnpConstants.h>
@@ -302,7 +303,8 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
 
     if (pUpnpResource != nullptr && !pUpnpResource->isRegistered())
     {
-        if (pUpnpResource->getResourceType() == UPNP_OIC_TYPE_DEVICE_LIGHT)
+        if (pUpnpResource->getResourceType() == UPNP_OIC_TYPE_DEVICE_LIGHT ||
+            pUpnpResource->getResourceType() == UPNP_OIC_TYPE_DEVICE_AV_PLAYER)
         {
             int ret = oc_add_device("/oic/d", pUpnpResource->getResourceType().c_str(),
                     pUpnpResource->getName().c_str(), "ocf.1.0.0", "ocf.res.1.0.0,ocf.sh.1.0.0",
@@ -312,7 +314,7 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
             {
                 s_deviceIndexLookup[pUpnpResource->getUdn()] = ++s_deviceIndex;
                 pUpnpResource->setRegistered(true);
-                DEBUG_PRINT("Added light device " << pUpnpResource->getName());
+                DEBUG_PRINT("Added " << pUpnpResource->getResourceType() << " device " << pUpnpResource->getName());
 
 //                for (std::map< string, int >::iterator iter = s_deviceIndexLookup.begin(); iter != s_deviceIndexLookup.end(); ++iter)
 //                  std::cout << iter->first << " => " << iter->second << '\n';
@@ -321,7 +323,7 @@ void UpnpConnector::onDeviceProxyAvailable(GUPnPControlPoint *controlPoint,
             {
                 pUpnpResource->setRegistered(false);
                 unregisterDeviceResource(udn);
-                DEBUG_PRINT("Failed to add light device " << pUpnpResource->getName());
+                DEBUG_PRINT("Failed to add " << pUpnpResource->getResourceType() << " device " << pUpnpResource->getName());
                 return;
             }
         }
