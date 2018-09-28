@@ -28,6 +28,8 @@
 #include <string>
 #include <vector>
 
+#define OC_SERVER
+#define OC_DYNAMIC_ALLOCATION
 #include <oc_api.h>
 
 #include <UpnpConstants.h>
@@ -56,6 +58,7 @@ static std::map<std::string, std::string > UpnpSearchPatternMap =
     {UPNP_OIC_TYPE_BRIGHTNESS,              UPNP_PREFIX_SERVICE + ":.*(?:[Dd]imming).*"},
     {UPNP_OIC_TYPE_POWER_SWITCH,            UPNP_PREFIX_SERVICE + ":.*(?:[Ss]witch[Pp]ower).*"},
 // Media Control
+    {UPNP_OIC_TYPE_DEVICE_AV_PLAYER,        UPNP_PREFIX_DEVICE  + ":.*(?:[Mm]edia[Rr]enderer).*"},
     {UPNP_OIC_TYPE_AUDIO,                   UPNP_PREFIX_SERVICE + ":.*(?:[Rr]endering[Cc]ontrol).*"},
     {UPNP_OIC_TYPE_MEDIA_CONTROL,           UPNP_PREFIX_SERVICE + ":.*(?:[Aa][Vv][Tt]ransport).*"}
 };
@@ -71,11 +74,12 @@ static std::map<std::string, std::string > UpnpInterfaceMap =
     {UPNP_OIC_TYPE_POWER_SWITCH,             "oic.if.a"},
     {UPNP_OIC_TYPE_BRIGHTNESS,               "oic.if.a"},
 // Media Control
-    {UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER,    "oic.if.baseline"},
-    {UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER,      "oic.if.baseline"},
+    {UPNP_OIC_TYPE_DEVICE_AV_PLAYER,         "oic.if.baseline"},
+    {UPNP_OIC_TYPE_AUDIO,                    "oic.if.a"},
+    {UPNP_OIC_TYPE_MEDIA_CONTROL,            "oic.if.a"}
 };
 
-// URI prexfix map
+// URI prefix map
 // TODO and TBD
 static std::map<std::string, std::string > UpnpUriPrefixMap =
 {
@@ -83,8 +87,9 @@ static std::map<std::string, std::string > UpnpUriPrefixMap =
     {UPNP_OIC_TYPE_BRIGHTNESS,              UPNP_OIC_URI_PREFIX_BRIGHTNESS},
     {UPNP_OIC_TYPE_POWER_SWITCH,            UPNP_OIC_URI_PREFIX_POWER_SWITCH},
 
-    {UPNP_OIC_TYPE_AV_TRANSPORT,            UPNP_OIC_URI_PREFIX_AV_TRANSPORT},
-    {UPNP_OIC_TYPE_RENDERING_CONTROL,       UPNP_OIC_URI_PREFIX_RENDERING_CONTROL}
+    {UPNP_OIC_TYPE_DEVICE_AV_PLAYER,        UPNP_OIC_URI_PREFIX_MEDIA_RENDERER},
+    {UPNP_OIC_TYPE_AUDIO,                   UPNP_OIC_URI_PREFIX_AUDIO},
+    {UPNP_OIC_TYPE_MEDIA_CONTROL,           UPNP_OIC_URI_PREFIX_MEDIA_CONTROL}
 };
 
 #define ERROR_PRINT(x) do { std::cerr << MODULE << ":" << __func__ << "(): ERROR: " << x << std::endl; } while (0)

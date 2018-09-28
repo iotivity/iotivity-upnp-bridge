@@ -53,7 +53,7 @@ void UpnpPowerSwitch::processGetRequest(oc_request_t *request, oc_interface_mask
 
     oc_rep_start_root_object();
     oc_process_baseline_interface(request->resource);
-    DEBUG_PRINT("oc_rep_set_boolean " << powerSwitchStateName << " "  << powerSwitchStateValue);
+    DEBUG_PRINT("oc_rep_set_boolean " << powerSwitchStateName << ": "  << powerSwitchStateValue);
     oc_rep_set_boolean(root, value, powerSwitchStateValue);
     oc_rep_end_root_object();
     oc_send_response(request, OC_STATUS_OK);

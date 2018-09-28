@@ -57,6 +57,8 @@ upnp_iot_lite_bridge_cpp = ['UpnpBridgeIotLite.cpp',
                             'UpnpService.cpp',
                             'UpnpDimmingService.cpp',
                             'UpnpPowerSwitchService.cpp',
+                            'UpnpAvTransportService.cpp',
+                            'UpnpRenderingControlService.cpp',
                             'UpnpException.cpp']
 
 upnp_iot_lite_bridge_obj = env_upnp_iot_lite_bridge.Object(upnp_iot_lite_bridge_cpp)
