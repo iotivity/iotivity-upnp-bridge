@@ -27,6 +27,7 @@
 #include <gupnp-service-proxy.h>
 
 #define OC_SERVER
+#define OC_DYNAMIC_ALLOCATION
 #include <oc_api.h>
 
 using namespace std;

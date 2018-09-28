@@ -25,6 +25,8 @@
 
 #include "UpnpDimmingService.h"
 #include "UpnpPowerSwitchService.h"
+#include "UpnpAvTransportService.h"
+#include "UpnpRenderingControlService.h"
 
 using namespace std;
 
@@ -366,6 +368,14 @@ std::shared_ptr<UpnpService>  UpnpManager::generateService(GUPnPServiceInfo *ser
     else if (resourceType == UPNP_OIC_TYPE_BRIGHTNESS)
     {
         return (std::make_shared < UpnpDimming > (serviceInfo, requestState));
+    }
+    else if (resourceType == UPNP_OIC_TYPE_AUDIO)
+    {
+        return (std::make_shared < UpnpRenderingControl > (serviceInfo, requestState));
+    }
+    else if (resourceType == UPNP_OIC_TYPE_MEDIA_CONTROL)
+    {
+        return (std::make_shared < UpnpAvTransport > (serviceInfo, requestState));
     }
     else
     {

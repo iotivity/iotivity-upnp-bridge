@@ -53,7 +53,7 @@ void UpnpDimming::processGetRequest(oc_request_t *request, oc_interface_mask_t i
 
     oc_rep_start_root_object();
     oc_process_baseline_interface(request->resource);
-    DEBUG_PRINT("oc_rep_set_int " << brightnessLevelName << " "  << brightnessLevelValue);
+    DEBUG_PRINT("oc_rep_set_int " << brightnessLevelName << ": "  << brightnessLevelValue);
     oc_rep_set_int(root, brightness, brightnessLevelValue);
     oc_rep_end_root_object();
     oc_send_response(request, OC_STATUS_OK);
@@ -90,7 +90,7 @@ void UpnpDimming::processPostRequest(oc_request_t *request, oc_interface_mask_t 
     GError *error = NULL;
     if (! gupnp_service_proxy_send_action(proxy, "SetLoadLevelTarget", &error,
             // IN args
-            "newLoadlevelTarget", G_TYPE_BOOLEAN, brightnessLevelValue,
+            "newLoadlevelTarget", G_TYPE_UINT, brightnessLevelValue,
             NULL,
             // OUT args (none)
             NULL))

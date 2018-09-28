@@ -29,6 +29,8 @@
 
 #include "UpnpDimmingService.h"
 #include "UpnpPowerSwitchService.h"
+#include "UpnpAvTransportService.h"
+#include "UpnpRenderingControlService.h"
 
 using namespace std;
 
@@ -178,17 +180,25 @@ void UpnpService::processGetRequest(oc_request_t *request, oc_interface_mask_t i
 
     for (int i = 0; i < (int)oc_string_array_get_allocated_size(request->resource->types); i++)
     {
-//      size_t size = oc_string_array_get_item_size(request->resource->types, i);
-      const char *type = oc_string_array_get_item(request->resource->types, i);
-      DEBUG_PRINT("request->resource->type[" << i << "]=" << type);
-      if (string(type) == UPNP_OIC_TYPE_POWER_SWITCH)
-      {
-          return UpnpPowerSwitch::processGetRequest(request, interface, user_data);
-      }
-      if (string(type) == UPNP_OIC_TYPE_BRIGHTNESS)
-      {
-          return UpnpDimming::processGetRequest(request, interface, user_data);
-      }
+//        size_t size = oc_string_array_get_item_size(request->resource->types, i);
+        const char *type = oc_string_array_get_item(request->resource->types, i);
+        DEBUG_PRINT("request->resource->type[" << i << "]=" << type);
+        if (string(type) == UPNP_OIC_TYPE_POWER_SWITCH)
+        {
+            return UpnpPowerSwitch::processGetRequest(request, interface, user_data);
+        }
+        if (string(type) == UPNP_OIC_TYPE_BRIGHTNESS)
+        {
+            return UpnpDimming::processGetRequest(request, interface, user_data);
+        }
+        if (string(type) == UPNP_OIC_TYPE_AUDIO)
+        {
+            return UpnpRenderingControl::processGetRequest(request, interface, user_data);
+        }
+        if (string(type) == UPNP_OIC_TYPE_MEDIA_CONTROL)
+        {
+            return UpnpAvTransport::processGetRequest(request, interface, user_data);
+        }
     }
 }
 
@@ -217,17 +227,25 @@ void UpnpService::processPostRequest(oc_request_t *request, oc_interface_mask_t 
 
     for (int i = 0; i < (int)oc_string_array_get_allocated_size(request->resource->types); i++)
     {
-//      size_t size = oc_string_array_get_item_size(request->resource->types, i);
-      const char *type = oc_string_array_get_item(request->resource->types, i);
-      DEBUG_PRINT("request->resource->type[" << i << "]=" << type);
-      if (string(type) == UPNP_OIC_TYPE_POWER_SWITCH)
-      {
-          return UpnpPowerSwitch::processPostRequest(request, interface, user_data);
-      }
-      if (string(type) == UPNP_OIC_TYPE_BRIGHTNESS)
-      {
-          return UpnpDimming::processPostRequest(request, interface, user_data);
-      }
+//        size_t size = oc_string_array_get_item_size(request->resource->types, i);
+        const char *type = oc_string_array_get_item(request->resource->types, i);
+        DEBUG_PRINT("request->resource->type[" << i << "]=" << type);
+        if (string(type) == UPNP_OIC_TYPE_POWER_SWITCH)
+        {
+            return UpnpPowerSwitch::processPostRequest(request, interface, user_data);
+        }
+        if (string(type) == UPNP_OIC_TYPE_BRIGHTNESS)
+        {
+            return UpnpDimming::processPostRequest(request, interface, user_data);
+        }
+        if (string(type) == UPNP_OIC_TYPE_AUDIO)
+        {
+            return UpnpRenderingControl::processPostRequest(request, interface, user_data);
+        }
+        if (string(type) == UPNP_OIC_TYPE_MEDIA_CONTROL)
+        {
+            return UpnpAvTransport::processPostRequest(request, interface, user_data);
+        }
     }
 }
 

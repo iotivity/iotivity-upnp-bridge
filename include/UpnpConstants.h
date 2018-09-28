@@ -33,6 +33,7 @@ static const std::string UPNP_OIC_TYPE_DEVICE_INET_GATEWAY        = "oic.d.inet.
 static const std::string UPNP_OIC_TYPE_DEVICE_WAN                 = "oic.d.wan";
 static const std::string UPNP_OIC_TYPE_DEVICE_WAN_CONNECTION      = "oic.d.wan.connection";
 static const std::string UPNP_OIC_TYPE_DEVICE_LAN                 = "oic.d.lan";
+static const std::string UPNP_OIC_TYPE_DEVICE_AV_PLAYER           = "oic.d.avplayer";
 static const std::string UPNP_OIC_TYPE_DEVICE_MEDIA_RENDERER      = "oic.d.media.renderer";
 static const std::string UPNP_OIC_TYPE_DEVICE_MEDIA_SERVER        = "oic.d.media.server";
 
